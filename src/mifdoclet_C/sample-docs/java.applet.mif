@@ -1,0 +1,6677 @@
+<MIFFile 5.5> # written by mif API at Thu Jul 29 12:57:31 PDT 1999
+include (/home/dkramer/javadoc/mifdoclet/mifdoclet_B/styles.mif)
+<AFrames
+> # end of AFrames
+<Tbls
+ <Tbl
+  <TblID 24>
+  <TblTag `Classes'>
+  <TblNumColumns 2>
+  <TblColumnWidth 130.0pt>
+  <TblColumnWidth 340.0pt>
+  <TblH
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableHead'>
+       <ParaLine
+        <String `Class Summary'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+  > # end of TblH
+  <TblBody
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Interfaces'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `ClassHead: java.applet.AppletStub'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `AppletStub'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableText'>
+       <ParaLine
+        <String `When an applet is first created, an applet stub is atta'>
+        <String `ched to it using the applet\qs '>
+        <Font
+         <FTag `Code'>
+        > # end of Font
+        <String `setStub'>
+        <Font
+         <FTag `'>
+        > # end of Font
+        <String ` method.'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `ClassHead: java.applet.AppletContext'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `AppletContext'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableText'>
+       <ParaLine
+        <String `This interface corresponds to an applet\qs environment:'>
+        <String ` the document containing the applet and the other appl'>
+        <String `ets in the same document.'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode-Z'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `ClassHead: java.applet.AudioClip'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `AudioClip'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableText-Z'>
+       <ParaLine
+        <String `The '>
+        <Font
+         <FTag `Code'>
+        > # end of Font
+        <String `AudioClip'>
+        <Font
+         <FTag `'>
+        > # end of Font
+        <String ` interface is a simple abstraction for playing a sound'>
+        <String ` clip.'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Classes'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode-Z'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `ClassHead: java.applet.Applet'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `Applet'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableText-Z'>
+       <ParaLine
+        <String `An applet is a small program that is intended not to be'>
+        <String ` run on its own, but rather to be embedded inside ano'>
+        <String `ther application.'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+  > # end of TblBody
+  <TblF
+  > # end of TblF
+ > # end of Tbl
+ <Tbl
+  <TblID 25>
+  <TblTag `Members'>
+  <TblNumColumns 2>
+  <TblColumnWidth 130.0pt>
+  <TblColumnWidth 340.0pt>
+  <TblH
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableHead'>
+       <ParaLine
+        <String `Member Summary'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+  > # end of TblH
+  <TblBody
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Constructors'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.Applet()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `Applet()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Methods'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.setStub(java.applet.AppletStub)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `setStub(AppletStub)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `boolean'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.isActive()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `isActive()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `URL'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.getDocumentBase()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getDocumentBase()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `URL'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.getCodeBase()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getCodeBase()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `String'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.getParameter(java.lang.String)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getParameter(String)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `AppletContext'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.getAppletContext()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getAppletContext()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.resize(int, int)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `resize(int, int)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.resize(java.awt.Dimension)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `resize(Dimension)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.showStatus(java.lang.String)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `showStatus(String)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `Image'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.getImage(java.net.URL)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getImage(URL)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `Image'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.getImage(java.net.URL, java.lang.String)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getImage(URL, String)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `AudioClip'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.newAudioClip(java.net.URL)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `newAudioClip(URL)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `AudioClip'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.getAudioClip(java.net.URL)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getAudioClip(URL)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `AudioClip'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.getAudioClip(java.net.URL, java.lang.String)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getAudioClip(URL, String)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `String'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.getAppletInfo()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getAppletInfo()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `Locale'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.getLocale()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getLocale()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `String[][]'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.getParameterInfo()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getParameterInfo()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.play(java.net.URL)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `play(URL)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.play(java.net.URL, java.lang.String)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `play(URL, String)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.init()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `init()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.start()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `start()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.stop()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `stop()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.Applet.destroy()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `destroy()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+  > # end of TblBody
+  <TblF
+  > # end of TblF
+ > # end of Tbl
+ <Tbl
+  <TblID 26>
+  <TblTag `MembersInherited'>
+  <TblNumColumns 1>
+  <TblColumnWidth 470.0pt>
+  <TblH
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableHead'>
+       <ParaLine
+        <String `Inherited Member Summary'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+  > # end of TblH
+  <TblBody
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Fields inherited from class '>
+        <String `java.awt.Component'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <String `BOTTOM_ALIGNMENT'>
+        <String `, '>
+        <String `CENTER_ALIGNMENT'>
+        <String `, '>
+        <String `LEFT_ALIGNMENT'>
+        <String `, '>
+        <String `RIGHT_ALIGNMENT'>
+        <String `, '>
+        <String `TOP_ALIGNMENT'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Fields inherited from interface '>
+        <String `java.awt.image.ImageObserver'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <String `ABORT'>
+        <String `, '>
+        <String `ALLBITS'>
+        <String `, '>
+        <String `ERROR'>
+        <String `, '>
+        <String `FRAMEBITS'>
+        <String `, '>
+        <String `HEIGHT'>
+        <String `, '>
+        <String `PROPERTIES'>
+        <String `, '>
+        <String `SOMEBITS'>
+        <String `, '>
+        <String `WIDTH'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Methods inherited from class '>
+        <String `java.awt.Panel'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <String `addNotify'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Methods inherited from class '>
+        <String `java.awt.Container'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <String `add'>
+        <String `, '>
+        <String `add'>
+        <String `, '>
+        <String `add'>
+        <String `, '>
+        <String `add'>
+        <String `, '>
+        <String `add'>
+        <String `, '>
+        <String `addContainerListener'>
+        <String `, '>
+        <String `addImpl'>
+        <String `, '>
+        <String `countComponents'>
+        <String `, '>
+        <String `deliverEvent'>
+        <String `, '>
+        <String `doLayout'>
+        <String `, '>
+        <String `findComponentAt'>
+        <String `, '>
+        <String `findComponentAt'>
+        <String `, '>
+        <String `getAlignmentX'>
+        <String `, '>
+        <String `getAlignmentY'>
+        <String `, '>
+        <String `getComponent'>
+        <String `, '>
+        <String `getComponentAt'>
+        <String `, '>
+        <String `getComponentAt'>
+        <String `, '>
+        <String `getComponentCount'>
+        <String `, '>
+        <String `getComponents'>
+        <String `, '>
+        <String `getInsets'>
+        <String `, '>
+        <String `getLayout'>
+        <String `, '>
+        <String `getMaximumSize'>
+        <String `, '>
+        <String `getMinimumSize'>
+        <String `, '>
+        <String `getPreferredSize'>
+        <String `, '>
+        <String `insets'>
+        <String `, '>
+        <String `invalidate'>
+        <String `, '>
+        <String `isAncestorOf'>
+        <String `, '>
+        <String `layout'>
+        <String `, '>
+        <String `list'>
+        <String `, '>
+        <String `list'>
+        <String `, '>
+        <String `locate'>
+        <String `, '>
+        <String `minimumSize'>
+        <String `, '>
+        <String `paint'>
+        <String `, '>
+        <String `paintComponents'>
+        <String `, '>
+        <String `paramString'>
+        <String `, '>
+        <String `preferredSize'>
+        <String `, '>
+        <String `print'>
+        <String `, '>
+        <String `printComponents'>
+        <String `, '>
+        <String `processContainerEvent'>
+        <String `, '>
+        <String `processEvent'>
+        <String `, '>
+        <String `remove'>
+        <String `, '>
+        <String `remove'>
+        <String `, '>
+        <String `removeAll'>
+        <String `, '>
+        <String `removeContainerListener'>
+        <String `, '>
+        <String `removeNotify'>
+        <String `, '>
+        <String `setCursor'>
+        <String `, '>
+        <String `setFont'>
+        <String `, '>
+        <String `setLayout'>
+        <String `, '>
+        <String `update'>
+        <String `, '>
+        <String `validate'>
+        <String `, '>
+        <String `validateTree'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Methods inherited from class '>
+        <String `java.awt.Component'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <String `action'>
+        <String `, '>
+        <String `add'>
+        <String `, '>
+        <String `addComponentListener'>
+        <String `, '>
+        <String `addFocusListener'>
+        <String `, '>
+        <String `addInputMethodListener'>
+        <String `, '>
+        <String `addKeyListener'>
+        <String `, '>
+        <String `addMouseListener'>
+        <String `, '>
+        <String `addMouseMotionListener'>
+        <String `, '>
+        <String `addPropertyChangeListener'>
+        <String `, '>
+        <String `addPropertyChangeListener'>
+        <String `, '>
+        <String `bounds'>
+        <String `, '>
+        <String `checkImage'>
+        <String `, '>
+        <String `checkImage'>
+        <String `, '>
+        <String `coalesceEvents'>
+        <String `, '>
+        <String `contains'>
+        <String `, '>
+        <String `contains'>
+        <String `, '>
+        <String `createImage'>
+        <String `, '>
+        <String `createImage'>
+        <String `, '>
+        <String `disable'>
+        <String `, '>
+        <String `disableEvents'>
+        <String `, '>
+        <String `dispatchEvent'>
+        <String `, '>
+        <String `enable'>
+        <String `, '>
+        <String `enable'>
+        <String `, '>
+        <String `enableEvents'>
+        <String `, '>
+        <String `enableInputMethods'>
+        <String `, '>
+        <String `firePropertyChange'>
+        <String `, '>
+        <String `getBackground'>
+        <String `, '>
+        <String `getBounds'>
+        <String `, '>
+        <String `getBounds'>
+        <String `, '>
+        <String `getColorModel'>
+        <String `, '>
+        <String `getComponentOrientation'>
+        <String `, '>
+        <String `getCursor'>
+        <String `, '>
+        <String `getDropTarget'>
+        <String `, '>
+        <String `getFont'>
+        <String `, '>
+        <String `getFontMetrics'>
+        <String `, '>
+        <String `getForeground'>
+        <String `, '>
+        <String `getGraphics'>
+        <String `, '>
+        <String `getHeight'>
+        <String `, '>
+        <String `getInputContext'>
+        <String `, '>
+        <String `getInputMethodRequests'>
+        <String `, '>
+        <String `getLocation'>
+        <String `, '>
+        <String `getLocation'>
+        <String `, '>
+        <String `getLocationOnScreen'>
+        <String `, '>
+        <String `getName'>
+        <String `, '>
+        <String `getParent'>
+        <String `, '>
+        <String `getPeer'>
+        <String `, '>
+        <String `getSize'>
+        <String `, '>
+        <String `getSize'>
+        <String `, '>
+        <String `getToolkit'>
+        <String `, '>
+        <String `getTreeLock'>
+        <String `, '>
+        <String `getWidth'>
+        <String `, '>
+        <String `getX'>
+        <String `, '>
+        <String `getY'>
+        <String `, '>
+        <String `gotFocus'>
+        <String `, '>
+        <String `handleEvent'>
+        <String `, '>
+        <String `hasFocus'>
+        <String `, '>
+        <String `hide'>
+        <String `, '>
+        <String `imageUpdate'>
+        <String `, '>
+        <String `inside'>
+        <String `, '>
+        <String `isDisplayable'>
+        <String `, '>
+        <String `isDoubleBuffered'>
+        <String `, '>
+        <String `isEnabled'>
+        <String `, '>
+        <String `isFocusTraversable'>
+        <String `, '>
+        <String `isLightweight'>
+        <String `, '>
+        <String `isOpaque'>
+        <String `, '>
+        <String `isShowing'>
+        <String `, '>
+        <String `isValid'>
+        <String `, '>
+        <String `isVisible'>
+        <String `, '>
+        <String `keyDown'>
+        <String `, '>
+        <String `keyUp'>
+        <String `, '>
+        <String `list'>
+        <String `, '>
+        <String `list'>
+        <String `, '>
+        <String `list'>
+        <String `, '>
+        <String `location'>
+        <String `, '>
+        <String `lostFocus'>
+        <String `, '>
+        <String `mouseDown'>
+        <String `, '>
+        <String `mouseDrag'>
+        <String `, '>
+        <String `mouseEnter'>
+        <String `, '>
+        <String `mouseExit'>
+        <String `, '>
+        <String `mouseMove'>
+        <String `, '>
+        <String `mouseUp'>
+        <String `, '>
+        <String `move'>
+        <String `, '>
+        <String `nextFocus'>
+        <String `, '>
+        <String `paintAll'>
+        <String `, '>
+        <String `postEvent'>
+        <String `, '>
+        <String `prepareImage'>
+        <String `, '>
+        <String `prepareImage'>
+        <String `, '>
+        <String `printAll'>
+        <String `, '>
+        <String `processComponentEvent'>
+        <String `, '>
+        <String `processFocusEvent'>
+        <String `, '>
+        <String `processInputMethodEvent'>
+        <String `, '>
+        <String `processKeyEvent'>
+        <String `, '>
+        <String `processMouseEvent'>
+        <String `, '>
+        <String `processMouseMotionEvent'>
+        <String `, '>
+        <String `remove'>
+        <String `, '>
+        <String `removeComponentListener'>
+        <String `, '>
+        <String `removeFocusListener'>
+        <String `, '>
+        <String `removeInputMethodListener'>
+        <String `, '>
+        <String `removeKeyListener'>
+        <String `, '>
+        <String `removeMouseListener'>
+        <String `, '>
+        <String `removeMouseMotionListener'>
+        <String `, '>
+        <String `removePropertyChangeListener'>
+        <String `, '>
+        <String `removePropertyChangeListener'>
+        <String `, '>
+        <String `repaint'>
+        <String `, '>
+        <String `repaint'>
+        <String `, '>
+        <String `repaint'>
+        <String `, '>
+        <String `repaint'>
+        <String `, '>
+        <String `requestFocus'>
+        <String `, '>
+        <String `reshape'>
+        <String `, '>
+        <String `setBackground'>
+        <String `, '>
+        <String `setBounds'>
+        <String `, '>
+        <String `setBounds'>
+        <String `, '>
+        <String `setComponentOrientation'>
+        <String `, '>
+        <String `setDropTarget'>
+        <String `, '>
+        <String `setEnabled'>
+        <String `, '>
+        <String `setForeground'>
+        <String `, '>
+        <String `setLocale'>
+        <String `, '>
+        <String `setLocation'>
+        <String `, '>
+        <String `setLocation'>
+        <String `, '>
+        <String `setName'>
+        <String `, '>
+        <String `setSize'>
+        <String `, '>
+        <String `setSize'>
+        <String `, '>
+        <String `setVisible'>
+        <String `, '>
+        <String `show'>
+        <String `, '>
+        <String `show'>
+        <String `, '>
+        <String `size'>
+        <String `, '>
+        <String `toString'>
+        <String `, '>
+        <String `transferFocus'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Methods inherited from class '>
+        <String `java.lang.Object'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <String `clone'>
+        <String `, '>
+        <String `equals'>
+        <String `, '>
+        <String `finalize'>
+        <String `, '>
+        <String `getClass'>
+        <String `, '>
+        <String `hashCode'>
+        <String `, '>
+        <String `notify'>
+        <String `, '>
+        <String `notifyAll'>
+        <String `, '>
+        <String `wait'>
+        <String `, '>
+        <String `wait'>
+        <String `, '>
+        <String `wait'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Methods inherited from interface '>
+        <String `java.awt.image.ImageObserver'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <String `imageUpdate'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Methods inherited from interface '>
+        <String `java.awt.MenuContainer'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <String `getFont'>
+        <String `, '>
+        <String `postEvent'>
+        <String `, '>
+        <String `remove'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+  > # end of TblBody
+  <TblF
+  > # end of TblF
+ > # end of Tbl
+ <Tbl
+  <TblID 27>
+  <TblTag `Members'>
+  <TblNumColumns 2>
+  <TblColumnWidth 130.0pt>
+  <TblColumnWidth 340.0pt>
+  <TblH
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableHead'>
+       <ParaLine
+        <String `Member Summary'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+  > # end of TblH
+  <TblBody
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Methods'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `AudioClip'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AppletContext.getAudioClip(java.net.URL)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getAudioClip(URL)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `Image'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AppletContext.getImage(java.net.URL)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getImage(URL)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `Applet'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AppletContext.getApplet(java.lang.String)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getApplet(String)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `Enumeration'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AppletContext.getApplets()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getApplets()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AppletContext.showDocument(java.net.URL)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `showDocument(URL)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AppletContext.showDocument(java.net.URL, java.lang.String)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `showDocument(URL, String)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AppletContext.showStatus(java.lang.String)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `showStatus(String)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+  > # end of TblBody
+  <TblF
+  > # end of TblF
+ > # end of Tbl
+ <Tbl
+  <TblID 28>
+  <TblTag `Members'>
+  <TblNumColumns 2>
+  <TblColumnWidth 130.0pt>
+  <TblColumnWidth 340.0pt>
+  <TblH
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableHead'>
+       <ParaLine
+        <String `Member Summary'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+  > # end of TblH
+  <TblBody
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Methods'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `boolean'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AppletStub.isActive()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `isActive()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `URL'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AppletStub.getDocumentBase()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getDocumentBase()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `URL'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AppletStub.getCodeBase()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getCodeBase()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `String'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AppletStub.getParameter(java.lang.String)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getParameter(String)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `AppletContext'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AppletStub.getAppletContext()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `getAppletContext()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AppletStub.appletResize(int, int)'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `appletResize(int, int)'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+  > # end of TblBody
+  <TblF
+  > # end of TblF
+ > # end of Tbl
+ <Tbl
+  <TblID 29>
+  <TblTag `Members'>
+  <TblNumColumns 2>
+  <TblColumnWidth 130.0pt>
+  <TblColumnWidth 340.0pt>
+  <TblH
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableHead'>
+       <ParaLine
+        <String `Member Summary'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+  > # end of TblH
+  <TblBody
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableSubHead'>
+       <ParaLine
+        <String `Methods'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AudioClip.play()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `play()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AudioClip.loop()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `loop()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+   <Row
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableTextReturn'>
+       <ParaLine
+        <String `void'>
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+    <Cell
+     <CellContent
+      <Para
+       <PgfTag `TableCode'>
+       <ParaLine
+        <XRef
+         <XRefName `Blue Underlined'>
+         <XRefSrcText `MemberHead: java.applet.AudioClip.stop()'>
+         <XRefSrcFile `<c\>java.applet.fm'>
+        > # end of XRef
+        <Font
+         <FTag `Link'>
+        > # end of Font
+        <String `stop()'>
+        <XRefEnd>
+        <Font
+         <FTag `'>
+        > # end of Font
+       > # end of ParaLine
+      > # end of Para
+     > # end of CellContent
+    > # end of Cell
+   > # end of Row
+  > # end of TblBody
+  <TblF
+  > # end of TblF
+ > # end of Tbl
+> # end of Tbls
+include (/home/dkramer/javadoc/mifdoclet/mifdoclet_B/pages.mif)
+include (/home/dkramer/javadoc/mifdoclet/mifdoclet_B/textflows.mif)
+<TextFlow
+ <TFTag `A'>
+ <TFAutoConnect Yes>
+ <TextRectID 22>
+ <Para
+  <PgfTag `PackagePreHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `java.applet - java.applet'>
+   > # end of Marker
+   <String `package'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `PackageHead'>
+  <ParaLine
+   <Marker
+    <MType 9>
+    <MText `PackageHead: java.applet'>
+   > # end of Marker
+   <String `java.applet'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHead'>
+  <ParaLine
+   <String `Description'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassText'>
+  <ParaLine
+   <String `Provides the classes necessary to create an applet and '>
+   <String `the classes an applet uses to communicate with its appl'>
+   <String `et context. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassText'>
+  <ParaLine
+   <String `The applet framework involves two entities: the '>
+   <Font
+    <FTag `Italic'>
+   > # end of Font
+   <String `applet'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` and the '>
+   <Font
+    <FTag `Italic'>
+   > # end of Font
+   <String `applet context'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `. An applet is an embeddable window (see the Panel clas'>
+   <String `s) with a few extra methods that the applet context can'>
+   <String ` use to initialize, start, and stop the applet. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassText'>
+  <ParaLine
+   <String `The applet context is an application that is responsib'>
+   <String `le for loading and running applets. For example, the ap'>
+   <String `plet context could be a Web browser or an applet develo'>
+   <String `pment environment. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassText'>
+  <ParaLine
+   <String `'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHeadRunIn'>
+  <ParaLine
+   <String `Since: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassTagText'>
+  <ParaLine
+   <String `JDK1.0 \\x13 '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `'>
+  <ParaLine
+   <ATbl 24>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassPreHead'>
+  <ParaLine
+   <String `java.applet'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `Applet - java.applet.Applet'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `ClassHead: java.applet.Applet'>
+   > # end of Marker
+   <String `Applet'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHead'>
+  <ParaLine
+   <String `Syntax'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSyntax'>
+  <ParaLine
+   <String `public class Applet extends '>
+   <String `java.awt.Panel'>
+  > # end of ParaLine
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <ParaLine
+   <String ` '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <ParaLine
+   <String `java.lang.Object'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <ParaLine
+   <Char HardSpace>
+   <Char HardSpace>
+   <String `|'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <ParaLine
+   <Char HardSpace>
+   <Char HardSpace>
+   <String `+--'>
+   <String `java.awt.Component'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <ParaLine
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <String `|'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <ParaLine
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <String `+--'>
+   <String `java.awt.Container'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <ParaLine
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <String `|'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <ParaLine
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <String `+--'>
+   <String `java.awt.Panel'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <ParaLine
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <String `|'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <ParaLine
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <String `+--'>
+   <Font
+    <FTag `Bold'>
+   > # end of Font
+   <String `java.applet.Applet'>
+   <Font
+    <FTag `Reset'>
+   > # end of Font
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHeadRunIn'>
+  <ParaLine
+   <String `All Implemented Interfaces: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassTagText'>
+  <ParaLine
+   <String `java.awt.image.ImageObserver'>
+   <String `, '>
+   <String `java.awt.MenuContainer'>
+   <String `, '>
+   <String `java.io.Serializable'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHead'>
+  <ParaLine
+   <String `Description'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassText'>
+  <ParaLine
+   <String `An applet is a small program that is intended not to be'>
+   <String ` run on its own, but rather to be embedded inside ano'>
+   <String `ther application. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassText'>
+  <ParaLine
+   <String `The '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Applet'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` class must be the superclass of any applet that is t'>
+   <String `o be embedded in a Web page or viewed by the Java App'>
+   <String `let Viewer. The '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Applet'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` class provides a standard interface between applets '>
+   <String `and their environment.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHeadRunIn'>
+  <ParaLine
+   <String `Since: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassTagText'>
+  <ParaLine
+   <String `JDK1.0'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `'>
+  <ParaLine
+   <ATbl 25>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `'>
+  <ParaLine
+   <ATbl 26>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberGroupHead'>
+  <ParaLine
+   <String `Constructors'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `Applet() - java.applet.Applet.Applet()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.Applet()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `Applet()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `'>
+   <String ` Applet'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberGroupHead'>
+  <ParaLine
+   <String `Methods'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `destroy() - java.applet.Applet.destroy()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.destroy()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `destroy()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` destroy'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Called by the browser or applet viewer to inform this'>
+   <String ` applet that it is being reclaimed and that it should d'>
+   <String `estroy any resources that it has allocated. The '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `stop'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method will always be called before '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `destroy'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `A subclass of '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Applet'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` should override this method if it has any operation '>
+   <String `that it wants to perform before it is destroyed. For '>
+   <String `example, an applet with threads would use the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `init'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method to create the threads and the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `destroy'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method to kill them. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `The implementation of this method provided by the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Applet'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` class does nothing.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `See Also: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.init()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `init()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `, '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.start()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `start()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `, '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.stop()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `stop()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getAppletContext() - java.applet.Applet.getAppletContext()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.getAppletContext()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getAppletContext()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `ClassHead: java.applet.AppletContext'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `AppletContext'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` getAppletContext'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Determines this applet\qs context, which allows the app'>
+   <String `let to query and affect the environment in which it r'>
+   <String `uns. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `This environment of an applet represents the document'>
+   <String ` that contains the applet.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the applet\qs context.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getAppletInfo() - java.applet.Applet.getAppletInfo()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.getAppletInfo()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getAppletInfo()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `java.lang.String'>
+   <String ` getAppletInfo'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Returns information about this applet. An applet should'>
+   <String ` override this method to return a '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `String'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` containing information about the author, version, an'>
+   <String `d copyright of the applet. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `The implementation of this method provided by the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Applet'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` class returns '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `null'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `a string containing information about the author, versi'>
+   <String `on, and copyright of the applet.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getAudioClip(URL) - java.applet.Applet.getAudioClip(java.net.URL)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.getAudioClip(java.net.URL)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getAudioClip(URL)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `ClassHead: java.applet.AudioClip'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `AudioClip'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` getAudioClip'>
+   <String `('>
+   <String `java.net.URL'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Returns the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `AudioClip'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` object specified by the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `URL'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` argument. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `This method always returns immediately, whether or no'>
+   <String `t the audio clip exists. When this applet attempts to'>
+   <String ` play the audio clip, the data will be loaded.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `an absolute URL giving the location of the audio clip.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the audio clip at the specified URL.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `See Also: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `ClassHead: java.applet.AudioClip'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `AudioClip'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getAudioClip(URL, String) - java.applet.Applet.getAudioClip(java.net.URL, java.lang.String)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.getAudioClip(java.net.URL, java.lang.String)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getAudioClip(URL, String)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `ClassHead: java.applet.AudioClip'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `AudioClip'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` getAudioClip'>
+   <String `('>
+   <String `java.net.URL'>
+   <String `, '>
+   <String `java.lang.String'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Returns the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `AudioClip'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` object specified by the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `URL'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` and '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `name'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` arguments. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `This method always returns immediately, whether or no'>
+   <String `t the audio clip exists. When this applet attempts to'>
+   <String ` play the audio clip, the data will be loaded.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `an absolute URL giving the base location of the '>
+   <String ` audio clip.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `name'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `the location of the audio clip, relative to the '>
+   <String ` '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` argument.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the audio clip at the specified URL.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `See Also: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `ClassHead: java.applet.AudioClip'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `AudioClip'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getCodeBase() - java.applet.Applet.getCodeBase()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.getCodeBase()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getCodeBase()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `java.net.URL'>
+   <String ` getCodeBase'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Gets the base URL. This is the URL of the applet itself'>
+   <String `.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `URL#_top_'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <Char HardSpace>
+   <String ` of this applet.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `See Also: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.getDocumentBase()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `getDocumentBase()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getDocumentBase() - java.applet.Applet.getDocumentBase()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.getDocumentBase()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getDocumentBase()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `java.net.URL'>
+   <String ` getDocumentBase'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Gets the document URL. This is the URL of the document '>
+   <String `in which the applet is embedded.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `URL#_top_'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <Char HardSpace>
+   <String ` of the document that contains this applet.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `See Also: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.getCodeBase()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `getCodeBase()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getImage(URL) - java.applet.Applet.getImage(java.net.URL)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.getImage(java.net.URL)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getImage(URL)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `java.awt.Image'>
+   <String ` getImage'>
+   <String `('>
+   <String `java.net.URL'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Returns an '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Image'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` object that can then be painted on the screen. The '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` that is passed as an argument must specify an absolu'>
+   <String `te URL. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `This method always returns immediately, whether or no'>
+   <String `t the image exists. When this applet attempts to draw'>
+   <String ` the image on the screen, the data will be loaded. Th'>
+   <String `e graphics primitives that draw the image will increm'>
+   <String `entally paint on the screen.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `an absolute URL giving the location of the image.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the image at the specified URL.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `See Also: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `java.awt.Image'>
+   <Font
+    <FTag `'>
+   > # end of Font
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getImage(URL, String) - java.applet.Applet.getImage(java.net.URL, java.lang.String)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.getImage(java.net.URL, java.lang.String)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getImage(URL, String)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `java.awt.Image'>
+   <String ` getImage'>
+   <String `('>
+   <String `java.net.URL'>
+   <String `, '>
+   <String `java.lang.String'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Returns an '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Image'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` object that can then be painted on the screen. The '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` argument must specify an absolute URL. The '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `name'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` argument is a specifier that is relative to the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` argument. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `This method always returns immediately, whether or no'>
+   <String `t the image exists. When this applet attempts to draw'>
+   <String ` the image on the screen, the data will be loaded. Th'>
+   <String `e graphics primitives that draw the image will increm'>
+   <String `entally paint on the screen.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `an absolute URL giving the base location of the image.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `name'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `the location of the image, relative to the '>
+   <String ` '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` argument.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the image at the specified URL.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `See Also: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `java.awt.Image'>
+   <Font
+    <FTag `'>
+   > # end of Font
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getLocale() - java.applet.Applet.getLocale()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.getLocale()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getLocale()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `java.util.Locale'>
+   <String ` getLocale'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Gets the Locale for the applet, if it has been set. If'>
+   <String ` no Locale has been set, then the default Locale is r'>
+   <String `eturned.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Overrides:'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `java.awt.Component.getLocale()'>
+   <String ` in class '>
+   <String `java.awt.Component'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the Locale for the applet'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Since: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `JDK1.1'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getParameter(String) - java.applet.Applet.getParameter(java.lang.String)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.getParameter(java.lang.String)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getParameter(String)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `java.lang.String'>
+   <String ` getParameter'>
+   <String `('>
+   <String `java.lang.String'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Returns the value of the named parameter in the HTML ta'>
+   <String `g. For example, if this applet is specified as '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberBlockQuote'>
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+   <Char HardSpace>
+   <String `<applet'>
+   <Char HardSpace>
+   <String `code="Clock"'>
+   <Char HardSpace>
+   <String `width=50'>
+   <Char HardSpace>
+   <String `height=50\>'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+   <Char HardSpace>
+   <String `<param'>
+   <Char HardSpace>
+   <String `name=Color'>
+   <Char HardSpace>
+   <String `value="blue"\>'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+   <Char HardSpace>
+   <String `</applet\>'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+   <Char HardSpace>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `thena call to '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `getParameter("Color")'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` returns the value '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `"blue"'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `The '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `name'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` argument is case insensitive.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `name'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `a parameter name.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the value of the named parameter.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getParameterInfo() - java.applet.Applet.getParameterInfo()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.getParameterInfo()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getParameterInfo()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `java.lang.String'>
+   <String ` getParameterInfo'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Returns information about the parameters than are under'>
+   <String `stood by this applet. An applet should override this '>
+   <String `method to return an array of '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Strings'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` describing these parameters. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Each element of the array should be a set of three '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Strings'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` containing the name, the type, and a description. Fo'>
+   <String `r example: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberBlockQuote'>
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+   <Char HardSpace>
+   <String `String'>
+   <Char HardSpace>
+   <String `pinfo[][]'>
+   <Char HardSpace>
+   <String `='>
+   <Char HardSpace>
+   <String `{'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+   <Char HardSpace>
+   <String `{"fps",'>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <String `"1-10",'>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <String `"frames'>
+   <Char HardSpace>
+   <String `per'>
+   <Char HardSpace>
+   <String `second"},'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+   <Char HardSpace>
+   <String `{"repeat",'>
+   <Char HardSpace>
+   <String `"boolean",'>
+   <Char HardSpace>
+   <String `"repeat'>
+   <Char HardSpace>
+   <String `image'>
+   <Char HardSpace>
+   <String `loop"},'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+   <Char HardSpace>
+   <String `{"imgs",'>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <String `"url",'>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <Char HardSpace>
+   <String `"images'>
+   <Char HardSpace>
+   <String `directory"}'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+   <Char HardSpace>
+   <String `};'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+   <Char HardSpace>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Theimplementation of this method provided by the '>
+   <String ` '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Applet'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` class returns '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `null'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `an array describing the parameters this applet looks fo'>
+   <String `r.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `init() - java.applet.Applet.init()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.init()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `init()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` init'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Called by the browser or applet viewer to inform this'>
+   <String ` applet that it has been loaded into the system. It is '>
+   <String `always called before the first time that the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `start'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method is called. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `A subclass of '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Applet'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` should override this method if it has initialization'>
+   <String ` to perform. For example, an applet with threads woul'>
+   <String `d use the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `init'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method to create the threads and the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `destroy'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method to kill them. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `The implementation of this method provided by the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Applet'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` class does nothing.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `See Also: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.destroy()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `destroy()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `, '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.start()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `start()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `, '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.stop()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `stop()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `isActive() - java.applet.Applet.isActive()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.isActive()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `isActive()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `boolean'>
+   <String ` isActive'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Determines if this applet is active. An applet is marke'>
+   <String `d active just before its '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `start'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method is called. It becomes inactive just before it'>
+   <String `s '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `stop'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method is called.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `true'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` if the applet is active; '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `false'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` otherwise.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `See Also: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.start()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `start()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `, '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.stop()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `stop()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `newAudioClip(URL) - java.applet.Applet.newAudioClip(java.net.URL)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.newAudioClip(java.net.URL)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `newAudioClip(URL)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public static final '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `ClassHead: java.applet.AudioClip'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `AudioClip'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` newAudioClip'>
+   <String `('>
+   <String `java.net.URL'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Get an audio clip from the given URL'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `Points to the audio clip'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Since: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `JDK1.2'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `play(URL) - java.applet.Applet.play(java.net.URL)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.play(java.net.URL)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `play(URL)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` play'>
+   <String `('>
+   <String `java.net.URL'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Plays the audio clip at the specified absolute URL. Not'>
+   <String `hing happens if the audio clip cannot be found.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `an absolute URL giving the location of the audio clip.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `play(URL, String) - java.applet.Applet.play(java.net.URL, java.lang.String)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.play(java.net.URL, java.lang.String)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `play(URL, String)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` play'>
+   <String `('>
+   <String `java.net.URL'>
+   <String `, '>
+   <String `java.lang.String'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Plays the audio clip given the URL and a specifier that'>
+   <String ` is relative to it. Nothing happens if the audio clip'>
+   <String ` cannot be found.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `an absolute URL giving the base location of the '>
+   <String ` audio clip.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `name'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `the location of the audio clip, relative to the '>
+   <String ` '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` argument.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `resize(Dimension) - java.applet.Applet.resize(java.awt.Dimension)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.resize(java.awt.Dimension)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `resize(Dimension)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` resize'>
+   <String `('>
+   <String `java.awt.Dimension'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Requests that this applet be resized.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Overrides:'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `java.awt.Component.resize(java.awt.Dimension)'>
+   <String ` in class '>
+   <String `java.awt.Component'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `d'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `an object giving the new width and height.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `resize(int, int) - java.applet.Applet.resize(int, int)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.resize(int, int)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `resize(int, int)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` resize'>
+   <String `('>
+   <String `int'>
+   <String `, '>
+   <String `int'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Requests that this applet be resized.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Overrides:'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `java.awt.Component.resize(int, int)'>
+   <String ` in class '>
+   <String `java.awt.Component'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `width'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `the new requested width for the applet.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `height'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `the new requested height for the applet.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `setStub(AppletStub) - java.applet.Applet.setStub(java.applet.AppletStub)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.setStub(java.applet.AppletStub)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `setStub(AppletStub)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public final '>
+   <String `void'>
+   <String ` setStub'>
+   <String `('>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `ClassHead: java.applet.AppletStub'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `AppletStub'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Sets this applet\qs stub. This is done automatically by'>
+   <String ` the system.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `stub'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `the new stub.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `showStatus(String) - java.applet.Applet.showStatus(java.lang.String)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.showStatus(java.lang.String)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `showStatus(String)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` showStatus'>
+   <String `('>
+   <String `java.lang.String'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Requests that the argument string be displayed in the '>
+   <String ` "status window". Many browsers and applet viewers pr'>
+   <String `ovide such a window, where the application can inform u'>
+   <String `sers of its current state.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `msg'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `a string to display in the status window.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `start() - java.applet.Applet.start()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.start()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `start()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` start'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Called by the browser or applet viewer to inform this'>
+   <String ` applet that it should start its execution. It is calle'>
+   <String `d after the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `init'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method and each time the applet is revisited in a We'>
+   <String `b page. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `A subclass of '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Applet'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` should override this method if it has any operation '>
+   <String `that it wants to perform each time the Web page conta'>
+   <String `ining it is visited. For example, an applet with anim'>
+   <String `ation might want to use the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `start'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method to resume animation, and the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `stop'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method to suspend the animation. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `The implementation of this method provided by the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Applet'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` class does nothing.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `See Also: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.destroy()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `destroy()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `, '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.init()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `init()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `, '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.stop()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `stop()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `stop() - java.applet.Applet.stop()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.Applet.stop()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `stop()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` stop'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Called by the browser or applet viewer to inform this'>
+   <String ` applet that it should stop its execution. It is called'>
+   <String ` when the Web page that contains this applet has been'>
+   <String ` replaced by another page, and also just before the a'>
+   <String `pplet is to be destroyed. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `A subclass of '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Applet'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` should override this method if it has any operation '>
+   <String `that it wants to perform each time the Web page conta'>
+   <String `ining it is no longer visible. For example, an applet '>
+   <String ` with animation might want to use the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `start'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method to resume animation, and the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `stop'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method to suspend the animation. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `The implementation of this method provided by the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Applet'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` class does nothing.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `See Also: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.destroy()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `destroy()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `, '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.init()'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `init()'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassPreHead'>
+  <ParaLine
+   <String `java.applet'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `AppletContext - java.applet.AppletContext'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `ClassHead: java.applet.AppletContext'>
+   > # end of Marker
+   <String `AppletContext'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHead'>
+  <ParaLine
+   <String `Syntax'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSyntax'>
+  <ParaLine
+   <String `public interface AppletContext'>
+  > # end of ParaLine
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHead'>
+  <ParaLine
+   <String `Description'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassText'>
+  <ParaLine
+   <String `This interface corresponds to an applet\qs environment:'>
+   <String ` the document containing the applet and the other appl'>
+   <String `ets in the same document. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassText'>
+  <ParaLine
+   <String `The methods in this interface can be used by an apple'>
+   <String `t to obtain information about its environment.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHeadRunIn'>
+  <ParaLine
+   <String `Since: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassTagText'>
+  <ParaLine
+   <String `JDK1.0'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `'>
+  <ParaLine
+   <ATbl 27>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberGroupHead'>
+  <ParaLine
+   <String `Methods'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getApplet(String) - java.applet.AppletContext.getApplet(java.lang.String)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AppletContext.getApplet(java.lang.String)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getApplet(String)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `ClassHead: java.applet.Applet'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `Applet'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` getApplet'>
+   <String `('>
+   <String `java.lang.String'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Finds and returns the applet in the document represente'>
+   <String `d by this applet context with the given name. The name'>
+   <String ` can be set in the HTML tag by setting the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `name'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` attribute.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `name'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `an applet name.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the applet with the given name, or '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `null'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` if not found.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getApplets() - java.applet.AppletContext.getApplets()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AppletContext.getApplets()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getApplets()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `java.util.Enumeration'>
+   <String ` getApplets'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Finds all the applets in the document represented by th'>
+   <String `is applet context.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `an enumeration of all applets in the document represent'>
+   <String `ed by this applet context.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getAudioClip(URL) - java.applet.AppletContext.getAudioClip(java.net.URL)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AppletContext.getAudioClip(java.net.URL)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getAudioClip(URL)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `ClassHead: java.applet.AudioClip'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `AudioClip'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` getAudioClip'>
+   <String `('>
+   <String `java.net.URL'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Creates an audio clip.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `an absolute URL giving the location of the audio clip.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the audio clip at the specified URL.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getImage(URL) - java.applet.AppletContext.getImage(java.net.URL)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AppletContext.getImage(java.net.URL)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getImage(URL)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `java.awt.Image'>
+   <String ` getImage'>
+   <String `('>
+   <String `java.net.URL'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Returns an '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `Image'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` object that can then be painted on the screen. The '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` argument'>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String ` '>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `that is passed as an argument must specify an absolute'>
+   <String ` URL. '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `This method always returns immediately, whether or no'>
+   <String `t the image exists. When the applet attempts to draw t'>
+   <String `he image on the screen, the data will be loaded. The g'>
+   <String `raphics primitives that draw the image will incrementa'>
+   <String `lly paint on the screen.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `an absolute URL giving the location of the image.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the image at the specified URL.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `See Also: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `java.awt.Image'>
+   <Font
+    <FTag `'>
+   > # end of Font
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `showDocument(URL) - java.applet.AppletContext.showDocument(java.net.URL)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AppletContext.showDocument(java.net.URL)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `showDocument(URL)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` showDocument'>
+   <String `('>
+   <String `java.net.URL'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Replaces the Web page currently being viewed with the g'>
+   <String `iven URL. This method may be ignored by applet context'>
+   <String `s that are not browsers.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `an absolute URL giving the location of the document.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `showDocument(URL, String) - java.applet.AppletContext.showDocument(java.net.URL, java.lang.String)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AppletContext.showDocument(java.net.URL, java.lang.String)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `showDocument(URL, String)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` showDocument'>
+   <String `('>
+   <String `java.net.URL'>
+   <String `, '>
+   <String `java.lang.String'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Requests that the browser or applet viewer show the Web'>
+   <String ` page indicated by the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` argument. The '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `target'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` argument indicates in which HTML frame the document i'>
+   <String `s to be displayed. The target argument is interpreted '>
+   <String `as follows: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `"_self"'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` Show in the window and frame that '>
+   <String ` contain the applet. '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `"_parent"'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `Show in the applet\qs parent frame. If '>
+   <String ` the applet\qs frame has no parent fr'>
+   <String `ame, acts the same a'>
+   <String `s "_self". '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `"_top"'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` Show in the top-level frame of the applet\qs '>
+   <String ` window. If the applet\qs fr'>
+   <String `ame is the top-level'>
+   <String ` frame, acts the same as "_self". '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `"_blank"'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` Show in a new, unnamed '>
+   <String ` top-level window. '>
+   <Font
+    <FTag `Italic'>
+   > # end of Font
+   <String `name'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `Show in the frame or window named '>
+   <Font
+    <FTag `Italic'>
+   > # end of Font
+   <String `name'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `. If a target named '>
+   <Font
+    <FTag `Italic'>
+   > # end of Font
+   <String `name'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` does not already exist, a new '>
+   <String `top-level window with the specified name is created, '>
+   <String ` and the document is shown there. '>
+   <String ` '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `An applet viewer or browser is free to ignore '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `showDocument'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `url'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `an absolute URL giving the location of the document.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `target'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `a '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `String'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` indicating where to display the pag'>
+   <String `e.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `showStatus(String) - java.applet.AppletContext.showStatus(java.lang.String)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AppletContext.showStatus(java.lang.String)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `showStatus(String)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` showStatus'>
+   <String `('>
+   <String `java.lang.String'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Requests that the argument string be displayed in the '>
+   <String `"status window". Many browsers and applet viewers prov'>
+   <String `ide such a window, where the application can inform use'>
+   <String `rs of its current state.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `status'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `a string to display in the status window.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassPreHead'>
+  <ParaLine
+   <String `java.applet'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `AppletStub - java.applet.AppletStub'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `ClassHead: java.applet.AppletStub'>
+   > # end of Marker
+   <String `AppletStub'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHead'>
+  <ParaLine
+   <String `Syntax'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSyntax'>
+  <ParaLine
+   <String `public interface AppletStub'>
+  > # end of ParaLine
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHead'>
+  <ParaLine
+   <String `Description'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassText'>
+  <ParaLine
+   <String `When an applet is first created, an applet stub is atta'>
+   <String `ched to it using the applet\qs '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `setStub'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method. This stub serves as the interface between the'>
+   <String ` applet and the browser environment or applet viewer e'>
+   <String `nvironment in which the application is running.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHeadRunIn'>
+  <ParaLine
+   <String `Since: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassTagText'>
+  <ParaLine
+   <String `JDK1.0'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHeadRunIn'>
+  <ParaLine
+   <String `See Also: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassTagText'>
+  <ParaLine
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `MemberHead: java.applet.Applet.setStub(java.applet.AppletStub)'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `Applet.setStub(AppletStub)'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `'>
+  <ParaLine
+   <ATbl 28>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberGroupHead'>
+  <ParaLine
+   <String `Methods'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `appletResize(int, int) - java.applet.AppletStub.appletResize(int, int)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AppletStub.appletResize(int, int)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `appletResize(int, int)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` appletResize'>
+   <String `('>
+   <String `int'>
+   <String `, '>
+   <String `int'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Called when the applet wants to be resized.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `width'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `the new requested width for the applet.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `height'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `the new requested height for the applet.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getAppletContext() - java.applet.AppletStub.getAppletContext()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AppletStub.getAppletContext()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getAppletContext()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <XRef
+    <XRefName `Blue Underlined'>
+    <XRefSrcText `ClassHead: java.applet.AppletContext'>
+    <XRefSrcFile `<c\>java.applet.fm'>
+   > # end of XRef
+   <Font
+    <FTag `Link'>
+   > # end of Font
+   <String `AppletContext'>
+   <XRefEnd>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` getAppletContext'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Gets a handler to the applet\qs context.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the applet\qs context.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getCodeBase() - java.applet.AppletStub.getCodeBase()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AppletStub.getCodeBase()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getCodeBase()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `java.net.URL'>
+   <String ` getCodeBase'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Gets the base URL.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `URL'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` of the applet.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getDocumentBase() - java.applet.AppletStub.getDocumentBase()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AppletStub.getDocumentBase()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getDocumentBase()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `java.net.URL'>
+   <String ` getDocumentBase'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Gets the document URL.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `URL'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` of the document containing the applet.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `getParameter(String) - java.applet.AppletStub.getParameter(java.lang.String)'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AppletStub.getParameter(java.lang.String)'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `getParameter(String)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `java.lang.String'>
+   <String ` getParameter'>
+   <String `('>
+   <String `java.lang.String'>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Returns the value of the named parameter in the HTML ta'>
+   <String `g. For example, if an applet is specified as '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberBlockQuote'>
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+   <Char HardSpace>
+   <String `<applet'>
+   <Char HardSpace>
+   <String `code="Clock"'>
+   <Char HardSpace>
+   <String `width=50'>
+   <Char HardSpace>
+   <String `height=50\>'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+   <Char HardSpace>
+   <String `<param'>
+   <Char HardSpace>
+   <String `name=Color'>
+   <Char HardSpace>
+   <String `value="blue"\>'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+   <Char HardSpace>
+   <String `</applet\>'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberCodeFragment'>
+  <ParaLine
+   <Char HardSpace>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `thena call to '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `getParameter("Color")'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` returns the value '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `"blue"'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String `.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHead'>
+  <ParaLine
+   <String `Parameters: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `name'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` - '>
+  > # end of ParaLine
+  <ParaLine
+   <String `a parameter name.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <String `the value of the named parameter.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `isActive() - java.applet.AppletStub.isActive()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AppletStub.isActive()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `isActive()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `boolean'>
+   <String ` isActive'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Determines if the applet is active. An applet is active'>
+   <String ` just before its '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `start'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method is called. It becomes inactive just before its'>
+   <String ` '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `stop'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` method is called.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSubHeadRunIn'>
+  <ParaLine
+   <String `Returns: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberTagText'>
+  <ParaLine
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `true'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` if the applet is active; '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `false'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` otherwise.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassPreHead'>
+  <ParaLine
+   <String `java.applet'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `AudioClip - java.applet.AudioClip'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `ClassHead: java.applet.AudioClip'>
+   > # end of Marker
+   <String `AudioClip'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHead'>
+  <ParaLine
+   <String `Syntax'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSyntax'>
+  <ParaLine
+   <String `public interface AudioClip'>
+  > # end of ParaLine
+  <ParaLine
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHead'>
+  <ParaLine
+   <String `Description'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassText'>
+  <ParaLine
+   <String `The '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `AudioClip'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` interface is a simple abstraction for playing a sound'>
+   <String ` clip. Multiple '>
+   <Font
+    <FTag `Code'>
+   > # end of Font
+   <String `AudioClip'>
+   <Font
+    <FTag `'>
+   > # end of Font
+   <String ` items can be playing at the same time, and the result'>
+   <String `ing sound is mixed together to produce a composite.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassSubHeadRunIn'>
+  <ParaLine
+   <String `Since: '>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `ClassTagText'>
+  <ParaLine
+   <String `JDK1.0'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `'>
+  <ParaLine
+   <ATbl 29>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberGroupHead'>
+  <ParaLine
+   <String `Methods'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `loop() - java.applet.AudioClip.loop()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AudioClip.loop()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `loop()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` loop'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Starts playing this audio clip in a loop.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `play() - java.applet.AudioClip.play()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AudioClip.play()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `play()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` play'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Starts playing this audio clip. Each time this method i'>
+   <String `s called, the clip is restarted from the beginning.'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberHead'>
+  <ParaLine
+   <Marker
+    <MType 2>
+    <MText `stop() - java.applet.AudioClip.stop()'>
+   > # end of Marker
+   <Marker
+    <MType 9>
+    <MText `MemberHead: java.applet.AudioClip.stop()'>
+   > # end of Marker
+  > # end of ParaLine
+  <ParaLine
+   <String `stop()'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberSyntax'>
+  <ParaLine
+   <String `public '>
+   <String `void'>
+   <String ` stop'>
+   <String `('>
+   <String `)'>
+  > # end of ParaLine
+ > # end of Para
+ <Para
+  <PgfTag `MemberText'>
+  <ParaLine
+   <String `Stops playing this audio clip.'>
+  > # end of ParaLine
+ > # end of Para
+> # end of TextFlow

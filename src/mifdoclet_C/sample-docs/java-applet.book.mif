@@ -1,0 +1,55 @@
+<Book 5.5> # written by mif API at Thu Jul 29 12:57:35 PDT 1999
+<BWindowRect 10 10 400 320 >
+<BookComponent
+ <FileName `<c\>titlepage.fm'>
+ <DeriveLinks Yes>
+ <StartPageSide ReadFromFile>
+ <PageNumbering Continue>
+ <PgfNumbering Continue>
+ <DefaultPrint Yes>
+ <DefaultApply Yes>
+> # end of BookComponent
+<BookComponent
+ <FileName `<c\>contents.fm'>
+ <DeriveType TOC>
+ <DeriveLinks Yes>
+ <DeriveTag ClassHead>
+ <DeriveTag IndexHead>
+ <DeriveTag PackageHead>
+ <DeriveTag OverviewHead>
+ <StartPageSide ReadFromFile>
+ <PageNumbering Continue>
+ <PgfNumbering Continue>
+ <DefaultPrint Yes>
+ <DefaultApply Yes>
+> # end of BookComponent
+<BookComponent
+ <FileName `<c\>overview-summary.fm'>
+ <DeriveLinks Yes>
+ <StartPageSide ReadFromFile>
+ <PageNumbering Continue>
+ <PgfNumbering Continue>
+ <DefaultPrint Yes>
+ <DefaultApply Yes>
+> # end of BookComponent
+<BookComponent
+ <FileName `<c\>java.applet.fm'>
+ <DeriveLinks Yes>
+ <StartPageSide ReadFromFile>
+ <PageNumbering Continue>
+ <PgfNumbering Continue>
+ <DefaultPrint Yes>
+ <DefaultApply Yes>
+> # end of BookComponent
+<BookComponent
+ <FileName `<c\>index.fm'>
+ <DeriveType IDX>
+ <DeriveLinks Yes>
+ <DeriveTag Index>
+ <StartPageSide ReadFromFile>
+ <PageNumbering Continue>
+ <PgfNumbering Continue>
+ <DefaultPrint Yes>
+ <DefaultApply Yes>
+> # end of BookComponent
+<BookUpdateReferences Yes>

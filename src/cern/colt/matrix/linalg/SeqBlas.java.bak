@@ -1,0 +1,221 @@
+package cern.colt.matrix.linalg;
+
+import cern.colt.matrix.*;
+/**
+<p>Subset of the <A HREF="http://netlib2.cs.utk.edu/blas/faq.html">BLAS</A> (Basic Linear Algebra System); 
+Mostly for compatibility with 
+  legacy notations. Most operations actually just delegate to the appropriate 
+  methods directly defined on matrices and vectors. </p>
+<p>This class implements the BLAS functions for operations on matrices from the 
+  matrix package. It follows the spirit of the <A HREF="http://math.nist.gov/javanumerics/blas.html">Draft Proposal for Java BLAS Interface</A>, 
+  by Roldan Pozo of the National Institute of Standards and Technology. Interface 
+  definitions are also identical to the Ninja interface. Because the matrix package 
+  supports sections, the interface is actually simpler. </p>
+<p>Currently, the following operations are supported: </p>
+<ol>
+  <li>BLAS Level 1: Vector-Vector operations </li>
+  <ul>
+	<li>ddot  : dot product of two vectors </li>
+	<li>daxpy : scalar times a vector plus a vector </li>
+	<li>drotg : construct a Givens plane rotation </li>
+	<li>drot  : apply a plane rotation </li>
+	<li>dcopy : copy vector X into vector Y </li>
+	<li>dswap : interchange vectors X and Y </li>
+	<li>dnrm2 : Euclidean norm of a vector </li>
+	<li>dasum : sum of absolute values of vector components </li>
+	<li>dscal : scale a vector by a scalar </li>
+	<li>idamax: index of element with maximum absolute value </li>
+  </ul>
+  <li>2.BLAS Level 2: Matrix-Vector operations </li>
+  <ul>
+	<li>dgemv : matrix-vector multiply with general matrix </li>
+	<li>dger  : rank-1 update on general matrix </li>
+	<li>dsymv : matrix-vector multiply with symmetric matrix </li>
+	<li>dtrmv : matrix-vector multiply with triangular matrix </li>
+  </ul>
+  <li>3.BLAS Level 3: Matrix-Matrix operations 
+	<ul>
+	  <li>dgemm : matrix-matrix multiply with general matrices </li>
+	</ul>
+  </li>
+</ol>
+
+@author wolfgang.hoschek@cern.ch
+@version 0.9, 16/04/2000 
+*/
+public class SeqBlas {
+	private cern.jet.math.Functions F = cern.jet.math.Functions.functions;
+/**
+Makes this class non instantiable, but still let's others inherit from it.
+*/
+protected SeqBlas() {}
+public double dasum(DoubleMatrix1D x) {
+	return x.aggregate(F.plus, F.abs);
+}
+public void daxpy(double alpha, DoubleMatrix1D x, DoubleMatrix1D y) {
+	y.assign(x,F.plusMult(alpha));
+}
+public void dcopy(DoubleMatrix1D x, DoubleMatrix1D y) {
+	y.assign(x);
+}
+public double ddot(DoubleMatrix1D x, DoubleMatrix1D y) {
+	return x.zDotProduct(y);
+}
+public void dgemm(boolean transposeA, boolean transposeB, double alpha, DoubleMatrix2D A, DoubleMatrix2D B, double beta, DoubleMatrix2D C) {
+	A.zMult(B,C,alpha,beta,transposeA,transposeB);
+}
+public void dgemv(boolean transposeA, double alpha, DoubleMatrix2D A, DoubleMatrix1D x, double beta, DoubleMatrix1D y) {
+	A.zMult(x,y,alpha,beta,transposeA);
+}
+public void dger(double alpha, DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix2D A) {
+	cern.jet.math.PlusMult fun = cern.jet.math.PlusMult.plusMult(0);
+	for (int i=A.rows(); --i >= 0; ) {
+		fun.multiplicator = x.getQuick(i);
+		A.viewRow(i).assign(y,fun);
+	}
+}
+public double dnrm2(DoubleMatrix1D x) {
+	return Math.sqrt(Algebra.DEFAULT.norm2(x));
+}
+public void drot(DoubleMatrix1D x, DoubleMatrix1D y, double c, double s) {
+	x.checkSize(y);
+	DoubleMatrix1D tmp = x.copy();
+	
+	x.assign(F.mult(c));
+	x.assign(y,F.plusMult(s));
+
+	y.assign(F.mult(c));
+	y.assign(tmp,F.minusMult(s));
+}
+public void drotg(double a, double b, double rotvec[]) {
+	double c,s,roe,scale,r,z,ra,rb;
+
+	roe = b;
+
+	if (Math.abs(a) > Math.abs(b)) roe = a;
+
+	scale = Math.abs(a) + Math.abs(b);
+
+	if (scale != 0.0) {
+
+		ra = a/scale;
+		rb = b/scale;
+		r = scale*Math.sqrt(ra*ra + rb*rb);
+		r = sign(1.0,roe)*r;
+		c = a/r;
+		s = b/r;
+		z = 1.0;
+		if (Math.abs(a) > Math.abs(b)) z = s;
+		if ((Math.abs(b) >= Math.abs(a)) && (c != 0.0)) z = 1.0/c;
+
+	} else {
+
+		c = 1.0;
+		s = 0.0;
+		r = 0.0;
+		z = 0.0;
+
+	}
+
+	a = r;
+	b = z;
+
+	rotvec[0] = a;
+	rotvec[1] = b;
+	rotvec[2] = c;
+	rotvec[3] = s;
+
+}
+public void dscal(double alpha, DoubleMatrix1D x) {
+	x.assign(F.mult(alpha));
+}
+public void dswap(DoubleMatrix1D x, DoubleMatrix1D y) {
+	y.swap(x);
+}
+public void dsymv(boolean isUpperTriangular, double alpha, DoubleMatrix2D A, DoubleMatrix1D x, double beta, DoubleMatrix1D y) {
+	if (isUpperTriangular) A = A.viewDice();
+	Property.DEFAULT.checkSquare(A);
+	int size = A.rows();
+	if (size != x.size() || size!=y.size()) {
+		throw new IllegalArgumentException(A.toStringShort() + ", " + x.toStringShort() + ", " + y.toStringShort());
+	}
+	DoubleMatrix1D tmp = x.like();
+	for (int i = 0; i < size; i++) {
+		double sum = 0;
+		for (int j = 0; j <= i; j++) {
+			sum += A.getQuick(i,j) * x.getQuick(j);
+		}
+		for (int j = i + 1; j < size; j++) {
+			sum += A.getQuick(j,i) * x.getQuick(j);
+		}
+		tmp.setQuick(i, alpha * sum + beta * y.getQuick(i));
+	}
+	y.assign(tmp);
+}
+public void dtrmv(boolean isUpperTriangular, boolean transposeA, boolean isUnitTriangular, DoubleMatrix2D A, DoubleMatrix1D x) {
+	if (transposeA) {
+		A = A.viewDice();
+		isUpperTriangular = !isUpperTriangular;
+	}
+	
+	Property.DEFAULT.checkSquare(A);
+	int size = A.rows();
+	if (size != x.size()) {
+		throw new IllegalArgumentException(A.toStringShort() + ", " + x.toStringShort());
+	}
+	    
+	DoubleMatrix1D b = x.like();
+	DoubleMatrix1D y = x.like();
+	if (isUnitTriangular) {
+		y.assign(1);
+	}
+	else {
+		for (int i = 0; i < size; i++) {
+			y.setQuick(i, A.getQuick(i,i));
+		}
+	}
+	
+	for (int i = 0; i < size; i++) {
+		double sum = 0;
+		if (!isUpperTriangular) {
+			for (int j = 0; j < i; j++) {
+				sum += A.getQuick(i,j) * x.getQuick(j);
+			}
+			sum += y.getQuick(i) * x.getQuick(i);
+		}
+		else {
+			sum += y.getQuick(i) * x.getQuick(i);
+			for (int j = i + 1; j < size; j++) {
+				sum += A.getQuick(j,i) * x.getQuick(j);
+			}
+		}
+		b.setQuick(i,sum);
+	}
+	x.assign(b);
+}
+public int idamax(DoubleMatrix1D x) {
+	int maxIndex = -1;
+	double maxValue = Double.MIN_VALUE;
+	for (int i=x.size(); --i >= 0; ) {
+		double v = Math.abs(x.getQuick(i));
+		if (v > maxValue) {
+			maxValue = v;
+			maxIndex = i;
+		}
+	}
+	return maxIndex;
+}
+/**
+Implements the FORTRAN sign (not sin) function.
+See the code for details.
+@param  a   a
+@param  b   b
+*/
+private double sign(double a, double b) {
+	if (b < 0.0) {
+		return -Math.abs(a);
+	} else {
+		return Math.abs(a);      
+	}
+}
+}

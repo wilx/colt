@@ -1,0 +1,7 @@
+Main-Class: cern.colt.Version
+
+Name: cern/colt/
+Specification-Title: Colt Distribution
+Specification-Vendor: The Colt Project
+Package-Title: cern.colt
+Implementation-Vendor: wolfgang.hoschek@cern.ch or http://nicewww.cern.ch/~hoschek/colt/index.htm

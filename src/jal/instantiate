@@ -1,0 +1,98 @@
+#!/usr/bin/perl
+
+# Copyright (c) 1996
+# Silicon Graphics, Inc.
+#
+# Permission to use, copy, modify, distribute and sell this software
+# and its documentation for any purpose is hereby granted without fee,
+# provided that the above copyright notice appear in all copies and
+# that both that copyright notice and this permission notice appear
+# in supporting documentation.  Silicon Graphics makes no
+# representations about the suitability of this software for any
+# purpose.  It is provided "as is" without express or 
+# implied warranty.
+
+$non_numeric_base = "generic/object";
+$numeric_base = "generic/numeric";
+$generic_type = "generic";
+$generic_package = "GENERIC";
+@files = ("BinaryOperator",    "Modification",      "Sorting",
+	  "BinaryPredicate",   "Numeric",           "UnaryOperator",
+	  "Generator",         "Predicate",         "VoidFunction",
+	  "Inspection",        "Range",             "Equals",
+	  );
+$extension = ".java";
+
+$word_count = 0;
+while ($_ = shift) {
+    if (/^-/) {
+	if (/^-n$/)
+	  { $is_numeric_type = 1; }
+	else
+	  { goto print_usage; }
+    }
+    else 
+      { $words[$word_count++] = $_; }
+}
+
+if ($word_count < 1 || $word_count > 2)
+    { goto print_usage; }
+$type_name = $words[0];
+$package_name = $words[$word_count - 1];
+$source_directory = $is_numeric_type ? $numeric_base : $non_numeric_base;
+$dest_directory = $package_name;
+
+if (-d $dest_directory) {
+    print "Performing instantiation in directory $dest_directory, ";
+    print "which already exists.\n";
+}
+elsif (-e $dest_directory) {
+    print "$0: Error:  The package $package_name must be instantiated in the\n";
+    print "directory $dest_directory.  A non-directory file of that name\n";
+    print "already exists.\n";
+    exit 1;
+}
+else {
+    print "Creating directory $dest_directory for instantiation.\n";
+    mkdir $dest_directory, 0777 || die "Error: couldn't create directory.\n";
+}
+
+while ($base_name = pop(@files)) {
+    $file_name = $base_name . $extension;
+    $source_file = $source_directory . "/" . $file_name;
+    $dest_file   = $dest_directory. "/" . $file_name;
+
+    print "  Instantiating $file_name...\n";
+    if (-e $dest_file) {
+	$backup_file = $dest_file . ".bak";
+	print "    $dest_file already exists.\n    Saving it in $backup_file.\n";
+	unlink $backup_file if -e $backup_file;
+	rename $dest_file, $backup_file;
+    }
+
+    $in_ok = open IN, $source_file;
+    $out_ok = open OUT, ">" . $dest_file;
+
+    if (!$in_ok) {
+	print "    Instantiation failed.  Can't open $source_file for reading.\n";
+    }
+    elsif (!$out_ok) {
+	print "    Instantiation failed.  Can't open $dest_file for writing.\n";
+    }
+    else {
+	while(<IN>) {
+	    s/$generic_package/$package_name/g;
+	    s/$generic_type/$type_name/g;
+	    print OUT;
+	}
+    }
+
+    close IN;
+    close OUT;
+}
+print "Done.\n";
+exit 0;
+
+
+print_usage:
+    die "Usage: $0 [-n] type_name [package_name]\n";

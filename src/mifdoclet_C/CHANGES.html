@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+    <title>Changes and Bugs in MIF Doclet</title>
+</head>
+
+<body bgcolor="white">
+
+<TABLE BORDER="0" WIDTH="100%">
+<TR>
+<TD>
+   <IMG SRC="javalogo52x88.gif" ALT="Java" BORDER=0 WIDTH=52 HEIGHT=88>
+</TD>
+
+<TD>
+<center>
+      <h1>Changes and Bugs in MIF Doclet</h1>
+<p>
+<font size="-1">
+<em>
+<!-- Created: Wed Apr 23 18:17:54 PDT 1997 -->
+<!-- hhmts start -->
+Last modified: Fri Jul 23 15:27:04 PDT 1999
+<!-- hhmts end -->
+</em>
+</font>
+
+</center>
+</TD>
+
+<TD ALIGN=RIGHT VALIGN=TOP WIDTH="40">
+
+<!-- THIS IS AN ABSOLUTE URL TO java.sun.com BECAUSE THIS FILE IS INCLUDED IN THE DOWNLOAD BUNDLE -->
+   <font size="-1"><a href="http://java.sun.com/javadoc/mifdoclet/index.html">MIF Doclet&nbsp;Home&nbsp;Page</a></font>
+</TD>
+</TR>
+</TABLE>
+
+<p>
+
+<!-- ========================================================= -->
+
+<!-- Body text begins here -->
+
+<h3>Limitations</h3>
+This doclet does not support converting HTML tables to MIF.  We have 
+not committed to adding table support.
+See other <a href="http://java.sun.com/products/jdk/javadoc/mifdoclet/mifdoclet.html#limitations">limitations</a>.
+<p>
+
+<h3>Changes and Bugs</h3>
+
+You can tell which version of the MIF doclet you have only by file date and size,
+as listed on this page.
+<p>
+
+<!-- ================================================================= -->
+
+<b>Version C</b> (<code>mifdoclet_C.zip</code>)
+
+<pre>
+    mif.jar              84135 Aug 30 16:34
+    mifoutput.jar        36075 Aug 30 16:22
+    standarddoclet.jar  162636 Aug 31 16:34
+</pre>
+
+<ul>
+   <li> <b>Design Change:</b> The file <code>standarddoclet.jar</code> is now included 
+        by necessity, since some changes in it are required by the MIF Doclet.
+        This means the MIF doclet can work with Java 2 SDK v1.2 and no longer 
+        requires v1.2.2.  The MIF Doclet also works with v1.3 Beta.  Eventually the 
+        MIF Doclet will work with <code>tools.jar</code> in v1.3 Final without requiring 
+        this separate jar file.
+   <li> <b>Design Change:</b> Changed the name of the jar files:  <code>mif.jar</code>
+        became <code>mifoutput.jar</code> and <code>mifdoclet.jar</code> became
+        <code>mif.jar</code>.
+   <li> <b>Design change:</b> Changed the name of the package in which the MIF Doclet
+        code resides.  As a result, the <code>-doclet</code> option now requires 
+        <code>com.sun.tools.doclets.mif.MIFDoclet</code> as an argument.
+   <li> <b>Added Feature:</b> Renamed <code>-fmbatch</code> to <code>-batch</code>.
+        It now takes one of two arguments: <code>fmbatch</code> or <code>dzbatcher</code>.
+   <li> <b>Added Feature:</b> Added <code>-noexecutebatch</code> option.
+   <li> <b>Added Feature:</b> Alphabetically sort rows in class summary (on package
+        page) and member summary (on class page)
+   <li> <b>Fixed Bug:</b> The bug was that <code>{@link name label}</code> 
+        tags displayed the name rather than the label.  The fix is to omit
+        all HTML tags in the label and display the text that's left.
+   <li> <b>Fixed Bug:</b> Parameter names are now included in the Constructor/Method Descriptions.
+   <li> <b>Fixed Bug:</b> Fixed bug about <code>@exception</code> tags. Those were 
+        getting repeated. 
+   <li> <b>Fixed Bug:</b> Fixed "missing space" problem after first word in the next 
+        paragraph after &lt;/p&gt; and &lt;/pre&gt; tags.
+   <li> <b>Fixed Bug:</b> Added escape character ('\') to any array square brackets []
+        that appear in Marker Text, like this: '\[' and '\]'.
+   <li> <b>Fixed Bug:</b> The <code>stylemap.properties</code> file now can have blank lines 
+   <li> <b>Fixed Bug:</b> Added <code>PackagePreHead</code> to 
+        <code>stylemap.properties</code>.  Renamed <code>ClassPackageHead</code> to 
+        <code>ClassPreHead</code>.
+   <li> <b>Fixed Bug:</b> Fixed <code>template.mif</code> so it would no longer display an 
+        "unavailable font" warning when opened in Solaris.
+   <li> <b>Known Bug:</b> TrueType fonts in the header/footer are corrupted with
+        Distiller 3.0.  (Workaround: Change fonts or use Distiller 4.0 instead.)
+   <li> <b>Known Bug:</b> The paragraph ahead of tables is Paragraph style;  should be
+        ClassText style.
+   <li> <b>Known Bug:</b> When converted to PDF, links in the index appear in the white
+        space to the <em>right</em> of the page number.
+</ul>
+
+<!-- ================================================================= -->
+
+<b>Version B</b> (<code>mifdoclet_B.zip</code>)
+
+<pre>
+    mif.jar        31977 Jul 20 16:06   (unchanged from version A)
+    mifdoclet.jar  93524 Jul 29 11:43
+</pre>
+
+<ul>
+   <li> <b>Added Feature:</b> Added <code>-includeDir</code> for specifying the directory of 
+        the three MIF include files.
+
+   <li> <b>Change:</b> Removed <code>-contentstitle</code> and <code>-indextitle</code>
+        options, which are obsoleted by <code>-contentsfile</code> and <code>-indexfile</code>.
+
+   <li> <b>Fixed Bug:</b> The bug was that the references to <code>.mif</code> files should instead be
+        to <code>.fm</code> files.
+
+   <li> <b>Fixed Bug:</b> The bug was that a space was missing between words.  This occured
+        at the boundary of newlines in doc comments.
+
+   <li> <b>Fixed Bug:</b>  The bug was that <code>OutlineHead</code> style was white font;
+        should be black.
+
+   <li> <b>Fixed Bug:</b> The bug was that Array brackets [] did not appear in the return type.
+
+   <li> <b>Known Bug:</b> When converted to PDF, links in the index appear in the white space
+        to the <em>right</em> of the page number.
+
+   <li> <b>Known Bug:</b> <code>{@link name label}</code> tags display the name rather than 
+        the label.
+
+   <li> <b>Known Bug:</b> TrueType fonts in the header/footer are corrupted with
+         Distiller 3.0.  (Workaround: Change fonts or use Distiller 4.0 instead.)
+
+</ul>
+
+<!-- ================================================================= -->
+
+<b>Version A</b> (<code>mifdoclet_A.zip</code>)
+<p>
+<pre>
+   mif.jar         31977 Jul 20  16:19 
+   mifdoclet.jar   98971 Jul 20  16:19
+</pre>
+
+<ul>
+
+   <li> <b>Known Bug:</b> A space is missing between words.  This occurs at the boundary
+        of newlines in doc comments.
+
+   <li> <b>Known Bug:</b> When converted to PDF, links in the index appear in the white space
+        to the <em>right</em> of the page number.
+
+   <li> <b>Known Bug:</b> <code>OutlineHead</code> style is white font; should be black.
+
+   <li> <b>Known Bug:</b> <code>titlepage.mif</code> was inadvertently omitted from the
+        download bundle.  You can get it from the MIF doclet home page.
+
+        NOTE: This file contains a dummy copyright information on page 2.
+        Be sure to modify this for your company.
+
+   <li> <b>Known Bug:</b> There are some content bugs not present in the standard doclet.
+        Array brackets [] do not appear in the return type.
+
+   <li> <b>Known Bug:</b> <code>{@link name label}</code> tags display the name rather than 
+        the label.
+
+   <li> <b>Known Bug:</b> In Solaris, opening template and any generated MIF files produces
+        warning that "Arial", "TimesNewRoman" and "TimesNewRoman Bold" fonts are not available.
+
+</ul>
+
+
+
+<hr>
+<address><a href="mailto:dkramer@eng.sun.com">Doug Kramer</a></address>
+<!-- Created: Fri Jul 23 15:12:11 PDT 1999 -->
+<!-- hhmts start -->
+Last modified: Wed Sep  1 12:02:48 PDT 1999
+<!-- hhmts end -->
+  </body>
+</html>

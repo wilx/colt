@@ -1,0 +1,53 @@
+#DOC=/MyStuff/Programming/Java/MySources/mifdoclet_C
+DOC=$(HOME)/coltb4/mif/mifdoclet_C
+
+#SOURCEDIR=/MyStuff/Programming/Java/MySources
+SOURCEDIR=$(HOME)/coltdev/MySources
+
+#SOURCEDIR=/Applications/Compilers/Java/jdk1.2/src/src
+#SOURCEDIR=$(HOME)/jdk1.2.2/src
+
+DOCTITLE = 'Open Source Libraries for High Performance Scientific and Technical Computing in Java'
+LINK = 'http://java.sun.com/products/jdk/1.2/docs/api'
+OVERVIEW = $(SOURCEDIR)/cern/colt/doc-files/Overview.html
+
+
+run ::
+	javadoc -doclet com.sun.tools.doclets.mif.MIFDoclet \
+	-docletpath $(DOC)/mif.jar:$(DOC)/mifoutput.jar:$(DOC)/standarddoclet.jar \
+	-sourcepath $(SOURCEDIR) \
+	-includedir $(DOC) \
+	-public \
+	-overview $(OVERVIEW) \
+	-doctitle $(DOCTITLE) \
+	-group 'Colt Packages' 'cern.colt*' -group 'Jet Packages' 'cern.jet*' -group 'CLHEP Packages' 'cern.clhep' -group 'CoreJava, RngPack, VNI and Concurrent Packages' 'corejava:edu.cornell.lassp.houle.RngPack:com.imsl*:edu.oswego.cs.dl.util.concurrent' -group 'JAL Packages' 'jal.BYTE:jal.CHAR:jal.DOUBLE:jal.FLOAT:jal.INT:jal.LONG:jal.Object:jal.SHORT:jal.String' \
+	-membersummary compact \
+	-bookfile mydoc.book \
+	-batch fmbatch \
+	-titlefile $(DOC)/titlepage2.mif \
+	-contentsfile $(DOC)/contents.mif \
+	-indexfile $(DOC)/index.mif \
+	-d . \
+	cern.colt cern.colt.function cern.colt.list cern.colt.list.adapter cern.colt.bitvector cern.colt.buffer cern.colt.map cern.colt.matrix cern.colt.matrix.impl cern.colt.matrix.linalg cern.colt.matrix.doublealgo cern.colt.matrix.objectalgo cern.jet.math cern.jet.histo cern.jet.random cern.jet.stat cern.jet.stat.quantile cern.jet.random.engine cern.jet.random.sampling cern.clhep \
+	edu.oswego.cs.dl.util.concurrent corejava com.imsl.math edu.cornell.lassp.houle.RngPack jal.BYTE jal.CHAR jal.DOUBLE jal.FLOAT jal.INT jal.LONG jal.Object jal.SHORT jal.String
+
+run2 ::
+#	-link $(LINK) \
+#	cern.clhep cern.colt cern.colt.function cern.colt.list cern.colt.list.adapter cern.colt.bitvector cern.colt.buffer cern.colt.map cern.colt.matrix cern.colt.matrix.impl cern.colt.matrix.linalg cern.colt.matrix.doublealgo cern.colt.matrix.objectalgo cern.jet.math cern.jet.histo cern.jet.random cern.jet.stat cern.jet.stat.quantile cern.jet.random.engine cern.jet.random.sampling
+#	cern.colt.bitvector cern.colt.buffer
+
+	javadoc -doclet com.sun.tools.doclets.mif.MIFDoclet \
+	-docletpath '$(DOC)/mif.jar;$(DOC)/mifoutput.jar;$(DOC)/standarddoclet.jar' \
+	-sourcepath $(SOURCEDIR) \
+	-includedir $(DOC) \
+	-overview $(SOURCEDIR)/cern/colt/doc-files/Overview.html \
+	-doctitle "Java Packages" \
+	-group "Core Packages" "cern.colt.matrix.*" \
+	-membersummary compact \
+	-bookfile cern.colt.matrix.book \
+	-batch dzbatcher \
+	-titlefile $(DOC)/titlepage.mif \
+	-contentsfile $(DOC)/contents.mif \
+	-indexfile $(DOC)/index.mif \
+	-d docs \
+	cern.colt.matrix                                                                                                                                                        
