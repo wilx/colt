@@ -27,7 +27,7 @@ import cern.colt.matrix.linalg.SeqBlas;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class TestMatrix2D {
+class TestMatrix2D {
 	private static final cern.jet.math.Functions F = cern.jet.math.Functions.functions;
 	private static final cern.colt.matrix.DoubleFactory2D Factory2D = cern.colt.matrix.DoubleFactory2D.dense;
 	private static final cern.colt.matrix.DoubleFactory1D Factory1D = cern.colt.matrix.DoubleFactory1D.dense;

@@ -243,13 +243,16 @@ public double normF(DoubleMatrix2D A) {
  * Returns the infinity norm of vector <tt>x</tt>, which is <tt>Max(abs(x[i]))</tt>.
  */
 public double normInfinity(DoubleMatrix1D x) {
-	//if (x.size()==0) return 0;
-	//return x.aggregate(cern.jet.math.Functions.plus,cern.jet.math.Functions.abs);
-	double max = 0;
-	for (int i = x.size(); --i >= 0; ) {
-		max = Math.max(max, x.getQuick(i));
-	}
-	return max;
+	// fix for bug reported by T.J.Hunt@open.ac.uk
+	if (x.size()==0) return 0;
+	return x.aggregate(cern.jet.math.Functions.max ,cern.jet.math.Functions.abs);
+//	if (x.size()==0) return 0;
+//	return x.aggregate(cern.jet.math.Functions.plus,cern.jet.math.Functions.abs);
+//	double max = 0;
+//	for (int i = x.size(); --i >= 0; ) {
+//		max = Math.max(max, x.getQuick(i));
+//	}
+//	return max;
 }
 /**
  * Returns the infinity norm of matrix <tt>A</tt>, which is the maximum absolute row sum.

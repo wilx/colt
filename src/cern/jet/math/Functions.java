@@ -13,10 +13,10 @@ import cern.colt.function.DoubleDoubleProcedure;
 import cern.colt.function.DoubleFunction;
 import cern.colt.function.DoubleProcedure;
 
-import com.imsl.math.Sfun;
+//import com.imsl.math.Sfun;
 /** 
 Function objects to be passed to generic methods. Contains the functions of 
-  {@link java.lang.Math} and {@link com.imsl.math.Sfun} as function objects, as 
+  {@link java.lang.Math} as function objects, as 
   well as a few more basic functions.
 <p>Function objects conveniently allow to express arbitrary functions in a generic 
   manner. Essentially, a function object is an object that can perform a function 
@@ -183,9 +183,11 @@ public class Functions extends Object {
 	/**
 	 * Function that returns <tt>com.imsl.math.Sfun.acosh(a)</tt>.
 	 */
+	/*
 	public static final DoubleFunction acosh = new DoubleFunction() {
 		public final double apply(double a) { return Sfun.acosh(a); }
-	};		
+	};
+	*/		
 
 	/**
 	 * Function that returns <tt>Math.asin(a)</tt>.
@@ -197,9 +199,11 @@ public class Functions extends Object {
 	/**
 	 * Function that returns <tt>com.imsl.math.Sfun.asinh(a)</tt>.
 	 */
+	/*
 	public static final DoubleFunction asinh = new DoubleFunction() {
 		public final double apply(double a) { return Sfun.asinh(a); }
-	};		
+	};
+	*/		
 
 	/**
 	 * Function that returns <tt>Math.atan(a)</tt>.
@@ -211,9 +215,11 @@ public class Functions extends Object {
 	/**
 	 * Function that returns <tt>com.imsl.math.Sfun.atanh(a)</tt>.
 	 */
+	/*
 	public static final DoubleFunction atanh = new DoubleFunction() {
 		public final double apply(double a) { return Sfun.atanh(a); }
-	};		
+	};
+	*/		
 
 	/**
 	 * Function that returns <tt>Math.ceil(a)</tt>.
@@ -232,30 +238,38 @@ public class Functions extends Object {
 	/**
 	 * Function that returns <tt>com.imsl.math.Sfun.cosh(a)</tt>.
 	 */
+	/*
 	public static final DoubleFunction cosh = new DoubleFunction() {
 		public final double apply(double a) { return Sfun.cosh(a); }
-	};		
+	};
+	*/		
 
 	/**
 	 * Function that returns <tt>com.imsl.math.Sfun.cot(a)</tt>.
 	 */
+	/*
 	public static final DoubleFunction cot = new DoubleFunction() {
 		public final double apply(double a) { return Sfun.cot(a); }
-	};		
+	};
+	*/		
 
 	/**
 	 * Function that returns <tt>com.imsl.math.Sfun.erf(a)</tt>.
 	 */
+	/*
 	public static final DoubleFunction erf = new DoubleFunction() {
 		public final double apply(double a) { return Sfun.erf(a); }
-	};		
+	};
+	*/		
 
 	/**
 	 * Function that returns <tt>com.imsl.math.Sfun.erfc(a)</tt>.
 	 */
+	/*
 	public static final DoubleFunction erfc = new DoubleFunction() {
 		public final double apply(double a) { return Sfun.erfc(a); }
-	};		
+	};
+	*/		
 
 	/**
 	 * Function that returns <tt>Math.exp(a)</tt>.
@@ -274,9 +288,11 @@ public class Functions extends Object {
 	/**
 	 * Function that returns <tt>com.imsl.math.Sfun.gamma(a)</tt>.
 	 */
+	/*
 	public static final DoubleFunction gamma = new DoubleFunction() {
 		public final double apply(double a) { return Sfun.gamma(a); }
-	};		
+	};
+	*/		
 
 	/**
 	 * Function that returns its argument.
@@ -302,9 +318,11 @@ public class Functions extends Object {
 	/**
 	 * Function that returns <tt>com.imsl.math.Sfun.log10(a)</tt>.
 	 */
+	/*
 	public static final DoubleFunction log10 = new DoubleFunction() {
 		public final double apply(double a) { return Sfun.log10(a); }
-	};		
+	};
+	*/		
 
 	/**
 	 * Function that returns <tt>Math.log(a) / Math.log(2)</tt>.
@@ -317,9 +335,11 @@ public class Functions extends Object {
 	/**
 	 * Function that returns <tt>com.imsl.math.Sfun.logGamma(a)</tt>.
 	 */
+	/*
 	public static final DoubleFunction logGamma = new DoubleFunction() {
 		public final double apply(double a) { return Sfun.logGamma(a); }
-	};		
+	};
+	*/		
 
 	/**
 	 * Function that returns <tt>-a</tt>.
@@ -352,9 +372,11 @@ public class Functions extends Object {
 	/**
 	 * Function that returns <tt>com.imsl.math.Sfun.sinh(a)</tt>.
 	 */
+	/*
 	public static final DoubleFunction sinh = new DoubleFunction() {
 		public final double apply(double a) { return Sfun.sinh(a); }
-	};		
+	};
+	*/		
 
 	/**
 	 * Function that returns <tt>Math.sqrt(a)</tt>.
@@ -380,9 +402,11 @@ public class Functions extends Object {
 	/**
 	 * Function that returns <tt>com.imsl.math.Sfun.tanh(a)</tt>.
 	 */
+	/*
 	public static final DoubleFunction tanh = new DoubleFunction() {
 		public final double apply(double a) { return Sfun.tanh(a); }
-	};		
+	};
+	*/		
 
 	/**
 	 * Function that returns <tt>Math.toDegrees(a)</tt>.
@@ -418,9 +442,12 @@ public class Functions extends Object {
 	/**
 	 * Function that returns <tt>com.imsl.math.Sfun.logBeta(a,b)</tt>.
 	 */
+	/*
 	public static final DoubleDoubleFunction logBeta = new DoubleDoubleFunction() {
 		public final double apply(double a, double b) { return Sfun.logBeta(a,b); }
-	};		
+	};
+	*/
+		
 
 	/**
 	 * Function that returns <tt>a < b ? -1 : a > b ? 1 : 0</tt>.

@@ -9,8 +9,8 @@ It is provided "as is" without expressed or implied warranty.
 package cern.colt.matrix.linalg;
 
 import cern.colt.matrix.DoubleMatrix2D;
-import edu.oswego.cs.dl.util.concurrent.FJTask;
-import edu.oswego.cs.dl.util.concurrent.FJTaskRunnerGroup;
+import EDU.oswego.cs.dl.util.concurrent.FJTask;
+import EDU.oswego.cs.dl.util.concurrent.FJTaskRunnerGroup;
 /*
 */
 class Smp {
@@ -187,7 +187,7 @@ protected DoubleMatrix2D[] splitStridedNN(DoubleMatrix2D A, int threshold, long 
 	return blocks;
 }
 /**
- * Prints various snapshot statistics to System.out; Simply delegates to {@link edu.oswego.cs.dl.util.concurrent.FJTaskRunnerGroup#stats}.
+ * Prints various snapshot statistics to System.out; Simply delegates to {@link EDU.oswego.cs.dl.util.concurrent.FJTaskRunnerGroup#stats}.
  */
 public void stats() {
 	if (this.taskGroup!=null) this.taskGroup.stats();

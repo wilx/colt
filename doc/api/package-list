@@ -18,7 +18,6 @@ cern.jet.random.engine
 cern.jet.random.sampling
 cern.jet.stat
 cern.jet.stat.quantile
-com.imsl.math
 corejava
 hep.aida
 hep.aida.bin

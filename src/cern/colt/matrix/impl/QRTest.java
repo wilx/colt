@@ -7,7 +7,7 @@ import cern.colt.matrix.linalg.Algebra;
 //import Jama.Matrix.*;
 //import Jama.*;
 
-public class QRTest {
+class QRTest {
 
 	/**
 	 * Constructor for QRTest.

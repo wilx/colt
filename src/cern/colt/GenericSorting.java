@@ -215,7 +215,7 @@ private static void inplace_merge(int first, int middle, int last, IntComparator
  * @see Sorting#equal_range
  * @see Sorting#binary_search
  */
-public static int lower_bound(int first, int last, int x, IntComparator comp) {
+private static int lower_bound(int first, int last, int x, IntComparator comp) {
 	//if (comp==null) throw new NullPointerException();
 	int len = last - first;
 	while (len > 0) {
@@ -415,7 +415,7 @@ private static void reverse(int first, int last, Swapper swapper) {
  *                 <code>array[first]</code>
  * @param last     One past the end of the range
  */
-public static void rotate(int first, int middle, int last, Swapper swapper) {
+private static void rotate(int first, int middle, int last, Swapper swapper) {
 	// no more needed since manually inlined
 	if (middle != first && middle != last) {
 		reverse(first, middle, swapper);
@@ -440,7 +440,7 @@ public static void rotate(int first, int middle, int last, Swapper swapper) {
  * @see Sorting#equal_range
  * @see Sorting#binary_search
  */
-public static int upper_bound(int first, int last, int x, IntComparator comp) {
+private static int upper_bound(int first, int last, int x, IntComparator comp) {
 	//if (comp==null) throw new NullPointerException();
 	int len = last - first;
 	while (len > 0) {

@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -292,9 +292,14 @@ public static long factorial(int n) {
 private static double fkt2_value(double lambda, double beta, double x_value) {
 	double y_value;
 
-	y_value = com.imsl.math.Sfun.cosh(lambda*x_value)*Math.exp(-beta*com.imsl.math.Sfun.cosh(x_value));
+	y_value = cosh(lambda*x_value)*Math.exp(-beta*cosh(x_value));
 	return y_value;
 }
+private static double cosh(double x) {
+	return (Math.exp(x) + Math.exp(-x)) / 2.0;
+}
+
+
 /**
  * Returns the gamma function <tt>gamma(x)</tt>.
  */

@@ -33,7 +33,7 @@ package cern.jet.random.engine;
  * @see java.util.Random
  */
 //public abstract class RandomEngine extends edu.cornell.lassp.houle.RngPack.RandomSeedable implements cern.colt.function.DoubleFunction, cern.colt.function.IntFunction {
-public abstract class RandomEngine extends cern.colt.PersistentObject implements Cloneable, cern.colt.function.DoubleFunction, cern.colt.function.IntFunction {
+public abstract class RandomEngine extends cern.colt.PersistentObject implements cern.colt.function.DoubleFunction, cern.colt.function.IntFunction {
 /**
  * Makes this class non instantiable, but still let's others inherit from it.
  */

@@ -10,7 +10,7 @@ package cern.colt.matrix.linalg;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
-import edu.oswego.cs.dl.util.concurrent.FJTask;
+import EDU.oswego.cs.dl.util.concurrent.FJTask;
 /**
 Parallel implementation of the Basic Linear Algebra System for symmetric multi processing boxes.
 Currently only a few algorithms are parallelised; the others are fully functional, but run in sequential mode.
@@ -48,11 +48,11 @@ So if you're lucky, you get parallel performance for free.
 number of CPUs on a JVM, so there is no good way to automate defaults.</li>
 <li>Only improves performance on boxes with > 1 CPUs and VMs with <b>native threads</b>.</li>
 <li>Currently only improves performance when working on dense matrix types. On sparse types, performance is likely to degrade (because of the implementation of sub-range views)!</li>
-<li>Implemented using Doug Lea's fast lightweight task framework ({@link edu.oswego.cs.dl.util.concurrent}) built upon Java threads, and geared for parallel computation.</li>
+<li>Implemented using Doug Lea's fast lightweight task framework ({@link EDU.oswego.cs.dl.util.concurrent}) built upon Java threads, and geared for parallel computation.</li>
 </ul>
 
-@see edu.oswego.cs.dl.util.concurrent.FJTaskRunnerGroup
-@see edu.oswego.cs.dl.util.concurrent.FJTask
+@see EDU.oswego.cs.dl.util.concurrent.FJTaskRunnerGroup
+@see EDU.oswego.cs.dl.util.concurrent.FJTask
 @author wolfgang.hoschek@cern.ch
 @version 0.9, 16/04/2000
 */
@@ -367,7 +367,7 @@ protected double[] run(DoubleMatrix2D A, boolean collectResults, Matrix2DMatrix2
 	return results;
 }
 /**
- * Prints various snapshot statistics to System.out; Simply delegates to {@link edu.oswego.cs.dl.util.concurrent.FJTaskRunnerGroup#stats}.
+ * Prints various snapshot statistics to System.out; Simply delegates to {@link EDU.oswego.cs.dl.util.concurrent.FJTaskRunnerGroup#stats}.
  */
 public void stats() {
 	if (this.smp!=null) this.smp.stats();
