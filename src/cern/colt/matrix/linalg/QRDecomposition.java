@@ -24,6 +24,7 @@ of simultaneous linear equations.  This will fail if <tt>isFullRank()</tt>
 returns <tt>false</tt>.
 */
 public class QRDecomposition implements java.io.Serializable {
+	static final long serialVersionUID = 1020;
 	/** Array for internal storage of decomposition.
 	@serial internal array storage.
 	*/
@@ -73,32 +74,33 @@ public QRDecomposition (DoubleMatrix2D A) {
 		//DoubleMatrix1D QRcolk = QR.viewColumn(k).viewPart(k,m-k);
 		// Compute 2-norm of k-th column without under/overflow.
 		double nrm = 0;
-		if (k<m) nrm = QRcolumnsPart[k].aggregate(hypot,F.identity);
-		/*
-		for (int i = k; i < m; i++) {
-		nrm = Algebra.hypot(nrm,QR[i][k]);
+		//if (k<m) nrm = QRcolumnsPart[k].aggregate(hypot,F.identity);
+		
+		for (int i = k; i < m; i++) { // fixes bug reported by hong.44@osu.edu
+			nrm = Algebra.hypot(nrm,QR.getQuick(i,k));
 		}
-		*/
+		
 		
 		if (nrm != 0.0) {
 			// Form k-th Householder vector.
 			if (QR.getQuick(k,k) < 0) nrm = -nrm;
-			QRcolumnsPart[k].assign(cern.jet.math.Functions.div(nrm));
+			QRcolumnsPart[k].assign(cern.jet.math.Functions.div(nrm));		
 			/*
 			for (int i = k; i < m; i++) {
 			   QR[i][k] /= nrm;
 			}
 			*/
+			
 			QR.setQuick(k,k, QR.getQuick(k,k) + 1);
 			
 			// Apply transformation to remaining columns.
 			for (int j = k+1; j < n; j++) {
 				DoubleMatrix1D QRcolj = QR.viewColumn(j).viewPart(k,m-k);
 				double s = QRcolumnsPart[k].zDotProduct(QRcolj);
-				// fixes bug reported by John Chambers
-				//DoubleMatrix1D QRcolj = QR.viewColumn(j).viewPart(k,m-k);
-				//double s = QRcolumnsPart[k].zDotProduct(QRcolumns[j]);
 				/*
+				// fixes bug reported by John Chambers
+				DoubleMatrix1D QRcolj = QR.viewColumn(j).viewPart(k,m-k);
+				double s = QRcolumnsPart[k].zDotProduct(QRcolumns[j]);
 				double s = 0.0; 
 				for (int i = k; i < m; i++) {
 				  s += QR[i][k]*QR[i][j];

@@ -1,19 +1,3 @@
-/*
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Library General Public
-License as published by the Free Software Foundation; either
-version 2 of the License, or (at your option) any later version.
-
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Library General Public License for more details.
-
-You should have received a copy of the GNU Library General Public
-License along with this library; if not, write to the
-Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-Boston, MA  02111-1307, USA.
-*/
 package hep.aida.bin;
 
 /** 
@@ -123,8 +107,7 @@ protected BinFunctions1D() {}
 public static BinFunction1D quantile(final double percentage) {
 	return new BinFunction1D() {
 		public final double apply(DynamicBin1D bin) { return bin.quantile(percentage); }
-		public final String name() { return new corejava.Format("%1.2G").form(percentage*100)+"% Q."; }
+		public final String name() { return new cern.colt.matrix.impl.FormerFactory().create("%1.2G").form(percentage*100)+"% Q."; }
 	};
-}	
-
+}
 }

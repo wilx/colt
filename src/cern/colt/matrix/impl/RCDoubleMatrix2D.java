@@ -145,7 +145,12 @@ public RCDoubleMatrix2D(double[][] values) {
  */
 public RCDoubleMatrix2D(int rows, int columns) {
 	super(null);
-	setUp(rows, columns);
+	try {
+		setUp(rows, columns);
+	}
+	catch (IllegalArgumentException exc) { // we can hold rows*columns>Integer.MAX_VALUE cells !
+		if (! "matrix too large".equals(exc.getMessage())) throw exc;
+	}
 	indexes = new IntArrayList();
 	values = new DoubleArrayList();
 	starts = new int[rows+1];
@@ -208,6 +213,16 @@ public DoubleMatrix2D assign(DoubleMatrix2D source) {
 	if (! (source instanceof RCDoubleMatrix2D)) {
 		//return super.assign(source);
 
+		assign(0);
+		source.forEachNonZero(
+			new cern.colt.function.IntIntDoubleFunction() {
+				public double apply(int i, int j, double value) {
+					setQuick(i,j,value);
+					return value;
+				}
+			}
+		);
+		/*
 		indexes.clear();
 		values.clear();
 		int nonZeros=0;
@@ -223,6 +238,7 @@ public DoubleMatrix2D assign(DoubleMatrix2D source) {
 			}
 		}
 		starts[rows]=nonZeros;
+		*/
 		return this;
 	}
 

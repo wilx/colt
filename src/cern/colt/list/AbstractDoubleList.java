@@ -249,7 +249,8 @@ public boolean equals(Object otherObj) { //delta
  * @param val the value to be stored in the specified elements of the receiver.
  */
 public void fillFromToWith(int from, int to, double val) {
-	for (int i=from; i<=to;) set(i++,val); 
+	checkRangeFromTo(from,to,this.size);
+	for (int i=from; i<=to;) setQuick(i++,val); 
 }
 /**
  * Applies a procedure to each element of the receiver, if any.

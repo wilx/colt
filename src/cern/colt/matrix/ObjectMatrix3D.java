@@ -771,13 +771,14 @@ public ObjectMatrix3D viewSliceFlip() {
 }
 /**
 Sorts the matrix slices into ascending order, according to the <i>natural ordering</i> of the matrix values in the given <tt>[row,column]</tt> position.
-For further information, see {@link cern.colt.matrix.objectalgo.Sorting#quickSort(ObjectMatrix3D,int,int)}.
+This sort is guaranteed to be <i>stable</i>.
+For further information, see {@link cern.colt.matrix.objectalgo.Sorting#sort(ObjectMatrix3D,int,int)}.
 For more advanced sorting functionality, see {@link cern.colt.matrix.objectalgo.Sorting}.
 @return a new sorted vector (matrix) view.
 @throws IndexOutOfBoundsException if <tt>row < 0 || row >= rows() || column < 0 || column >= columns()</tt>.
 */
 public ObjectMatrix3D viewSorted(int row, int column) {
-	return cern.colt.matrix.objectalgo.Sorting.quickSort(this,row,column);
+	return cern.colt.matrix.objectalgo.Sorting.mergeSort.sort(this,row,column);
 }
 /**
 Constructs and returns a new <i>stride view</i> which is a sub matrix consisting of every i-th cell.

@@ -95,6 +95,17 @@ In fact equivalent to <tt>y.assign(x,cern.jet.math.Functions.plusMult(alpha))</t
 */
 public void daxpy(double alpha, DoubleMatrix1D x, DoubleMatrix1D y);
 /**
+Combined matrix scaling; <tt>B = B + alpha*A</tt>.
+In fact equivalent to <tt>B.assign(A,cern.jet.math.Functions.plusMult(alpha))</tt>.
+
+@param alpha a scale factor.
+@param A the first source matrix.
+@param B the second source matrix, this is also the matrix where results are stored.
+
+@throws IllegalArgumentException if <tt>A.columns() != B.columns() || A.rows() != B.rows()</tt>.
+*/
+public void daxpy(double alpha, DoubleMatrix2D A, DoubleMatrix2D B);
+/**
 Vector assignment (copying); <tt>y = x</tt>.
 In fact equivalent to <tt>y.assign(x)</tt>.
 
@@ -104,6 +115,16 @@ In fact equivalent to <tt>y.assign(x)</tt>.
 @throws IllegalArgumentException <tt>x.size() != y.size()</tt>.
 */
 public void dcopy(DoubleMatrix1D x, DoubleMatrix1D y);
+/**
+Matrix assignment (copying); <tt>B = A</tt>.
+In fact equivalent to <tt>B.assign(A)</tt>.
+
+@param A the source matrix.
+@param B the destination matrix.
+
+@throws IllegalArgumentException if <tt>A.columns() != B.columns() || A.rows() != B.rows()</tt>.
+*/
+public void dcopy(DoubleMatrix2D A, DoubleMatrix2D B);
 /**
 Returns the dot product of two vectors x and y, which is <tt>Sum(x[i]*y[i])</tt>.
 In fact equivalent to <tt>x.zDotProduct(y)</tt>.
@@ -195,6 +216,14 @@ In fact equivalent to <tt>x.assign(cern.jet.math.Functions.mult(alpha))</tt>.
 */
 public void dscal(double alpha, DoubleMatrix1D x);
 /**
+Matrix scaling; <tt>A = alpha*A</tt>.
+In fact equivalent to <tt>A.assign(cern.jet.math.Functions.mult(alpha))</tt>.
+
+@param alpha a scale factor.
+@param A the matrix.
+*/
+public void dscal(double alpha, DoubleMatrix2D A);
+/**
 Swaps the elements of two vectors; <tt>y <==> x</tt>.
 In fact equivalent to <tt>y.swap(x)</tt>.
 
@@ -204,6 +233,15 @@ In fact equivalent to <tt>y.swap(x)</tt>.
 @throws IllegalArgumentException <tt>x.size() != y.size()</tt>.
 */
 public void dswap(DoubleMatrix1D x, DoubleMatrix1D y);
+/**
+Swaps the elements of two matrices; <tt>B <==> A</tt>.
+
+@param A the first matrix.
+@param B the second matrix.
+
+@throws IllegalArgumentException if <tt>A.columns() != B.columns() || A.rows() != B.rows()</tt>.
+*/
+public void dswap(DoubleMatrix2D x, DoubleMatrix2D y);
 /**
 Symmetric matrix-vector multiplication; <tt>y = alpha*A*x + beta*y</tt>.
 Where alpha and beta are scalars, x and y are n element vectors and
@@ -235,4 +273,16 @@ Returns the index of largest absolute value; <tt>i such that |x[i]| == max(|x[0]
 @return the index of largest absolute value (-1 if x is empty).
 */
 public int idamax(DoubleMatrix1D x);
+
+
+
+
+
+
+
+
+
+
+
+
 }

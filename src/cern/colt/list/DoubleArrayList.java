@@ -185,46 +185,6 @@ public boolean equals(Object otherObj) { //delta
 	return true;
 }
 /**
- * Sets the specified range of elements in the specified array to the specified value.
- *
- * @param from the index of the first element (inclusive) to be filled with the specified value.
- * @param to the index of the last element (inclusive) to be filled with the specified value.
- * @param val the value to be stored in the specified elements of the receiver.
- */
-public void fillFromToWith(int from, int to, double val) {
-	// overridden for performance only.
-	/*
-	 * Tuned for performance.
-	 * The following line is equivalent to the actual code of the method, but slower.
-	 * for (int i=from; i<=to;) values[i++]=val; 
-	 *	
-	 * For small ranges, the actual method is as fast as the above code.
-	 * For large ranges, the actual method is faster than the above code.
-	 * (Speedup grows the larger the fill range)
-	 * For range = 10^6 elements -> speedup = 4 on JDK 1.2 JIT.
-	 * (Speedup on interpreted bytecode is, of course, many orders of magnitude.)
-	 */
-
-	int block=1024;
-	
-	int limit = Math.min(to, from+block);	
-	for (int i=from; i<=limit;) elements[i++]=val; // fill small amount as basis for arraycopy
-
-	if (from+block>to) return; // nothing more to fill.
-	
-	// switch to arraycopy, copying blocks doubling length each time.
-	int newFrom=from+block;
-	while (newFrom+block <= to) { //as double as we can copy full blocks
-		System.arraycopy(elements, from, elements, newFrom, block); //copy a block
-		newFrom += block;
-		block <<=1; //boolean block length //block = block * 2;
-	}
-
-	// now fill remaining part, if necessary
-	block=to-newFrom+1;
-	System.arraycopy(elements,from,elements,newFrom,block);
-}
-/**
  * Applies a procedure to each element of the receiver, if any.
  * Starts at index 0, moving rightwards.
  * @param procedure    the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise continues. 

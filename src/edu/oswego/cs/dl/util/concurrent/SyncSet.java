@@ -19,7 +19,7 @@ import java.util.*;
  * SyncSets wrap Sync-based control around java.util.Sets.
  * They support two additional reader operations than do
  * SyncCollection: hashCode and equals.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see SyncCollection
 **/
 

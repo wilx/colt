@@ -19,7 +19,7 @@ import java.lang.reflect.*;
 /**
  * Abstract class for channels that use Semaphores to
  * control puts and takes.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 
 public abstract class SemaphoreControlledChannel implements BoundedChannel {

@@ -23,6 +23,7 @@ LU decomposition is in the solution of square systems of simultaneous
 linear equations.  This will fail if <tt>isNonsingular()</tt> returns false.
 */
 public class LUDecomposition implements java.io.Serializable {
+	static final long serialVersionUID = 1020;
 	protected LUDecompositionQuick quick;
 /**
 Constructs and returns a new LU Decomposition object; 

@@ -25,6 +25,7 @@ never fail.  The matrix condition number and the effective numerical
 rank can be computed from this decomposition.
 */
 public class SingularValueDecomposition implements java.io.Serializable {
+	static final long serialVersionUID = 1020;
 	/** Arrays for internal storage of U and V.
 	@serial internal storage of U.
 	@serial internal storage of V.

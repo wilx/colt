@@ -18,7 +18,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * An implementation of Executor that 
  * invokes the run method of the supplied command and then returns.
  * 
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 public class DirectExecutor implements Executor {
   /** 

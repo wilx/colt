@@ -41,6 +41,7 @@ Attempting to solve such a system will throw an exception if <tt>isNonsingular()
 <p>
 */
 public class LUDecompositionQuick implements java.io.Serializable {
+	static final long serialVersionUID = 1020;
 	/** Array for internal storage of decomposition.
 	@serial internal array storage.
 	*/
@@ -83,6 +84,7 @@ Uses a "left-looking", dot-product, Crout/Doolittle algorithm.
 @param  A   any matrix.
 */	
 public void decompose(DoubleMatrix2D A) {
+	final int CUT_OFF = 10;
 	// setup
 	LU = A;
 	int m = A.rows();
@@ -112,23 +114,35 @@ public void decompose(DoubleMatrix2D A) {
 		LUcolj.assign(LU.viewColumn(j));
 		
 		// sparsity detection
-		LUcolj.getNonZeros(nonZeroIndexes,null);
-		boolean sparse = nonZeroIndexes.size() < m/10;
+		int maxCardinality = m/CUT_OFF; // == heuristic depending on speedup
+		LUcolj.getNonZeros(nonZeroIndexes,null,maxCardinality);
+		int cardinality = nonZeroIndexes.size(); 
+		boolean sparse = (cardinality < maxCardinality);
 
 		// Apply previous transformations.
 		for (int i = 0; i < m; i++) {
 			int kmax = Math.min(i,j);
 			double s;
 			if (sparse) {
-				//throw new RuntimeException("sparse");
 				s = LUrows[i].zDotProduct(LUcolj,0,kmax,nonZeroIndexes);
 			}
 			else {
 				s = LUrows[i].zDotProduct(LUcolj,0,kmax);
 			}
-			s = LUcolj.getQuick(i) - s;
-			LUcolj.setQuick(i, s); // LUcolj is a copy
-			LU.setQuick(i,j, s);   // this is the original
+			double before = LUcolj.getQuick(i);
+			double after = before -s;
+			LUcolj.setQuick(i, after); // LUcolj is a copy
+			LU.setQuick(i,j, after);   // this is the original
+			if (sparse) {
+				if (before==0 && after!=0) { // nasty bug fixed!
+					int pos = nonZeroIndexes.binarySearch(i);
+					pos = -pos -1;
+					nonZeroIndexes.beforeInsert(pos,i);
+				}
+				if (before!=0 && after==0) {
+					nonZeroIndexes.remove(nonZeroIndexes.binarySearch(i));
+				}
+			}
 		}
 	
 		// Find pivot and exchange if necessary.
@@ -141,7 +155,7 @@ public void decompose(DoubleMatrix2D A) {
 					p = i;
 					max = v;
 				}
-			}			
+			}
 		}
 		if (p != j) {
 			LUrows[p].swap(LUrows[j]);
@@ -349,8 +363,8 @@ protected DoubleMatrix2D lowerTriangular(DoubleMatrix2D A) {
 	int min = Math.min(rows,columns);
 	for (int r = min; --r >= 0; ) {
 		for (int c = min; --c >= 0; ) {
-			if (r < c) A.setQuick(r,c, 0.0);
-			else if (r == c) A.setQuick(r,c, 1.0);
+			if (r < c) A.setQuick(r,c, 0);
+			else if (r == c) A.setQuick(r,c, 1);
 		}
 	}
 	if (columns>rows) A.viewPart(0,min,rows,columns-min).assign(0);
@@ -435,6 +449,7 @@ Upon return <tt>B</tt> is overridden with the result <tt>X</tt>, such that <tt>L
 @exception  IllegalArgumentException  if <tt>A.rows() < A.columns()</tt>.
 */
 public void solve(DoubleMatrix2D B) {
+	final int CUT_OFF = 10;
 	algebra.property().checkRectangular(LU);
 	int m = m();
 	int n = n();
@@ -468,13 +483,10 @@ public void solve(DoubleMatrix2D B) {
 		Browk.assign(Brows[k]); 
 		
 		// sparsity detection
-		int maxCardinality = nx/10; // == heuristic depending on speedup
+		int maxCardinality = nx/CUT_OFF; // == heuristic depending on speedup
 		Browk.getNonZeros(nonZeroIndexes,null,maxCardinality);
 		int cardinality = nonZeroIndexes.size(); 
 		boolean sparse = (cardinality < maxCardinality);
-
-		//Browk.getNonZeros(nonZeroIndexes,null);
-		//boolean sparse = nonZeroIndexes.size() < nx/10;
 
 		for (int i = k+1; i < n; i++) {
 			//for (int j = 0; j < nx; j++) B[i][j] -= B[k][j]*LU[i][k];
@@ -504,7 +516,7 @@ public void solve(DoubleMatrix2D B) {
 		Browk.assign(Brows[k]);
 
 		// sparsity detection
-		int maxCardinality = nx/10; // == heuristic depending on speedup
+		int maxCardinality = nx/CUT_OFF; // == heuristic depending on speedup
 		Browk.getNonZeros(nonZeroIndexes,null,maxCardinality);
 		int cardinality = nonZeroIndexes.size();
 		boolean sparse = (cardinality < maxCardinality);
@@ -637,7 +649,7 @@ protected DoubleMatrix2D upperTriangular(DoubleMatrix2D A) {
 	int min = Math.min(rows,columns);
 	for (int r = min; --r >= 0; ) {
 		for (int c = min; --c >= 0; ) {
-			if (r > c) A.setQuick(r,c, 0.0);
+			if (r > c) A.setQuick(r,c, 0);
 		}
 	}
 	if (columns<rows) A.viewPart(min,0,rows-min,columns).assign(0);

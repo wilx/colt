@@ -24,6 +24,8 @@ package edu.oswego.cs.dl.util.concurrent;
   31Mar1999  dl                 Revise scan to remove need for NullTasks
   27Apr1999  dl                 Renamed
   23oct1999  dl                 Earlier detect of interrupt in scanWhileIdling
+  24nov1999  dl                 Now works on JVMs that do not properly
+								implement read-after-write of 2 volatiles.
 */
 
 import java.util.Random;
@@ -61,10 +63,8 @@ import java.util.Random;
  *  Else if current thread is otherwise idling
  *     If all threads are idling
  *        Wait for a task to be put on group entry queue
- *     Else
- *        Sleep for a while, and then retry
- *  Else 
- *     Thread.yield, and then run a dummy idle task
+ *  Else
+ *      Yield or Sleep for a while, and then retry
  *  </pre>
  * </ul>
  * The push, pop, and put are designed to only ever called by the
@@ -76,9 +76,6 @@ import java.util.Random;
  * Implementations of the underlying representations and operations
  * are geared for use on JVMs operating on multiple CPUs (although
  * they should of course work fine on single CPUs as well).
- * They minimize the need for Java synchronization via algorithms that rely
- * on volatiles being properly implemented in the JVM. (See especially
- * the last bullet on page 407 of the Java Language Specification.)
  * <p>
  * A possible snapshot of a FJTaskRunner's DEQ is:
  * <pre>
@@ -125,12 +122,13 @@ import java.util.Random;
  * This is handled via a specialization of Dekker's algorithm,
  * in which the popping thread pre-decrements <code>top</code>,
  * and then checks it against <code>base</code>. 
- * (This relies on the JVM properly dealing with read-after-write
- * of two volatiles.)
- * It then enters a 
- * synchronized lock only
- * if the DEQ appears empty, to re-check whether 
- * it is really empty, if so failing. The stealing thread
+ * To be conservative in the face of JVMs that only partially
+ * honor the specification for volatile, the pop proceeds
+ * without synchronization only if there are apparently enough
+ * items for both a simultaneous pop and take to succeed.
+ * It otherwise enters a 
+ * synchronized lock to check if the DEQ is actually empty,
+ * if so failing. The stealing thread
  * does almost the opposite, but is set up to be less likely
  * to win in cases of contention: Steals always run under synchronized
  * locks in order to avoid conflicts with other ongoing steals.
@@ -178,7 +176,7 @@ import java.util.Random;
  * <p>
  * Composite operations such as taskJoin include heavy
  * manual inlining of the most time-critical operations
- * (mainly pop and FJTask.invoke). 
+ * (mainly FJTask.invoke). 
  * This opens up a few opportunities for further hand-optimizations. 
  * Until Java compilers get a lot smarter, these tweaks
  * improve performance significantly enough for task-intensive 
@@ -203,7 +201,7 @@ import java.util.Random;
  * scheduling on most systems, would lead to very poor performance. 
  * But on the platforms
  * tested, the performance is quite good.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see FJTask
  * @see FJTaskRunnerGroup
  **/
@@ -215,6 +213,7 @@ public class FJTaskRunner extends Thread {
 
   /* ------------ DEQ Representation ------------------- */
 
+
   /**
    * FJTasks are held in an array-based DEQ with INITIAL_CAPACITY
    * elements. The DEQ is grown if necessary, but default value is
@@ -224,7 +223,14 @@ public class FJTaskRunner extends Thread {
    * Capacities must be a power of two. 
    **/
 
-  protected static final int INITIAL_CAPACITY = 4096;
+  protected static final int INITIAL_CAPACITY = 4096; 
+
+  /**
+   * The maximum supported DEQ capacity.
+   * When exceeded, FJTaskRunner operations throw Errors
+   **/
+
+  protected static final int MAX_CAPACITY = 1 << 30;
 
   /**
    * An object holding a single volatile reference to a FJTask.
@@ -237,9 +243,9 @@ public class FJTaskRunner extends Thread {
 	/** Set the reference **/
 	protected final void put(FJTask r) { ref = r; }
 	/** Return the reference **/
-	protected final FJTask get()       { return ref; }
+	protected final FJTask get()     { return ref; }
 	/** Return the reference and clear it **/
-	protected final FJTask take()      { FJTask r = ref; ref = null; return r;  }
+	protected final FJTask take()    { FJTask r = ref; ref = null; return r;  }
 
 	/**
 	 * Initialization utility for constructing arrays. 
@@ -272,14 +278,21 @@ public class FJTaskRunner extends Thread {
    **/
   protected volatile int top = 0;
 
+
   /** 
    * Current base of DEQ. Acts like a take-pointer in an
    * array-based bounded queue. Same bounds and usage as top.
    **/
 
-
   protected volatile int base = 0;
 
+
+  /**
+   * An extra object to synchronize on in order to
+   * achieve a memory barrier.
+   **/
+
+  protected final Object barrier = new Object();
 
   /* ------------ Other BookKeeping ------------------- */
 
@@ -308,8 +321,11 @@ public class FJTaskRunner extends Thread {
    * since all are read and written without synchronization.
    **/
 
+
+
   static final boolean COLLECT_STATS = true;
   // static final boolean COLLECT_STATS = false;
+
 
   // for stat collection
 
@@ -321,6 +337,9 @@ public class FJTaskRunner extends Thread {
 
   /** Total number of tasks obtained via scan **/
   protected int steals = 0;
+
+
+
 
   /**
    *  Constructor called only during FJTaskRunnerGroup initialization
@@ -334,14 +353,15 @@ public class FJTaskRunner extends Thread {
   }  
   /**
    * Adjust top and base, and grow DEQ if necessary.
+   * Called only while DEQ synch lock being held.
    * We don't expect this to be called very often. In most
    * programs using FJTasks, it is never called.
    **/
 
-  protected synchronized void checkOverflow() {
+  protected void checkOverflow() { 
 	int t = top;
 	int b = base;
-
+	
 	if (t - b < deq.length-1) { // check if just need an index reset
 	  
 	  int newBase = b & (deq.length-1);
@@ -349,38 +369,40 @@ public class FJTaskRunner extends Thread {
 	  if (newTop < newBase) newTop += deq.length;
 	  top = newTop;
 	  base = newBase;
-
+	  
 	  /* 
 		 Null out refs to stolen tasks. 
 		 This is the only time we can safely do it.
 	  */
-
+	  
 	  int i = newBase;
 	  while (i != newTop && deq[i].ref != null) {
 		deq[i].ref = null;
 		i = (i - 1) & (deq.length-1);
 	  }
-
+	  
 	}
 	else { // grow by doubling array
-
+	  
 	  int newTop = t - b;
 	  int oldcap = deq.length;
 	  int newcap = oldcap * 2;
-	
+	  
+	  if (newcap >= MAX_CAPACITY)
+		throw new Error("FJTask queue maximum capacity exceeded");
+	  
 	  VolatileTaskRef[] newdeq = new VolatileTaskRef[newcap];
-
+	  
 	  // copy in bottom half of new deq with refs from old deq
 	  for (int j = 0; j < oldcap; ++j) newdeq[j] = deq[b++ & (oldcap-1)];
-
+	  
 	  // fill top half of new deq with new refs
 	  for (int j = oldcap; j < newcap; ++j) newdeq[j] = new VolatileTaskRef();
-		  
+	  
 	  deq = newdeq;
 	  base = 0;
 	  top = newTop;
 	}
-	
   }  
   /**
    * Array-based version of coInvoke
@@ -412,9 +434,9 @@ public class FJTaskRunner extends Thread {
 	  for (int i = 0; i < nforks; ++i) { 
 		FJTask w = tasks[i];
 		while (!w.isDone()) {
-		  int nt = --top;
-		  if (base < nt) {
-			FJTask task = deq[nt & (deq.length-1)].take();
+
+		  FJTask task = pop();
+		  if (task != null) {
 			if (!task.isDone()) {
 			  if (COLLECT_STATS) ++runs;
 			  task.run(); 
@@ -422,14 +444,13 @@ public class FJTaskRunner extends Thread {
 			}
 		  }
 		  else
-			scan(nt, w);
+			scan(w);
 		}
 	  }
 	}
 
-	else { // handle all other cases
+	else  // handle non-inlinable cases
 	  slowCoInvoke(tasks);
-	}
   }  
   /**
    * A specialized expansion of
@@ -458,9 +479,8 @@ public class FJTaskRunner extends Thread {
 	  // inline  taskJoin
 	  
 	  while (!w.isDone()) {
-		int nt = --top;
-		if (base < nt) {
-		  FJTask task  = deq[nt & (deq.length-1)].take();
+		FJTask task  = pop();
+		if (task != null) {
 		  if (!task.isDone()) {
 			if (COLLECT_STATS) ++runs;
 			task.run(); 
@@ -469,28 +489,62 @@ public class FJTaskRunner extends Thread {
 		  }
 		}
 		else
-		  scan(nt, w);
+		  scan(w);
 	  }
 	}
 
-	else // handle overflow etc
+	else      // handle non-inlinable cases
 	  slowCoInvoke(w, v);
   }  
   /**
    * Check under synch lock if DEQ is really empty when doing pop. 
-   * Called only when DEQ holds at most one element. 
    * Return task if not empty, else null.
    **/
 
   protected final synchronized FJTask confirmPop(int provisionalTop) {
-	// take if not empty
-	FJTask r = ((base == provisionalTop) ? 
-			  deq[provisionalTop & (deq.length-1)].take() : 
-			  null);
-	
-	// we know deq is now empty -- reset indices to zero
-	top = base = 0;
-	return r;
+	if (base <= provisionalTop) 
+	  return deq[provisionalTop & (deq.length-1)].take();
+	else {    // was empty
+	  /*
+		Reset DEQ indices to zero whenever it is empty.
+		This both avoids unnecessary calls to checkOverflow
+		in push, and helps keep the DEQ from accumulating garbage
+	  */
+
+	  top = base = 0;
+	  return null;
+	}
+  }  
+  /**
+   * double-check a potential take
+   **/
+  
+  protected FJTask confirmTake(int oldBase) {
+
+	/*
+	  Use a second (guaranteed uncontended) synch
+	  to serve as a barrier in case JVM does not
+	  properly process read-after-write of 2 volatiles
+	*/
+
+	synchronized(barrier) {
+	  if (oldBase < top) {
+		/*
+		  We cannot call deq[oldBase].take here because of possible races when
+		  nulling out versus concurrent push operations.  Resulting
+		  accumulated garbage is swept out periodically in
+		  checkOverflow, or more typically, just by keeping indices
+		  zero-based when found to be empty in pop, which keeps active
+		  region small and constantly overwritten. 
+		*/
+		
+		return deq[oldBase & (deq.length-1)].get();
+	  }
+	  else {
+		base = oldBase;
+		return null;
+	  }
+	}
   }  
   /** Current size of the task DEQ **/
   protected int deqSize() { return deq.length; }  
@@ -513,13 +567,25 @@ public class FJTaskRunner extends Thread {
    **/
 
   protected final FJTask pop() {
-	int t = --top;     // pre-decrement suppresses contending take
-	if (base < t) {    // fast case -- no contention
+	/* 
+	   Decrement top, to force a contending take to back down.
+	*/
+
+	int t = --top;      
+
+	/*
+	  To avoid problems with JVMs that do not properly implement
+	  read-after-write of a pair of volatiles, we conservatively
+	  grab without lock only if the DEQ appears to have at least two
+	  elements, thus guaranteeing that both a pop and take will succeed,
+	  even if the pre-increment in take is not seen by current thread.
+	  Otherwise we recheck under synch.
+	*/
+
+	if (base + 1 < t) 
 	  return deq[t & (deq.length-1)].take();
-	}
-	else {             // slow case -- deq might be empty
+	else
 	  return confirmPop(t);
-	}
 
   }  
   /* ------------ DEQ operations ------------------- */
@@ -547,7 +613,7 @@ public class FJTaskRunner extends Thread {
 	  top = t + 1;
 	}
 
-	else 
+	else  // isolate slow case to increase chances push is inlined
 	  slowPush(r); // check overflow and retry
   }  
   /**
@@ -559,23 +625,25 @@ public class FJTaskRunner extends Thread {
    **/
 
   protected final synchronized void put(final FJTask r) {
-	int b = base - 1;
-	if (top < b + deq.length) {
-
-	  int newBase = b & (deq.length-1);
-	  deq[newBase].put(r);
-	  base = newBase;
-
-	  if (b != newBase) { // Adjust for index underflow
-		int newTop = top & (deq.length-1);
-		if (newTop < newBase) newTop += deq.length;
-		top = newTop;
+	for (;;) {
+	  int b = base - 1;
+	  if (top < b + deq.length) {
+		
+		int newBase = b & (deq.length-1);
+		deq[newBase].put(r);
+		base = newBase;
+		
+		if (b != newBase) { // Adjust for index underflow
+		  int newTop = top & (deq.length-1);
+		  if (newTop < newBase) newTop += deq.length;
+		  top = newTop;
+		}
+		return;
 	  }
-	}
-
-	else {
-	  checkOverflow();
-	  put(r);
+	  else {
+		checkOverflow();
+		// ... and retry
+	  }
 	}
   }  
   /* ------------  composite operations ------------------- */
@@ -589,23 +657,20 @@ public class FJTaskRunner extends Thread {
 	try{ 
 	  while (!interrupted()) {
 		
-		int nt = --top; // partially inline pop
-		if (base < nt) {
-		  FJTask task = deq[nt & (deq.length-1)].take();
-	   
-		  // inline FJTask.invoke
+		FJTask task = pop();
+		if (task != null) {
 		  if (!task.isDone()) {
+			// inline FJTask.invoke
 			if (COLLECT_STATS) ++runs;
 			task.run(); 
 			task.setDone(); 
 		  }
 		}
 		else
-		  scanWhileIdling(nt);
+		  scanWhileIdling();
 	  }
 	}
 	finally {
-	  //      System.out.println("Terminating " + this);
 	  group.setInactive(this);
 	}
   }  
@@ -613,10 +678,7 @@ public class FJTaskRunner extends Thread {
 
 
   /**
-   * Do all but the normally-inlined parts of
-   * yield or join.  Called only if the inlined, non-synched
-   * part of pop fails. It first retries the pop
-   * under synch. If that fails, it tries scanning by
+   * Do all but the pop() part of yield or join, by
    * traversing all DEQs in our group looking for a task to
    * steal. If none, it checks the entry queue. 
    * <p>
@@ -625,74 +687,69 @@ public class FJTaskRunner extends Thread {
    * to reduce wasted spinning, even though these are
    * not well defined. We are hoping here that the JVM
    * does something sensible.
-   * @param provisionalTop  the current value of DEQ top
    * @param waitingFor if non-null, the current task being joined
    **/
 
-  protected void scan(int provisionalTop, final FJTask waitingFor) {
-	FJTask task = confirmPop(provisionalTop);
-	if (task == null) {
+  protected void scan(final FJTask waitingFor) {
 
+	FJTask task = null;
 
-	  // to delay lowering priority until first failure to steal
-	  boolean lowered = false;
-
-	  /*
-		Circularly traverse from a random start index. 
-		
-		This differs slightly from cilk version that uses a random index
-		for each attempted steal.
-		Exhaustive scanning might impede analytic tractablity of 
-		the scheduling policy, but makes it much easier to deal with
-		startup and shutdown.
-	  */
-
-	  FJTaskRunner[] ts = group.getArray();
-	  int idx = victimRNG.nextInt(ts.length);
+	// to delay lowering priority until first failure to steal
+	boolean lowered = false;
 	
-	  for (int i = 0; i < ts.length; ++i) {
-
-		FJTaskRunner t = ts[idx];
-		if (++idx >= ts.length) idx = 0; // circularly traverse
-
-		if (t != null && t != this) {
-
-		  if (waitingFor != null && waitingFor.isDone()) {
+	/*
+	  Circularly traverse from a random start index. 
+	  
+	  This differs slightly from cilk version that uses a random index
+	  for each attempted steal.
+	  Exhaustive scanning might impede analytic tractablity of 
+	  the scheduling policy, but makes it much easier to deal with
+	  startup and shutdown.
+	*/
+	
+	FJTaskRunner[] ts = group.getArray();
+	int idx = victimRNG.nextInt(ts.length);
+	
+	for (int i = 0; i < ts.length; ++i) {
+	  
+	  FJTaskRunner t = ts[idx];
+	  if (++idx >= ts.length) idx = 0; // circularly traverse
+	  
+	  if (t != null && t != this) {
+		
+		if (waitingFor != null && waitingFor.isDone()) {
+		  break;
+		}
+		else {
+		  if (COLLECT_STATS) ++scans;
+		  task = t.take();
+		  if (task != null) {
+			if (COLLECT_STATS) ++steals;
 			break;
 		  }
-		  else {
-			if (COLLECT_STATS) ++scans;
-			task = t.take();
-			if (task != null) {
-			  if (COLLECT_STATS) ++steals;
-			  break;
-			}
-			else if (isInterrupted()) {
-			  break;
-			}
-			else if (!lowered) { // if this is first fail, lower priority
-			  lowered = true;
-			  setPriority(scanPriority);
-			}
-			else {           // otherwise we are at low priority; just yield
-			  yield();
-			}
+		  else if (isInterrupted()) {
+			break;
+		  }
+		  else if (!lowered) { // if this is first fail, lower priority
+			lowered = true;
+			setPriority(scanPriority);
+		  }
+		  else {           // otherwise we are at low priority; just yield
+			yield();
 		  }
 		}
-	  
-	  } 
-
-	  if (task == null) {
-		if (COLLECT_STATS) ++scans;
-		task = group.pollEntryQueue();
-		if (COLLECT_STATS) if (task != null) ++steals;
 	  }
+	  
+	} 
 
-	  if (lowered) setPriority(runPriority);
-
+	if (task == null) {
+	  if (COLLECT_STATS) ++scans;
+	  task = group.pollEntryQueue();
+	  if (COLLECT_STATS) if (task != null) ++steals;
 	}
-
-
+	
+	if (lowered) setPriority(runPriority);
+	
 	if (task != null && !task.isDone()) {
 	  if (COLLECT_STATS) ++runs;
 	  task.run(); 
@@ -711,68 +768,65 @@ public class FJTaskRunner extends Thread {
    * off via sleeps if necessary.
    **/
 
-  protected void scanWhileIdling(int provisionalTop) {
-	FJTask task = confirmPop(provisionalTop);
+  protected void scanWhileIdling() {
+	FJTask task = null;
 	
-	if (task == null) {
-	  
-	  boolean lowered = false;
-	  long iters = 0;
-
-	  FJTaskRunner[] ts = group.getArray();
-	  int idx = victimRNG.nextInt(ts.length);
-
-	  do {
-		for (int i = 0; i < ts.length; ++i) {
-		  
-		  FJTaskRunner t = ts[idx];
-		  if (++idx >= ts.length) idx = 0; // circularly traverse
-		  
-		  if (t != null && t != this) {
-			if (COLLECT_STATS) ++scans;
-			
-			task = t.take();
-			if (task != null) {
-			  if (COLLECT_STATS) ++steals;
-			  if (lowered) setPriority(runPriority);
-			  group.setActive(this);
-			  break;
-			}
-		  }
-		} 
+	boolean lowered = false;
+	long iters = 0;
+	
+	FJTaskRunner[] ts = group.getArray();
+	int idx = victimRNG.nextInt(ts.length);
+	
+	do {
+	  for (int i = 0; i < ts.length; ++i) {
 		
-		if (task == null) {
-		  if (isInterrupted()) 
-			return;
-
+		FJTaskRunner t = ts[idx];
+		if (++idx >= ts.length) idx = 0; // circularly traverse
+		
+		if (t != null && t != this) {
 		  if (COLLECT_STATS) ++scans;
-		  task = group.pollEntryQueue();
 		  
+		  task = t.take();
 		  if (task != null) {
 			if (COLLECT_STATS) ++steals;
 			if (lowered) setPriority(runPriority);
 			group.setActive(this);
-		  }
-		  else {
-			++iters;
-			//  Check here for yield vs sleep to avoid entering group synch lock
-			if (iters >= group.SCANS_PER_SLEEP) {
-			  group.checkActive(this, iters);
-			}
-			else if (isInterrupted()) {
-			  return;
-			}
-			else if (!lowered) {
-			  lowered = true;
-			  setPriority(scanPriority);
-			}
-			else {
-			  yield();
-			}
+			break;
 		  }
 		}
-	  } while (task == null);
-	}
+	  } 
+	  
+	  if (task == null) {
+		if (isInterrupted()) 
+		  return;
+		
+		if (COLLECT_STATS) ++scans;
+		task = group.pollEntryQueue();
+		
+		if (task != null) {
+		  if (COLLECT_STATS) ++steals;
+		  if (lowered) setPriority(runPriority);
+		  group.setActive(this);
+		}
+		else {
+		  ++iters;
+		  //  Check here for yield vs sleep to avoid entering group synch lock
+		  if (iters >= group.SCANS_PER_SLEEP) {
+			group.checkActive(this, iters);
+			if (isInterrupted())
+			  return;
+		  }
+		  else if (!lowered) {
+			lowered = true;
+			setPriority(scanPriority);
+		  }
+		  else {
+			yield();
+		  }
+		}
+	  }
+	} while (task == null);
+
 
 	if (!task.isDone()) {
 	  if (COLLECT_STATS) ++runs;
@@ -816,32 +870,28 @@ public class FJTaskRunner extends Thread {
    * Handle slow case for push
    **/
 
-  protected void slowPush(final FJTask r) {
+  protected synchronized void slowPush(final FJTask r) {
 	checkOverflow();
-	push(r); // just recurse
+	push(r); // just recurse -- this one is sure to succeed.
   }  
   /** 
    * Take a task from the base of the DEQ.
    * Always called by other threads via scan()
    **/
+
   
   protected final synchronized FJTask take() {
-	int b = base++;     // pre-increment suppresses contending pop 
-	if (b < top) {
 
-	  /*
-		We cannot call deq[b].take here because of possible races when
-		nulling out versus concurrent push operations.  Resulting
-		accumulated garbage is swept out periodically in
-		checkOverflow, or more typically, just by keeping indices
-		zero-based when found to be empty in pop, which keeps active
-		region small and constantly overwritten. 
-	  */
-
-	  return deq[b & (deq.length-1)].get();
-	}
-
-	else { // back out
+	/*
+	  Increment base in order to suppress a contending pop
+	*/
+	
+	int b = base++;     
+	
+	if (b < top) 
+	  return confirmTake(b);
+	else {
+	  // back out
 	  base = b; 
 	  return null;
 	}
@@ -855,10 +905,8 @@ public class FJTaskRunner extends Thread {
 
 	while (!w.isDone()) { 
 
-	  // inline yield
-	  int nt = --top;
-	  if (base < nt) {
-		FJTask task = deq[nt & (deq.length-1)].take();
+	  FJTask task = pop();
+	  if (task != null) {
 		if (!task.isDone()) {
 		  if (COLLECT_STATS) ++runs;
 		  task.run(); 
@@ -867,7 +915,7 @@ public class FJTaskRunner extends Thread {
 		}
 	  }
 	  else
-		scan(nt, w);
+		scan(w);
 	}
   }  
   /**
@@ -877,9 +925,8 @@ public class FJTaskRunner extends Thread {
 
 	
   protected final void taskYield() {
-	int nt = --top;      // partially inline pop
-	if (base < nt) {
-	  FJTask task = deq[nt & (deq.length-1)].take();
+	FJTask task = pop();
+	if (task != null) {
 	  if (!task.isDone()) {
 		if (COLLECT_STATS) ++runs;
 		task.run(); 
@@ -887,6 +934,6 @@ public class FJTaskRunner extends Thread {
 	  }
 	}
 	else
-	  scan(nt, null);
+	  scan(null);
   }  
 }

@@ -561,12 +561,13 @@ public ObjectMatrix1D viewSelection(cern.colt.function.ObjectProcedure condition
 protected abstract ObjectMatrix1D viewSelectionLike(int[] offsets);
 /**
 Sorts the vector into ascending order, according to the <i>natural ordering</i>.
-For further information, see {@link cern.colt.matrix.objectalgo.Sorting#quickSort(ObjectMatrix1D)}.
+This sort is guaranteed to be <i>stable</i>.
+For further information, see {@link cern.colt.matrix.objectalgo.Sorting#sort(ObjectMatrix1D)}.
 For more advanced sorting functionality, see {@link cern.colt.matrix.objectalgo.Sorting}.
 @return a new sorted vector (matrix) view.
 */
 public ObjectMatrix1D viewSorted() {
-	return cern.colt.matrix.objectalgo.Sorting.quickSort(this);
+	return cern.colt.matrix.objectalgo.Sorting.mergeSort.sort(this);
 }
 /**
 Constructs and returns a new <i>stride view</i> which is a sub matrix consisting of every i-th cell.

@@ -19,7 +19,7 @@ import java.util.*;
  * SyncSortedMaps wrap Sync-based control around java.util.SortedMaps.
  * They support the following additional reader operations over
  * SyncMap: comparator, subMap, headMap, tailMap, firstKey, lastKey.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see SyncCollection
 **/
 

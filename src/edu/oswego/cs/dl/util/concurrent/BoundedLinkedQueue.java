@@ -14,6 +14,7 @@ package edu.oswego.cs.dl.util.concurrent;
   17Jul1998  dl               Simplified by eliminating wait counts
   25aug1998  dl               added peek
   10oct1999  dl               lock on node object to ensure visibility
+  27jan2000  dl               setCapacity forces immediate permit reconcile
 */
 
 /**
@@ -39,7 +40,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * takes are still usually able to execute concurrently.
  * @see LinkedQueue 
  * @see BoundedBuffer 
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
  **/
 
 public class BoundedLinkedQueue implements BoundedChannel {
@@ -294,12 +295,18 @@ public class BoundedLinkedQueue implements BoundedChannel {
    * @exception IllegalArgumentException if capacity less or equal to zero
    **/
 
-  public synchronized void setCapacity(int newCapacity) {
+  public void setCapacity(int newCapacity) {
 	if (newCapacity <= 0) throw new IllegalArgumentException();
-
-	takeSidePutPermits_ += (newCapacity - capacity_);
-	capacity_ = newCapacity;
-	notifyAll();
+	synchronized (putGuard_) {
+	  synchronized(this) {
+		takeSidePutPermits_ += (newCapacity - capacity_);
+		capacity_ = newCapacity;
+		
+		// Force immediate reconcilation.
+		reconcilePutPermits();
+		notifyAll();
+	  }
+	}
   }  
   /** 
    * Return the number of elements in the queue.

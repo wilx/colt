@@ -19,6 +19,11 @@ package edu.oswego.cs.dl.util.concurrent;
 							  add methods createThreads, drain
   15may1999  dl               Allow infinite keepalives
   21oct1999  dl               add minimumPoolSize methods
+   7sep2000  dl               BlockedExecutionHandler now an interface,
+							  new DiscardOldestWhenBlocked policy
+  12oct2000 dl                add shutdownAfterProcessingCurrentlyQueuedTasks
+  13nov2000  dl               null out task ref after run 
+							  
 */
 
 import java.util.*;
@@ -170,7 +175,7 @@ import java.util.*;
  *   <dt> Blocked execution policy
  *   <dd> If the maximum pool size or queue size is
  *        bounded, then it is possible for incoming <code>execute</code>
- *        requests to block. There are three supported policies
+ *        requests to block. There are four supported policies
  *        for handling this problem, and mechanics (based on
  *        the Strategy Object pattern) to allow
  *        others in subclasses: <p>
@@ -228,7 +233,10 @@ import java.util.*;
  *      in your code for the tasks running within pools. Normally, before
  *      shutting down a pool via method interruptAll, you should make
  *      sure that all clients of the pool are themselves terminated,
- *      in order to prevent hanging or lost commands. Additionally,
+ *      in order to prevent hanging or lost commands. The
+ *      shutdownAfterProcessingCurrentlyQueuedTasks method automates
+ *      one common case.
+ *      Additionally,
  *      if you are using some form of queuing, you may wish to
  *      call method drain() to remove (and return)
  *      unprocessed commands from
@@ -299,7 +307,7 @@ import java.util.*;
  * for aggregate control. This has been removed, and the method
  * interruptAll added, to avoid differences in behavior across JVMs.
  *
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 
 public class PooledExecutor extends ThreadFactoryUser implements Executor {
@@ -325,10 +333,14 @@ public class PooledExecutor extends ThreadFactoryUser implements Executor {
   public static final long DEFAULT_KEEPALIVETIME = 60 * 1000;
 
 
+  /** Special queue element to signal termination **/
+  protected static Runnable ENDTASK = new Runnable() { public void run() {} };
+
   // Bounds declared as volatile since there is no point
   // in trying to carefully synchronize responses to changes
   // in value.
 
+  /** max pool size, or zero if shutting down **/
   protected volatile int maximumPoolSize_ = DEFAULT_MAXIMUMPOOLSIZE;
   protected volatile int minimumPoolSize_ = DEFAULT_MINIMUMPOOLSIZE;
 
@@ -373,14 +385,23 @@ public class PooledExecutor extends ThreadFactoryUser implements Executor {
 	public void run() {
 	  try {
 		Runnable task = firstTask_;
-		firstTask_ = null;
-		if (task != null)
+		if (task != null) {
 		  task.run();
+		  task = firstTask_ = null; // enable GC
+		}
 
 		while (getPoolSize() <= getMaximumPoolSize()) { // die if max lowered
 		  task = getTask();
-		  if (task != null)
+		  if (task == ENDTASK) {
+			// disable new thread creation
+			maximumPoolSize_ = minimumPoolSize_ = 0; 
+			interruptAll();
+			break;
+		  }
+		  else if (task != null) {
 			task.run();
+			task = null;
+		  }
 		  else 
 			break;
 		}
@@ -402,25 +423,25 @@ public class PooledExecutor extends ThreadFactoryUser implements Executor {
    * set the current blockedExectionHandler_.
    **/
 
-  protected abstract class BlockedExecutionHandler {
+  protected interface BlockedExecutionHandler {
 	/** 
 	 * Return true if successfully handled so, execute should terminate;
 	 * else return false if execute loop should be retried
 	 **/
-	abstract boolean blockedAction(Runnable command);
+	boolean blockedAction(Runnable command);
   }
 
   /** Class defining Run action **/
-  protected class RunWhenBlocked extends BlockedExecutionHandler {
-	protected boolean blockedAction(Runnable command) {
+  protected class RunWhenBlocked implements BlockedExecutionHandler {
+	public boolean blockedAction(Runnable command) {
 	  command.run();
 	  return true;
 	}
   }
 
   /** Class defining Wait action **/
-  protected class WaitWhenBlocked extends BlockedExecutionHandler {
-	protected boolean blockedAction(Runnable command) {
+  protected class WaitWhenBlocked implements BlockedExecutionHandler {
+	public boolean blockedAction(Runnable command) {
 	  try {
 		handOff_.put(command);
 	  }
@@ -432,11 +453,35 @@ public class PooledExecutor extends ThreadFactoryUser implements Executor {
   }
 
   /** Class defining Discard action **/
-  protected class DiscardWhenBlocked extends BlockedExecutionHandler {
-	protected boolean blockedAction(Runnable command) {
+  protected class DiscardWhenBlocked implements BlockedExecutionHandler {
+	public boolean blockedAction(Runnable command) {
 	  return true;
 	}
   }
+
+
+  /** Class defining DiscardOldest action.
+   *      Under this policy, at most one old unhandled task is discarded.
+   *      If the new task can then be handed off, it is.
+   *      Otherwise, the new task is run in the current thread
+   *      (i.e., RunWhenBlocked is used as a bakcup policy.)
+   **/
+  protected class DiscardOldestWhenBlocked implements BlockedExecutionHandler {
+	public boolean blockedAction(Runnable command) {
+	  try {
+		handOff_.poll(0);
+		if (!handOff_.offer(command, 0))
+		  command.run();
+	  }
+	  catch(InterruptedException ex) {
+		Thread.currentThread().interrupt(); // propagate
+	  }
+
+	  return true;
+	}
+  }
+
+
 
   /** The current handler **/
   protected BlockedExecutionHandler blockedExecutionHandler_;
@@ -506,6 +551,13 @@ public class PooledExecutor extends ThreadFactoryUser implements Executor {
 	  }
 	}
 	return ncreated;
+  }  
+  /** 
+   * Set the policy for blocked execution to be to
+   * discard the oldest unhandled request
+   **/
+  public synchronized void discardOldestWhenBlocked() {
+	blockedExecutionHandler_ = new DiscardOldestWhenBlocked();
   }  
   /** 
    * Set the policy for blocked execution to be to
@@ -693,6 +745,31 @@ public class PooledExecutor extends ThreadFactoryUser implements Executor {
   public void setMinimumPoolSize(int newMinimum) { 
 	if (newMinimum < 0) throw new IllegalArgumentException();
 	minimumPoolSize_ = newMinimum; 
+  }  
+  /**
+   * Terminate (via interruptAll)  threads after processing all
+   * elements currently in queue. Any tasks entered after this point will
+   * not be processed. A shut down pool cannot be restarted.
+   * This method may block if the task queue is finite and full.
+   * Also, this method 
+   * does not in general apply (and may lead to comparator-based
+   * exceptions) if the task queue is a priority queue.
+   **/
+  public void shutdownAfterProcessingCurrentlyQueuedTasks() {
+	// check if already idle
+	synchronized(poolLock_) { 
+	  if (poolSize_ == 0) {
+		// disable new thread construction
+		minimumPoolSize_ = maximumPoolSize_ = 0;
+		return;
+	  }
+	}
+
+	// Place marker into task queue
+	try { handOff_.put(ENDTASK); }
+	catch (InterruptedException ex) {
+	  Thread.currentThread().interrupt();
+	}
   }  
   /** 
    * Set the policy for blocked execution to be to

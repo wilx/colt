@@ -34,7 +34,7 @@ package edu.oswego.cs.dl.util.concurrent;
  *     BrokenBarrierException for other threads
  *     when barriers are in broken states.
  * </ul>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 
  **/
 public interface Barrier {

@@ -105,6 +105,8 @@ public abstract class AbstractFormatter extends cern.colt.PersistentObject {
 
 	private static String[] blanksCache; // for efficient String manipulations
 
+	protected static final FormerFactory factory = new FormerFactory();
+
 	static {
 		setupBlanksCache();
 	}
@@ -344,7 +346,7 @@ public static void demo3(int size, Object value) {
 /**
  * Converts a given cell to a String; no alignment considered.
  */
-protected abstract String form(AbstractMatrix1D matrix, int index, corejava.Format formatter);
+protected abstract String form(AbstractMatrix1D matrix, int index, Former formatter);
 /**
  * Returns a string representations of all cells; no alignment considered.
  */
@@ -353,8 +355,8 @@ protected abstract String[][] format(AbstractMatrix2D matrix);
  * Returns a string representations of all cells; no alignment considered.
  */
 protected String[] formatRow(AbstractMatrix1D vector) {
-	corejava.Format formatter = null;
-	if (format != null) formatter = new corejava.Format(format);
+	Former formatter = null;
+	if (format != null) formatter = factory.create(format);
 	int s = vector.size();
 	String[] strings = new String[s];
 	for (int i=0; i<s; i++) {

@@ -25,7 +25,6 @@ protected BenchmarkKernel() {}
 public static float run(double minSeconds, TimerProcedure procedure) {
 	long iter=0;
 	long minMillis = (long) (minSeconds * 1000);
-	//System.out.print("start"+minMillis);
 	long begin=System.currentTimeMillis();
 	long limit = begin + minMillis;
 	while (System.currentTimeMillis() < limit) {
@@ -34,9 +33,6 @@ public static float run(double minSeconds, TimerProcedure procedure) {
 		iter++;
 	}
 	long end = System.currentTimeMillis();
-	//System.out.println("- stop "+ (end-begin));
-
-	//cern.colt.Timer timer = new cern.colt.Timer().start();
 	if (minSeconds/iter < 0.1) { 
 		// unreliable timing due to very fast iteration;
 		// reading, starting and stopping timer distorts measurement
@@ -51,7 +47,7 @@ public static float run(double minSeconds, TimerProcedure procedure) {
 	}
 
 	long begin2 = System.currentTimeMillis();
-	int dummy=1;
+	int dummy=1; // prevent compiler from optimizing away the loop
 	for (long i=iter; --i >= 0; ) {
 		dummy *= i;
 		procedure.init();

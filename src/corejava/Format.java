@@ -30,8 +30,9 @@ import java.io.*;
   * @version 1.04 13 Sep 1998
   * @author Cay Horstmann
   */
-public class Format
+public class Format implements java.io.Serializable
 {
+	static final long serialVersionUID = 1020;
 
 
    private int width;

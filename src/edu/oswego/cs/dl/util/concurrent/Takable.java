@@ -21,7 +21,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * will disallow put operations.
  * <p>
  * Full method descriptions appear in the Channel interface.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see Channel
  * @see Puttable
 **/

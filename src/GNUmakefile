@@ -1,5 +1,5 @@
 #
-# @(#)GNUmakefile	2.0 2000/May/08
+# @(#)GNUmakefile	2.0 2001/Sep/07
 #
 # Makefile for building the Colt distribution.
 # Builds Colt, Jet, JAL, RngPack, VNI, CoreJava, util.concurrent, ViolinStrings, CLHEP. 
@@ -26,9 +26,8 @@
 
 # For Unix:
 # change the next line and let it point to your JDK top directory (the one ABOVE bin)
-JDK=$(HOME)/IBMJava2-13
-#JDK=/usr/local/libexec/jdk/1.2.2
-#JDK=$(HOME)/inprise122/jdk1.2.2
+JDK=/afs/cern.ch/sw/java/i386_redhat61/jdk/sun-1.3.1
+#JDK=/afs/cern.ch/sw/java/sparc_solaris26/jdk/sun-1.3.1
 # change the next line and let it point to your colt tree (the one ABOVE MySources)
 TOPDIR = $(HOME)/coltdev
 
@@ -41,8 +40,11 @@ TOPDIR = $(HOME)/coltdev
 #TOPDIR = P:/.cern.ch/.user/h/hoschek/coltdev
 
 
-JAVAC = $(JDK)/bin/javac
-JAVADOC = $(JDK)/bin/javadoc
+JAVAC = javac
+JAVADOC = javadoc
+JAR = jar
+#JAVAC = $(JDK)/bin/javac
+#JAVADOC = $(JDK)/bin/javadoc
 BUILDDIR=.
 
 # Directory where the sources are to be found
@@ -62,12 +64,13 @@ DOCUDIR = $(SOURCEDIR)/cern/colt/doc-files
 
 
 # Libs for compilation
-CLASSPATH = $(CLASSDIR):$(JDK)/jre/lib/rt.jar:$(JDK)/lib/tools.jar
+CLASSPATH = $(CLASSDIR):.:$(JDK)/jre/lib/rt.jar:$(JDK)/lib/tools.jar
+#CLASSPATH = $(CLASSDIR)
 
 #
 # file names for .jar and archives.
 #
-VERSION = 1.0.1
+VERSION = 1.0.2
 DOWNLOADFILE = colt$(VERSION).zip
 JARFILE = colt.jar
 SRCFILE = src.zip
@@ -109,7 +112,7 @@ DOCTITLE_MIF = 'Open Source Libraries for High Performance Scientific and Techni
 # Sources with CERN copyright.
 #
 #MY_SOURCES = cern/colt/matrix 
-MY_SOURCE_PACKAGES = cern/colt cern/colt/function cern/colt/list cern/colt/list/adapter cern/colt/bitvector cern/colt/buffer cern/colt/map cern/colt/matrix cern/colt/matrix/impl cern/colt/matrix/linalg cern/colt/matrix/doublealgo cern/colt/matrix/objectalgo cern/colt/matrix/bench cern/jet/math cern/jet/random cern/jet/stat cern/jet/stat/quantile cern/jet/random/engine cern/jet/random/sampling cern/clhep
+MY_SOURCE_PACKAGES = cern/colt cern/colt/io cern/colt/function cern/colt/list cern/colt/list/adapter cern/colt/bitvector cern/colt/buffer cern/colt/map cern/colt/matrix cern/colt/matrix/impl cern/colt/matrix/linalg cern/colt/matrix/doublealgo cern/colt/matrix/objectalgo cern/colt/matrix/bench cern/jet/math cern/jet/random cern/jet/stat cern/jet/stat/quantile cern/jet/random/engine cern/jet/random/sampling cern/clhep
 #MY_SOURCE_PACKAGES = cern/colt/matrix/linalg 
 
 #
@@ -121,7 +124,7 @@ GNU_SOURCE_PACKAGES = hep/aida hep/aida/ref hep/aida/bin
 # Sources copy-righted by third parties.
 #
 #OTHER_SOURCES = 
-OTHER_SOURCE_PACKAGES = ViolinStrings edu/oswego/cs/dl/util/concurrent corejava com/imsl/math edu/cornell/lassp/houle/RngPack jal/BYTE jal/CHAR jal/DOUBLE jal/FLOAT jal/INT jal/LONG jal/Object jal/SHORT jal/String 
+OTHER_SOURCE_PACKAGES = ViolinStrings edu/oswego/cs/dl/util/concurrent edu/oswego/cs/dl/util/concurrent/misc corejava com/imsl/math edu/cornell/lassp/houle/RngPack jal/BYTE jal/CHAR jal/DOUBLE jal/FLOAT jal/INT jal/LONG jal/Object jal/SHORT jal/String 
 
 
 #
@@ -189,7 +192,8 @@ LINES_TRIMMED = $(shell expr $(LINES) - 1)
 
 
 #Not for release builds
-JIKES = /usr/local/libexec/java/jikes/1.06/jikes
+#JIKES = /afs/cern.ch/sw/java/sparc_solaris26/opt/jikes-1.14/jikes
+JIKES = /afs/cern.ch/sw/java/i386_redhat61/opt/jikes-1.14/jikes
 
 # garbage
 #PKGDIR		= $(shell echo $(PACKAGE) | sed 's:\.:/:g')
@@ -221,6 +225,9 @@ cleanClasses:
 	@rm -fr $(SOURCEDIR)/cern/colt/benchmarkNinja/*
 	@rm -fr $(SOURCEDIR)/cern/colt/benchmarkJama/*
 	@rm -f $(SOURCEDIR)/cern/colt/matrix/doublealgo/Matrix2DModel.java
+	@rm -f $(SOURCEDIR)/cern/colt/SmpSorter.java
+	@rm -f $(SOURCEDIR)/cern/colt/Sort.java
+	@rm -f $(SOURCEDIR)/cern/colt/Reverser.java
 
 
 #
@@ -234,7 +241,7 @@ cleanDoc:
 # Compiles .java to .class.
 #
 javac: incrementBuild
-	@echo "Compilation can take a while (some minutes). Have a coffee..."
+	@echo "Compilation can take a while (perhaps a minute)..."
 	@echo $(JAVAC_PARAM_SOURCES) > tmpFiles938X
 	$(JAVAC) -O -d $(CLASSDIR) -classpath $(CLASSPATH) @tmpFiles938X
 	rm tmpFiles938X
@@ -254,8 +261,8 @@ jar:
 	@echo "Now building .jar file for $(VERSION).$(BUILD) (`date`)..."
 	@cp manifest tmp
 	@echo "Implementation-Version: $(VERSION).$(BUILD) (`date`)" >> tmp
-	$(JDK)/bin/jar cvfm $(JARDIR)/$(JARFILE) tmp $(JAR_CLASSES) $(JAR_PARAM_CLASSES)
-	$(JDK)/bin/jar -i $(JARDIR)/$(JARFILE)
+	$(JAR) cvfm $(JARDIR)/$(JARFILE) tmp $(JAR_CLASSES) $(JAR_PARAM_CLASSES)
+	$(JAR) -i $(JARDIR)/$(JARFILE)
 #	@rm tmp
 # use jar -i only for >= jdk1.3 
 
@@ -266,8 +273,8 @@ jar:
 #
 distribute:
 	@echo "Now building download file..."
-	$(JDK)/bin/jar Mcvf $(JARDIR)/$(SRCFILE) $(JAR_SOURCES) $(JAR_PARAM_SOURCES) 
-	$(JDK)/bin/jar Mcvf $(JARDIR)/$(DOWNLOADFILE) -C $(DOCUDIR) README.html -C $(JAVADOCDIR) doc -C $(JARDIR) $(JARFILE) -C $(JARDIR) $(SRCFILE) 
+	$(JAR) Mcvf $(JARDIR)/$(SRCFILE) $(JAR_SOURCES) $(JAR_PARAM_SOURCES) 
+	$(JAR) Mcvf $(JARDIR)/$(DOWNLOADFILE) -C $(DOCUDIR) README.html -C $(JAVADOCDIR) doc -C $(JARDIR) $(JARFILE) -C $(JARDIR) $(SRCFILE) 
 
 #
 # increment build number
@@ -282,7 +289,7 @@ incrementBuild:
 version:
 	@echo 'Version last build was $(VERSION).$(BUILD)'
 	@echo 'Version currently is'
-	@$(JDK)/bin/java -jar $(JARDIR)/$(JARFILE)
+	@$(JAVA) -jar $(JARDIR)/$(JARFILE)
 	
 license:
 	@echo 'dummy' > tmp
@@ -314,7 +321,7 @@ gnulicense:
 #
 # Produces printer-friendly docu by using Sun's MIF doclet (.java -> .mif -> .fm -> .ps -> .pdf)
 # Requires the MIFdoclet and FrameMaker being installed (Solaris or NT) and fmbatch (part of FrameMaker) being in current PATH.
-# We do this (like everything else) on Solaris. Maybe this also works on NT, but was not tested.
+# We do this on Solaris. Maybe this also works on NT, but was not tested.
 # See http://java.sun.com/products/jdk/javadoc/mifdoclet
 #
 # Currently the whole thing runs through, but in the very end reports an error that seems to be harmless and can be ignored.
@@ -349,7 +356,7 @@ docMif ::
 # Compiles .java to .class (less stable but faster than javac)
 #
 jikes: incrementBuild
-	$(JIKES) -d $(CLASSDIR) -classpath $(CLASSPATH) $(JAVAC_PARAM_SOURCES)
+	$(JIKES) -nowarn -classpath $(CLASSPATH) -d $(CLASSDIR) $(JAVAC_PARAM_SOURCES)
 
 
 #
@@ -372,7 +379,14 @@ restore:
 # for quick and dirty compilation only
 #
 jik:
-	$(JIKES) -classpath /usr/local/libexec/jdk/1.2.2/jre/lib/rt.jar:$(HOME)/coltb4/myjars/colt.jar:$(HOME)/coltb4/myjars/array.zip:$(HOME)/coltb4/myclasses:$(CLASSPATH) -d $(HOME)/coltb4/myclasses $(SOURCEDIR)/cern/colt/benchmark/*.java $(SOURCEDIR)/cern/colt/matrix/bench/*.java
+	$(JIKES) -classpath $(CLASSPATH):$(HOME)/coltb4/myjars/colt.jar:$(HOME)/coltb4/myjars/array.zip:$(HOME)/coltb4/myclasses:$(CLASSPATH) -d $(HOME)/coltb4/myclasses $(SOURCEDIR)/cern/colt/matrix/bench/*.java $(SOURCEDIR)/demo2/*.java 
+
+#
+# for quick and dirty compilation only
+#
+io:
+	$(JAVAC) -classpath $(CLASSPATH) -d $(HOME)/coltb4/myclasses $(SOURCEDIR)/java/io/*.java
+	$(JAR) cvf $(HOME)/coltb4/myjars/io.jar -C $(HOME)/coltb4/myclasses java
 
 #
 # What follows is old stuff - No more used
@@ -391,6 +405,7 @@ jikbench:
 	$(JAVAC) -classpath /usr/local/libexec/jdk/1.2.2/jre/lib/rt.jar:$(SOURCEDIR)/jgf/v20:$(CLASSPATH) $(SOURCEDIR)/jgf/v20/jgfutil/*.java 
 	$(JAVAC) -classpath /usr/local/libexec/jdk/1.2.2/jre/lib/rt.jar:$(SOURCEDIR)/jgf/v20:$(CLASSPATH) $(SOURCEDIR)/jgf/v20/section1/*.java  
 	$(JAVAC) -classpath /usr/local/libexec/jdk/1.2.2/jre/lib/rt.jar:$(SOURCEDIR)/jgf/v20:$(CLASSPATH) $(SOURCEDIR)/jgf/v20/section2/*.java $(SOURCEDIR)/jgf/v20/section2/crypt/*.java $(SOURCEDIR)/jgf/v20/section2/fft/*.java $(SOURCEDIR)/jgf/v20/section2/heapsort/*.java $(SOURCEDIR)/jgf/v20/section2/lufact/*.java $(SOURCEDIR)/jgf/v20/section2/series/*.java $(SOURCEDIR)/jgf/v20/section2/sor/*.java $(SOURCEDIR)/jgf/v20/section2/sparsematmult/*.java  
+	
 	
 # Remove dependency files generated by jikes.
 #

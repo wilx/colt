@@ -25,7 +25,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * first, modulo the caveats discussed with FIFOSemaphore, which
  * is used for queuing.
  * <p>
- * [<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
+ * [<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
  *
  * @see FIFOSemaphore
 **/

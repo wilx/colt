@@ -144,19 +144,6 @@ public DoubleMatrix3D assign(double[][][] values) {
 	return this;
 }
 /**
- * Sets all cells to the state specified by <tt>value</tt>.
- * @param    value the value to be filled into the cells.
- * @return <tt>this</tt> (for convenience only).
- */
-public DoubleMatrix3D assign(double value) {
-	// overriden for performance only
-	if (this.isNoView) {
-		new cern.colt.list.DoubleArrayList(this.elements).fillFromToWith(0,this.elements.length-1,value);
-		return this;
-	}
-	return super.assign(value);
-}
-/**
  * Replaces all cell values of the receiver with the values of another matrix.
  * Both matrices must have the same number of slices, rows and columns.
  * If both matrices share the same cells (as is the case if they are views derived from the same matrix) and intersect in an ambiguous way, then replaces <i>as if</i> using an intermediate auxiliary deep copy of <tt>other</tt>.

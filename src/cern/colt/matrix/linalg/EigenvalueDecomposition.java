@@ -30,6 +30,7 @@ conditioned, or even singular, so the validity of the equation
 <tt>A = V*D*inverse(V)</tt> depends upon <tt>Algebra.cond(V)</tt>.
 **/
 public class EigenvalueDecomposition implements java.io.Serializable {
+	static final long serialVersionUID = 1020;
 	/** Row and column dimension (square matrix).
 	@serial matrix dimension.
 	*/

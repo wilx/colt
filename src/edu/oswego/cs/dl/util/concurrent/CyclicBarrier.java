@@ -1,7 +1,7 @@
 package edu.oswego.cs.dl.util.concurrent;
 
 /*
-  File: Barrier.java
+  File: CyclicBarrier.java
 
   Originally written by Doug Lea and released into the public domain.
   This may be used for any purposes whatsoever without acknowledgment.
@@ -80,7 +80,7 @@ package edu.oswego.cs.dl.util.concurrent;
  *    }
  * }
  * </pre>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 
  **/
 public class CyclicBarrier implements Barrier {

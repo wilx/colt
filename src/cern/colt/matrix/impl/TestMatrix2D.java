@@ -1341,6 +1341,139 @@ public static void doubleTest32() {
 }
 /**
  */
+public static void doubleTest33() {
+	double nan = Double.NaN;
+	double inf = Double.POSITIVE_INFINITY;
+	double ninf = Double.NEGATIVE_INFINITY;
+	
+	double[][] data =
+	{{ ninf, nan}};
+	/*
+	{ 
+		{ 1, 4, 0 },
+		{ 6, 2, 5 },
+		{ 0, 7, 3 },
+		{ 0, 0, 8 },
+		{ 0, 0, 0 },
+		{ 0, 0, 0 }
+	};
+	*/
+	
+	DoubleMatrix2D x = new DenseDoubleMatrix2D(data);
+
+	System.out.println("\n\n\n"+x);
+	System.out.println("\n"+ x.equals(ninf));
+}
+/**
+ */
+public static void doubleTest34() {
+	double[][] data = 
+	{ 
+		{ 3, 0, 0, 0 },
+		{ 0, 4, 2, 0 },
+		{ 0, 0, 0, 0 },
+		{ 0, 0, 0, 0 },
+	};
+	
+	DoubleMatrix2D A = new DenseDoubleMatrix2D(data);
+	Property.DEFAULT.generateNonSingular(A);
+	DoubleMatrix2D inv = Algebra.DEFAULT.inverse(A);
+
+
+	System.out.println("\n\n\n"+A);
+	System.out.println("\n"+inv);
+	DoubleMatrix2D B = A.zMult(inv,null);
+	System.out.println(B);
+	if (!(B.equals(DoubleFactory2D.dense.identity(A.rows)))) {
+		throw new InternalError();
+	}
+}
+/**
+ * Title:        Aero3D<p>
+ * Description:  A Program to analyse aeroelestic evects in transonic wings<p>
+ * Copyright:    Copyright (c) 1998<p>
+ * Company:      PIERSOL Engineering Inc.<p>
+ * @author John R. Piersol
+ * @version
+ */
+public static void doubleTest35() {
+	/*
+	final int DOF = 200;
+	final cern.jet.random.engine.MersenneTwister RANDOM = new cern.jet.random.engine.MersenneTwister();
+	final Algebra ALGEBRA = new Algebra();
+	
+	System.out.println("\n\n\nStarting...");
+	double[][] k = randomMatrix(DOF, RANDOM);
+	DoubleMatrix2D kd = new DenseDoubleMatrix2D(k);
+	Jama.Matrix km = new Jama.Matrix(k);
+
+
+	
+
+
+	DoubleMatrix2D coltL = new LUDecomposition(kd).getL();
+	DoubleMatrix2D coltU = new LUDecomposition(kd).getU();
+	Jama.Matrix jamaL = new Jama.LUDecomposition(km).getL();
+	Jama.Matrix jamaU = new Jama.LUDecomposition(km).getU();
+
+	System.out.println(coltL.equals(kd.like().assign(jamaL.getArrayCopy())));
+	System.out.println(coltL.aggregate(F.plus,F.abs));
+	double s = 0;
+	double[] temp2 = jamaL.getColumnPackedCopy();
+	for (int i = 0, n = temp2.length; i < n; ++i) s += Math.abs(temp2[i]);
+	System.out.println(s);
+
+	System.out.println(coltU.equals(kd.like().assign(jamaU.getArrayCopy())));
+	System.out.println(coltU.aggregate(F.plus,F.abs));
+	s = 0;
+	temp2 = jamaU.getColumnPackedCopy();
+	for (int i = 0, n = temp2.length; i < n; ++i) s += Math.abs(temp2[i]);
+	System.out.println(s);
+
+	//System.out.println("colt="+new LUDecomposition(kd).toString());
+	//System.out.println("jama="+new Jama.LUDecomposition(km).toString());
+
+
+
+	Jama.Matrix kmi = km.inverse();
+
+	DoubleMatrix2D kdi = Algebra.DEFAULT.inverse(kd);
+	DoubleMatrix2D checkColt = Algebra.DEFAULT.mult(kd, kdi);
+	System.out.println("Colt checksum = " + checkColt.aggregate(F.plus,F.abs) + ", correct = " + DOF);
+
+	Jama.Matrix checkJama = kmi.times(km);
+	double checksum = 0;
+	double[] temp = checkJama.getColumnPackedCopy();
+	for (int i = 0, n = temp.length; i < n; ++i) checksum += Math.abs(temp[i]);
+	System.out.println("Jama checksum = " + checksum + ", correct = " + DOF);
+
+	System.out.println("done\n");
+	*/
+}
+/**
+ * Title:        Aero3D<p>
+ * Description:  A Program to analyse aeroelestic evects in transonic wings<p>
+ * Copyright:    Copyright (c) 1998<p>
+ * Company:      PIERSOL Engineering Inc.<p>
+ * @author John R. Piersol
+ * @version
+ */
+public static void doubleTest36() {
+	double[] testSort = new double[5];
+	testSort[0] = 5;
+	testSort[1] = Double.NaN;
+	testSort[2] = 2;
+	testSort[3] = Double.NaN;
+	testSort[4] = 1;
+	DoubleMatrix1D doubleDense = new DenseDoubleMatrix1D(testSort);
+	System.out.println("orig = "+doubleDense);
+	doubleDense = doubleDense.viewSorted();
+	doubleDense.toArray(testSort);
+	System.out.println("sort = "+doubleDense);
+	System.out.println("done\n");
+}
+/**
+ */
 public static void doubleTest4() {
 int rows = 4;
 int columns = 5; // make a 4*5 matrix
@@ -1501,6 +1634,16 @@ System.out.println("flip1 replaced"+view1);
 System.out.println("flip2 replaced"+view2);
 
 }
+public static void doubleTestQR() {
+// test case0...
+	double x0[] = { -6.221564, -9.002113, 2.678001, 6.483597, -7.934148 };
+	double y0[] = { -7.291898, -7.346928, 0.520158, 5.012548, -8.223725 };
+	double x1[] = { 1.185925, -2.523077, 0.135380 , 0.412556, -2.980280 };
+	double y1[] = {13.561087, -15.204410, 16.496829, 16.470860, 0.822198};
+
+	solve(x1.length, x1, y1);
+	solve(x0.length, x0, y0);
+}   
 /**
  */
 public static void main(String[] args) {
@@ -1515,6 +1658,107 @@ public static void main(String[] args) {
 	//doubleTest23(runs, size, nonZeroFraction, dense);
 	doubleTest24(runs, size, dense);
 	*/
+}
+public static double[][] randomMatrix(int dof, cern.jet.random.engine.MersenneTwister RANDOM) {
+	double[][] m = new double[dof][dof];
+	/*
+	for (int i = 0; i < dof; ++i) {
+		for (int j = i - 1, n = i + 1; j <= n; ++j) {
+			if (j < dof && j > -1)
+				m[i][j] = RANDOM.nextDouble();
+		}
+	}
+	*/
+	for (int i = 0; i < dof; ++i) {
+		for (int j = 0; j < dof; j++) {
+			m[i][j] = 5;
+		}
+	}
+	//        for (int i = 0; i < dof; ++i)
+	//            for (int j = 0; j < dof; ++j) m[i][j] = RANDOM.nextDouble();
+	return m;
+}
+public static void solve(int numpnt, double x[], double y[]) {
+	/*
+	// create the matrix object
+	DoubleMatrix2D A = new DenseDoubleMatrix2D(numpnt, 5);
+	DoubleMatrix2D B = new DenseDoubleMatrix2D(numpnt, 1);
+	//fillout the matrix
+	for (int i = 0; i < numpnt; i++) {
+		A.setQuick(i, 0, x[i] * y[i]);
+		A.setQuick(i, 1, y[i] * y[i]);
+		A.setQuick(i, 2, x[i]);
+		A.setQuick(i, 3, y[i]);
+		A.setQuick(i, 4, 1.0);
+		B.setQuick(i, 0, -x[i] * x[i]);
+	}
+	System.out.println(A);
+	//test the matrix condition
+	SingularValueDecomposition svd = new SingularValueDecomposition(A);
+	System.out.println(svd);
+	// Using Algebra to solve the equation
+	Algebra alg = new Algebra();
+	DoubleMatrix2D resAlg = alg.solve(A.copy(), B.copy());
+	System.out.println("Using Algebra...");
+	System.out.println(resAlg);
+	// Using QRDecomposition to solve the problem..
+	QRDecomposition qrd = new QRDecomposition(A);
+	DoubleMatrix2D resQRD = qrd.solve(B);
+	System.out.println("Using QRDecomposition...");
+	System.out.println(resQRD);
+	// Using Jama.QRDecomposition to solve the problem..
+	Jama.QRDecomposition qrdJama = new Jama.QRDecomposition(new Jama.Matrix(A.toArray()));
+	resQRD = new DenseDoubleMatrix2D(qrdJama.solve(new Jama.Matrix(B.toArray())).getArrayCopy());
+	System.out.println("Using Jama.QRDecomposition...");
+	System.out.println(resQRD);
+	*/
+}
+/**
+ */
+public static void testLU() {
+double[][] vals = {
+	{-0.074683,  0.321248,-0.014656, 0.286586,0},
+	{-0.344852, -0.16278 , 0.173711, 0.00064 ,0},
+	{-0.181924, -0.092926, 0.184153, 0.177966,1},
+	{-0.166829, -0.10321 , 0.582301, 0.142583,0},
+	{ 0       , -0.112952,-0.04932 ,-0.700157,0},
+	{ 0       , 0        ,0        ,0        ,0}
+};
+ 
+DoubleMatrix2D H = new DenseDoubleMatrix2D( vals ); // see values below...
+System.out.println("\nHplus="+H.viewDice().zMult(H,null));
+
+DoubleMatrix2D Hplus = Algebra.DEFAULT.inverse(H.viewDice().zMult( H,null )).zMult(H.viewDice(),null);
+Hplus.assign(cern.jet.math.Functions.round(1.0E-10));
+System.out.println("\nHplus="+Hplus);
+
+		/*
+DoubleMatrix2D HtH = new DenseDoubleMatrix2D( 5, 5 );
+DoubleMatrix2D Hplus = new DenseDoubleMatrix2D( 5, 6 );
+LUDecompositionQuick LUD = new LUDecompositionQuick();
+		//H.zMult( H, HtH, 1, 0, true, false );
+		//DoubleMatrix2D res = Algebra.DEFAULT.inverse(HtH).zMult(H,null,1,0,false,true);
+		LUD.decompose( HtH );
+		// first fill Hplus with the transpose of H...
+		for (int i = 0; i < 6; i++ ) {
+			for ( int j = 0; j < 5; j++ ) {
+				Hplus.set( j, i, H.get( i, j ) );
+			}
+		}
+		LUD.solve( Hplus );
+
+		DoubleMatrix2D perm = Algebra.DEFAULT.permute(Hplus, null,LUD.getPivot());
+		DoubleMatrix2D inv = Algebra.DEFAULT.inverse(HtH);//.zMult(H,null,1,0,false,true);
+		*/
+
+		// in matlab...
+		// Hplus = inv(H' * H) * H'
+
+//System.out.println("\nLU="+LUD);
+//System.out.println("\nHplus="+Hplus);
+//System.out.println("\nperm="+perm);
+//System.out.println("\ninv="+inv);
+//System.out.println("\nres="+res);
 }
 /**
  */
@@ -1531,5 +1775,57 @@ public static void testMax() {
   double max = d1ynamicBin.max();
   
   System.out.println("max = "+ max);
+}
+/**
+ */
+public static void testPermuting() {
+//int[] piv = {1,2,3,0};
+//final double[] v = { 0,1,2,3};
+//int[] piv = {0,4,1,2,3};
+//final double[] v = { 0,1,2,3,4};
+int[] piv = {2, 3, 4, 1, 0,5};
+final double[] v = { 0,1,2,3,4,5};
+	cern.colt.Swapper swapper = new cern.colt.Swapper() {
+		public void swap(int a, int b) {
+			double t = v[a]; v[a]=v[b]; v[b] = t;
+			//System.out.println("\n"+a+" <-> "+b+"  "+new cern.colt.list.DoubleArrayList(v));
+		}
+	};
+
+System.out.println("\nsource="+new cern.colt.list.DoubleArrayList(v));
+cern.colt.GenericPermuting.permute(piv, swapper, null);
+System.out.println("\nres="+new cern.colt.list.DoubleArrayList(v));
+}
+/**
+ */
+public static void testPermuting2(int runs, int size) {
+	int[] piv = new int[size];
+	for (int i=0; i<size; i++) piv[i]=i;
+	IntArrayList list = new IntArrayList(piv);
+	for (int run=0; run<runs; run++) {
+		list.shuffle();
+
+		final int[] v = new int[size];
+		for (int i=0; i<size; i++) v[i]=i;
+		IntArrayList safer = new IntArrayList(v).copy();
+		IntArrayList otherr = new IntArrayList(v).copy();
+		cern.colt.Swapper swapper = new cern.colt.Swapper() {
+			public void swap(int a, int b) {
+				int t = v[a]; v[a]=v[b]; v[b] = t;
+				//System.out.println("\n"+a+" <-> "+b+"  "+new cern.colt.list.DoubleArrayList(v));
+			}
+		};
+
+		//System.out.println("\nsource="+new cern.colt.list.IntArrayList(v));
+		//System.out.println("\nsafer="+safer.get(0));
+		cern.colt.GenericPermuting.permute(piv, swapper, null);
+		cern.colt.GenericPermuting.permute(otherr.elements(), piv);
+		IntArrayList vv = new IntArrayList(v);
+
+		
+		//System.out.println("\nres="+vv);
+		if (!(vv.equals(otherr))) throw new InternalError();
+	}
+	System.out.println("no bug detected\n\n");
 }
 }

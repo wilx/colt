@@ -95,11 +95,6 @@ public DoubleMatrix1D assign(double[] values) {
  * @return <tt>this</tt> (for convenience only).
  */
 public DoubleMatrix1D assign(double value) {
-	// overriden for performance only
-	if (isNoView) {
-		new cern.colt.list.DoubleArrayList(this.elements).fillFromToWith(0,this.elements.length-1,value);
-		return this;
-	}
 	int index = index(0);
 	int s = this.stride;
 	double[] elems = this.elements;

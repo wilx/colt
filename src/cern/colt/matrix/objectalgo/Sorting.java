@@ -1,5 +1,3 @@
-package cern.colt.matrix.objectalgo;
-
 /*
 Copyright © 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
@@ -8,33 +6,62 @@ that both that copyright notice and this permission notice appear in supporting 
 CERN makes no representations about the suitability of this software for any purpose. 
 It is provided "as is" without expressed or implied warranty.
 */
+package cern.colt.matrix.objectalgo;
+
 import cern.colt.matrix.*;
 import cern.colt.matrix.impl.*;
 import cern.colt.function.IntComparator;
 /**
- * Matrix Quicksorts.
- * Come in two variants: a) Sorting according to the order induces by a user supplied comparator, b) sorting according to natural ordering.
- * Natural ordering means cells must implement {@java.lang.Comparable}.
- * In both variants, cells must not be <tt>null</tt>.
- *
- * All sorting algorithms are tuned quicksorts, adapted from Jon
- * L. Bentley and M. Douglas McIlroy's "Engineering a Sort Function",
- * Software-Practice and Experience, Vol. 23(11) P. 1249-1265 (November
- * 1993).  This algorithm offers n*log(n) performance on many data sets
- * that cause other quicksorts to degrade to quadratic performance.
- *
- * @see cern.colt.Sorting
- * @see cern.colt.GenericSorting
- * @see java.util.Arrays
- *
- * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- */
-public class Sorting extends Object {
+Matrix quicksorts and mergesorts.
+Use idioms like <tt>Sorting.quickSort.sort(...)</tt> and <tt>Sorting.mergeSort.sort(...)</tt>.
+<p>
+This is another case demonstrating one primary goal of this library: Delivering easy to use, yet very efficient APIs.
+The sorts return convenient <i>sort views</i>.
+This enables the usage of algorithms which scale well with the problem size:
+For example, sorting a 1000000 x 10000 or a 1000000 x 100 x 100 matrix performs just as fast as sorting a 1000000 x 1 matrix.
+This is so, because internally the algorithms only move around integer indexes, they do not physically move around entire rows or slices.
+The original matrix is left unaffected.
+<p>
+The quicksort is a derivative of the JDK 1.2 V1.26 algorithms (which are, in turn, based on Bentley's and McIlroy's fine work).
+The mergesort is a derivative of the JAL algorithms, with optimisations taken from the JDK algorithms.
+Mergesort is <i>stable</i> (by definition), while quicksort is not.
+A stable sort is, for example, helpful, if matrices are sorted successively 
+by multiple columns. It preserves the relative position of equal elements.
+ 
+@see cern.colt.GenericSorting
+@see cern.colt.Sorting
+@see java.util.Arrays
+
+@author wolfgang.hoschek@cern.ch
+@version 1.1, 25/May/2000
+*/
+public class Sorting extends cern.colt.PersistentObject {
+	/**
+	 * A prefabricated quicksort.
+	 */
+	public static final Sorting quickSort = new Sorting(); // already has quicksort implemented
+
+	/**
+	 * A prefabricated mergesort.
+	 */
+	public static final Sorting mergeSort = new Sorting() { // override quicksort with mergesort
+		protected void runSort(int[] a, int fromIndex, int toIndex, IntComparator c) {
+			cern.colt.Sorting.mergeSort(a,fromIndex,toIndex,c);
+		}
+		protected void runSort(int fromIndex, int toIndex, IntComparator c, cern.colt.Swapper swapper) {
+			cern.colt.GenericSorting.mergeSort(fromIndex, toIndex, c, swapper);
+		}
+	};
 /**
  * Makes this class non instantiable, but still let's others inherit from it.
  */
 protected Sorting() {}
+protected void runSort(int[] a, int fromIndex, int toIndex, IntComparator c) {
+	cern.colt.Sorting.quickSort(a,fromIndex,toIndex,c);
+}
+protected void runSort(int fromIndex, int toIndex, IntComparator c, cern.colt.Swapper swapper) {
+	cern.colt.GenericSorting.quickSort(fromIndex, toIndex, c, swapper);
+}
 /**
 Sorts the vector into ascending order, according to the <i>natural ordering</i>.
 The returned view is backed by this matrix, so changes in the returned view are reflected in this matrix, and vice-versa.
@@ -57,7 +84,7 @@ To sort ranges use sub-ranging views. To sort descending, use flip views ...
 @return a new sorted vector (matrix) view. 
 		<b>Note that the original matrix is left unaffected.</b>
 */
-public static ObjectMatrix1D quickSort(final ObjectMatrix1D vector) {
+public ObjectMatrix1D sort(final ObjectMatrix1D vector) {
 	int[] indexes = new int[vector.size()]; // row indexes to reorder instead of matrix itself
 	for (int i=indexes.length; --i >= 0; ) indexes[i] = i;
 
@@ -70,7 +97,7 @@ public static ObjectMatrix1D quickSort(final ObjectMatrix1D vector) {
 		}
 	};
 
-	cern.colt.Sorting.quickSort(indexes,0,indexes.length,comp);
+	runSort(indexes,0,indexes.length,comp);
 
 	return vector.viewSelection(indexes);
 }
@@ -97,7 +124,7 @@ sorted = quickSort(vector,comp);
 @return a new matrix view sorted as specified.
 		<b>Note that the original vector (matrix) is left unaffected.</b>
 */
-public static ObjectMatrix1D quickSort(final ObjectMatrix1D vector, final java.util.Comparator c) {
+public ObjectMatrix1D sort(final ObjectMatrix1D vector, final java.util.Comparator c) {
 	int[] indexes = new int[vector.size()]; // row indexes to reorder instead of matrix itself
 	for (int i=indexes.length; --i >= 0; ) indexes[i] = i;
 
@@ -107,7 +134,7 @@ public static ObjectMatrix1D quickSort(final ObjectMatrix1D vector, final java.u
 		}
 	};
 
-	cern.colt.Sorting.quickSort(indexes,0,indexes.length,comp);
+	runSort(indexes,0,indexes.length,comp);
 
 	return vector.viewSelection(indexes);
 }
@@ -149,7 +176,7 @@ To sort ranges use sub-ranging views. To sort columns by rows, use dice views. T
 		<b>Note that the original matrix is left unaffected.</b>
 @throws IndexOutOfBoundsException if <tt>column < 0 || column >= matrix.columns()</tt>.
 */
-public static ObjectMatrix2D quickSort(ObjectMatrix2D matrix, int column) {
+public ObjectMatrix2D sort(ObjectMatrix2D matrix, int column) {
 	if (column < 0 || column >= matrix.columns()) throw new IndexOutOfBoundsException("column="+column+", matrix="+Formatter.shape(matrix));
 
 	int[] rowIndexes = new int[matrix.rows()]; // row indexes to reorder instead of matrix itself
@@ -165,7 +192,7 @@ public static ObjectMatrix2D quickSort(ObjectMatrix2D matrix, int column) {
 		}
 	};
 
-	cern.colt.Sorting.quickSort(rowIndexes,0,rowIndexes.length,comp);
+	runSort(rowIndexes,0,rowIndexes.length,comp);
 
 	// view the matrix according to the reordered row indexes
 	// take all columns in the original order
@@ -194,7 +221,7 @@ sorted = quickSort(matrix,comp);
 @return a new matrix view having rows sorted as specified.
 		<b>Note that the original matrix is left unaffected.</b>
 */
-public static ObjectMatrix2D quickSort(final ObjectMatrix2D matrix, final ObjectMatrix1DComparator c) {
+public ObjectMatrix2D sort(final ObjectMatrix2D matrix, final ObjectMatrix1DComparator c) {
 	int[] rowIndexes = new int[matrix.rows()]; // row indexes to reorder instead of matrix itself
 	for (int i=rowIndexes.length; --i >= 0; ) rowIndexes[i] = i;
 
@@ -208,7 +235,7 @@ public static ObjectMatrix2D quickSort(final ObjectMatrix2D matrix, final Object
 		}
 	};
 
-	cern.colt.Sorting.quickSort(rowIndexes,0,rowIndexes.length,comp);
+	runSort(rowIndexes,0,rowIndexes.length,comp);
 
 	// view the matrix according to the reordered row indexes
 	// take all columns in the original order
@@ -235,7 +262,7 @@ Let <tt>A</tt> and <tt>B</tt> be two 2-d slices. Then we have the following rule
 		<b>Note that the original matrix is left unaffected.</b>
 @throws IndexOutOfBoundsException if <tt>row < 0 || row >= matrix.rows() || column < 0 || column >= matrix.columns()</tt>.
 */
-public static ObjectMatrix3D quickSort(ObjectMatrix3D matrix, int row, int column) {
+public ObjectMatrix3D sort(ObjectMatrix3D matrix, int row, int column) {
 	if (row < 0 || row >= matrix.rows()) throw new IndexOutOfBoundsException("row="+row+", matrix="+Formatter.shape(matrix));
 	if (column < 0 || column >= matrix.columns()) throw new IndexOutOfBoundsException("column="+column+", matrix="+Formatter.shape(matrix));
 
@@ -252,7 +279,7 @@ public static ObjectMatrix3D quickSort(ObjectMatrix3D matrix, int row, int colum
 		}
 	};
 
-	cern.colt.Sorting.quickSort(sliceIndexes,0,sliceIndexes.length,comp);
+	runSort(sliceIndexes,0,sliceIndexes.length,comp);
 
 	// view the matrix according to the reordered slice indexes
 	// take all rows and columns in the original order
@@ -281,7 +308,7 @@ sorted = quickSort(matrix,comp);
 @return a new matrix view having slices sorted as specified.
 		<b>Note that the original matrix is left unaffected.</b>
 */
-public static ObjectMatrix3D quickSort(final ObjectMatrix3D matrix, final ObjectMatrix2DComparator c) {
+public ObjectMatrix3D sort(final ObjectMatrix3D matrix, final ObjectMatrix2DComparator c) {
 	int[] sliceIndexes = new int[matrix.slices()]; // indexes to reorder instead of matrix itself
 	for (int i=sliceIndexes.length; --i >= 0; ) sliceIndexes[i] = i;
 
@@ -295,7 +322,7 @@ public static ObjectMatrix3D quickSort(final ObjectMatrix3D matrix, final Object
 		}
 	};
 
-	cern.colt.Sorting.quickSort(sliceIndexes,0,sliceIndexes.length,comp);
+	runSort(sliceIndexes,0,sliceIndexes.length,comp);
 
 	// view the matrix according to the reordered slice indexes
 	// take all rows and columns in the original order

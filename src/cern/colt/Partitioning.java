@@ -331,8 +331,8 @@ Therefore, must satisfy <tt>splitIndexes.length > splitTo</tt>.
 <p>
 Tip: Normally you will have <tt>splitIndexes.length == s.length</tt> as well as <tt>from==0, to==g.length-1</tt> and <tt>splitFrom==0, splitTo==s.length-1</tt>.
 
-@see GenericSorting
-@see GenericSorting#quickSort(int,int,IntComparator,Swapper)
+@see Sort
+@see Sort#sort(int,int,IntComparator,Swapper)
 @see Sorting#binarySearchFromTo(int,int,IntComparator)
 */
 public static void genericPartition(int from, int to, int splitFrom, int splitTo, int[] splitIndexes, IntComparator comp, IntComparator comp2, Swapper swapper) {

@@ -2,53 +2,36 @@ package cern.colt.matrix.linalg;
 
 import cern.colt.matrix.*;
 /**
-<p>Subset of the <A HREF="http://netlib2.cs.utk.edu/blas/faq.html">BLAS</A> (Basic Linear Algebra System); 
-Mostly for compatibility with 
-  legacy notations. Most operations actually just delegate to the appropriate 
-  methods directly defined on matrices and vectors. </p>
-<p>This class implements the BLAS functions for operations on matrices from the 
-  matrix package. It follows the spirit of the <A HREF="http://math.nist.gov/javanumerics/blas.html">Draft Proposal for Java BLAS Interface</A>, 
-  by Roldan Pozo of the National Institute of Standards and Technology. Interface 
-  definitions are also identical to the Ninja interface. Because the matrix package 
-  supports sections, the interface is actually simpler. </p>
-<p>Currently, the following operations are supported: </p>
-<ol>
-  <li>BLAS Level 1: Vector-Vector operations </li>
-  <ul>
-	<li>ddot  : dot product of two vectors </li>
-	<li>daxpy : scalar times a vector plus a vector </li>
-	<li>drotg : construct a Givens plane rotation </li>
-	<li>drot  : apply a plane rotation </li>
-	<li>dcopy : copy vector X into vector Y </li>
-	<li>dswap : interchange vectors X and Y </li>
-	<li>dnrm2 : Euclidean norm of a vector </li>
-	<li>dasum : sum of absolute values of vector components </li>
-	<li>dscal : scale a vector by a scalar </li>
-	<li>idamax: index of element with maximum absolute value </li>
-  </ul>
-  <li>2.BLAS Level 2: Matrix-Vector operations </li>
-  <ul>
-	<li>dgemv : matrix-vector multiply with general matrix </li>
-	<li>dger  : rank-1 update on general matrix </li>
-	<li>dsymv : matrix-vector multiply with symmetric matrix </li>
-	<li>dtrmv : matrix-vector multiply with triangular matrix </li>
-  </ul>
-  <li>3.BLAS Level 3: Matrix-Matrix operations 
-	<ul>
-	  <li>dgemm : matrix-matrix multiply with general matrices </li>
-	</ul>
-  </li>
-</ol>
+Sequential implementation of the Basic Linear Algebra System.
 
 @author wolfgang.hoschek@cern.ch
 @version 0.9, 16/04/2000 
 */
-public class SeqBlas {
-	private cern.jet.math.Functions F = cern.jet.math.Functions.functions;
+public class SeqBlas implements Blas {
+	/**
+	Little trick to allow for "aliasing", that is, renaming this class.
+	Time and again writing code like
+	<p>
+	<tt>SeqBlas.blas.dgemm(...);</tt>
+	<p>
+	is a bit awkward. Using the aliasing you can instead write
+	<p>
+	<tt>Blas B = SeqBlas.blas; <br>
+	B.dgemm(...);</tt>
+	*/
+	public static final Blas seqBlas = new SeqBlas();
+	
+	private static final cern.jet.math.Functions F = cern.jet.math.Functions.functions;
 /**
 Makes this class non instantiable, but still let's others inherit from it.
 */
 protected SeqBlas() {}
+public void assign(DoubleMatrix2D A, cern.colt.function.DoubleFunction function) {
+	A.assign(function);
+}
+public void assign(DoubleMatrix2D A, DoubleMatrix2D B, cern.colt.function.DoubleDoubleFunction function) {
+	A.assign(B,function);
+}
 public double dasum(DoubleMatrix1D x) {
 	return x.aggregate(F.plus, F.abs);
 }
@@ -70,8 +53,9 @@ public void dgemv(boolean transposeA, double alpha, DoubleMatrix2D A, DoubleMatr
 public void dger(double alpha, DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix2D A) {
 	cern.jet.math.PlusMult fun = cern.jet.math.PlusMult.plusMult(0);
 	for (int i=A.rows(); --i >= 0; ) {
-		fun.multiplicator = x.getQuick(i);
-		A.viewRow(i).assign(y,fun);
+		fun.multiplicator = alpha * x.getQuick(i);
+ 		A.viewRow(i).assign(y,fun);
+		
 	}
 }
 public double dnrm2(DoubleMatrix1D x) {
@@ -186,8 +170,7 @@ public void dtrmv(boolean isUpperTriangular, boolean transposeA, boolean isUnitT
 		else {
 			sum += y.getQuick(i) * x.getQuick(i);
 			for (int j = i + 1; j < size; j++) {
-				sum += A.getQuick(j,i) * x.getQuick(j);
-			}
+				sum += A.getQuick(i,j) * x.getQuick(j);			}
 		}
 		b.setQuick(i,sum);
 	}

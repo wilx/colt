@@ -166,7 +166,7 @@ Here are some example properties
 </table>
 
 @author wolfgang.hoschek@cern.ch
-@version 1.0, 10/14/99
+@version 1.1, 28/May/2000 (fixed strange bugs involving NaN, -inf, inf)
 */
 public class Property extends cern.colt.PersistentObject {
 	/**
@@ -244,7 +244,11 @@ public boolean equals(DoubleMatrix1D A, double value) {
 	double epsilon = tolerance();
 	for (int i = A.size(); --i >= 0;) {
 		//if (!(A.getQuick(i) == value)) return false;
-		if (Math.abs(value - A.getQuick(i)) > epsilon) return false;
+		//if (Math.abs(value - A.getQuick(i)) > epsilon) return false;
+		double x = A.getQuick(i);
+		double diff = Math.abs(value - x);
+		if ((diff!=diff) && ((value!=value && x!=x) || value==x)) diff = 0;
+		if (!(diff <= epsilon)) return false;
 	}
 	return true;
 }
@@ -268,7 +272,12 @@ public boolean equals(DoubleMatrix1D A, DoubleMatrix1D B) {
 	double epsilon = tolerance();
 	for (int i=size; --i >= 0;) {
 		//if (!(getQuick(i) == B.getQuick(i))) return false;
-		if (Math.abs(A.getQuick(i) - B.getQuick(i)) > epsilon) return false;
+		//if (Math.abs(A.getQuick(i) - B.getQuick(i)) > epsilon) return false;
+		double x = A.getQuick(i);
+		double value = B.getQuick(i);
+		double diff = Math.abs(value - x);
+		if ((diff!=diff) && ((value!=value && x!=x) || value==x)) diff = 0;
+		if (!(diff <= epsilon)) return false;
 	}
 	return true;
 }
@@ -290,7 +299,11 @@ public boolean equals(DoubleMatrix2D A, double value) {
 	for (int row=rows; --row >= 0;) {
 		for (int column=columns; --column >= 0;) {
 			//if (!(A.getQuick(row,column) == value)) return false;
-			if (Math.abs(value - A.getQuick(row,column)) > epsilon) return false;
+			//if (Math.abs(value - A.getQuick(row,column)) > epsilon) return false;
+			double x = A.getQuick(row,column);
+			double diff = Math.abs(value - x);
+			if ((diff!=diff) && ((value!=value && x!=x) || value==x)) diff = 0;
+			if (!(diff <= epsilon)) return false;
 		}
 	}
 	return true;
@@ -317,7 +330,12 @@ public boolean equals(DoubleMatrix2D A, DoubleMatrix2D B) {
 	for (int row=rows; --row >= 0;) {
 		for (int column=columns; --column >= 0;) {
 			//if (!(A.getQuick(row,column) == B.getQuick(row,column))) return false;
-			if (Math.abs(A.getQuick(row,column) - B.getQuick(row,column)) > epsilon) return false;
+			//if (Math.abs((A.getQuick(row,column) - B.getQuick(row,column)) > epsilon) return false;
+			double x = A.getQuick(row,column);
+			double value = B.getQuick(row,column);
+			double diff = Math.abs(value - x);
+			if ((diff!=diff) && ((value!=value && x!=x) || value==x)) diff = 0;
+			if (!(diff <= epsilon)) return false;
 		}
 	}
 	return true;
@@ -341,7 +359,11 @@ public boolean equals(DoubleMatrix3D A, double value) {
 		for (int row=rows; --row >= 0;) {
 			for (int column=columns; --column >= 0;) {
 				//if (!(A.getQuick(slice,row,column) == value)) return false;
-				if (Math.abs(value - A.getQuick(slice,row,column)) > epsilon) return false;
+				//if (Math.abs(value - A.getQuick(slice,row,column)) > epsilon) return false;
+				double x = A.getQuick(slice,row,column);
+				double diff = Math.abs(value - x);
+				if ((diff!=diff) && ((value!=value && x!=x) || value==x)) diff = 0;
+				if (!(diff <= epsilon)) return false;
 			}
 		}
 	}
@@ -371,7 +393,12 @@ public boolean equals(DoubleMatrix3D A, DoubleMatrix3D B) {
 		for (int row=rows; --row >= 0;) {
 			for (int column=columns; --column >= 0;) {
 				//if (!(A.getQuick(slice,row,column) == B.getQuick(slice,row,column))) return false;
-				if (Math.abs(A.getQuick(slice,row,column) - B.getQuick(slice,row,column)) > epsilon) return false;
+				//if (Math.abs(A.getQuick(slice,row,column) - B.getQuick(slice,row,column)) > epsilon) return false;
+				double x = A.getQuick(slice,row,column);
+				double value = B.getQuick(slice,row,column);
+				double diff = Math.abs(value - x);
+				if ((diff!=diff) && ((value!=value && x!=x) || value==x)) diff = 0;
+				if (!(diff <= epsilon)) return false;
 			}
 		}
 	}
@@ -412,7 +439,7 @@ public boolean isDiagonal(DoubleMatrix2D A) {
 	for (int row = rows; --row >=0; ) {
 		for (int column = columns; --column >= 0; ) {
 			//if (row!=column && A.getQuick(row,column) != 0) return false;
-			if (row!=column && Math.abs(A.getQuick(row,column)) > epsilon) return false;
+			if (row!=column && !(Math.abs(A.getQuick(row,column)) <= epsilon)) return false;
 		}
 	}
 	return true;
@@ -431,7 +458,7 @@ public boolean isDiagonallyDominantByColumn(DoubleMatrix2D A) {
 	for (int i = min; --i >= 0; ) {
 		double diag = Math.abs(A.getQuick(i,i));
 		diag += diag;
-		if (!(diag > A.viewColumn(i).aggregate(F.plus,F.abs))) return false;
+		if (diag <= A.viewColumn(i).aggregate(F.plus,F.abs)) return false;
 	}
 	return true;
 }
@@ -449,7 +476,7 @@ public boolean isDiagonallyDominantByRow(DoubleMatrix2D A) {
 	for (int i = min; --i >= 0; ) {
 		double diag = Math.abs(A.getQuick(i,i));
 		diag += diag;
-		if (!(diag > A.viewRow(i).aggregate(F.plus,F.abs))) return false;
+		if (diag <= A.viewRow(i).aggregate(F.plus,F.abs)) return false;
 	}
 	return true;
 }
@@ -464,10 +491,10 @@ public boolean isIdentity(DoubleMatrix2D A) {
 	for (int row = rows; --row >=0; ) {
 		for (int column = columns; --column >= 0; ) {
 			double v = A.getQuick(row,column);
-			//if (row==column && v != 1) return false;
-			//else if (v != 0) return false;
-			if (row==column && Math.abs(1-v) > epsilon) return false;
-			else if (Math.abs(v) > epsilon) return false;
+			if (row==column) {
+				if (!(Math.abs(1-v) < epsilon)) return false;
+			}
+			else if (!(Math.abs(v) <= epsilon)) return false;
 		}
 	}
 	return true;
@@ -484,7 +511,7 @@ public boolean isLowerBidiagonal(DoubleMatrix2D A) {
 		for (int column = columns; --column >= 0; ) {
 			if (!(row==column || row==column+1)) {
 				//if (A.getQuick(row,column) != 0) return false;
-				if (Math.abs(A.getQuick(row,column)) > epsilon) return false;
+				if (!(Math.abs(A.getQuick(row,column)) <= epsilon)) return false;
 			}
 		}
 	}
@@ -501,7 +528,7 @@ public boolean isLowerTriangular(DoubleMatrix2D A) {
 	for (int column = columns; --column >= 0; ) {
 		for (int row = Math.min(column,rows); --row >= 0; ) {
 			//if (A.getQuick(row,column) != 0) return false;
-			if (Math.abs(A.getQuick(row,column)) > epsilon) return false;
+			if (!(Math.abs(A.getQuick(row,column)) <= epsilon)) return false;
 		}
 	}
 	return true;
@@ -527,7 +554,7 @@ public boolean isNonNegative(DoubleMatrix2D A) {
  */
 public boolean isOrthogonal(DoubleMatrix2D A) {
 	checkSquare(A);
-	return equals(Algebra.DEFAULT.mult(A,Algebra.DEFAULT.transpose(A)), cern.colt.matrix.DoubleFactory2D.dense.identity(A.rows()));
+	return equals(A.zMult(A,null,1,0,false,true), cern.colt.matrix.DoubleFactory2D.dense.identity(A.rows()));
 }
 /**
  * A matrix <tt>A</tt> is <i>positive</i> if <tt>A[i,j] &gt; 0</tt> holds for all cells.
@@ -539,7 +566,7 @@ public boolean isPositive(DoubleMatrix2D A) {
 	int columns = A.columns();
 	for (int row = rows; --row >=0; ) {
 		for (int column = columns; --column >= 0; ) {
-			if (A.getQuick(row,column) <= 0) return false;
+			if (!(A.getQuick(row,column) > 0)) return false;
 		}
 	}
 	return true;
@@ -548,7 +575,7 @@ public boolean isPositive(DoubleMatrix2D A) {
  * A matrix <tt>A</tt> is <i>singular</i> if it has no inverse, that is, iff <tt>det(A)==0</tt>.
  */
 public boolean isSingular(DoubleMatrix2D A) {
-	return Math.abs(Algebra.DEFAULT.det(A)) <= tolerance();
+	return !(Math.abs(Algebra.DEFAULT.det(A)) >= tolerance());
 }
 /**
  * A square matrix <tt>A</tt> is <i>skew-symmetric</i> if <tt>A = -transpose(A)</tt>, that is <tt>A[i,j] == -A[j,i]</tt>.
@@ -562,7 +589,7 @@ public boolean isSkewSymmetric(DoubleMatrix2D A) {
 	for (int row = rows; --row >=0; ) {
 		for (int column = rows; --column >= 0; ) {
 			//if (A.getQuick(row,column) != -A.getQuick(column,row)) return false;
-			if (Math.abs(A.getQuick(row,column) + A.getQuick(column,row)) > epsilon) return false;
+			if (!(Math.abs(A.getQuick(row,column) + A.getQuick(column,row)) <= epsilon)) return false;
 		}
 	}
 	return true;
@@ -584,7 +611,7 @@ public boolean isStrictlyLowerTriangular(DoubleMatrix2D A) {
 	for (int column = columns; --column >= 0; ) {
 		for (int row = Math.min(rows,column+1); --row >= 0; ) {
 			//if (A.getQuick(row,column) != 0) return false;
-			if (Math.abs(A.getQuick(row,column)) > epsilon) return false;
+			if (!(Math.abs(A.getQuick(row,column)) <= epsilon)) return false;
 		}
 	}
 	return true;
@@ -599,7 +626,7 @@ public boolean isStrictlyTriangular(DoubleMatrix2D A) {
 	double epsilon = tolerance();
 	for (int i = Math.min(A.rows(), A.columns()); --i >= 0; ) {
 		//if (A.getQuick(i,i) != 0) return false;
-		if (Math.abs(A.getQuick(i,i)) > epsilon) return false;
+		if (!(Math.abs(A.getQuick(i,i)) <= epsilon)) return false;
 	}
 	return true;
 }
@@ -614,7 +641,7 @@ public boolean isStrictlyUpperTriangular(DoubleMatrix2D A) {
 	for (int column = columns; --column >= 0; ) {
 		for (int row = rows; --row >= column; ) {
 			//if (A.getQuick(row,column) != 0) return false;
-			if (Math.abs(A.getQuick(row,column)) > epsilon) return false;
+			if (!(Math.abs(A.getQuick(row,column)) <= epsilon)) return false;
 		}
 	}
 	return true;
@@ -625,7 +652,7 @@ public boolean isStrictlyUpperTriangular(DoubleMatrix2D A) {
  */
 public boolean isSymmetric(DoubleMatrix2D A) {
 	checkSquare(A);
-	return equals(A,Algebra.DEFAULT.transpose(A));
+	return equals(A,A.viewDice());
 }
 /**
  * A matrix <tt>A</tt> is <i>triangular</i> iff it is either upper or lower triangular.
@@ -646,7 +673,7 @@ public boolean isTridiagonal(DoubleMatrix2D A) {
 		for (int column = columns; --column >= 0; ) {
 			if (Math.abs(row-column) > 1) {
 				//if (A.getQuick(row,column) != 0) return false;
-				if (Math.abs(A.getQuick(row,column)) > epsilon) return false;
+				if (!(Math.abs(A.getQuick(row,column)) <= epsilon)) return false;
 			}
 		}
 	}
@@ -662,7 +689,7 @@ public boolean isUnitTriangular(DoubleMatrix2D A) {
 	double epsilon = tolerance();
 	for (int i = Math.min(A.rows(), A.columns()); --i >= 0; ) {
 		//if (A.getQuick(i,i) != 1) return false;
-		if (Math.abs(1 - A.getQuick(i,i)) > epsilon) return false;
+		if (!(Math.abs(1 - A.getQuick(i,i)) <= epsilon)) return false;
 	}
 	return true;
 }
@@ -678,7 +705,7 @@ public boolean isUpperBidiagonal(DoubleMatrix2D A) {
 		for (int column = columns; --column >= 0; ) {
 			if (!(row==column || row==column-1)) {
 				//if (A.getQuick(row,column) != 0) return false;
-				if (Math.abs(A.getQuick(row,column)) > epsilon) return false;
+				if (!(Math.abs(A.getQuick(row,column)) <= epsilon)) return false;
 			}
 		}
 	}
@@ -695,7 +722,7 @@ public boolean isUpperTriangular(DoubleMatrix2D A) {
 	for (int column = columns; --column >= 0; ) {
 		for (int row = rows; --row > column; ) {
 			//if (A.getQuick(row,column) != 0) return false;
-			if (Math.abs(A.getQuick(row,column)) > epsilon) return false;
+			if (!(Math.abs(A.getQuick(row,column)) <= epsilon)) return false;
 		}
 	}
 	return true;
@@ -726,7 +753,7 @@ public int lowerBandwidth(DoubleMatrix2D A) {
 		for (int i = rows-k; --i >= 0; ) {
 			int j = i+k;
 			//if (A.getQuick(j,i) != 0) return k;
-			if (Math.abs(A.getQuick(j,i)) > epsilon) return k;
+			if (!(Math.abs(A.getQuick(j,i)) <= epsilon)) return k;
 		}
 	}
 	return 0;
@@ -884,8 +911,8 @@ public int semiBandwidth(DoubleMatrix2D A) {
 			int j = i+k;
 			//if (A.getQuick(j,i) != 0) return k+1;
 			//if (A.getQuick(i,j) != 0) return k+1;
-			if (Math.abs(A.getQuick(j,i)) > epsilon) return k+1;
-			if (Math.abs(A.getQuick(i,j)) > epsilon) return k+1;
+			if (!(Math.abs(A.getQuick(j,i)) <= epsilon)) return k+1;
+			if (!(Math.abs(A.getQuick(i,j)) <= epsilon)) return k+1;
 		}
 	}
 	return 1;
@@ -1111,8 +1138,8 @@ public int upperBandwidth(DoubleMatrix2D A) {
 	for (int k=rows; --k >= 0; ) {
 		for (int i = rows-k; --i >= 0; ) {
 			int j = i+k;
-			if (A.getQuick(i,j) != 0) return k;
-			if (Math.abs(A.getQuick(i,j)) > epsilon) return k;
+			//if (A.getQuick(i,j) != 0) return k;
+			if (!(Math.abs(A.getQuick(i,j)) <= epsilon)) return k;
 		}
 	}
 	return 0;

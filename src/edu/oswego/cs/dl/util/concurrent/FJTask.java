@@ -123,7 +123,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * synchronization or I/O. Extending FJTasks to support such capabilities
  * would amount to re-inventing the Thread class, and would make them
  * less optimal in the contexts that they were designed for.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * <p>
  * @see FJTaskRunner
  * @see FJTaskRunnerGroup

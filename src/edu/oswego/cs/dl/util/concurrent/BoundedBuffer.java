@@ -19,7 +19,7 @@ package edu.oswego.cs.dl.util.concurrent;
 /**
  * Efficient array-based bounded buffer class.
  * Adapted from CPJ, chapter 8, which describes design.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
  **/
 
 public class BoundedBuffer implements BoundedChannel {

@@ -11,15 +11,17 @@ package edu.oswego.cs.dl.util.concurrent;
   History:
   Date       Who                What
   26aug1998  dl                 Create public version
-
+   7sep2000  dl                 Readers are now also reentrant
 */
 
+import java.util.*;
+
 /** 
- * A writer-preference ReadWriteLock that allows writers to reacquire
+ * A writer-preference ReadWriteLock that allows both readers and 
+ * writers to reacquire
  * read or write locks in the style of a ReentrantLock.
  * Readers are not allowed until all write locks held by
  * the writing thread have been released.
- * Readers may also reacquire read locks, but not write locks.
  * Among other applications, reentrancy can be useful when
  * write locks are held during calls or callbacks to methods that perform
  * reads under read locks.
@@ -55,14 +57,21 @@ package edu.oswego.cs.dl.util.concurrent;
  * </pre>
  *
  * 
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see ReentrantLock
  **/
 
 public class ReentrantWriterPreferenceReadWriteLock extends WriterPreferenceReadWriteLock {
 
-  /** Number of number of acquires on write lock by activeWriter_ thread **/
+  /** Number of acquires on write lock by activeWriter_ thread **/
   protected long writeHolds_ = 0;  
+
+  /** Number of acquires on read lock by any reader thread **/
+  protected HashMap readers_ = new HashMap();
+
+  /** cache/reuse the special Integer value one to speed up readlocks **/
+  protected static final Integer IONE = new Integer(1);
+
 
   protected boolean allowReader() {
 	return (activeWriter_ == null && waitingWriters_ == 0) ||
@@ -70,14 +79,24 @@ public class ReentrantWriterPreferenceReadWriteLock extends WriterPreferenceRead
   }  
   protected synchronized Signaller endRead() {
 	--activeReaders_;
-
-	if (writeHolds_ > 0) // a write lock is still held by current thread
+	Thread t = Thread.currentThread();
+	Object c = readers_.get(t);
+	if (c != IONE) { // more than one hold; decrement count
+	  int h = ((Integer)(c)).intValue()-1;
+	  Integer ih = (h == 1)? IONE : new Integer(h);
+	  readers_.put(t, ih);
 	  return null;
-	else if (activeReaders_ == 0 && waitingWriters_ > 0)
-	  return writerLock_;
-	else
-	  return null;
-
+	}
+	else {
+	  readers_.remove(t);
+	
+	  if (writeHolds_ > 0) // a write lock is still held by current thread
+		return null;
+	  else if (activeReaders_ == 0 && waitingWriters_ > 0)
+		return writerLock_;
+	  else
+		return null;
+	}
   }  
   protected synchronized Signaller endWrite() {
 	--writeHolds_;
@@ -93,8 +112,28 @@ public class ReentrantWriterPreferenceReadWriteLock extends WriterPreferenceRead
 		return null;
 	}
   }  
+  protected synchronized boolean startRead() {
+	Thread t = Thread.currentThread();
+	Object c = readers_.get(t);
+	if (c != null) { // already held -- just increment hold count
+	  readers_.put(t, new Integer(((Integer)(c)).intValue()+1));
+	  ++activeReaders_;
+	  return true;
+	}
+	else if (allowReader()) {
+	  readers_.put(t, IONE);
+	  ++activeReaders_;
+	  return true;
+	}
+	else
+	  return false;
+  }  
   protected synchronized boolean startWrite() {
-	if (writeHolds_ == 0) {
+	if (activeWriter_ == Thread.currentThread()) { // already held; re-acquire
+	  ++writeHolds_;
+	  return true;
+	}
+	else if (writeHolds_ == 0) {
 	  if (activeReaders_ == 0) {
 		activeWriter_ = Thread.currentThread();
 		writeHolds_ = 1;
@@ -102,10 +141,6 @@ public class ReentrantWriterPreferenceReadWriteLock extends WriterPreferenceRead
 	  }
 	  else
 		return false;
-	}
-	else if (activeWriter_ == Thread.currentThread()) {
-	  ++writeHolds_;
-	  return true;
 	}
 	else
 	  return false;

@@ -48,7 +48,7 @@ import java.util.Date;
  * The class uses Java timed waits for scheduling. These can vary
  * in precision across platforms, and provide no real-time guarantees
  * about meeting deadlines.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 
 public class ClockDaemon extends ThreadFactoryUser  {

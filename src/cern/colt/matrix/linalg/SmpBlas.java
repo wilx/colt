@@ -86,6 +86,11 @@ Normally there is no need to call this method more than once.
 @param seqBlas the sequential blas algorithms to be used on concurrently processed matrix blocks.
 */
 public static void allocateBlas(int maxThreads, Blas seqBlas) {
+	if (smpBlas instanceof SmpBlas) { // no need to change anything?
+		SmpBlas s = (SmpBlas) smpBlas;
+		if (s.maxThreads == maxThreads && s.seqBlas == seqBlas) return;
+	}
+
 	if (maxThreads<=1) 
 		smpBlas = seqBlas;
 	else {
@@ -118,8 +123,14 @@ public double dasum(DoubleMatrix1D x) {
 public void daxpy(double alpha, DoubleMatrix1D x, DoubleMatrix1D y) {
 	seqBlas.daxpy(alpha,x,y);
 }
+public void daxpy(double alpha, DoubleMatrix2D A, DoubleMatrix2D B) {
+	seqBlas.daxpy(alpha,A,B);
+}
 public void dcopy(DoubleMatrix1D x, DoubleMatrix1D y) {
 	seqBlas.dcopy(x,y);
+}
+public void dcopy(DoubleMatrix2D A, DoubleMatrix2D B) {
+	seqBlas.dcopy(A, B);
 }
 public double ddot(DoubleMatrix1D x, DoubleMatrix1D y) {
 	return seqBlas.ddot(x,y);
@@ -302,8 +313,14 @@ public void drotg(double a, double b, double rotvec[]) {
 public void dscal(double alpha, DoubleMatrix1D x) {
 	seqBlas.dscal(alpha,x);
 }
+public void dscal(double alpha, DoubleMatrix2D A) {
+	seqBlas.dscal(alpha, A);
+}
 public void dswap(DoubleMatrix1D x, DoubleMatrix1D y) {
 	seqBlas.dswap(x,y);
+}
+public void dswap(DoubleMatrix2D A, DoubleMatrix2D B) {
+	seqBlas.dswap(A,B);
 }
 public void dsymv(boolean isUpperTriangular, double alpha, DoubleMatrix2D A, DoubleMatrix1D x, double beta, DoubleMatrix1D y) {
 	seqBlas.dsymv(isUpperTriangular, alpha, A, x, beta, y);

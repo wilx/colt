@@ -1,0 +1,66 @@
+package edu.oswego.cs.dl.util.concurrent.misc;
+
+/*
+  File: SynchronizationTimer.java
+
+  Originally written by Doug Lea and released into the public domain.
+  This may be used for any purposes whatsoever without acknowledgment.
+  Thanks for the assistance and support of Sun Microsystems Labs,
+  and everyone contributing, testing, and using this code.
+
+  History:
+  Date       Who                What
+  7Jul1998   dl               Create public version
+  16Jul1998  dl               fix intialization error for compute loops
+							  combined into one frame
+							  misc layout and defaults changes
+							  increase printed precision
+							  overlap get/set in Executor tests
+							  Swap defaults for swing import
+							  Active thread counts reflect executors
+  30Aug1998 dl                Misc revisions to mesh with 1.1.0
+  27jan1999 dl                Eliminate GC calls                             
+*/
+
+// Swap the following sets of imports if necessary.
+
+import javax.swing.*;
+import javax.swing.border.*;
+
+//import com.sun.java.swing.*;
+//import com.sun.java.swing.border.*;
+
+import  edu.oswego.cs.dl.util.concurrent.*;
+import  java.awt.*;
+import  java.awt.event.*;
+import  java.io.*;
+import  java.net.*;
+import  java.lang.reflect.*;
+
+class AClongRNG extends RNG {
+  protected final SynchronizedLong acurrent_ = 
+	new SynchronizedLong(nextSeed());
+
+  protected long internalGet() { return acurrent_.get(); }  
+  protected void internalUpdate() { 
+	int retriesBeforeSleep = 100;
+	int maxSleepTime = 100;
+	int retries = 0;
+	for (;;) {
+	  long v = internalGet();
+	  long n = compute(v);
+	  if (acurrent_.commit(v, n))
+		return;
+	  else if (++retries >= retriesBeforeSleep) {
+		try {
+		  Thread.sleep(n % maxSleepTime);
+		}
+		catch (InterruptedException ex) {
+		  Thread.currentThread().interrupt();
+		}
+		retries = 0;
+	  }
+	}        
+  }  
+  protected void set(long l) { throw new Error("No set allowed"); }  
+}

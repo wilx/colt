@@ -26,7 +26,7 @@ import java.lang.reflect.*;
  * that can be obtained
  * and returned by various threads.
  *
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 **/
 
 public class Slot extends SemaphoreControlledChannel {

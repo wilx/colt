@@ -27,13 +27,13 @@ import cern.colt.list.DoubleArrayList;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 03-Jul-99
  */
-class xPartitioningOld extends Object {
+class xxPartitioningOld extends Object {
 	public static int steps = 0;
 	public static int swappedElements = 0;
 /**
  * Makes this class non instantiable, but still let's others inherit from it.
  */
-protected xPartitioningOld() {}
+protected xxPartitioningOld() {}
 /**
  * Same as {@link #dualPartition(int[],int[],int,int,int[],int,int,int[])}
  * except that it partitions <tt>double[]</tt> rather than <tt>int[]</tt> arrays.

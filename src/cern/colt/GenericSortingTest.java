@@ -10,7 +10,7 @@ package cern.colt;
 
 import cern.colt.function.IntComparator;
 /**
-Demonstrates how to use {@link GenericSorting}.
+Demonstrates how to use {@link Sort}.
 
 @author wolfgang.hoschek@cern.ch
 @version 1.0, 03-Jul-99
@@ -107,5 +107,51 @@ public static void demo2() {
 	System.out.println("Y="+Arrays.toString(y));
 	System.out.println("Z="+Arrays.toString(z));
 	System.out.println("\n\n");
+}
+/**
+ * Checks the correctness of the partition method by generating random input parameters and checking whether results are correct.
+ */
+public static void testRandomly(int runs) {
+	cern.jet.random.engine.RandomEngine engine = new cern.jet.random.engine.MersenneTwister();
+	cern.jet.random.Uniform gen = new cern.jet.random.Uniform(engine);
+	
+	for (int run=0; run<runs; run++) {
+		int maxSize = 50;
+		int maxSplittersSize = 2*maxSize;
+		
+		
+		int size = gen.nextIntFromTo(1,maxSize);
+		int from, to;
+		if (size==0) { 
+			from=0; to=-1;
+		}
+		else {
+			from = gen.nextIntFromTo(0,size-1);
+			to = gen.nextIntFromTo(Math.min(from,size-1),size-1);
+		}
+
+		cern.colt.matrix.DoubleMatrix2D A1 = new cern.colt.matrix.impl.DenseDoubleMatrix2D(size,size);
+		cern.colt.matrix.DoubleMatrix2D P1 = A1.viewPart(from,from,size-to,size-to);
+
+		int intervalFrom = gen.nextIntFromTo(size/2,2*size);
+		int intervalTo = gen.nextIntFromTo(intervalFrom,2*size);
+
+		for (int i=0; i<size; i++) {
+			for (int j=0; j<size; j++) {
+				A1.set(i,j,gen.nextIntFromTo(intervalFrom,intervalTo));
+			}
+		}
+
+		cern.colt.matrix.DoubleMatrix2D A2 = A1.copy();
+		cern.colt.matrix.DoubleMatrix2D P2 = A2.viewPart(from,from,size-to,size-to);
+
+		int c = 0;
+		cern.colt.matrix.DoubleMatrix2D S1 = cern.colt.matrix.doublealgo.Sorting.quickSort.sort(P1,c);
+		cern.colt.matrix.DoubleMatrix2D S2 = cern.colt.matrix.doublealgo.Sorting.mergeSort.sort(P2,c);
+
+		if (!(S1.viewColumn(c).equals(S2.viewColumn(c)))) throw new InternalError();
+	}
+
+	System.out.println("All tests passed. No bug detected.");
 }
 }

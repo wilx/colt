@@ -12,12 +12,12 @@ import cern.colt.matrix.*;
 import cern.colt.matrix.impl.*;
 import java.lang.Double;
 /** 
-Flexible, well human readable matrix print formatting; By default decimal point aligned. Build on top of the C-like <i>printf</i> functionality 
-  provided by the Core Java class {@link corejava.Format} written by <a href="http://www.horstmann.com">Cay 
-  S. Horstmann</a> & Gary Cornell. Currenly works on 1-d, 2-d and 3-d matrices.
+Flexible, well human readable matrix print formatting; By default decimal point aligned. Build on top of the C-like <i>sprintf</i> functionality 
+  provided by the {@link corejava.PrintfFormat} class written by Sun's Allan Jacobs.
+  Currenly works on 1-d, 2-d and 3-d matrices.
   Note that in most cases you will not need to get familiar with this class; just call <tt>matrix.toString()</tt> and be happy with the default formatting.
   This class is for advanced requirements.
-<p> Can't exactly remember the syntax of printf format strings? See {@link corejava.Format#Format(String)} 
+<p> Can't exactly remember the syntax of printf format strings? See {@link corejava.PrintfFormat} 
   or <a href="http://www.efd.lth.se/%7Ed93hb/java/printf/docs/index.html">Henrik 
   Nordberg's documentation</a>, or the <a href="http://www.dinkumware.com/htm_cl/lib_prin.html#Print%20Functions">Dinkumware's 
   C Library Reference</a>.
@@ -379,7 +379,7 @@ public static void demo3(int size, double value) {
 	timer.stop().display();
 
 	timer.reset().start();
-	corejava.Format format = new corejava.Format("%G");
+	cern.colt.matrix.impl.Former format = new cern.colt.matrix.impl.FormerFactory().create("%G");
 	buf = new StringBuffer();
 	for (int i=size; --i >= 0; ) {
 		for (int j=size; --j >= 0; ) {
@@ -531,20 +531,13 @@ System.out.println(new Formatter(format).toTitleString(cern.colt.matrix.DoubleFa
 /**
  * Converts a given cell to a String; no alignment considered.
  */
-protected String form(DoubleMatrix1D matrix, int index, corejava.Format formatter) {
-	double value = matrix.get(index);
-	if (formatter==null || value == Double.POSITIVE_INFINITY || value == Double.NEGATIVE_INFINITY || value != value) {
-		// value != value <==> Double.isNaN(value)
-		// Work around bug in corejava.Format.form() for inf, -inf, NaN
-		return String.valueOf(value);
-	}
-	return formatter.form(value);
-
+protected String form(DoubleMatrix1D matrix, int index, Former formatter) {
+	return formatter.form(matrix.get(index));
 }
 /**
  * Converts a given cell to a String; no alignment considered.
  */
-protected String form(AbstractMatrix1D matrix, int index, corejava.Format formatter) {
+protected String form(AbstractMatrix1D matrix, int index, Former formatter) {
 	return this.form((DoubleMatrix1D) matrix, index, formatter);
 }
 /**

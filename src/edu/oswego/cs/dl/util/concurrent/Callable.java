@@ -24,7 +24,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * they are ordinarily used as the bases of Runnables that set
  * FutureResults
  * <p>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see FutureResult
  **/
 

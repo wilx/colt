@@ -22,7 +22,7 @@ import java.util.*;
  * subList. They support additional writer operations remove(int),
  * set(int), add(int), addAll(int). The corresponding listIterators
  * and are similarly extended.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see SyncCollection
 **/
 

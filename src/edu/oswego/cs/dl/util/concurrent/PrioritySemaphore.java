@@ -25,7 +25,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * inversion --  when a new high-priority thread enters
  * while a low-priority thread is currently running, their
  * priorities are <em>not</em> artificially manipulated.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 
 **/
 

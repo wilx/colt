@@ -18,7 +18,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * BoundedChannel
  * implementations that otherwise require a capacity argument
  * @see BoundedChannel
- * [<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
+ * [<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
  **/
 
 public class DefaultChannelCapacity {

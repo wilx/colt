@@ -36,13 +36,13 @@ public Formatter(String alignment) {
 /**
  * Converts a given cell to a String; no alignment considered.
  */
-protected String form(AbstractMatrix1D matrix, int index, corejava.Format formatter) {
+protected String form(AbstractMatrix1D matrix, int index, Former formatter) {
 	return this.form((ObjectMatrix1D) matrix, index, formatter);
 }
 /**
  * Converts a given cell to a String; no alignment considered.
  */
-protected String form(ObjectMatrix1D matrix, int index, corejava.Format formatter) {
+protected String form(ObjectMatrix1D matrix, int index, Former formatter) {
 	Object value = matrix.get(index);
 	if (value==null) return "";
 	return String.valueOf(value);

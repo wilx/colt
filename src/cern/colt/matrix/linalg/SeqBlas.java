@@ -46,8 +46,14 @@ public double dasum(DoubleMatrix1D x) {
 public void daxpy(double alpha, DoubleMatrix1D x, DoubleMatrix1D y) {
 	y.assign(x,F.plusMult(alpha));
 }
+public void daxpy(double alpha, DoubleMatrix2D A, DoubleMatrix2D B) {
+	B.assign(A, F.plusMult(alpha));
+}
 public void dcopy(DoubleMatrix1D x, DoubleMatrix1D y) {
 	y.assign(x);
+}
+public void dcopy(DoubleMatrix2D A, DoubleMatrix2D B) {
+	B.assign(A);
 }
 public double ddot(DoubleMatrix1D x, DoubleMatrix1D y) {
 	return x.zDotProduct(y);
@@ -61,8 +67,9 @@ public void dgemv(boolean transposeA, double alpha, DoubleMatrix2D A, DoubleMatr
 public void dger(double alpha, DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix2D A) {
 	cern.jet.math.PlusMult fun = cern.jet.math.PlusMult.plusMult(0);
 	for (int i=A.rows(); --i >= 0; ) {
-		fun.multiplicator = x.getQuick(i);
-		A.viewRow(i).assign(y,fun);
+		fun.multiplicator = alpha * x.getQuick(i);
+ 		A.viewRow(i).assign(y,fun);
+		
 	}
 }
 public double dnrm2(DoubleMatrix1D x) {
@@ -120,8 +127,18 @@ public void drotg(double a, double b, double rotvec[]) {
 public void dscal(double alpha, DoubleMatrix1D x) {
 	x.assign(F.mult(alpha));
 }
+
+public void dscal(double alpha, DoubleMatrix2D A) {
+	A.assign(F.mult(alpha));
+}
+
 public void dswap(DoubleMatrix1D x, DoubleMatrix1D y) {
 	y.swap(x);
+}
+public void dswap(DoubleMatrix2D A, DoubleMatrix2D B) {
+	//B.swap(A); not yet implemented
+	A.checkShape(B);
+	for(int i = A.rows(); --i >= 0;) A.viewRow(i).swap(B.viewRow(i));
 }
 public void dsymv(boolean isUpperTriangular, double alpha, DoubleMatrix2D A, DoubleMatrix1D x, double beta, DoubleMatrix1D y) {
 	if (isUpperTriangular) A = A.viewDice();
@@ -177,8 +194,7 @@ public void dtrmv(boolean isUpperTriangular, boolean transposeA, boolean isUnitT
 		else {
 			sum += y.getQuick(i) * x.getQuick(i);
 			for (int j = i + 1; j < size; j++) {
-				sum += A.getQuick(j,i) * x.getQuick(j);
-			}
+				sum += A.getQuick(i,j) * x.getQuick(j);			}
 		}
 		b.setQuick(i,sum);
 	}

@@ -28,7 +28,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * actually return to the caller. These depend on Java thread
  * scheduling which is not guaranteed to be predictable (although
  * JVMs tend not to go out of their way to be unfair). 
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 **/
 
 public class FIFOSemaphore extends QueuedSemaphore {

@@ -32,7 +32,7 @@ import java.util.*;
  * It is not hard to convert this to instead use a Listener
  * design (as seen in AWT and JavaBeans), by defining associated
  * EventObjects and forwarding them.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see LayeredSync
 **/
 

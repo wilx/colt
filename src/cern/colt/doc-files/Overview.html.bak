@@ -92,9 +92,9 @@ and conveniently accessible in C and Fortran.
   <tr> 
     <td width="3%" valign="top"><img src="cern/colt/doc-files/redBall.gif" width="14" height="14"></td>
     <td width="97%"><strong>Histogramming. </strong>Compact, extensible, modular 
-      and performant histogramming functionality. Offers the histogramming features 
-      of HTL and HBOOK. <a href="cern/jet/histo/package-summary.html#Overview">More 
-      details</a>.</td>
+      and performant histogramming functionality. AIDA offers the histogramming 
+      features of HTL and HBOOK. More details <a href="hep/aida/package-summary.html#Overview">here</a> 
+      and also <a href="hep/aida/bin/package-summary.html#Overview">there</a>.</td>
   </tr>
   <tr> 
     <td width="3%" valign="top"><img src="cern/colt/doc-files/redBall.gif" width="14" height="14"></td>
@@ -126,7 +126,7 @@ and conveniently accessible in C and Fortran.
   <tr> 
     <td width="3%" valign="top"><img src="cern/colt/doc-files/redBall.gif" width="14" height="14"></td>
     <td width="97%"><strong>Contains util.concurrent.</strong> 
-      Efficient utility classes commonly encountered in parallel &amp; concurrent programming. <a href="EDU/oswego/cs/dl/util/concurrent/package-summary.html#Overview">More 
+      Efficient utility classes commonly encountered in parallel &amp; concurrent programming. <a href="edu/oswego/cs/dl/util/concurrent/package-summary.html#Overview">More 
       details.</a></td>
   </tr>
 </table>

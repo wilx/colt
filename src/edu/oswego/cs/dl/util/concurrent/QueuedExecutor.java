@@ -13,6 +13,7 @@ package edu.oswego.cs.dl.util.concurrent;
   21Jun1998  dl               Create public version
   28aug1998  dl               rely on ThreadFactoryUser, restart now public
    4may1999  dl               removed redundant interrupt detect
+   7sep2000  dl               new shutdown methods
 */
 
 /**
@@ -24,7 +25,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * The thread is not actually started until the first 
  * <code>execute</code> request is encountered. Also, if the
  * thread is stopped for any reason (for example, after hitting
- * an unrecoverable exception in an executing task, one is started 
+ * an unrecoverable exception in an executing task), one is started 
  * upon encountering a new request, or if <code>restart()</code> is
  * invoked.
  * <p>
@@ -32,15 +33,20 @@ package edu.oswego.cs.dl.util.concurrent;
  * where command objects themselves invoke execute, queuing can
  * sometimes lead to lockups, since commands that might allow
  * other threads to terminate do not run at all when they are in the queue.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 public class QueuedExecutor extends ThreadFactoryUser implements Executor {
 
 
-
+  
   /** The thread used to process commands **/
   protected Thread thread_;
 
+  /** Special queue element to signal termination **/
+  protected static Runnable ENDTASK = new Runnable() { public void run() {} };
+
+  /** true if thread should shut down after processing current task **/
+  protected volatile boolean shutdown_; // latches true;
   
   /** The queue **/
   protected final Channel queue_;
@@ -56,9 +62,18 @@ public class QueuedExecutor extends ThreadFactoryUser implements Executor {
   protected class RunLoop implements Runnable {
 	public void run() {
 	  try {
-		for (;;) {
+		while (!shutdown_) {
 		  Runnable task = (Runnable)(queue_.take());
-		  task.run();
+		  if (task == ENDTASK) {
+			shutdown_ = true;
+			break;
+		  }
+		  else if (task != null) {
+			task.run();
+			task = null;
+		  }
+		  else
+			break;
 		}
 	  }
 	  catch (InterruptedException ex) {} // fallthrough
@@ -129,9 +144,58 @@ public class QueuedExecutor extends ThreadFactoryUser implements Executor {
    **/
 
   public synchronized void restart() {
-	if (thread_ == null) {
+	if (thread_ == null && !shutdown_) {
 	  thread_ = threadFactory_.newThread(runLoop_);
 	  thread_.start();
+	}
+  }  
+  /**
+   * Terminate background thread after it processes all
+   * elements currently in queue. Any tasks entered after this point will
+   * not be processed. A shut down thread cannot be restarted.
+   * This method may block if the task queue is finite and full.
+   * Also, this method 
+   * does not in general apply (and may lead to comparator-based
+   * exceptions) if the task queue is a priority queue.
+   **/
+  public synchronized void shutdownAfterProcessingCurrentlyQueuedTasks() {
+	if (thread_ != null && !shutdown_) {
+	  try { queue_.put(ENDTASK); }
+	  catch (InterruptedException ex) {
+		Thread.currentThread().interrupt();
+	  }
+	}
+  }  
+  /**
+   * Terminate background thread after it processes the 
+   * current task, removing other queued tasks and leaving them unprocessed.
+   * A shut down thread cannot be restarted.
+   **/
+  public synchronized void shutdownAfterProcessingCurrentTask() {
+	shutdown_ = true;
+	if (thread_ != null) {
+	  try { 
+		while (queue_.poll(0) != null) ; // drain
+		queue_.put(ENDTASK); 
+	  }
+	  catch (InterruptedException ex) {
+		Thread.currentThread().interrupt();
+	  }
+	}
+  }  
+  /**
+   * Terminate background thread even if it is currently processing
+   * a task. This method uses Thread.interrupt, so relies on tasks
+   * themselves responding appropriately to interruption. If the
+   * current tasks does not terminate on interruption, then the 
+   * thread will not terminate until processing current task.
+   * A shut down thread cannot be restarted.
+   **/
+  public synchronized void shutdownNow() {
+	shutdown_ = true;
+	if (thread_ != null) {
+	  thread_.interrupt();
+	  shutdownAfterProcessingCurrentTask();
 	}
   }  
 }

@@ -39,47 +39,52 @@ with an object-oriented approach. These features include the following:
       <td class="PRE"> 
         <pre>
  IHistogram1D h1 = new Histogram1D("my histo 1",10, -2, +2); // 10 bins, min=-2, max=2<br> IHistogram2D h2 = new Histogram2D("my histo 2",10, -2, +2,    5, -2, +2);
+ IHistogram2D h3 = new Histogram3D("my histo 3",10, -2, +2,    5, -2, +2,    3, -2, +2);
 
  // equivalent
  // IHistogram1D h1 = new Histogram1D("my histo 1",new FixedPartition(10, -2, +2)); <br> // IHistogram2D h2 = new Histogram2D("my histo 2",new FixedPartition(10, -2, +2),new FixedPartition(5, -2, +2));<br><br> // your favourite distribution goes here
  cern.jet.random.AbstractDistribution gauss = new cern.jet.random.Normal(0,1,new cern.jet.random.engine.MersenneTwister());
 <br> for (int i=0; i &lt; 10000; i++) {    <br>    h1.{@link hep.aida.IHistogram1D#fill fill}(gauss.nextDouble());
     h2.{@link hep.aida.IHistogram2D#fill fill}(gauss.nextDouble(),gauss.nextDouble());
+    h3.{@link hep.aida.IHistogram3D#fill fill}(gauss.nextDouble(),gauss.nextDouble(),gauss.nextDouble());
  }
 
  System.out.println(h1);
  System.out.println(h2);
-
+ System.out.println(h3);
  rms=h1.rms();
  sum=h1.sumBinHeights();
  ...</pre>
-    </td>
+      </td>
   </table>
 </h4>
 <h3>Variable-width histogram</h3>
 <p>The following code snippet demonstrates example usage: </p>
 <h4> 
   <table>
-    <td class="PRE"> 
-      <pre>
+      <td class="PRE"> 
+        <pre>
  double[] xedges = { -5, -1, 0, 1, 5 };
  double[] yedges = { -5, -1, 0.2, 0, 0.2, 1, 5 };
+ double[] zedges = { -5, 0, 7 };
  IHistogram1D h1 = new Histogram1D("my histo 1",xedges); //<br> IHistogram2D h2 = new Histogram2D("my histo 2",xedges,yedges);
+ IHistogram2D h3 = new Histogram3D("my histo 3",xedges,yedges,zedges);
 
  // equivalent
  // IHistogram1D h1 = new Histogram1D("my histo 1",new VariableAxis(xedges)); <br> // IHistogram2D h2 = new Histogram2D("my histo 2",new VariableAxis(xedges),new VariableAxis(yedges));<br><br> // your favourite distribution goes here
  cern.jet.random.AbstractDistribution gauss = new cern.jet.random.Normal(0,1,new cern.jet.random.engine.MersenneTwister());
 <br> for (int i=0; i &lt; 10000; i++) {    <br>    h1.{@link hep.aida.IHistogram1D#fill fill}(gauss.nextDouble());
     h2.{@link hep.aida.IHistogram2D#fill fill}(gauss.nextDouble(),gauss.nextDouble());
+    h3.{@link hep.aida.IHistogram3D#fill fill}(gauss.nextDouble(),gauss.nextDouble(),gauss.nextDouble());
  }
 
  System.out.println(h1);
  System.out.println(h2);
-
+ System.out.println(h3);
  rms=h1.rms();
  sum=h1.sumBinHeights();
  ...</pre>
-    </td>
+      </td>
   </table>
 </h4>
 <p>Here are some example histograms, as rendered by <a href="http://www-sldnt.slac.stanford.edu/jasweb/">Java 
@@ -94,16 +99,15 @@ with an object-oriented approach. These features include the following:
 </table>
 <p>And here is an example output of {@link hep.aida.ref.Converter#toString(IHistogram2D)}. 
 </p>
-<blockquote style="MARGIN-RIGHT: 0px">
-<table>
+<blockquote style="MARGIN-RIGHT: 0px"> 
+  <table>
     <td class="PRE"> 
         <pre>
 my histo 2:
 &nbsp;&nbsp;&nbsp;Entries=5000, ExtraEntries=0
 &nbsp;&nbsp;&nbsp;MeanX=4.9838, RmsX=NaN
 &nbsp;&nbsp;&nbsp;MeanY=2.5304, RmsY=NaN
-&nbsp;&nbsp;&nbsp;xAxis: Min=0, Max=11, Bins=11
-&nbsp;&nbsp;&nbsp;yAxis: Min=0, Max=6, Bins=6
+&nbsp;&nbsp;&nbsp;xAxis: Bins=11, Min=0, Max=11<br>&nbsp;&nbsp;&nbsp;yAxis: Bins=6, Min=0, Max=6
 Heights:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| X
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| 0   1   2   3   4   5   6   7   8   9   10  | Sum 
@@ -120,6 +124,7 @@ Y 5   |  30  53  51  52  57  39  65  61  55  49  22 |  534
     </td>
   </table>
 </blockquote>
+<p>And <a href="doc-files/hist3d.txt">here</a> is a sample 3d histogram output.</p>
 <h2>3. Histograms</h2>
 <h3>3.1 Axes</h3>
 <p>An <i>axis</i> ({@link hep.aida.IAxis}) describes how one dimension of the problem 
@@ -131,7 +136,7 @@ Y 5   |  30  53  51  52  57  39  65  61  55  49  22 |  534
 <table>
   <td class="PRE"> 
       <pre>
-FixedAxis axis = new FixedAxis(10, 0.0, 100.0); 
+IAxis axis = new FixedAxis(10, 0.0, 100.0); 
 </pre>
   </td>
 </table>
@@ -144,7 +149,7 @@ as follows
   <td class="PRE"> 
       <pre>
 double[] edges = { 0.0, 10.0, 40.0, 49.0, 50.0, 51.0, 60.0, 100.0 };
-VariableAxis axis = new VariableAxis(edges); 
+IAxis axis = new VariableAxis(edges); 
 </pre>
   </td>
 </table>
@@ -156,7 +161,7 @@ upper point/bound. An axis can be asked for such information as follows:
 <table>
     <td class="PRE"> 
       <pre>
-FixedAxis axis = new FixedAxis(2, 0.0, 20.0); // 2 bins, min=0, max=20<br>... 
+IAxis axis = new FixedAxis(2, 0.0, 20.0); // 2 bins, min=0, max=20<br>... 
 axis.{@link hep.aida.IAxis#bins bins()};          // Number of in-range bins (excluding underflow and overflow bins) 
 axis.{@link hep.aida.IAxis#binLowerEdge binLowerEdge(i)}; // and the lower edge of bin i
 axis.{@link hep.aida.IAxis#binWidth binWidth(i)};     // and its width

@@ -113,7 +113,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * this leads to such a tiny performance improvement that there is 
  * very little motivation to bother.
  *
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * <p>
  * @see FJTask
  * @see FJTaskRunner

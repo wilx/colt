@@ -357,6 +357,48 @@ public static int binarySearchFromTo(int from, int to, IntComparator comp) {
 	}
 	return -(from + 1);  // key not found.
 }
+private static void inplace_merge(int[] array, int first, int middle, int last) {
+	if (first >= middle || middle >= last)
+		return;
+	if (last - first == 2) {
+		if (array[middle] < array[first]) {
+			int tmp = array[first];
+			array[first] = array[middle];
+			array[middle] = tmp;
+		}
+		return;
+	}
+	int firstCut;
+	int secondCut;
+	if (middle - first > last - middle) {
+		firstCut = first + (middle - first) / 2;
+		secondCut = jal.INT.Sorting.lower_bound(array, middle, last, array[firstCut]);
+	} else {
+		secondCut = middle + (last - middle) / 2;
+		firstCut = jal.INT.Sorting.upper_bound(array, first, middle, array[secondCut]);
+	}
+
+	//rotate(array, firstCut, middle, secondCut);
+	// is manually inlined for speed (jitter inlining seems to work only for small call depths, even if methods are "static private")
+	// speedup = 1.7
+	// begin inline
+	int first2 = firstCut; int middle2 = middle; int last2 = secondCut;
+	if (middle2 != first2 && middle2 != last2) {
+		int first1 = first2; int last1 = middle2;
+		int tmp;
+		while (first1 < --last1) { tmp = array[first1]; array[last1] = array[first1]; array[first1++] = tmp; }
+		first1 = middle2; last1 = last2;
+		while (first1 < --last1) { tmp = array[first1]; array[last1] = array[first1]; array[first1++] = tmp; }
+		first1 = first2; last1 = last2;
+		while (first1 < --last1) { tmp = array[first1]; array[last1] = array[first1]; array[first1++] = tmp; }
+	}
+	// end inline
+
+	
+	middle = firstCut + (secondCut - middle);
+	inplace_merge(array, first, firstCut, middle);
+	inplace_merge(array, middle, secondCut, last);
+}
 	/**
 	 * Returns the index of the median of the three indexed chars.
 	 */
@@ -1386,6 +1428,53 @@ if (numNegZeros != 0) {
 }
 }
 /**
+ * Sorts the specified range of the specified array of elements.
+ *
+ * <p>This sort is guaranteed to be <i>stable</i>:  equal elements will
+ * not be reordered as a result of the sort.<p>
+ *
+ * The sorting algorithm is a modified mergesort (in which the merge is
+ * omitted if the highest element in the low sublist is less than the
+ * lowest element in the high sublist).  This algorithm offers guaranteed
+ * n*log(n) performance, and can approach linear performance on nearly
+ * sorted lists.
+ *
+ * @param a the array to be sorted.
+ * @param fromIndex the index of the first element (inclusive) to be
+ *        sorted.
+ * @param toIndex the index of the last element (exclusive) to be sorted.
+ * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
+ * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
+ *	       <tt>toIndex &gt; a.length</tt>
+ */
+public static void mergeSortInPlace(int[] a, int fromIndex, int toIndex) {
+	rangeCheck(a.length, fromIndex, toIndex);
+	int length = toIndex - fromIndex;
+
+	// Insertion sort on smallest arrays
+	if (length < SMALL) {
+		for (int i = fromIndex; i < toIndex; i++) { 
+			for (int j = i; j > fromIndex && a[j - 1] > a[j]; j--) {
+				int tmp = a[j]; a[j] = a[j - 1]; a[j-1] = tmp;
+			}
+		}
+		return;
+	}
+
+	// Recursively sort halves
+	int mid = (fromIndex + toIndex) / 2;
+	mergeSortInPlace(a,fromIndex, mid);
+	mergeSortInPlace(a,mid, toIndex);
+
+	// If list is already sorted, nothing left to do.  This is an
+	// optimization that results in faster sorts for nearly ordered lists.
+	if (a[mid-1] <= a[mid]) return;
+
+	// Merge sorted halves 
+	//jal.INT.Sorting.inplace_merge(a, fromIndex, mid, toIndex);
+	jal.INT.Sorting.inplace_merge(a, fromIndex, mid, toIndex);
+}
+/**
  * Sorts the specified range of the specified array of elements according
  * to the order induced by the specified comparator.  All elements in the
  * range must be <i>mutually comparable</i> by the specified comparator
@@ -1523,12 +1612,6 @@ public static void quickSort(float[] a, int fromIndex, int toIndex, FloatCompara
  * P. 1249-1265 (November 1993).  This algorithm offers n*log(n)
  * performance on many data sets that cause other quicksorts to degrade to
  * quadratic performance.
- *
- * The sorting algorithm is a modified mergesort (in which the merge is
- * omitted if the highest element in the low sublist is less than the
- * lowest element in the high sublist).  This algorithm offers guaranteed
- * n*log(n) performance, and can approach linear performance on nearly
- * sorted lists.
  *
  * @param a the array to be sorted.
  * @param fromIndex the index of the first element (inclusive) to be
@@ -2355,103 +2438,4 @@ private static void swap(short x[], int a, int b) {
 	for (int i=0; i<n; i++, a++, b++)
 	    swap(x, a, b);
 	}
-	/**
-	 * <b>Deprecated.</b> Use java.util.Comparator instead.
-	 * Returns the index of the median of the three indexed chars.
-	 */
-	private static int xmed3(Object x[], int a, int b, int c, xObjectComparator comp) {
-		int ab = comp.compare(x[a],x[b]);
-  		int ac = comp.compare(x[a],x[c]);
-  		int bc = comp.compare(x[b],x[c]);
-		return (ab<0 ?
-		(bc<0 ? b : ac<0 ? c : a) :
-		(bc>0 ? b : ac>0 ? c : a));
-	}
-/**
- * <b>Deprecated.</b> Use java.util.Comparator instead.
- * Sorts the specified range of the specified array of chars into
- * ascending order, as defined by the specified comparator.
- *
- * The sorting algorithm is a tuned quicksort,
- * adapted from Jon L. Bentley and M. Douglas McIlroy's "Engineering a
- * Sort Function", Software-Practice and Experience, Vol. 23(11)
- * P. 1249-1265 (November 1993).  This algorithm offers n*log(n)
- * performance on many data sets that cause other quicksorts to degrade to
- * quadratic performance.
- *
- * @deprecated 
- * @param a the array to be sorted.
- * @param fromIndex the index of the first element (inclusive) to be
- *        sorted.
- * @param toIndex the index of the last element (exclusive) to be sorted.
- * @param c the comparator to determine the order of the receiver.
- * @throws ClassCastException if the array contains elements that are not
- *	       <i>mutually comparable</i> using the specified comparator.
- * @throws IllegalArgumentException if <tt>fromIndex &gt; toIndex</tt>
- * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
- *	       <tt>toIndex &gt; a.length</tt>
- * @see Comparator
- */
-public static void xquickSort(Object[] a, int fromIndex, int toIndex, xObjectComparator c) {
-	rangeCheck(a.length, fromIndex, toIndex);
-	xquickSort1(a, fromIndex, toIndex-fromIndex, c);
-}
-/**
- * <b>Deprecated.</b> Use java.util.Comparator instead.
- * Sorts the specified sub-array of chars into ascending order.
- */
-private static void xquickSort1(Object x[], int off, int len, xObjectComparator comp) {
-	// Insertion sort on smallest arrays
-	if (len < SMALL) {
-		for (int i=off; i<len+off; i++)
-		for (int j=i; j>off && comp.compare(x[j-1],x[j])>0; j--)
-		    swap(x, j, j-1);
-		return;
-	}
-
-	// Choose a partition element, v
-	int m = off + len/2;       // Small arrays, middle element
-	if (len > SMALL) {
-		int l = off;
-		int n = off + len - 1;
-		if (len > MEDIUM) {        // Big arrays, pseudomedian of 9
-		int s = len/8;
-		l = xmed3(x, l,     l+s, l+2*s, comp);
-		m = xmed3(x, m-s,   m,   m+s, comp);
-		n = xmed3(x, n-2*s, n-s, n, comp);
-		}
-		m = xmed3(x, l, m, n, comp); // Mid-size, med of 3
-	}
-	Object v = x[m];
-
-	// Establish Invariant: v* (<v)* (>v)* v*
-	int a = off, b = a, c = off + len - 1, d = c;
-	while(true) {
-		int comparison;
-		while (b <= c && (comparison=comp.compare(x[b],v))<=0) {
-		if (comparison == 0)
-		    swap(x, a++, b);
-		b++;
-		}
-		while (c >= b && (comparison=comp.compare(x[c],v))>=0) {
-		if (comparison == 0)
-		    swap(x, c, d--);
-		c--;
-		}
-		if (b > c)
-		break;
-		swap(x, b++, c--);
-	}
-
-	// Swap partition elements back to middle
-	int s, n = off + len;
-	s = Math.min(a-off, b-a  );  vecswap(x, off, b-s, s);
-	s = Math.min(d-c,   n-d-1);  vecswap(x, b,   n-s, s);
-
-	// Recursively sort non-partition-elements
-	if ((s = b-a) > 1)
-		xquickSort1(x, off, s, comp);
-	if ((s = d-c) > 1)
-		xquickSort1(x, n-s, s, comp);
-}
 }

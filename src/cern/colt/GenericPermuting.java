@@ -255,9 +255,11 @@ public static void permute(int[] indexes, cern.colt.Swapper swapper, int[] work1
 		int index = indexes[i];
 		int track = tracks[index];
 		
-		swapper.swap(i,track);
-		tracks[index]=i; tracks[pos[i]]=track;
-		int tmp = pos[i]; pos[i]=pos[track]; pos[track]=tmp;
+		if (i!=track) {
+			swapper.swap(i,track);
+			tracks[index]=i; tracks[pos[i]]=track;
+			int tmp = pos[i]; pos[i]=pos[track]; pos[track]=tmp;
+		}
 	}
 }
 /**

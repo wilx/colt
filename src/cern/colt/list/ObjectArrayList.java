@@ -373,36 +373,8 @@ public boolean equals(Object otherObj, boolean testForEquality) { //delta
  * @param val the value to be stored in the specified elements of the receiver.
  */
 public void fillFromToWith(int from, int to, Object val) {
-	/*
-	 * Tuned for performance.
-	 * The following line is equivalent to the actual code of the method, but slower.
-	 * for (int i=from; i<=to;) values[i++]=val; 
-	 *	
-	 * For small ranges, the actual method is as fast as the above code.
-	 * For large ranges, the actual method is faster than the above code.
-	 * (Speedup grows the larger the fill range)
-	 * For range = 10^6 elements -> speedup = 4 on JDK 1.2 JIT.
-	 * (Speedup on interpreted bytecode is, of course, many orders of magnitude.)
-	 */
-
-	int block=1024;
-	
-	int limit = Math.min(to, from+block);	
-	for (int i=from; i<=limit;) elements[i++]=val; // fill small amount as basis for arraycopy
-
-	if (from+block>to) return; // nothing more to fill.
-	
-	// switch to arraycopy, copying blocks doubling length each time.
-	int newFrom=from+block;
-	while (newFrom+block <= to) { //as long as we can copy full blocks
-		System.arraycopy(elements, from, elements, newFrom, block); //copy a block
-		newFrom += block;
-		block <<=1; //boolean block length //block = block * 2;
-	}
-
-	// now fill remaining part, if necessary
-	block=to-newFrom+1;
-	System.arraycopy(elements,from,elements,newFrom,block);
+	checkRangeFromTo(from,to,this.size);
+	for (int i=from; i<=to;) setQuick(i++,val); 
 }
 /**
  * Applies a procedure to each element of the receiver, if any.
@@ -989,9 +961,10 @@ public Object[] toArray(Object array[]) {
  * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
  */
 public java.util.ArrayList toList() {
-	java.util.ArrayList list = new java.util.ArrayList(size);
+	int mySize = size();
 	Object[] theElements = elements;
-	for (int i=size; --i >=0; ) list.set(i,theElements[i]);
+	java.util.ArrayList list = new java.util.ArrayList(mySize);
+	for (int i=0; i < mySize; i++) list.add(theElements[i]);
 	return list;
 }
 /**

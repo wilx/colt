@@ -11,12 +11,13 @@ package edu.oswego.cs.dl.util.concurrent;
   History:
   Date       Who                What
   11Jun1998  dl               Create public version
+  25may2000  dl               Change class access to public
 */
 
 /** A standard linked list node used in various queue classes **/
-class LinkedNode { 
-  Object value;
-  LinkedNode next = null;
-  LinkedNode(Object x) { value = x; }  
-  LinkedNode(Object x, LinkedNode n) { value = x; next = n; }  
+public class LinkedNode { 
+  protected Object value;
+  protected LinkedNode next = null;
+  public LinkedNode(Object x) { value = x; }  
+  public LinkedNode(Object x, LinkedNode n) { value = x; next = n; }  
 }

@@ -51,6 +51,7 @@ is quicker than
 @version 1.0, 09/24/99
 */
 public class DenseDoubleMatrix2D extends DoubleMatrix2D {
+	static final long serialVersionUID = 1020177651L;
 	/**
 	  * The elements of this matrix.
 	  * elements are stored in row major, i.e.
@@ -134,11 +135,6 @@ public DoubleMatrix2D assign(double[][] values) {
  * @return <tt>this</tt> (for convenience only).
  */
 public DoubleMatrix2D assign(double value) {
-	// overriden for performance only
-	if (this.isNoView) {
-		new cern.colt.list.DoubleArrayList(this.elements).fillFromToWith(0,this.elements.length-1,value);
-		return this;
-	}
 	final double[] elems = this.elements;
 	int index = index(0,0);
 	int cs = this.columnStride;
@@ -736,7 +732,7 @@ public DoubleMatrix2D zMult(DoubleMatrix2D B, DoubleMatrix2D C, double alpha, do
 	---     -------
 	xxx     xxxxxxx
 	*/
-	final int BLOCK_SIZE = 10000; // * 8 == Level 2 cache in bytes / 3
+	final int BLOCK_SIZE = 30000; // * 8 == Level 2 cache in bytes
 	//if (n+p == 0) return C;
 	//int m_optimal = (BLOCK_SIZE - n*p) / (n+p);
 	int m_optimal = (BLOCK_SIZE - n) / (n+1);

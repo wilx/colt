@@ -22,164 +22,6 @@ class PartitioningTest extends Object {
  * Makes this class non instantiable, but still let's others inherit from it.
  */
 protected PartitioningTest() {}
-public static void benchmarkPartition(int runs, int size, int splittersSize, boolean outliers, boolean newSort) {
-	System.out.println("\n\n");
-
-	cern.jet.random.Uniform gen = new cern.jet.random.Uniform(new cern.jet.random.engine.MersenneTwister());
-
-	System.out.println("initializing...");
-
-	int[] values = new int[size];
-	int max = Math.max(size,splittersSize);
-	for (int i=0; i<size; i++) {
-		if (!outliers) values[i]=gen.nextIntFromTo(0,max);
-		else values[i] = -10000000;
-	}
-
-	//int s = - (splittersSize - size) / 2 ;
-	int[] splitterValues = new int[splittersSize];
-	for (int i=0; i<splittersSize; i++) {
-		//if (splittersSize>=size) splitterValues[i]= s++;
-		//else 
-		splitterValues[i]=(int) Math.round((double)max/splittersSize*(i+0.5));
-	}
-
-
-	// multiple
-	IntArrayList source = new IntArrayList(values);
-	IntArrayList list = new IntArrayList();
-	IntArrayList secondary = source.copy();
-
-	IntArrayList splitters = new IntArrayList(splitterValues);
-	//System.out.println(splitters);
-	IntArrayList splitIndexes = new IntArrayList(new int[splitters.size()]);
-
-	System.out.println("warming up...");
-	list.addAllOfFromTo(source,0,size-1);
-	//System.out.println(list);
-	
-	if (newSort) {
-		Partitioning.partition(list,0,size-1, splitters, splitIndexes);
-		Partitioning.steps = 0;
-		Partitioning.swappedElements = 0;
-	}
-	else {
-		xPartitioningOld.partition(list,0,size-1, splitters, splitIndexes);
-		xPartitioningOld.steps = 0;
-		xPartitioningOld.swappedElements = 0;
-	}
-	
-	System.out.println("now benchmarking...");
-	cern.colt.Timer timer = new cern.colt.Timer();
-	for (int run=0; run<runs; run++) {
-		timer.start();
-		list.clear();
-		list.addAllOfFromTo(source,0,size-1); 
-		if (newSort) Partitioning.partition(list,0,size-1, splitters, splitIndexes);
-		else xPartitioningOld.partition(list,0,size-1, splitters, splitIndexes);
-		timer.stop();
-	}
-
-	//System.out.println(splitIndexes);
-	timer.display();
-
-	/*
-	//dual multiple
-	list = new IntArrayList(values).copy();
-	IntArrayList secondary = new IntArrayList(values).copy();
-	System.out.println();
-	System.out.println(list);
-	System.out.println(secondary);
-	System.out.println(splitters);
-
-	dualpartition(list,secondary,0,list.size()-1, splitters, splitIndexes);
-
-	System.out.println(list);
-	System.out.println(secondary);
-	System.out.println("splitIndexes="+splitIndexes);
-	*/
-	if (newSort) {
-		System.out.println("steps="+Partitioning.steps);
-		System.out.println("swappedElements="+Partitioning.swappedElements);
-	}
-	else {
-		System.out.println("steps="+xPartitioningOld.steps);
-		System.out.println("swappedElements="+xPartitioningOld.swappedElements);
-	}
-	System.out.println("bye bye.");
-}
-public static void benchmarkPartitionDouble(int runs, int size, int splittersSize, boolean outliers) {
-	System.out.println("\n\n");
-
-	cern.jet.random.Uniform gen = new cern.jet.random.Uniform(new cern.jet.random.engine.MersenneTwister());
-
-	System.out.println("initializing...");
-	double[] values = new double[size];
-	for (int i=0; i<size; i++) {
-		if (!outliers) values[i]=gen.nextIntFromTo(0,size);
-		else values[i] = -10000000;
-	}
-	
-	double[] splitterValues = new double[splittersSize];
-	for (int i=0; i<splittersSize; i++) {
-		splitterValues[i]=(int) Math.round((double)size/splittersSize*(i+0.5));
-	}
-
-
-	// multiple
-	DoubleArrayList source = new DoubleArrayList(values);
-	DoubleArrayList list = new DoubleArrayList();
-
-	DoubleArrayList splitters = new DoubleArrayList(splitterValues);
-	//System.out.println(splitters);
-	IntArrayList splitIndexes = new IntArrayList(new int[splitters.size()]);
-
-	/*
-	System.out.println("warming up...");
-	list.addAllOfFromTo(source,0,size-1);
-	Sorting.partition(list,0,size-1, splitters, splitIndexes);
-
-	System.out.println("now benchmarking...");
-	cern.colt.Timer timer = new cern.colt.Timer();
-	for (int run=0; run<runs; run++) {
-		list.clear();
-		list.addAllOfFromTo(source,0,size-1);
-		timer.start();
-		Sorting.partition(list,0,size-1, splitters, splitIndexes);
-		timer.stop();
-	}
-
-	//System.out.println(splitIndexes);
-	timer.display();
-	*/
-	
-	//dual multiple
-	list = new DoubleArrayList();
-	DoubleArrayList secondary = new DoubleArrayList(values).copy();
-	//System.out.println();
-	//System.out.println(list);
-	//System.out.println(secondary);
-	//System.out.println(splitters);
-
-	System.out.println("warming up...");
-	list.addAllOfFromTo(source,0,size-1);
-	xPartitioningOld.dualPartition(list.elements(),secondary.elements(),0,list.size()-1, splitters.elements(), 0, splitters.size()-1, splitIndexes.elements());
-
-	cern.colt.Timer timer2 = new cern.colt.Timer();
-	for (int run=0; run<runs; run++) {
-		list.clear();
-		list.addAllOfFromTo(source,0,size-1);
-		timer2.start();
-		xPartitioningOld.dualPartition(list.elements(),secondary.elements(),0,list.size()-1, splitters.elements(), 0, splitters.size()-1, splitIndexes.elements());
-		timer2.stop();
-	}
-	
-	timer2.display();
-	//System.out.println(secondary);
-	//System.out.println("splitIndexes="+splitIndexes);
-	
-	System.out.println("bye bye.");
-}
 /**
  * Tests various methods of this class.
  */
@@ -192,8 +34,8 @@ public static void main(String args[]) {
 	String kind = args[4];
 	boolean newSort = args[5].equals("new");
 
-	if (kind.equals("int")) benchmarkPartition(runs, size, splittersSize, isOutlier, newSort);
-	if (kind.equals("double")) benchmarkPartitionDouble(runs, size, splittersSize, isOutlier);
+	//if (kind.equals("int")) benchmarkPartition(runs, size, splittersSize, isOutlier, newSort);
+	//if (kind.equals("double")) benchmarkPartitionDouble(runs, size, splittersSize, isOutlier);
 }
 public static void testPartition() {
 	System.out.println("\n\n");
@@ -234,7 +76,7 @@ public static void testPartition() {
 		
 		//JDKArrays.sort(col,0,matrix.rows());
 		System.out.println("col3="+new DoubleArrayList(col));
-		System.out.println("sorted1="+cern.colt.matrix.doublealgo.Sorting.quickSort(matrix,0));
+		System.out.println("sorted1="+cern.colt.matrix.doublealgo.Sorting.quickSort.sort(matrix,0));
 		//System.out.println("sorted2="+Sorting.quickSort2(matrix,0));
 		System.out.println(cern.colt.matrix.doublealgo.Partitioning.partition(matrix,0,splitterValues,splitIndexes));
 
@@ -254,7 +96,7 @@ public static void testPartition() {
 		//matrix
 		DoubleMatrix3D matrix = cern.colt.matrix.DoubleFactory3D.dense.descending(4,2,3);
 		System.out.println(matrix);
-		System.out.println("sorted1="+cern.colt.matrix.doublealgo.Sorting.quickSort(matrix,0,0));
+		System.out.println("sorted1="+cern.colt.matrix.doublealgo.Sorting.quickSort.sort(matrix,0,0));
 		System.out.println(matrix);
 	}
 /*

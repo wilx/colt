@@ -16,7 +16,9 @@ H2 { color: blue; font-style: italic; }
   <li> <i><a href="#platforms">What about requirements? On which Platforms and 
     Virtual Machines does it run?</a></i></li>
   <li><i><a href="#doc">Where is the documentation?</a></i></li>
-  <li> <i><a href="#difference">What is the difference between the Colt distribution 
+  <li><i><a href="#relnotes">Where are the Release Notes?</a></i></li>
+  <li><i><a href="#mailing">Is there a mailing list?</a></i></li>
+  <li><i><a href="#difference">What is the difference between the Colt distribution 
     and the Colt library? Isn't there a name clash?</a></i></li>
   <li> <i><a href="#bugs">How do I report bugs?</a></i></li>
 </ol>
@@ -100,13 +102,13 @@ H2 { color: blue; font-style: italic; }
 <H2> <a name="install"></a>How do I install it? How do I set the CLASSPATH?</H2>
 <ol>
   <li>Download the Colt distribution</li>
-  <li>Extract the <tt>colt1.0.1.zip</tt> file just downloaded into a convenient, 
+  <li>Extract the <tt>colt1.0.2.zip</tt> file just downloaded into a convenient, 
     preferably empty directory. </li>
   <blockquote> 
     <p>For example by using <a href="http://www.winzip.com/">Winzip</a>, or <br>
-      <tt>jar -xvf colt1.0.1.zip</tt> (ships with the JDK and can be found in 
+      <tt>jar -xvf colt1.0.2.zip</tt> (ships with the JDK and can be found in 
       the same directory as <tt>javac</tt>), or by typing<tt><br>
-      <a href="http://www.cdrom.com/pub/infozip/">unzip</a> colt1.0.1.zip</tt> 
+      <a href="http://www.cdrom.com/pub/infozip/">unzip</a> colt1.0.2.zip</tt> 
       <br>
     </p>
     <p><b>IMPORTANT</b>: Using tools other than <tt>jar</tt> may produce subtle 
@@ -128,8 +130,8 @@ H2 { color: blue; font-style: italic; }
   <blockquote> 
     <p>The command to set environment variables may be one of set, export, or 
       setenv. For example, <tt><br>
-      CLASSPATH=usr/local/lib/colt.jar:$CLASSPATH; export CLASSPATH</tt> <br>
-      In case of problems, see the JDK documentation <a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/solaris/classpath.html">Solaris 
+      export CLASSPATH=usr/local/lib/colt.jar:$CLASSPATH</tt> <br>
+      In case of problems, see the JDK documentation <a href="http://java.sun.com/products/jdk/1.3/docs/tooldocs/solaris/classpath.html">Solaris 
       CLASSPATH.</a></p>
   </blockquote>
 </ol>
@@ -139,39 +141,67 @@ H2 { color: blue; font-style: italic; }
 <ol>
   <blockquote> 
     <p><tt>set CLASSPATH=D:\colt\colt.jar;%CLASSPATH%</tt> <br>
-      In case of problems, see the JDK documentation <a href="http://java.sun.com/products/jdk/1.2/docs/tooldocs/win32/classpath.html"> 
+      In case of problems, see the JDK documentation <a href="http://java.sun.com/products/jdk/1.3/docs/tooldocs/win32/classpath.html"> 
       Windows CLASSPATH.</a></p>
   </blockquote>
 </ol>
-<blockquote>
-  <p>You should now be able to compile and run the demonstration application. 
-  </p>
-</blockquote>
-<p></p>
 <p> 
 <H2> <a name="platforms"></a>What about requirements? 
   On which Platforms and Virtual Machines does it run?</H2>
 <p>The entire distribution is implemented in 100% pure Java, and runs on any platform 
   that uses Sun's JDK or other compatible VMs. Colt, Jet and util.concurrent require 
   JDK 1.2.0 or higher. JAL, RngPack, CoreJava and VNI require JDK 1.1.x or higher. 
-  It has been tested on Linux, Solaris and NT. In addition, users are running 
-  it on AIX, Digital Unix, SGI and HP.</p>
+  Tested on Linux, Solaris and NT. In addition, users are running it on AIX, Digital 
+  Unix, SGI and HP. Everything also runs happily under JDK1.3.</p>
 <H2> <a name="doc"></a>Where is the documentation?</H2>
 Documentation is provided in HTML files in the download package. 
 <ul>
-  <li> The installation provides an executive summary, installation details, a tutorial, a 
-    reference manual, FAQs, news, and feedback. Look for the file <tt>README.html</tt></li>
+  <li> The installation provides an executive summary, installation details, a 
+    tutorial, a reference manual, FAQs, news, and feedback. Look for the file 
+    <tt>README.html</tt></li>
   <li> The installation also provides javadoc HTML API documentation in the folder 
     <tt>doc</tt>. Look for the file <tt>index.html</tt></li>
 </ul>
-<H2> <a name="difference"></a>What is the difference 
-  between the Colt distribution and the Colt library? Isn't there a name clash?</H2>
+<h2> <a name="relnotes"></a>Where are the Release Notes?</h2>
+<ul>
+  <li> Click <a href="relnotes.html">here</a>.</li>
+</ul>
+<h2> <a name="mailing"></a>Is there a mailing list?</h2>
+<blockquote> 
+  <h3>Subscribing</h3>
+  <blockquote> 
+    <p>Join the discussion mailing list. This list will also announce the availability 
+      of new releases. To sign up for the list, please send an email to <a
+href="mailto:ListServer@listbox.cern.ch">ListServer@listbox.cern.ch</a>. The email 
+      should have the body<br>
+      <br>
+      <tt>subscribe colt</tt><br>
+      <br>
+      The email's subject is irrelevant. Your name and address will not be used 
+      for purposes other than this mailing list.</p>
+  </blockquote>
+  <h3>Posting</h3>
+  <blockquote> 
+    <p>To post to the list, send mail to <a href="mailto:colt@listbox.cern.ch">colt@listbox.cern.ch</a>.</p>
+  </blockquote>
+  <h3>Unsubscribing</h3>
+  <blockquote>
+    <p>To unsubscribe from the list send an email to <a
+href="mailto:ListServer@listbox.cern.ch">ListServer@listbox.cern.ch</a>.The email 
+      should have the body</p>
+    <p><tt>unsubscribe colt</tt></p>
+    <p>The email's subject is irrelevant.</p>
+  </blockquote>
+</blockquote>
+<h2></h2>
+<H2> <a name="difference"></a>What is the difference between the Colt distribution 
+  and the Colt library? Isn't there a name clash?</H2>
 <p>Yes. There is a name clash. Colt is both a Java library and the name of a larger 
   distribution containing several libraries, including the Colt library. The Colt 
   library is not shipped separately, only as part of the Colt distribution.</p>
 <H2> <a name="bugs"></a>How do I report bugs?</H2>
 Please first check the list of <a href="problems.html">known problems</a>. Send 
-bug reports and comments to <a href="mailto:wolfgang.hoschek@cern.ch">wolfgang.hoschek@cern.ch.</a> 
+bug reports and comments to the mailing list. 
 <hr>
 </body>
 </html>

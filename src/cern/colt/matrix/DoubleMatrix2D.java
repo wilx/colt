@@ -136,8 +136,12 @@ public DoubleMatrix2D assign(double[][] values) {
  * @return <tt>this</tt> (for convenience only).
  */
 public DoubleMatrix2D assign(double value) {
-	for (int row=rows; --row >= 0;) {
-		for (int column=columns; --column >= 0;) {
+	int r = rows;
+	int c = columns;
+	//for (int row=rows; --row >= 0;) {
+	//	for (int column=columns; --column >= 0;) {
+	for (int row=0; row < r; row++) {
+		for (int column=0; column < c; column++) {
 			setQuick(row,column,value);
 		}
 	}
@@ -772,13 +776,14 @@ public DoubleMatrix2D viewSelection(DoubleMatrix1DProcedure condition) {
 protected abstract DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets);
 /**
 Sorts the matrix rows into ascending order, according to the <i>natural ordering</i> of the matrix values in the given column.
-For further information, see {@link cern.colt.matrix.doublealgo.Sorting#quickSort(DoubleMatrix2D,int)}.
+This sort is guaranteed to be <i>stable</i>.
+For further information, see {@link cern.colt.matrix.doublealgo.Sorting#sort(DoubleMatrix2D,int)}.
 For more advanced sorting functionality, see {@link cern.colt.matrix.doublealgo.Sorting}.
 @return a new sorted vector (matrix) view.
 @throws IndexOutOfBoundsException if <tt>column < 0 || column >= columns()</tt>.
 */
 public DoubleMatrix2D viewSorted(int column) {
-	return cern.colt.matrix.doublealgo.Sorting.quickSort(this,column);
+	return cern.colt.matrix.doublealgo.Sorting.mergeSort.sort(this,column);
 }
 /**
 Constructs and returns a new <i>stride view</i> which is a sub matrix consisting of every i-th cell.

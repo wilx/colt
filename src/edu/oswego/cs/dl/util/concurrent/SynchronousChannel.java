@@ -18,7 +18,7 @@ package edu.oswego.cs.dl.util.concurrent;
 */
 
 /**
- * [<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
+ * [<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
  *  A rendezvous channel, similar to those used in CSP and Ada. 
  *  Each put must wait for a take, and vice versa.
  * <p>
@@ -35,7 +35,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * <p>
  * For a usage example, see the implementation of PooledExecutor
  * <p>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see CyclicBarrier
  * @see Rendezvous
  * @see PooledExecutor

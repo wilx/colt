@@ -46,7 +46,7 @@ package edu.oswego.cs.dl.util.concurrent;
  *
  * class Consumer implements Runnable {
  *   final Takable chan;
- *   Producer(Takable channel) { chan = channel; }
+ *   Consumer(Takable channel) { chan = channel; }
  *   public void run() {
  *     try {
  *       for(;;) { consume(chan.take()); }
@@ -220,7 +220,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * }
  *    
  * </pre>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see Sync 
  * @see BoundedChannel 
 **/
@@ -263,7 +263,7 @@ public interface Channel extends Puttable, Takable {
    * @exception InterruptedException if the current thread has
    * been interrupted at a point at which interruption
    * is detected, in which case state of the channel is unchanged
-   * (i.e., equivalent to a false return).
+   * (i.e., equivalent to a null return).
   **/
 
   public Object poll(long msecs) throws InterruptedException;  

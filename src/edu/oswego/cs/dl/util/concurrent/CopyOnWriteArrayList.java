@@ -73,7 +73,7 @@ import java.util.*;
  * (remove, set, and add) are not supported. These
  * are the only methods throwing UnsupportedOperationException.
  * <p>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see CopyOnWriteArraySet
  **/
 

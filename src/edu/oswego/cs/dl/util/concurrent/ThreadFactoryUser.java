@@ -18,7 +18,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * Base class for Executors and related classes that rely on thread factories.
  * Generally intended to be used as a mixin-style abstract class, but
  * can also be used stand-alone.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 
 public class ThreadFactoryUser {

@@ -12,7 +12,7 @@ import cern.colt.matrix.*;
 import edu.oswego.cs.dl.util.concurrent.*;
 /**
 Configurable matrix benchmark.
-Runs the operations defined in main(args) or in the file specified by args[0].
+Runs the operations defined in main(args) or in the file specified by args.
 To get <a href="doc-files/usage.txt">this overall help</a> on usage type <tt>java cern.colt.matrix.bench.BenchmarkMatrix -help</tt>.
 To get help on usage of a given command, type <tt>java cern.colt.matrix.bench.BenchmarkMatrix -help &lt;command&gt;</tt>.
 Here is the <a href="doc-files/usage_dgemm.txt">help ouput for the dgemm</a> command.
@@ -658,7 +658,7 @@ protected static boolean handle(String[] params) {
 	return success;
 }
 /**
- * Runs the matrix benchmark operations defined in args or in the file specified by args[0].
+ * Runs the matrix benchmark operations defined in args or in the file specified by args0.
  * To get detailed help on usage type java cern.colt.matrix.bench.BenchmarkMatrix -help
  */
 public static void main(String[] args) {
@@ -723,7 +723,8 @@ public static void main(String[] args) {
 				}
 				else {
 					String word;
-					corejava.Format formatter = new corejava.Format("%G"); // ok: 2.0 -> 2   wrong: 2.0 -> 2.0 (kills Integer.parseInt())
+					cern.colt.matrix.impl.Former formatter = new cern.colt.matrix.impl.FormerFactory().create("%G");
+					// ok: 2.0 -> 2   wrong: 2.0 -> 2.0 (kills Integer.parseInt())
 					if (token == stream.TT_NUMBER) 
 						word = formatter.form(stream.nval);
 					else 

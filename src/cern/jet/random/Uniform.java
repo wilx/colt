@@ -116,7 +116,12 @@ public long nextLongFromTo(long from, long to) {
 	// they are handled rather slow.
 	long random;
 	if (from==Long.MIN_VALUE) {
-		if (to==Long.MAX_VALUE) return Math.round(nextDoubleFromTo(from,to));
+		if (to==Long.MAX_VALUE) {
+			//return Math.round(nextDoubleFromTo(from,to));
+			int i1 = nextIntFromTo(Integer.MIN_VALUE,Integer.MAX_VALUE);
+			int i2 = nextIntFromTo(Integer.MIN_VALUE,Integer.MAX_VALUE);
+			return ((i1 & 0xFFFFFFFFL) << 32) | (i2 & 0xFFFFFFFFL);
+		}
 		random = Math.round(nextDoubleFromTo(from,to+1));
 		if (random > to) random = from;
 	}

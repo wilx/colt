@@ -20,9 +20,9 @@ This directory contains everything necessary to build the entire Colt distributi
 2. Building the distribution
 ============================
 
-This distribution was build with gmake 3.77 using SunJDK1.2.2 on Solaris 2.6.
+This distribution was build with gmake 3.77 using IBMJDK1.3 on Linux.
 Unix:
-	Building should be no problem on UNIX flavours other than Solaris.
+	Building as-is should be no problem on UNIX flavours other than Linux and Solaris.
 NT:
 	The makefile won't run in a NT shell. On NT use CYGWIN B20 or higher.
 	Use javac; jikes get's confused by the mixed pathnames ("dir1\dir2/dir3/file") that CygWin uses.
@@ -62,7 +62,7 @@ Now cd to TOPDIR/MySources and type
 
 gmake all
 
-And a long while later "colt1.0b4-1.zip" should pop up in TOPDIR/MyJars.
+And a long while later "colt1.0.2.zip" should pop up in TOPDIR/MyJars.
 Perhaps I will improve the makefile one day, it's certainly not that elegant...
 
 CAUTION: the makefile will delete everything in the directories TOPDIR/MyClasses and TOPDIR/MyDocs/doc

@@ -20,7 +20,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * applications to use special thread subclasses, default
  * prioritization settings, etc.
  * <p>
- * [<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
+ * [<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
  **/
 
 public interface ThreadFactory {

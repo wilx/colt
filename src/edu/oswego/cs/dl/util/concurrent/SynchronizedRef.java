@@ -19,7 +19,7 @@ import java.io.*;
  * A simple class maintaining a single reference variable that
  * is always accessed and updated under synchronization.
  * <p>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 
 public class SynchronizedRef extends SynchronizedVariable {

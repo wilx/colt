@@ -21,6 +21,7 @@ Overrides many methods for performance reasons only.
 @see	    java.util.HashMap
 */
 public class OpenIntDoubleHashMap extends AbstractIntDoubleMap {
+	//public static int hashCollisions = 0;
 	/**
 	 * The hash table keys.
 	 * @serial
@@ -245,7 +246,8 @@ protected int indexOfInsertion(int key) {
 
 	final int hash = HashFunctions.hash(key) & 0x7FFFFFFF;
 	int i = hash % length;
-	int decrement = (hash / length) % length;
+	int decrement = hash % (length-2); // double hashing, see http://www.eece.unm.edu/faculty/heileman/hash/node4.html
+	//int decrement = (hash / length) % length;
 	if (decrement == 0) decrement = 1;
 
 	// stop if we find a removed or free slot, or if we find the key itself
@@ -290,7 +292,8 @@ protected int indexOfKey(int key) {
 
 	final int hash = HashFunctions.hash(key) & 0x7FFFFFFF;
 	int i = hash % length;
-	int decrement = (hash / length) % length;
+	int decrement = hash % (length-2); // double hashing, see http://www.eece.unm.edu/faculty/heileman/hash/node4.html
+	//int decrement = (hash / length) % length;
 	if (decrement == 0) decrement = 1;
 
 	// stop if we find a free slot, or if we find the key itself.

@@ -773,13 +773,14 @@ public ObjectMatrix2D viewSelection(ObjectMatrix1DProcedure condition) {
 protected abstract ObjectMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets);
 /**
 Sorts the matrix rows into ascending order, according to the <i>natural ordering</i> of the matrix values in the given column.
-For further information, see {@link cern.colt.matrix.objectalgo.Sorting#quickSort(ObjectMatrix2D,int)}.
+This sort is guaranteed to be <i>stable</i>.
+For further information, see {@link cern.colt.matrix.objectalgo.Sorting#sort(ObjectMatrix2D,int)}.
 For more advanced sorting functionality, see {@link cern.colt.matrix.objectalgo.Sorting}.
 @return a new sorted vector (matrix) view.
 @throws IndexOutOfBoundsException if <tt>column < 0 || column >= columns()</tt>.
 */
 public ObjectMatrix2D viewSorted(int column) {
-	return cern.colt.matrix.objectalgo.Sorting.quickSort(this,column);
+	return cern.colt.matrix.objectalgo.Sorting.mergeSort.sort(this,column); 
 }
 /**
 Constructs and returns a new <i>stride view</i> which is a sub matrix consisting of every i-th cell.

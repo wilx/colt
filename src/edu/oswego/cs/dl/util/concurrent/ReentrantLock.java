@@ -20,7 +20,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * can re-obtain it any number of times without blocking.
  * The lock is made available to other threads when
  * as many releases as acquires have occurred.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 **/
 
 

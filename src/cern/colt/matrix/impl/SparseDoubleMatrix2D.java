@@ -73,7 +73,8 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
 	/*
 	 * The elements of the matrix.
 	 */
-	protected AbstractIntDoubleMap elements; 
+	protected AbstractIntDoubleMap elements;
+	protected int dummy;
 /**
  * Constructs a matrix with a copy of the given values.
  * <tt>values</tt> is required to have the form <tt>values[row][column]</tt>

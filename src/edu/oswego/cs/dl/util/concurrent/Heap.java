@@ -24,7 +24,7 @@ import java.util.Comparator;
  * in, for example, Sedgewick's Algorithms text. All methods
  * are fully synchronized. In the future,
  * it may instead use structures permitting finer-grained locking.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 
 public class Heap  {

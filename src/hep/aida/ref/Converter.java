@@ -1,19 +1,3 @@
-/*
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Library General Public
-License as published by the Free Software Foundation; either
-version 2 of the License, or (at your option) any later version.
-
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Library General Public License for more details.
-
-You should have received a copy of the GNU Library General Public
-License along with this library; if not, write to the
-Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-Boston, MA  02111-1307, USA.
-*/
 package hep.aida.ref;
 
 import hep.aida.*;
@@ -39,13 +23,8 @@ public class Converter
 		bounds[b]=axis.upperEdge();
 		return bounds;
 	}
-	String form(corejava.Format formatter, double value) 
+	String form(cern.colt.matrix.impl.Former formatter, double value) 
 	{
-		if (formatter==null || value == Double.POSITIVE_INFINITY || value == Double.NEGATIVE_INFINITY || value != value) {
-			// value != value <==> Double.isNaN(value)
-			// Work around bug in corejava.Format.form() for inf, -inf, NaN
-			return String.valueOf(value);
-		}
 		return formatter.form(value);
 	}
 	/** 
@@ -161,7 +140,7 @@ public class Converter
 		String format = "%G";
 		//String format = "%1.2G";
 
-		corejava.Format f = new corejava.Format(format);
+		cern.colt.matrix.impl.Former f = new cern.colt.matrix.impl.FormerFactory().create(format);
 		String sep = System.getProperty("line.separator");
 		int[] minMaxBins = h.minMaxBins();
 		String title = h.title() + ":" + sep +
@@ -205,7 +184,7 @@ public class Converter
 		String format = "%G";
 		//String format = "%1.2G";
 
-		corejava.Format f = new corejava.Format(format);
+		cern.colt.matrix.impl.Former f = new cern.colt.matrix.impl.FormerFactory().create(format);
 		String sep = System.getProperty("line.separator");
 		int[] minMaxBins = h.minMaxBins();
 		String title = h.title() + ":" + sep +
@@ -262,7 +241,7 @@ public class Converter
 		String format = "%G";
 		//String format = "%1.2G";
 
-		corejava.Format f = new corejava.Format(format);
+		cern.colt.matrix.impl.Former f = new cern.colt.matrix.impl.FormerFactory().create(format);
 		String sep = System.getProperty("line.separator");
 		int[] minMaxBins = h.minMaxBins();
 		String title = h.title() + ":" + sep +

@@ -29,7 +29,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * a thread holding a read lock should not attempt to
  * re-acquire it. Doing so risks lockouts when there are
  * also waiting writers.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 
 public class WriterPreferenceReadWriteLock implements ReadWriteLock {

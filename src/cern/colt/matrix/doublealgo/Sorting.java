@@ -12,179 +12,65 @@ import cern.colt.matrix.*;
 import cern.colt.matrix.impl.*;
 import cern.colt.function.IntComparator;
 /**
- * Matrix Quicksorts.
- *
- * All sorting algorithms are tuned quicksorts, adapted from Jon
- * L. Bentley and M. Douglas McIlroy's "Engineering a Sort Function",
- * Software-Practice and Experience, Vol. 23(11) P. 1249-1265 (November
- * 1993).  This algorithm offers n*log(n) performance on many data sets
- * that cause other quicksorts to degrade to quadratic performance.
- *
- * @see cern.colt.Sorting
- * @see cern.colt.GenericSorting
- * @see java.util.Arrays
- *
- * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- */
-public class Sorting extends Object {
+Matrix quicksorts and mergesorts.
+Use idioms like <tt>Sorting.quickSort.sort(...)</tt> and <tt>Sorting.mergeSort.sort(...)</tt>.
+<p>
+This is another case demonstrating one primary goal of this library: Delivering easy to use, yet very efficient APIs.
+The sorts return convenient <i>sort views</i>.
+This enables the usage of algorithms which scale well with the problem size:
+For example, sorting a 1000000 x 10000 or a 1000000 x 100 x 100 matrix performs just as fast as sorting a 1000000 x 1 matrix.
+This is so, because internally the algorithms only move around integer indexes, they do not physically move around entire rows or slices.
+The original matrix is left unaffected.
+<p>
+The quicksort is a derivative of the JDK 1.2 V1.26 algorithms (which are, in turn, based on Bentley's and McIlroy's fine work).
+The mergesort is a derivative of the JAL algorithms, with optimisations taken from the JDK algorithms.
+Mergesort is <i>stable</i> (by definition), while quicksort is not.
+A stable sort is, for example, helpful, if matrices are sorted successively 
+by multiple columns. It preserves the relative position of equal elements.
+ 
+@see cern.colt.GenericSorting
+@see cern.colt.Sorting
+@see java.util.Arrays
+
+@author wolfgang.hoschek@cern.ch
+@version 1.1, 25/May/2000
+*/
+public class Sorting extends cern.colt.PersistentObject {
+	/**
+	 * A prefabricated quicksort.
+	 */
+	public static final Sorting quickSort = new Sorting(); // already has quicksort implemented
+
+	/**
+	 * A prefabricated mergesort.
+	 */
+	public static final Sorting mergeSort = new Sorting() { // override quicksort with mergesort
+		protected void runSort(int[] a, int fromIndex, int toIndex, IntComparator c) {
+			cern.colt.Sorting.mergeSort(a,fromIndex,toIndex,c);
+		}
+		protected void runSort(int fromIndex, int toIndex, IntComparator c, cern.colt.Swapper swapper) {
+			cern.colt.GenericSorting.mergeSort(fromIndex, toIndex, c, swapper);
+		}
+	};
 /**
  * Makes this class non instantiable, but still let's others inherit from it.
  */
 protected Sorting() {}
 /**
- * Demonstrates advanced sorting.
- * Sorts by sum of row.
+ * Compare two values, one of which is assumed to be Double.NaN
  */
-public static void demo1() {
-	DoubleMatrix2D matrix = DoubleFactory2D.dense.descending(4,3);
-	DoubleMatrix1DComparator comp = new DoubleMatrix1DComparator() {
-		public int compare(DoubleMatrix1D a, DoubleMatrix1D b) {
-			double as = a.zSum(); double bs = b.zSum();
-			return as < bs ? -1 : as == bs ? 0 : 1;
-		}
-	};
-	System.out.println("unsorted:"+matrix);
-	System.out.println("sorted  :"+quickSort(matrix,comp));
-}
-/**
- * Demonstrates advanced sorting.
- * Sorts by sum of slice.
- */
-public static void demo2() {
-	DoubleMatrix3D matrix = DoubleFactory3D.dense.descending(4,3,2);
-	DoubleMatrix2DComparator comp = new DoubleMatrix2DComparator() {
-		public int compare(DoubleMatrix2D a, DoubleMatrix2D b) {
-			double as = a.zSum();
-			double bs = b.zSum();
-			return as < bs ? -1 : as == bs ? 0 : 1;
-		}
-	};
-	System.out.println("unsorted:"+matrix);
-	System.out.println("sorted  :"+quickSort(matrix,comp));
-}
-/**
- * Demonstrates advanced sorting.
- * Sorts by sinus of cell values.
- */
-public static void demo3() {
-	double[] values = {0.5, 1.5, 2.5, 3.5};
-	DoubleMatrix1D matrix = new DenseDoubleMatrix1D(values);
-	cern.colt.function.DoubleComparator comp = new cern.colt.function.DoubleComparator() {
-		public int compare(double a, double b) {
-			double as = Math.sin(a); double bs = Math.sin(b);
-			return as < bs ? -1 : as == bs ? 0 : 1;
-		}
-	};
-	System.out.println("unsorted:"+matrix);
-	
-	DoubleMatrix1D sorted = quickSort(matrix,comp);
-	System.out.println("sorted  :"+sorted);
-
-	// check whether it is really sorted
-	sorted.assign(cern.jet.math.Functions.sin);
-	/*
-	sorted.assign(
-		new cern.colt.function.DoubleFunction() {
-			public double apply(double arg) { return Math.sin(arg); }
-		}
-	);
-	*/
-	System.out.println("sined  :"+sorted);
-}
-/**
- * Demonstrates applying functions.
- */
-protected static void demo4() {
-	double[] values1 = {0, 1, 2, 3};
-	double[] values2 = {0, 2, 4, 6};
-	DoubleMatrix1D matrix1 = new DenseDoubleMatrix1D(values1);
-	DoubleMatrix1D matrix2 = new DenseDoubleMatrix1D(values2);
-	System.out.println("m1:"+matrix1);
-	System.out.println("m2:"+matrix2);
-	
-	matrix1.assign(matrix2, cern.jet.math.Functions.pow);
-	
-	/*
-	matrix1.assign(matrix2,
-		new cern.colt.function.DoubleDoubleFunction() {
-			public double apply(double x, double y) { return Math.pow(x,y); }
-		}
-	);
-	*/
-	
-	System.out.println("applied:"+matrix1);
-}
-/**
- * Demonstrates sorting with precomputation of aggregates (median and sum of logarithms).
- */
-public static void demo5(int rows, int columns, boolean print) {
-	// for reliable benchmarks, call this method twice: once with small dummy parameters to "warm up" the jitter, then with your real work-load
-		
-	System.out.println("\n\n");
-	System.out.print("now initializing... ");
-	cern.colt.Timer timer = new cern.colt.Timer().start();
-		
-	final cern.jet.math.Functions F = cern.jet.math.Functions.functions;
-	DoubleMatrix2D A = cern.colt.matrix.DoubleFactory2D.dense.make(rows,columns);
-	A.assign(new cern.jet.random.engine.DRand()); // initialize randomly
-	timer.stop().display();
-
-	// also benchmark copying in its several implementation flavours
-	DoubleMatrix2D B = A.like();
-	timer.reset().start();
-	System.out.print("now copying... ");
-	B.assign(A);
-	timer.stop().display();
-
-	timer.reset().start();
-	System.out.print("now copying subrange... ");
-	B.viewPart(0,0,rows,columns).assign(A.viewPart(0,0,rows,columns));
-	timer.stop().display();
-	//System.out.println(A);
-
-	timer.reset().start();
-	System.out.print("now copying selected... ");
-	B.viewSelection(null,null).assign(A.viewSelection(null,null));
-	timer.stop().display();
-
-	System.out.print("now sorting - quick version with precomputation... ");
-	timer.reset().start();
-	// THE QUICK VERSION (takes some 10 secs)
-	A = quickSort(A,hep.aida.bin.BinFunctions1D.median);
-	//A = quickSort(A,hep.aida.bin.BinFunctions1D.sumLog);
-	timer.stop().display();
-
-	// check results for correctness
-	// WARNING: be sure NOT TO PRINT huge matrices unless you have tons of main memory and time!!
-	// so we just show the first 5 rows
-	if (print) {
-		int r = Math.min(rows,5);
-		hep.aida.bin.BinFunction1D[] funs = {hep.aida.bin.BinFunctions1D.median, hep.aida.bin.BinFunctions1D.sumLog, hep.aida.bin.BinFunctions1D.geometricMean};
-		String[] rowNames = new String[r];
-		String[] columnNames = new String[columns];
-		for (int i=columns; --i >= 0; ) columnNames[i] = Integer.toString(i);
-		for (int i=r; --i >= 0; ) rowNames[i] = Integer.toString(i);
-		System.out.println("first part of sorted result = \n"+new cern.colt.matrix.doublealgo.Formatter("%G").toTitleString(
-			A.viewPart(0,0,r,columns), rowNames, columnNames, null, null, null, funs
-		));
+private static final int compareNaN(double a, double b) {
+	if (a!=a) {
+		if (b!=b) return 0; // NaN equals NaN
+		else return 1; // e.g. NaN > 5
 	}
-
-
-	System.out.print("now sorting - slow version... ");
-	A = B;	
-	cern.colt.matrix.doublealgo.DoubleMatrix1DComparator fun = new cern.colt.matrix.doublealgo.DoubleMatrix1DComparator() {
-		public int compare(DoubleMatrix1D x, DoubleMatrix1D y) {
-			double a = cern.colt.matrix.doublealgo.Statistic.bin(x).median();
-			double b = cern.colt.matrix.doublealgo.Statistic.bin(y).median();
-			//double a = x.aggregate(F.plus,F.log);
-			//double b = y.aggregate(F.plus,F.log);
-			return a < b ? -1 : (a==b) ? 0 : 1;
-		}
-	};
-	timer.reset().start();
-	A = cern.colt.matrix.doublealgo.Sorting.quickSort(A,fun);
-	timer.stop().display();
+	return -1; // e.g. 5 < NaN
+}
+protected void runSort(int[] a, int fromIndex, int toIndex, IntComparator c) {
+	cern.colt.Sorting.quickSort(a,fromIndex,toIndex,c);
+}
+protected void runSort(int fromIndex, int toIndex, IntComparator c, cern.colt.Swapper swapper) {
+	cern.colt.GenericSorting.quickSort(fromIndex, toIndex, c, swapper);
 }
 /**
 Sorts the vector into ascending order, according to the <i>natural ordering</i>.
@@ -208,7 +94,7 @@ To sort ranges use sub-ranging views. To sort descending, use flip views ...
 @return a new sorted vector (matrix) view. 
 		<b>Note that the original matrix is left unaffected.</b>
 */
-public static DoubleMatrix1D quickSort(final DoubleMatrix1D vector) {
+public DoubleMatrix1D sort(final DoubleMatrix1D vector) {
 	int[] indexes = new int[vector.size()]; // row indexes to reorder instead of matrix itself
 	for (int i=indexes.length; --i >= 0; ) indexes[i] = i;
 
@@ -216,11 +102,12 @@ public static DoubleMatrix1D quickSort(final DoubleMatrix1D vector) {
 		public int compare(int a, int b) {
 			double av = vector.getQuick(a);
 			double bv = vector.getQuick(b);
-			return av<bv ? -1 : (av>bv ? 1 : 0);
+			if (av!=av || bv!=bv) return compareNaN(av,bv); // swap NaNs to the end
+			return av<bv ? -1 : (av==bv ? 0 : 1);
 		}
 	};
 
-	cern.colt.Sorting.quickSort(indexes,0,indexes.length,comp);
+	runSort(indexes,0,indexes.length,comp);
 
 	return vector.viewSelection(indexes);
 }
@@ -247,7 +134,7 @@ sorted = quickSort(vector,comp);
 @return a new matrix view sorted as specified.
 		<b>Note that the original vector (matrix) is left unaffected.</b>
 */
-public static DoubleMatrix1D quickSort(final DoubleMatrix1D vector, final cern.colt.function.DoubleComparator c) {
+public DoubleMatrix1D sort(final DoubleMatrix1D vector, final cern.colt.function.DoubleComparator c) {
 	int[] indexes = new int[vector.size()]; // row indexes to reorder instead of matrix itself
 	for (int i=indexes.length; --i >= 0; ) indexes[i] = i;
 
@@ -257,7 +144,7 @@ public static DoubleMatrix1D quickSort(final DoubleMatrix1D vector, final cern.c
 		}
 	};
 
-	cern.colt.Sorting.quickSort(indexes,0,indexes.length,comp);
+	runSort(indexes,0,indexes.length,comp);
 
 	return vector.viewSelection(indexes);
 }
@@ -267,6 +154,7 @@ Particularly efficient when comparing expensive aggregates, because aggregates n
 Essentially, this algorithm makes expensive comparisons cheap.
 Normally each element of <tt>aggregates</tt> is a summary measure of a row.
 Speedup over comparator based sorting = <tt>2*log(rows)</tt>, on average.
+For this operation, quicksort is usually faster.
 <p>
 The returned view is backed by this matrix, so changes in the returned view are reflected in this matrix, and vice-versa.
 To sort ranges use sub-ranging views. To sort columns by rows, use dice views. To sort descending, use flip views ...
@@ -333,7 +221,7 @@ DoubleMatrix2D sorted = quickSort(matrix,comparator);
 		<b>Note that the original matrix is left unaffected.</b>
 @throws IndexOutOfBoundsException if <tt>aggregates.length != matrix.rows()</tt>.
 */
-public static DoubleMatrix2D quickSort(DoubleMatrix2D matrix, final double[] aggregates) {
+public DoubleMatrix2D sort(DoubleMatrix2D matrix, final double[] aggregates) {
 	int rows = matrix.rows();
 	if (aggregates.length != rows) throw new IndexOutOfBoundsException("aggregates.length != matrix.rows()");
 	
@@ -346,10 +234,11 @@ public static DoubleMatrix2D quickSort(DoubleMatrix2D matrix, final double[] agg
 		public int compare(int x, int y) {
 			double a = aggregates[x];
 			double b = aggregates[y];
+			if (a!=a || b!=b) return compareNaN(a,b); // swap NaNs to the end
 			return a < b ? -1 : (a==b) ? 0 : 1;
 		}
 	};
-	// swaps aggregates and reorder indexes
+	// swaps aggregates and reorders indexes
 	cern.colt.Swapper swapper = new cern.colt.Swapper() {
 		public void swap(int x, int y) {
 			int t1;	double t2;
@@ -359,7 +248,7 @@ public static DoubleMatrix2D quickSort(DoubleMatrix2D matrix, final double[] agg
 	};
 
 	// sort indexes and aggregates
-	cern.colt.GenericSorting.quickSort(0,rows,comp,swapper);
+	runSort(0,rows,comp,swapper);
 
 	// view the matrix according to the reordered row indexes
 	// take all columns in the original order
@@ -403,7 +292,7 @@ To sort ranges use sub-ranging views. To sort columns by rows, use dice views. T
 		<b>Note that the original matrix is left unaffected.</b>
 @throws IndexOutOfBoundsException if <tt>column < 0 || column >= matrix.columns()</tt>.
 */
-public static DoubleMatrix2D quickSort(DoubleMatrix2D matrix, int column) {
+public DoubleMatrix2D sort(DoubleMatrix2D matrix, int column) {
 	if (column < 0 || column >= matrix.columns()) throw new IndexOutOfBoundsException("column="+column+", matrix="+Formatter.shape(matrix));
 
 	int[] rowIndexes = new int[matrix.rows()]; // row indexes to reorder instead of matrix itself
@@ -414,11 +303,12 @@ public static DoubleMatrix2D quickSort(DoubleMatrix2D matrix, int column) {
 		public int compare(int a, int b) {
 			double av = col.getQuick(a);
 			double bv = col.getQuick(b);
-			return av<bv ? -1 : (av>bv ? 1 : 0);
+			if (av!=av || bv!=bv) return compareNaN(av,bv); // swap NaNs to the end
+			return av<bv ? -1 : (av==bv ? 0 : 1);
 		}
 	};
 
-	cern.colt.Sorting.quickSort(rowIndexes,0,rowIndexes.length,comp);
+	runSort(rowIndexes,0,rowIndexes.length,comp);
 
 	// view the matrix according to the reordered row indexes
 	// take all columns in the original order
@@ -447,7 +337,7 @@ sorted = quickSort(matrix,comp);
 @return a new matrix view having rows sorted as specified.
 		<b>Note that the original matrix is left unaffected.</b>
 */
-public static DoubleMatrix2D quickSort(final DoubleMatrix2D matrix, final DoubleMatrix1DComparator c) {
+public DoubleMatrix2D sort(final DoubleMatrix2D matrix, final DoubleMatrix1DComparator c) {
 	int[] rowIndexes = new int[matrix.rows()]; // row indexes to reorder instead of matrix itself
 	for (int i=rowIndexes.length; --i >= 0; ) rowIndexes[i] = i;
 
@@ -461,7 +351,7 @@ public static DoubleMatrix2D quickSort(final DoubleMatrix2D matrix, final Double
 		}
 	};
 
-	cern.colt.Sorting.quickSort(rowIndexes,0,rowIndexes.length,comp);
+	runSort(rowIndexes,0,rowIndexes.length,comp);
 
 	// view the matrix according to the reordered row indexes
 	// take all columns in the original order
@@ -535,7 +425,7 @@ DoubleMatrix2D sorted = quickSort(matrix,comparator);
 @return a new matrix view having rows sorted.
 		<b>Note that the original matrix is left unaffected.</b>
 */
-public static DoubleMatrix2D quickSort(DoubleMatrix2D matrix, hep.aida.bin.BinFunction1D aggregate) {
+public DoubleMatrix2D sort(DoubleMatrix2D matrix, hep.aida.bin.BinFunction1D aggregate) {
 	// precompute aggregates over rows, as defined by "aggregate"
 
 	// a bit clumsy, because Statistic.aggregate(...) is defined on columns, so we need to transpose views
@@ -543,7 +433,7 @@ public static DoubleMatrix2D quickSort(DoubleMatrix2D matrix, hep.aida.bin.BinFu
 	hep.aida.bin.BinFunction1D[] func = {aggregate};
 	Statistic.aggregate(matrix.viewDice(), func, tmp);
 	double[] aggr = tmp.viewRow(0).toArray();
-	return quickSort(matrix,aggr);
+	return sort(matrix,aggr);
 }
 /**
 Sorts the matrix slices into ascending order, according to the <i>natural ordering</i> of the matrix values in the given <tt>[row,column]</tt> position.
@@ -566,7 +456,7 @@ Let <tt>A</tt> and <tt>B</tt> be two 2-d slices. Then we have the following rule
 		<b>Note that the original matrix is left unaffected.</b>
 @throws IndexOutOfBoundsException if <tt>row < 0 || row >= matrix.rows() || column < 0 || column >= matrix.columns()</tt>.
 */
-public static DoubleMatrix3D quickSort(DoubleMatrix3D matrix, int row, int column) {
+public DoubleMatrix3D sort(DoubleMatrix3D matrix, int row, int column) {
 	if (row < 0 || row >= matrix.rows()) throw new IndexOutOfBoundsException("row="+row+", matrix="+Formatter.shape(matrix));
 	if (column < 0 || column >= matrix.columns()) throw new IndexOutOfBoundsException("column="+column+", matrix="+Formatter.shape(matrix));
 
@@ -578,11 +468,12 @@ public static DoubleMatrix3D quickSort(DoubleMatrix3D matrix, int row, int colum
 		public int compare(int a, int b) {
 			double av = sliceView.getQuick(a);
 			double bv = sliceView.getQuick(b);
-			return av<bv ? -1 : (av>bv ? 1 : 0);
+			if (av!=av || bv!=bv) return compareNaN(av,bv); // swap NaNs to the end
+			return av<bv ? -1 : (av==bv ? 0 : 1);
 		}
 	};
 
-	cern.colt.Sorting.quickSort(sliceIndexes,0,sliceIndexes.length,comp);
+	runSort(sliceIndexes,0,sliceIndexes.length,comp);
 
 	// view the matrix according to the reordered slice indexes
 	// take all rows and columns in the original order
@@ -611,7 +502,7 @@ sorted = quickSort(matrix,comp);
 @return a new matrix view having slices sorted as specified.
 		<b>Note that the original matrix is left unaffected.</b>
 */
-public static DoubleMatrix3D quickSort(final DoubleMatrix3D matrix, final DoubleMatrix2DComparator c) {
+public DoubleMatrix3D sort(final DoubleMatrix3D matrix, final DoubleMatrix2DComparator c) {
 	int[] sliceIndexes = new int[matrix.slices()]; // indexes to reorder instead of matrix itself
 	for (int i=sliceIndexes.length; --i >= 0; ) sliceIndexes[i] = i;
 
@@ -625,10 +516,242 @@ public static DoubleMatrix3D quickSort(final DoubleMatrix3D matrix, final Double
 		}
 	};
 
-	cern.colt.Sorting.quickSort(sliceIndexes,0,sliceIndexes.length,comp);
+	runSort(sliceIndexes,0,sliceIndexes.length,comp);
 
 	// view the matrix according to the reordered slice indexes
 	// take all rows and columns in the original order
 	return matrix.viewSelection(sliceIndexes,null,null);
+}
+/**
+ * Demonstrates advanced sorting.
+ * Sorts by sum of row.
+ */
+public static void zdemo1() {
+	Sorting sort = quickSort;
+	DoubleMatrix2D matrix = DoubleFactory2D.dense.descending(4,3);
+	DoubleMatrix1DComparator comp = new DoubleMatrix1DComparator() {
+		public int compare(DoubleMatrix1D a, DoubleMatrix1D b) {
+			double as = a.zSum(); double bs = b.zSum();
+			return as < bs ? -1 : as == bs ? 0 : 1;
+		}
+	};
+	System.out.println("unsorted:"+matrix);
+	System.out.println("sorted  :"+sort.sort(matrix,comp));
+}
+/**
+ * Demonstrates advanced sorting.
+ * Sorts by sum of slice.
+ */
+public static void zdemo2() {
+	Sorting sort = quickSort;
+	DoubleMatrix3D matrix = DoubleFactory3D.dense.descending(4,3,2);
+	DoubleMatrix2DComparator comp = new DoubleMatrix2DComparator() {
+		public int compare(DoubleMatrix2D a, DoubleMatrix2D b) {
+			double as = a.zSum();
+			double bs = b.zSum();
+			return as < bs ? -1 : as == bs ? 0 : 1;
+		}
+	};
+	System.out.println("unsorted:"+matrix);
+	System.out.println("sorted  :"+sort.sort(matrix,comp));
+}
+/**
+ * Demonstrates advanced sorting.
+ * Sorts by sinus of cell values.
+ */
+public static void zdemo3() {
+	Sorting sort = quickSort;
+	double[] values = {0.5, 1.5, 2.5, 3.5};
+	DoubleMatrix1D matrix = new DenseDoubleMatrix1D(values);
+	cern.colt.function.DoubleComparator comp = new cern.colt.function.DoubleComparator() {
+		public int compare(double a, double b) {
+			double as = Math.sin(a); double bs = Math.sin(b);
+			return as < bs ? -1 : as == bs ? 0 : 1;
+		}
+	};
+	System.out.println("unsorted:"+matrix);
+	
+	DoubleMatrix1D sorted = sort.sort(matrix,comp);
+	System.out.println("sorted  :"+sorted);
+
+	// check whether it is really sorted
+	sorted.assign(cern.jet.math.Functions.sin);
+	/*
+	sorted.assign(
+		new cern.colt.function.DoubleFunction() {
+			public double apply(double arg) { return Math.sin(arg); }
+		}
+	);
+	*/
+	System.out.println("sined  :"+sorted);
+}
+/**
+ * Demonstrates applying functions.
+ */
+protected static void zdemo4() {
+	double[] values1 = {0, 1, 2, 3};
+	double[] values2 = {0, 2, 4, 6};
+	DoubleMatrix1D matrix1 = new DenseDoubleMatrix1D(values1);
+	DoubleMatrix1D matrix2 = new DenseDoubleMatrix1D(values2);
+	System.out.println("m1:"+matrix1);
+	System.out.println("m2:"+matrix2);
+	
+	matrix1.assign(matrix2, cern.jet.math.Functions.pow);
+	
+	/*
+	matrix1.assign(matrix2,
+		new cern.colt.function.DoubleDoubleFunction() {
+			public double apply(double x, double y) { return Math.pow(x,y); }
+		}
+	);
+	*/
+	
+	System.out.println("applied:"+matrix1);
+}
+/**
+ * Demonstrates sorting with precomputation of aggregates (median and sum of logarithms).
+ */
+public static void zdemo5(int rows, int columns, boolean print) {
+	Sorting sort = quickSort;
+	// for reliable benchmarks, call this method twice: once with small dummy parameters to "warm up" the jitter, then with your real work-load
+		
+	System.out.println("\n\n");
+	System.out.print("now initializing... ");
+	cern.colt.Timer timer = new cern.colt.Timer().start();
+		
+	final cern.jet.math.Functions F = cern.jet.math.Functions.functions;
+	DoubleMatrix2D A = cern.colt.matrix.DoubleFactory2D.dense.make(rows,columns);
+	A.assign(new cern.jet.random.engine.DRand()); // initialize randomly
+	timer.stop().display();
+
+	// also benchmark copying in its several implementation flavours
+	DoubleMatrix2D B = A.like();
+	timer.reset().start();
+	System.out.print("now copying... ");
+	B.assign(A);
+	timer.stop().display();
+
+	timer.reset().start();
+	System.out.print("now copying subrange... ");
+	B.viewPart(0,0,rows,columns).assign(A.viewPart(0,0,rows,columns));
+	timer.stop().display();
+	//System.out.println(A);
+
+	timer.reset().start();
+	System.out.print("now copying selected... ");
+	B.viewSelection(null,null).assign(A.viewSelection(null,null));
+	timer.stop().display();
+
+	System.out.print("now sorting - quick version with precomputation... ");
+	timer.reset().start();
+	// THE QUICK VERSION (takes some 10 secs)
+	A = sort.sort(A,hep.aida.bin.BinFunctions1D.median);
+	//A = sort.sort(A,hep.aida.bin.BinFunctions1D.sumLog);
+	timer.stop().display();
+
+	// check results for correctness
+	// WARNING: be sure NOT TO PRINT huge matrices unless you have tons of main memory and time!!
+	// so we just show the first 5 rows
+	if (print) {
+		int r = Math.min(rows,5);
+		hep.aida.bin.BinFunction1D[] funs = {hep.aida.bin.BinFunctions1D.median, hep.aida.bin.BinFunctions1D.sumLog, hep.aida.bin.BinFunctions1D.geometricMean};
+		String[] rowNames = new String[r];
+		String[] columnNames = new String[columns];
+		for (int i=columns; --i >= 0; ) columnNames[i] = Integer.toString(i);
+		for (int i=r; --i >= 0; ) rowNames[i] = Integer.toString(i);
+		System.out.println("first part of sorted result = \n"+new cern.colt.matrix.doublealgo.Formatter("%G").toTitleString(
+			A.viewPart(0,0,r,columns), rowNames, columnNames, null, null, null, funs
+		));
+	}
+
+
+	System.out.print("now sorting - slow version... ");
+	A = B;	
+	cern.colt.matrix.doublealgo.DoubleMatrix1DComparator fun = new cern.colt.matrix.doublealgo.DoubleMatrix1DComparator() {
+		public int compare(DoubleMatrix1D x, DoubleMatrix1D y) {
+			double a = cern.colt.matrix.doublealgo.Statistic.bin(x).median();
+			double b = cern.colt.matrix.doublealgo.Statistic.bin(y).median();
+			//double a = x.aggregate(F.plus,F.log);
+			//double b = y.aggregate(F.plus,F.log);
+			return a < b ? -1 : (a==b) ? 0 : 1;
+		}
+	};
+	timer.reset().start();
+	A = sort.sort(A,fun);
+	timer.stop().display();
+}
+/**
+ * Demonstrates advanced sorting.
+ * Sorts by sum of row.
+ */
+public static void zdemo6() {
+	Sorting sort = quickSort;
+	double[][] values = {
+		{ 3,7,0 },
+		{ 2,1,0 },
+		{ 2,2,0 },
+		{ 1,8,0 },
+		{ 2,5,0 },
+		{ 7,0,0 },
+		{ 2,3,0 },
+		{ 1,0,0 },
+		{ 4,0,0 },
+		{ 2,0,0 }
+	};
+	DoubleMatrix2D A = DoubleFactory2D.dense.make(values);
+	DoubleMatrix2D B,C;
+	/*
+	DoubleMatrix1DComparator comp = new DoubleMatrix1DComparator() {
+		public int compare(DoubleMatrix1D a, DoubleMatrix1D b) {
+			double as = a.zSum(); double bs = b.zSum();
+			return as < bs ? -1 : as == bs ? 0 : 1;
+		}
+	};
+	*/
+	System.out.println("\n\nunsorted:"+A);
+	B = quickSort.sort(A,1);
+	C = quickSort.sort(B,0);	
+	System.out.println("quick sorted  :"+C);
+	
+	B = mergeSort.sort(A,1);
+	C = mergeSort.sort(B,0);	
+	System.out.println("merge sorted  :"+C);
+	
+}
+/**
+ * Demonstrates sorting with precomputation of aggregates, comparing mergesort with quicksort.
+ */
+public static void zdemo7(int rows, int columns, boolean print) {
+	// for reliable benchmarks, call this method twice: once with small dummy parameters to "warm up" the jitter, then with your real work-load
+		
+	System.out.println("\n\n");
+	System.out.println("now initializing... ");
+		
+	final cern.jet.math.Functions F = cern.jet.math.Functions.functions;
+	DoubleMatrix2D A = cern.colt.matrix.DoubleFactory2D.dense.make(rows,columns);
+	A.assign(new cern.jet.random.engine.DRand()); // initialize randomly
+	DoubleMatrix2D B = A.copy();
+
+	double[] v1 = A.viewColumn(0).toArray();
+	double[] v2 = A.viewColumn(0).toArray();
+	System.out.print("now quick sorting... ");
+	cern.colt.Timer timer = new cern.colt.Timer().start();
+	quickSort.sort(A,0);
+	timer.stop().display();
+
+	System.out.print("now merge sorting... ");
+	timer.reset().start();
+	mergeSort.sort(A,0);
+	timer.stop().display();
+
+	System.out.print("now quick sorting with simple aggregation... ");
+	timer.reset().start();
+	quickSort.sort(A,v1);
+	timer.stop().display();
+
+	System.out.print("now merge sorting with simple aggregation... ");
+	timer.reset().start();
+	mergeSort.sort(A,v2);
+	timer.stop().display();
 }
 }

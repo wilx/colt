@@ -42,7 +42,7 @@ with an object-oriented approach. These features include the following:
  IHistogram2D h3 = new Histogram3D("my histo 3",10, -2, +2,    5, -2, +2,    3, -2, +2);
 
  // equivalent
- // IHistogram1D h1 = new Histogram1D("my histo 1",new FixedPartition(10, -2, +2)); <br> // IHistogram2D h2 = new Histogram2D("my histo 2",new FixedPartition(10, -2, +2),new FixedPartition(5, -2, +2));<br><br> // your favourite distribution goes here
+ // IHistogram1D h1 = new Histogram1D("my histo 1",new FixedAxis(10, -2, +2)); <br> // IHistogram2D h2 = new Histogram2D("my histo 2",new FixedAxis(10, -2, +2),new FixedAxis(5, -2, +2));<br><br> // your favourite distribution goes here
  cern.jet.random.AbstractDistribution gauss = new cern.jet.random.Normal(0,1,new cern.jet.random.engine.MersenneTwister());
 <br> for (int i=0; i &lt; 10000; i++) {    <br>    h1.{@link hep.aida.IHistogram1D#fill fill}(gauss.nextDouble());
     h2.{@link hep.aida.IHistogram2D#fill fill}(gauss.nextDouble(),gauss.nextDouble());
@@ -197,7 +197,7 @@ histo.xAxis().binUpperEdge(i)  // and its upper edge
 <table>
   <td class="LISTING"> 
       <pre>
- IHistogram2D h = new Histogram2D(new FixedPartition(2, 0.0, 100.0), new FixedPartition(2, 0.0, 100.0), ...);
+ IHistogram2D h = new Histogram2D(new FixedAxis(2, 0.0, 100.0), new FixedAxis(2, 0.0, 100.0), ...);
 
 	   y ^                          i ... in-range bin, e .. extra bins
 	     |                           

@@ -668,12 +668,13 @@ public DoubleMatrix1D viewSelection(cern.colt.function.DoubleProcedure condition
 protected abstract DoubleMatrix1D viewSelectionLike(int[] offsets);
 /**
 Sorts the vector into ascending order, according to the <i>natural ordering</i>.
-For further information, see {@link cern.colt.matrix.doublealgo.Sorting#quickSort(DoubleMatrix1D)}.
+This sort is guaranteed to be <i>stable</i>.
+For further information, see {@link cern.colt.matrix.doublealgo.Sorting#sort(DoubleMatrix1D)}.
 For more advanced sorting functionality, see {@link cern.colt.matrix.doublealgo.Sorting}.
 @return a new sorted vector (matrix) view.
 */
 public DoubleMatrix1D viewSorted() {
-	return cern.colt.matrix.doublealgo.Sorting.quickSort(this);
+	return cern.colt.matrix.doublealgo.Sorting.mergeSort.sort(this);
 }
 /**
 Constructs and returns a new <i>stride view</i> which is a sub matrix consisting of every i-th cell.
@@ -728,9 +729,9 @@ public double zDotProduct(DoubleMatrix1D y) {
  * @return the sum of products; zero if <tt>from<0 || length<0</tt>.
  */
 public double zDotProduct(DoubleMatrix1D y, int from, int length) {
-	int tail = from+length;
-	if (from<0 || length<0) return 0;
+	if (from<0 || length<=0) return 0;
 	
+	int tail = from+length;
 	if (size < tail) tail = size;
 	if (y.size < tail) tail = y.size;
 	length = tail-from;
@@ -751,9 +752,9 @@ public double zDotProduct(DoubleMatrix1D y, int from, int length) {
  */
 public double zDotProduct(DoubleMatrix1D y, int from, int length, IntArrayList nonZeroIndexes) {
 	// determine minimum length
-	int tail = from+length;
-	if (from<0 || length<0) return 0;
+	if (from<0 || length<=0) return 0;
 	
+	int tail = from+length;
 	if (size < tail) tail = size;
 	if (y.size < tail) tail = y.size;
 	length = tail-from;

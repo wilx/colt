@@ -61,9 +61,6 @@ public class Transform extends cern.colt.PersistentObject {
 
 	private static final cern.jet.math.Functions F = cern.jet.math.Functions.functions; // alias
 
-	/*
-	 * These method implementations might look slow, but in fact the implementations of assign(...) methods are highly optimized :-)
-	 */
 /**
  * Makes this class non instantiable, but still let's others inherit from it.
  */
