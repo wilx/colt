@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -9,7 +9,14 @@ It is provided "as is" without expressed or implied warranty.
 package cern.colt;
 
 import java.util.Comparator;
-import cern.colt.function.*;
+
+import cern.colt.function.ByteComparator;
+import cern.colt.function.CharComparator;
+import cern.colt.function.DoubleComparator;
+import cern.colt.function.FloatComparator;
+import cern.colt.function.IntComparator;
+import cern.colt.function.LongComparator;
+import cern.colt.function.ShortComparator;
 /**
  * Quicksorts, mergesorts and binary searches; complements <tt>java.util.Arrays</tt>.
  * Contains, for example, the quicksort on Comparators and Comparables, which are still missing in <tt>java.util.Arrays</tt> of JDK 1.2.
@@ -357,42 +364,72 @@ public static int binarySearchFromTo(int from, int to, IntComparator comp) {
 	}
 	return -(from + 1);  // key not found.
 }
-private static void inplace_merge(int[] array, int first, int middle, int last) {
-	if (first >= middle || middle >= last)
-		return;
-	if (last - first == 2) {
-		if (array[middle] < array[first]) {
-			int tmp = array[first];
-			array[first] = array[middle];
-			array[middle] = tmp;
-		}
-		return;
-	}
-	int firstCut;
-	int secondCut;
-	if (middle - first > last - middle) {
-		firstCut = first + (middle - first) / 2;
-		secondCut = jal.INT.Sorting.lower_bound(array, middle, last, array[firstCut]);
-	} else {
-		secondCut = middle + (last - middle) / 2;
-		firstCut = jal.INT.Sorting.upper_bound(array, first, middle, array[secondCut]);
-	}
 
-	//rotate(array, firstCut, middle, secondCut);
-	// is manually inlined for speed (jitter inlining seems to work only for small call depths, even if methods are "static private")
-	// speedup = 1.7
-	// begin inline
-	int first2 = firstCut; int middle2 = middle; int last2 = secondCut;
-	if (middle2 != first2 && middle2 != last2) {
-		int first1 = first2; int last1 = middle2;
-		int tmp;
-		while (first1 < --last1) { tmp = array[first1]; array[last1] = array[first1]; array[first1++] = tmp; }
-		first1 = middle2; last1 = last2;
-		while (first1 < --last1) { tmp = array[first1]; array[last1] = array[first1]; array[first1++] = tmp; }
-		first1 = first2; last1 = last2;
-		while (first1 < --last1) { tmp = array[first1]; array[last1] = array[first1]; array[first1++] = tmp; }
+private static int lower_bound(int[] array, int first, int last, int x) {
+		int len = last - first;
+		while (len > 0) {
+			int half = len / 2;
+			int middle = first + half;
+			if (array[middle] < x) {
+				first = middle + 1;
+				len -= half + 1;
+			} else
+				len = half;
+		}
+		return first;
+	} 
+
+private static int upper_bound(int[] array, int first, int last, int x) {
+	int len = last - first;
+	while (len > 0) {
+		int half = len / 2;
+		int middle = first + half;
+		if (x < array[middle])
+			len = half;
+		else {
+			first = middle + 1;
+			len -= half + 1;
+		}
 	}
-	// end inline
+	return first;
+}
+
+private static void inplace_merge(int[] array, int first, int middle, int last) {
+if (first >= middle || middle >= last)
+	return;
+if (last - first == 2) {
+	if (array[middle] < array[first]) {
+		int tmp = array[first];
+		array[first] = array[middle];
+		array[middle] = tmp;
+	}
+	return;
+}
+int firstCut;
+int secondCut;
+if (middle - first > last - middle) {
+	firstCut = first + (middle - first) / 2;
+	secondCut = lower_bound(array, middle, last, array[firstCut]);
+} else {
+	secondCut = middle + (last - middle) / 2;
+	firstCut = upper_bound(array, first, middle, array[secondCut]);
+}
+
+//rotate(array, firstCut, middle, secondCut);
+// is manually inlined for speed (jitter inlining seems to work only for small call depths, even if methods are "static private")
+// speedup = 1.7
+// begin inline
+int first2 = firstCut; int middle2 = middle; int last2 = secondCut;
+if (middle2 != first2 && middle2 != last2) {
+	int first1 = first2; int last1 = middle2;
+	int tmp;
+	while (first1 < --last1) { tmp = array[first1]; array[last1] = array[first1]; array[first1++] = tmp; }
+	first1 = middle2; last1 = last2;
+	while (first1 < --last1) { tmp = array[first1]; array[last1] = array[first1]; array[first1++] = tmp; }
+	first1 = first2; last1 = last2;
+	while (first1 < --last1) { tmp = array[first1]; array[last1] = array[first1]; array[first1++] = tmp; }
+}
+// end inline
 
 	
 	middle = firstCut + (secondCut - middle);
@@ -400,104 +437,105 @@ private static void inplace_merge(int[] array, int first, int middle, int last) 
 	inplace_merge(array, middle, secondCut, last);
 }
 	/**
-	 * Returns the index of the median of the three indexed chars.
-	 */
-	private static int med3(byte x[], int a, int b, int c, ByteComparator comp) {
-		int ab = comp.compare(x[a],x[b]);
-  		int ac = comp.compare(x[a],x[c]);
-  		int bc = comp.compare(x[b],x[c]);
-		return (ab<0 ?
-		(bc<0 ? b : ac<0 ? c : a) :
-		(bc>0 ? b : ac>0 ? c : a));
-	}
-	/**
-	 * Returns the index of the median of the three indexed chars.
-	 */
-	private static int med3(char x[], int a, int b, int c, CharComparator comp) {
-		int ab = comp.compare(x[a],x[b]);
-  		int ac = comp.compare(x[a],x[c]);
-  		int bc = comp.compare(x[b],x[c]);
-		return (ab<0 ?
-		(bc<0 ? b : ac<0 ? c : a) :
-		(bc>0 ? b : ac>0 ? c : a));
-	}
-	/**
-	 * Returns the index of the median of the three indexed chars.
-	 */
-	private static int med3(double x[], int a, int b, int c, DoubleComparator comp) {
-		int ab = comp.compare(x[a],x[b]);
-  		int ac = comp.compare(x[a],x[c]);
-  		int bc = comp.compare(x[b],x[c]);
-		return (ab<0 ?
-		(bc<0 ? b : ac<0 ? c : a) :
-		(bc>0 ? b : ac>0 ? c : a));
-	}
-	/**
-	 * Returns the index of the median of the three indexed chars.
-	 */
-	private static int med3(float x[], int a, int b, int c, FloatComparator comp) {
-		int ab = comp.compare(x[a],x[b]);
-  		int ac = comp.compare(x[a],x[c]);
-  		int bc = comp.compare(x[b],x[c]);
-		return (ab<0 ?
-		(bc<0 ? b : ac<0 ? c : a) :
-		(bc>0 ? b : ac>0 ? c : a));
-	}
-	/**
-	 * Returns the index of the median of the three indexed chars.
-	 */
-	private static int med3(int x[], int a, int b, int c, IntComparator comp) {
-		int ab = comp.compare(x[a],x[b]);
-  		int ac = comp.compare(x[a],x[c]);
-  		int bc = comp.compare(x[b],x[c]);
-		return (ab<0 ?
-		(bc<0 ? b : ac<0 ? c : a) :
-		(bc>0 ? b : ac>0 ? c : a));
-	}
-	/**
-	 * Returns the index of the median of the three indexed chars.
-	 */
-	private static int med3(long x[], int a, int b, int c, LongComparator comp) {
-		int ab = comp.compare(x[a],x[b]);
-  		int ac = comp.compare(x[a],x[c]);
-  		int bc = comp.compare(x[b],x[c]);
-		return (ab<0 ?
-		(bc<0 ? b : ac<0 ? c : a) :
-		(bc>0 ? b : ac>0 ? c : a));
-	}
-	/**
-	 * Returns the index of the median of the three indexed chars.
-	 */
-	private static int med3(Object x[], int a, int b, int c) {
-		int ab = ((Comparable)x[a]).compareTo((Comparable)x[b]);
-  		int ac = ((Comparable)x[a]).compareTo((Comparable)x[c]);
-  		int bc = ((Comparable)x[b]).compareTo((Comparable)x[c]);
-		return (ab<0 ?
-		(bc<0 ? b : ac<0 ? c : a) :
-		(bc>0 ? b : ac>0 ? c : a));
-	}
-	/**
-	 * Returns the index of the median of the three indexed chars.
-	 */
-	private static int med3(Object x[], int a, int b, int c, Comparator comp) {
-		int ab = comp.compare(x[a],x[b]);
-  		int ac = comp.compare(x[a],x[c]);
-  		int bc = comp.compare(x[b],x[c]);
-		return (ab<0 ?
-		(bc<0 ? b : ac<0 ? c : a) :
-		(bc>0 ? b : ac>0 ? c : a));
-	}
-	/**
-	 * Returns the index of the median of the three indexed chars.
-	 */
-	private static int med3(short x[], int a, int b, int c, ShortComparator comp) {
-		int ab = comp.compare(x[a],x[b]);
-  		int ac = comp.compare(x[a],x[c]);
-  		int bc = comp.compare(x[b],x[c]);
-		return (ab<0 ?
-		(bc<0 ? b : ac<0 ? c : a) :
-		(bc>0 ? b : ac>0 ? c : a));
-	}
+ * Returns the index of the median of the three indexed chars.
+ */
+private static int med3(byte x[], int a, int b, int c, ByteComparator comp) {
+	int ab = comp.compare(x[a],x[b]);
+	int ac = comp.compare(x[a],x[c]);
+	int bc = comp.compare(x[b],x[c]);
+	return (ab<0 ?
+	(bc<0 ? b : ac<0 ? c : a) :
+	(bc>0 ? b : ac>0 ? c : a));
+}
+/**
+ * Returns the index of the median of the three indexed chars.
+ */
+private static int med3(char x[], int a, int b, int c, CharComparator comp) {
+	int ab = comp.compare(x[a],x[b]);
+	int ac = comp.compare(x[a],x[c]);
+	int bc = comp.compare(x[b],x[c]);
+	return (ab<0 ?
+	(bc<0 ? b : ac<0 ? c : a) :
+	(bc>0 ? b : ac>0 ? c : a));
+}
+/**
+ * Returns the index of the median of the three indexed chars.
+ */
+private static int med3(double x[], int a, int b, int c, DoubleComparator comp) {
+	int ab = comp.compare(x[a],x[b]);
+	int ac = comp.compare(x[a],x[c]);
+	int bc = comp.compare(x[b],x[c]);
+	return (ab<0 ?
+	(bc<0 ? b : ac<0 ? c : a) :
+	(bc>0 ? b : ac>0 ? c : a));
+}
+/**
+ * Returns the index of the median of the three indexed chars.
+ */
+private static int med3(float x[], int a, int b, int c, FloatComparator comp) {
+	int ab = comp.compare(x[a],x[b]);
+	int ac = comp.compare(x[a],x[c]);
+	int bc = comp.compare(x[b],x[c]);
+	return (ab<0 ?
+	(bc<0 ? b : ac<0 ? c : a) :
+	(bc>0 ? b : ac>0 ? c : a));
+}
+/**
+ * Returns the index of the median of the three indexed chars.
+ */
+private static int med3(int x[], int a, int b, int c, IntComparator comp) {
+	int ab = comp.compare(x[a],x[b]);
+	int ac = comp.compare(x[a],x[c]);
+	int bc = comp.compare(x[b],x[c]);
+	return (ab<0 ?
+	(bc<0 ? b : ac<0 ? c : a) :
+	(bc>0 ? b : ac>0 ? c : a));
+}
+/**
+ * Returns the index of the median of the three indexed chars.
+ */
+private static int med3(long x[], int a, int b, int c, LongComparator comp) {
+	int ab = comp.compare(x[a],x[b]);
+	int ac = comp.compare(x[a],x[c]);
+	int bc = comp.compare(x[b],x[c]);
+	return (ab<0 ?
+	(bc<0 ? b : ac<0 ? c : a) :
+	(bc>0 ? b : ac>0 ? c : a));
+}
+/**
+ * Returns the index of the median of the three indexed chars.
+ */
+private static int med3(Object x[], int a, int b, int c) {
+	int ab = ((Comparable)x[a]).compareTo((Comparable)x[b]);
+	int ac = ((Comparable)x[a]).compareTo((Comparable)x[c]);
+	int bc = ((Comparable)x[b]).compareTo((Comparable)x[c]);
+	return (ab<0 ?
+	(bc<0 ? b : ac<0 ? c : a) :
+	(bc>0 ? b : ac>0 ? c : a));
+}
+/**
+ * Returns the index of the median of the three indexed chars.
+ */
+private static int med3(Object x[], int a, int b, int c, Comparator comp) {
+	int ab = comp.compare(x[a],x[b]);
+	int ac = comp.compare(x[a],x[c]);
+	int bc = comp.compare(x[b],x[c]);
+	return (ab<0 ?
+	(bc<0 ? b : ac<0 ? c : a) :
+	(bc>0 ? b : ac>0 ? c : a));
+}
+/**
+ * Returns the index of the median of the three indexed chars.
+ */
+private static int med3(short x[], int a, int b, int c, ShortComparator comp) {
+	int ab = comp.compare(x[a],x[b]);
+	int ac = comp.compare(x[a],x[c]);
+	int bc = comp.compare(x[b],x[c]);
+	return (ab<0 ?
+	(bc<0 ? b : ac<0 ? c : a) :
+	(bc>0 ? b : ac>0 ? c : a));
+}
+
 /**
  * Sorts the specified range of the specified array of elements.
  *
@@ -1472,7 +1510,7 @@ public static void mergeSortInPlace(int[] a, int fromIndex, int toIndex) {
 
 	// Merge sorted halves 
 	//jal.INT.Sorting.inplace_merge(a, fromIndex, mid, toIndex);
-	jal.INT.Sorting.inplace_merge(a, fromIndex, mid, toIndex);
+	inplace_merge(a, fromIndex, mid, toIndex);
 }
 /**
  * Sorts the specified range of the specified array of elements according

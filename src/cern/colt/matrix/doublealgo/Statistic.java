@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,10 +8,14 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.colt.matrix.doublealgo;
 
-import cern.colt.matrix.*;
 import hep.aida.bin.DynamicBin1D;
-import cern.colt.list.*;
 import cern.colt.function.DoubleDoubleFunction;
+import cern.colt.matrix.DoubleFactory1D;
+import cern.colt.matrix.DoubleFactory2D;
+import cern.colt.matrix.DoubleMatrix1D;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.DoubleMatrix3D;
+import cern.jet.random.engine.RandomEngine;
 /**
 Basic statistics operations on matrices.
 Computation of covariance, correlation, distance matrix.
@@ -552,7 +556,7 @@ Samples "without replacement" from the uniform distribution.
 @throws IllegalArgumentException if <tt>! (0 <= rowFraction <= 1 && 0 <= columnFraction <= 1)</tt>.
 @see cern.jet.random.sampling.RandomSampler
 */
-public static DoubleMatrix1D viewSample(DoubleMatrix1D matrix, double fraction, edu.cornell.lassp.houle.RngPack.RandomElement randomGenerator) {
+public static DoubleMatrix1D viewSample(DoubleMatrix1D matrix, double fraction, RandomEngine randomGenerator) {
 	// check preconditions and allow for a little tolerance
 	double epsilon = 1e-09;
 	if (fraction < 0 - epsilon || fraction > 1 + epsilon) throw new IllegalArgumentException();
@@ -639,7 +643,7 @@ Examples:
 @throws IllegalArgumentException if <tt>! (0 <= rowFraction <= 1 && 0 <= columnFraction <= 1)</tt>.
 @see cern.jet.random.sampling.RandomSampler
 */
-public static DoubleMatrix2D viewSample(DoubleMatrix2D matrix, double rowFraction, double columnFraction, edu.cornell.lassp.houle.RngPack.RandomElement randomGenerator) {
+public static DoubleMatrix2D viewSample(DoubleMatrix2D matrix, double rowFraction, double columnFraction, RandomEngine randomGenerator) {
 	// check preconditions and allow for a little tolerance
 	double epsilon = 1e-09;
 	if (rowFraction < 0 - epsilon || rowFraction > 1 + epsilon) throw new IllegalArgumentException();
@@ -687,7 +691,7 @@ Slices, rows and columns are randomly chosen from the uniform distribution.
 @throws IllegalArgumentException if <tt>! (0 <= sliceFraction <= 1 && 0 <= rowFraction <= 1 && 0 <= columnFraction <= 1)</tt>.
 @see cern.jet.random.sampling.RandomSampler
 */
-public static DoubleMatrix3D viewSample(DoubleMatrix3D matrix, double sliceFraction, double rowFraction, double columnFraction, edu.cornell.lassp.houle.RngPack.RandomElement randomGenerator) {
+public static DoubleMatrix3D viewSample(DoubleMatrix3D matrix, double sliceFraction, double rowFraction, double columnFraction, RandomEngine randomGenerator) {
 	// check preconditions and allow for a little tolerance
 	double epsilon = 1e-09;
 	if (sliceFraction < 0 - epsilon || sliceFraction > 1 + epsilon) throw new IllegalArgumentException();

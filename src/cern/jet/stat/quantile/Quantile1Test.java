@@ -1,11 +1,13 @@
 package cern.jet.stat.quantile;
 
-import cern.jet.random.engine.DRand; 
-import hep.aida.bin.QuantileBin1D;
 import hep.aida.bin.DynamicBin1D;
+import hep.aida.bin.QuantileBin1D;
 
-import java.util.Date;
 import java.text.DecimalFormat;
+import java.util.Date;
+
+import cern.jet.random.Uniform;
+import cern.jet.random.engine.DRand;
 
 /**
  * A class to test the QuantileBin1D code.
@@ -73,9 +75,9 @@ public class Quantile1Test {
 	 * Use a new random number generator to generate numExamples
 	 * random gaussians, and add them to the QuantileBin1D
 	 */
-	DRand dataRand = new DRand(7757);
+	Uniform dataRand = new Uniform(new DRand(7757));
 	for (int i = 1; i <= numExamples; i++) {
-		double gauss = dataRand.gaussian();
+		double gauss = dataRand.nextDouble();
 	    qAccum.add(gauss);
 	    dbin.add(gauss);
 	}

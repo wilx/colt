@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,7 +8,7 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import cern.jet.random.engine.RandomEngine;
 /**
  * Uniform distribution; <A HREF="http://www.cern.ch/RD11/rkb/AN16pp/node292.html#SECTION0002920000000000000000"> Math definition</A>
  * and <A HREF="http://www.statsoft.com/textbook/glosu.html#Uniform Distribution"> animated definition</A>.
@@ -35,14 +35,14 @@ public Uniform(double min, double max, int seed) {
 /**
  * Constructs a uniform distribution with the given minimum and maximum.
  */
-public Uniform(double min, double max, RandomElement randomGenerator) {
+public Uniform(double min, double max, RandomEngine randomGenerator) {
 	setRandomGenerator(randomGenerator);
 	setState(min,max);
 }
 /**
  * Constructs a uniform distribution with <tt>min=0.0</tt> and <tt>max=1.0</tt>.
  */
-public Uniform(RandomElement randomGenerator) {
+public Uniform(RandomEngine randomGenerator) {
 	this(0,1,randomGenerator);
 }
 /**
@@ -208,7 +208,7 @@ public static long staticNextLongFromTo(long from, long to) {
  * Sets the uniform random number generation engine shared by all <b>static</b> methods.
  * @param randomGenerator the new uniform random number generation engine to be shared.
  */
-public static void staticSetRandomEngine(RandomElement randomGenerator) {
+public static void staticSetRandomEngine(RandomEngine randomGenerator) {
 	synchronized (shared) {
 		shared.setRandomGenerator(randomGenerator);
 	}

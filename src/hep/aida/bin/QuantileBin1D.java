@@ -1,8 +1,9 @@
 package hep.aida.bin;
 
 import cern.colt.list.DoubleArrayList;
-import cern.jet.stat.quantile.*;
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import cern.jet.random.engine.RandomEngine;
+import cern.jet.stat.quantile.DoubleQuantileFinder;
+import cern.jet.stat.quantile.QuantileFinderFactory;
 /**
 1-dimensional non-rebinnable bin holding <tt>double</tt> elements with scalable quantile operations defined upon;
 Using little main memory, quickly computes approximate quantiles over very large data sequences with and even without a-priori knowledge of the number of elements to be filled;
@@ -571,7 +572,7 @@ public QuantileBin1D(double epsilon) {
 /**
  * Equivalent to <tt>new QuantileBin1D(known_N, N, epsilon, delta, quantiles, randomGenerator, false, false, 2)</tt>.
  */
-public QuantileBin1D(boolean known_N, long N, double epsilon, double delta, int quantiles, RandomElement randomGenerator) {
+public QuantileBin1D(boolean known_N, long N, double epsilon, double delta, int quantiles, RandomEngine randomGenerator) {
 	this(known_N, N, epsilon, delta, quantiles, randomGenerator, false, false, 2);
 }
 /**
@@ -621,7 +622,7 @@ public QuantileBin1D(boolean known_N, long N, double epsilon, double delta, int 
  *        This method always substitutes <tt>Math.max(2,maxOrderForSumOfPowers)</tt> for the parameter passed in.
  *        Thus, <tt>sumOfPowers(0..2)</tt> always returns meaningful results.
  */
-public QuantileBin1D(boolean known_N, long N, double epsilon, double delta, int quantiles, RandomElement randomGenerator, boolean hasSumOfLogarithms, boolean hasSumOfInversions, int maxOrderForSumOfPowers) {
+public QuantileBin1D(boolean known_N, long N, double epsilon, double delta, int quantiles, RandomEngine randomGenerator, boolean hasSumOfLogarithms, boolean hasSumOfInversions, int maxOrderForSumOfPowers) {
 	super(hasSumOfLogarithms, hasSumOfInversions, maxOrderForSumOfPowers);
 	this.finder = QuantileFinderFactory.newDoubleQuantileFinder(known_N, N, epsilon, delta, quantiles, randomGenerator);
 	this.clear();

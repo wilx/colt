@@ -1,6 +1,9 @@
 package hep.aida.ref;
 
-import hep.aida.*;
+import hep.aida.IAxis;
+import hep.aida.IHistogram1D;
+import hep.aida.IHistogram2D;
+import hep.aida.IHistogram3D;
 
 /**
  * Histogram conversions, for example to String and XML format; 

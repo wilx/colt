@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,7 +8,7 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import cern.jet.random.engine.RandomEngine;
 /**
  * Logarithmic distribution.
  * <p>
@@ -41,7 +41,7 @@ public class Logarithmic extends AbstractContinousDistribution {
 /**
  * Constructs a Logarithmic distribution.
  */
-public Logarithmic(double p, RandomElement randomGenerator) {
+public Logarithmic(double p, RandomEngine randomGenerator) {
 	setRandomGenerator(randomGenerator);
 	setState(p);
 }
@@ -145,7 +145,7 @@ public String toString() {
  * Sets the uniform random number generated shared by all <b>static</b> methods.
  * @param randomGenerator the new uniform random number generator to be shared.
  */
-private static void xstaticSetRandomGenerator(RandomElement randomGenerator) {
+private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
 	synchronized (shared) {
 		shared.setRandomGenerator(randomGenerator);
 	}

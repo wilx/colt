@@ -1,6 +1,7 @@
 package hep.aida.ref;
 
-import hep.aida.*;
+import hep.aida.IAxis;
+import hep.aida.IHistogram1D;
 /**
 A reference implementation of hep.aida.IHistogram1D.
 The goal is to provide a clear implementation rather than the most efficient implementation.

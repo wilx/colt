@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,8 +8,8 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.colt.list;
 
-import cern.colt.bitvector.QuickBitVector;
 import cern.colt.bitvector.BitVector;
+import cern.colt.bitvector.QuickBitVector;
 /**
  * Resizable compressed list holding numbers; based on the fact that a value in a given interval need not take more than <tt>log(max-min+1)</tt> bits; implemented with a <tt>cern.colt.bitvector.BitVector</tt>.
  * First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.

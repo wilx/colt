@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,7 +8,6 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.stat.quantile;
 
-import cern.colt.list.FloatArrayList;
 /**
  * Read-only equi-depth histogram for selectivity estimation.
  * Assume you have collected statistics over a data set, among them a one-dimensional equi-depth histogram (quantiles).
@@ -33,7 +32,7 @@ public class EquiDepthHistogram extends cern.colt.PersistentObject {
  * Quantile elements must be sorted ascending and have the form specified in the class documentation.
  */
 public EquiDepthHistogram(float[] quantileElements) {
-	this.binBoundaries = binBoundaries;
+	this.binBoundaries = quantileElements;
 }
 /**
  * Returns the bin index of the given element.
@@ -93,7 +92,8 @@ public double phi(float element) {
 	if (element>=binBoundaries[size-1]) return 1.0;
 
 	double binWidth = 1.0/(size-1);
-	int index = new FloatArrayList(binBoundaries).binarySearch(element);
+	int index = java.util.Arrays.binarySearch(binBoundaries, element);
+	//int index = new FloatArrayList(binBoundaries).binarySearch(element);
 	if (index>=0) { // found
 		return binWidth*index;
 	}

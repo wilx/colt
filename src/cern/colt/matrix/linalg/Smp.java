@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,8 +8,9 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.colt.matrix.linalg;
 
-import cern.colt.matrix.*;
-import edu.oswego.cs.dl.util.concurrent.*;
+import cern.colt.matrix.DoubleMatrix2D;
+import edu.oswego.cs.dl.util.concurrent.FJTask;
+import edu.oswego.cs.dl.util.concurrent.FJTaskRunnerGroup;
 /*
 */
 class Smp {

@@ -1,6 +1,7 @@
 package hep.aida.ref;
 
-import hep.aida.*;
+import hep.aida.IAxis;
+import hep.aida.IHistogram;
 /**
 Variable-width axis; A reference implementation of hep.aida.IAxis.
 

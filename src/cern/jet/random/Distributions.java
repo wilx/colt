@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,16 +8,16 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import cern.jet.random.engine.RandomEngine;
 /**
  * Contains methods for conveniently generating pseudo-random numbers from special distributions such as the Burr, Cauchy, Erlang, Geometric, Lambda, Laplace, Logistic, Weibull, etc.
  * <p>
  * <b>About this class:</b>
- * <dt>All distributions are obtained by using a <b>uniform</b> pseudo-random number generator (derived from {@link edu.cornell.lassp.houle.RngPack.RandomElement})
+ * <dt>All distributions are obtained by using a <b>uniform</b> pseudo-random number generator.
  * followed by a transformation to the desired distribution.
  * <p>
  * <b>Example usage:</b><pre>
- * edu.cornell.lassp.houle.RngPack.RandomElement generator;
+ * cern.jet.random.engine.RandomEngine generator;
  * generator = new cern.jet.random.engine.MersenneTwister(new java.util.Date());
  * //generator = new edu.cornell.lassp.houle.RngPack.Ranecu(new java.util.Date());
  * //generator = new edu.cornell.lassp.houle.RngPack.Ranmar(new java.util.Date());
@@ -30,7 +30,6 @@ import edu.cornell.lassp.houle.RngPack.RandomElement;
  * </pre>
  *
  * @see cern.jet.random.engine.MersenneTwister
- * @see edu.cornell.lassp.houle.RngPack
  * @see java.util.Random
  * @see java.lang.Math
  * @author wolfgang.hoschek@cern.ch
@@ -67,7 +66,7 @@ public static double geometricPdf(int k, double p) {
  * @param r must be &gt; 0.
  * @param nr the number of the burr distribution (e.g. 2,7,8,10).
  */
-public static double nextBurr1(double r, int nr, RandomElement randomGenerator) {
+public static double nextBurr1(double r, int nr, RandomEngine randomGenerator) {
 /******************************************************************
  *                                                                *
  *        Burr II, VII, VIII, X Distributions - Inversion         *
@@ -116,7 +115,7 @@ public static double nextBurr1(double r, int nr, RandomElement randomGenerator) 
  * @param k must be &gt; 0.
  * @param nr the number of the burr distribution (e.g. 3,4,5,6,9,12).
  */
-public static double nextBurr2(double r, double k, int nr, RandomElement randomGenerator) {
+public static double nextBurr2(double r, double k, int nr, RandomEngine randomGenerator) {
 /******************************************************************
  *                                                                *
  *      Burr III, IV, V, VI, IX, XII Distribution - Inversion     *
@@ -177,13 +176,13 @@ public static double nextBurr2(double r, double k, int nr, RandomElement randomG
  * <p>
  * @returns a number in the open unit interval <code>(0.0,1.0)</code> (excluding 0.0 and 1.0).
  */
-public static double nextCauchy(RandomElement randomGenerator) {
+public static double nextCauchy(RandomEngine randomGenerator) {
 	return Math.tan(Math.PI*randomGenerator.raw());
 }
 /**
  * Returns an erlang distributed random number with the given variance and mean.
  */
-public static double nextErlang(double variance, double mean, RandomElement randomGenerator) {
+public static double nextErlang(double variance, double mean, RandomEngine randomGenerator) {
 	int k = (int)( (mean * mean ) / variance + 0.5 );
 	k = (k > 0) ? k : 1;
 	double a = k / mean;
@@ -202,7 +201,7 @@ public static double nextErlang(double variance, double mean, RandomElement rand
  * @param p must satisfy <tt>0 &lt; p &lt; 1</tt>.
  * <p>
  */
-public static int nextGeometric(double p, RandomElement randomGenerator) {
+public static int nextGeometric(double p, RandomEngine randomGenerator) {
 /******************************************************************
  *                                                                *
  *              Geometric Distribution - Inversion                *
@@ -242,7 +241,7 @@ public static int nextGeometric(double p, RandomElement randomGenerator) {
  * J.S. Ramberg, B:W. Schmeiser (1974): An approximate method for generating asymmetric variables, Communications ACM 17, 78-82.
  * <p>
  */
-public static double nextLambda(double l3, double l4, RandomElement randomGenerator) {
+public static double nextLambda(double l3, double l4, RandomEngine randomGenerator) {
  	double l_sign;
 	if ((l3<0) || (l4<0)) l_sign=-1.0;                          // sign(l) 
 	else l_sign=1.0;
@@ -259,7 +258,7 @@ public static double nextLambda(double l3, double l4, RandomElement randomGenera
  * <p>
  * @returns a number in the open unit interval <code>(0.0,1.0)</code> (excluding 0.0 and 1.0).
  */
-public static double nextLaplace(RandomElement randomGenerator) {
+public static double nextLaplace(RandomEngine randomGenerator) {
 	double u = randomGenerator.raw();
 	u = u+u-1.0;
 	if (u>0) return -Math.log(1.0-u);
@@ -271,7 +270,7 @@ public static double nextLaplace(RandomElement randomGenerator) {
  * <b>Implementation:</b> Inversion method.
  * This is a port of <tt>login.c</tt> from the <A HREF="http://www.cis.tu-graz.ac.at/stat/stadl/random.html">C-RAND / WIN-RAND</A> library.
  */
-public static double nextLogistic(RandomElement randomGenerator) {
+public static double nextLogistic(RandomEngine randomGenerator) {
 	double u = randomGenerator.raw();
 	return(-Math.log(1.0 / u-1.0));
 }
@@ -280,8 +279,8 @@ public static double nextLogistic(RandomElement randomGenerator) {
  * @param alpha the exponent 
  * @param cut the lower cutoff
  */
-public static double nextPowLaw(double alpha, double cut, RandomElement randomGenerator) {
-	return randomGenerator.powlaw(alpha,cut);
+public static double nextPowLaw(double alpha, double cut, RandomEngine randomGenerator) {
+	  return cut*Math.pow(randomGenerator.raw(), 1.0/(alpha+1.0) ) ;
 }
 /**
  * Returns a random number from the standard Triangular distribution in (-1,1).
@@ -290,7 +289,7 @@ public static double nextPowLaw(double alpha, double cut, RandomElement randomGe
  * This is a port of <tt>tra.c</tt> from the <A HREF="http://www.cis.tu-graz.ac.at/stat/stadl/random.html">C-RAND / WIN-RAND</A> library.
  * <p>
  */
-public static double nextTriangular(RandomElement randomGenerator) {
+public static double nextTriangular(RandomEngine randomGenerator) {
 /******************************************************************
  *                                                                *
  *     Triangular Distribution - Inversion: x = +-(1-sqrt(u))     *
@@ -314,7 +313,7 @@ public static double nextTriangular(RandomElement randomGenerator) {
  * Polar method.
  * See Simulation, Modelling & Analysis by Law & Kelton, pp259
  */
-public static double nextWeibull(double alpha, double beta, RandomElement randomGenerator) {
+public static double nextWeibull(double alpha, double beta, RandomEngine randomGenerator) {
 	// Polar method.
 	// See Simulation, Modelling & Analysis by Law & Kelton, pp259
 	return Math.pow(beta * ( - Math.log(1.0 - randomGenerator.raw()) ), 1.0 / alpha);
@@ -329,7 +328,7 @@ public static double nextWeibull(double alpha, double beta, RandomElement random
  * @param z the skew of the distribution (must be &gt;1.0).
  * @returns a zipfian distributed number in the closed interval <tt>[1,Integer.MAX_VALUE]</tt>.
  */
-public static int nextZipfInt(double z, RandomElement randomGenerator) {	 
+public static int nextZipfInt(double z, RandomEngine randomGenerator) {	 
 	/* Algorithm from page 551 of:
 	 * Devroye, Luc (1986) `Non-uniform random variate generation',
 	 * Springer-Verlag: Berlin.   ISBN 3-540-96305-7 (also 0-387-96305-7)

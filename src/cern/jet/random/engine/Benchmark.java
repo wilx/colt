@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -11,7 +11,7 @@ package cern.jet.random.engine;
 /**
  * Benchmarks the performance of the currently provided uniform pseudo-random number generation engines.
  * <p>
- * All distributions are obtained by using a <b>uniform</b> pseudo-random number generation engine (derived from <tt>edu.cornell.lassp.houle.RngPack.RandomElement</tt>)
+ * All distributions are obtained by using a <b>uniform</b> pseudo-random number generation engine.
  * followed by a transformation to the desired distribution.
  * Therefore, the performance of the uniform engines is crucial.
  * <p>
@@ -74,7 +74,6 @@ package cern.jet.random.engine;
  * </pre>
  *
  *
- * @see edu.cornell.lassp.houle.RngPack
  * @see cern.jet.random
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
@@ -91,7 +90,7 @@ protected Benchmark() {
  */
 public static void benchmark(int times) {
 	cern.colt.Timer timer = new cern.colt.Timer();
-	edu.cornell.lassp.houle.RngPack.RandomElement gen;
+	RandomEngine gen;
 
 	timer.reset().start();
 	for (int i=times; --i>=0; ) ; // no operation
@@ -139,6 +138,7 @@ public static void benchmark(int times) {
 	timer.stop().display();
 	System.out.println(times/(timer.elapsedTime()-emptyLoop)+ " numbers per second.");
 
+	/*
 	gen = new edu.cornell.lassp.houle.RngPack.Ranecu();
 	System.out.println("\nRanecu:");
 	timer.reset().start();
@@ -159,7 +159,7 @@ public static void benchmark(int times) {
 	for (int i=times; --i>=0; ) gen.raw();
 	timer.stop().display();
 	System.out.println(times/(timer.elapsedTime()-emptyLoop)+ " numbers per second.");
-	
+	*/
 
 	System.out.println("\nGood bye.\n");
 	
@@ -231,7 +231,7 @@ private static void xtestRandomFromTo(long from, long to, int times) {
 	//edu.cornell.lassp.houle.RngPack.RandomElement random = new edu.cornell.lassp.houle.RngPack.Ranecu();
 	//edu.cornell.lassp.houle.RngPack.RandomElement random = new edu.cornell.lassp.houle.RngPack.MT19937B();
 	//edu.cornell.lassp.houle.RngPack.RandomElement random = new edu.stanford.mt.MersenneTwister();
-	edu.cornell.lassp.houle.RngPack.RandomElement random = new MersenneTwister();
+	RandomEngine random = new MersenneTwister();
 	int _from=(int)from, _to=(int)to;
 	cern.colt.Timer timer = new cern.colt.Timer().start();
 	for (int j=0, i=times; --i>=0; j++) {

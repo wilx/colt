@@ -1,6 +1,7 @@
 package hep.aida.ref;
 
-import hep.aida.*;
+import hep.aida.IHistogram1D;
+import hep.aida.IHistogram2D;
 
 /**
  * Convenient histogram utilities. 

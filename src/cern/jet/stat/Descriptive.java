@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -53,7 +53,9 @@ public static double correlation(DoubleArrayList data1, double standardDev1, Dou
   return covariance(data1,data2)/(standardDev1*standardDev2);
 }
 /**
- * Returns the covariance of two data sequences.
+ * Returns the covariance of two data sequences, which is 
+ * <tt>cov(x,y) = (1/(size()-1)) * Sum((x[i]-mean(x)) * (y[i]-mean(y)))</tt>.
+ * See the <A HREF="http://www.cquest.utoronto.ca/geog/ggr270y/notes/not05efg.html"> math definition</A>.
  */
 public static double covariance(DoubleArrayList data1, DoubleArrayList data2) {
 	int size = data1.size();
@@ -70,8 +72,28 @@ public static double covariance(DoubleArrayList data1, DoubleArrayList data2) {
 		sumy += y;
 		// Exercise for the reader: Why does this give us the right answer?
 	}
-	return Sxy/size;
+	return Sxy/(size-1);
 }
+
+/* 
+ * Both covariance versions yield the same results but the one above is faster 
+ */
+private static double covariance2(DoubleArrayList data1, DoubleArrayList data2) {
+	int size = data1.size();
+	double mean1 = Descriptive.mean(data1);
+	double mean2 = Descriptive.mean(data2);
+	double covariance = 0.0D;
+	for (int i = 0; i < size; i++) {
+		double x = data1.get(i);
+		double y = data2.get(i);
+
+		covariance += (x - mean1) * (y - mean2);
+	}
+
+	return covariance / (double) (size-1);
+}
+
+
 /**
  * Durbin-Watson computation.
  */

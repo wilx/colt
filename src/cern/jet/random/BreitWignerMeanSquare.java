@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,7 +8,7 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import cern.jet.random.engine.RandomEngine;
 /**
  * Mean-square BreitWigner distribution; See the <A HREF="http://www.cern.ch/RD11/rkb/AN16pp/node23.html#SECTION000230000000000000000"> math definition</A>.
  * <p>
@@ -30,7 +30,7 @@ public class BreitWignerMeanSquare extends BreitWigner {
  * Constructs a mean-squared BreitWigner distribution.
  * @param cut </tt>cut==Double.NEGATIVE_INFINITY</tt> indicates "don't cut".
  */
-public BreitWignerMeanSquare(double mean, double gamma, double cut, RandomElement randomGenerator) {
+public BreitWignerMeanSquare(double mean, double gamma, double cut, RandomEngine randomGenerator) {
 	super(mean,gamma,cut,randomGenerator);
 	this.uniform = new Uniform(randomGenerator);
 }
@@ -80,7 +80,7 @@ public static double staticNextDouble(double mean,double gamma,double cut) {
  * Sets the uniform random number generated shared by all <b>static</b> methods.
  * @param randomGenerator the new uniform random number generator to be shared.
  */
-private static void xstaticSetRandomGenerator(RandomElement randomGenerator) {
+private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
 	synchronized (shared) {
 		shared.setRandomGenerator(randomGenerator);
 	}

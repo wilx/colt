@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,12 +8,10 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random.engine;
 
-import java.util.*;
 /**
  * Abstract base class for uniform pseudo-random number generating engines.
  * <p>
  * Most probability distributions are obtained by using a <b>uniform</b> pseudo-random number generation engine 
- * (derived from this class or {@link edu.cornell.lassp.houle.RngPack.RandomElement})
  * followed by a transformation to the desired distribution.
  * Thus, subclasses of this class are at the core of computational statistics, simulations, Monte Carlo methods, etc.
  * <p>
@@ -32,12 +30,10 @@ import java.util.*;
  * @version 1.0, 09/24/99
  * @see MersenneTwister
  * @see MersenneTwister64
- * @see edu.cornell.lassp.houle.RngPack.Ranmar
- * @see edu.cornell.lassp.houle.RngPack.Ranlux
- * @see edu.cornell.lassp.houle.RngPack.Ranecu
  * @see java.util.Random
  */
-public abstract class RandomEngine extends edu.cornell.lassp.houle.RngPack.RandomSeedable implements cern.colt.function.DoubleFunction, cern.colt.function.IntFunction {
+//public abstract class RandomEngine extends edu.cornell.lassp.houle.RngPack.RandomSeedable implements cern.colt.function.DoubleFunction, cern.colt.function.IntFunction {
+public abstract class RandomEngine extends cern.colt.PersistentObject implements Cloneable, cern.colt.function.DoubleFunction, cern.colt.function.IntFunction {
 /**
  * Makes this class non instantiable, but still let's others inherit from it.
  */
@@ -60,7 +56,7 @@ public int apply(int dummy) {
  * Constructs and returns a new uniform random number engine seeded with the current time.
  * Currently this is {@link cern.jet.random.engine.MersenneTwister}.
  */
-public static edu.cornell.lassp.houle.RngPack.RandomElement makeDefault() {
+public static RandomEngine makeDefault() {
 	return new cern.jet.random.engine.MersenneTwister((int) System.currentTimeMillis());
 }
 /**

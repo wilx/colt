@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,9 +8,10 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.stat.quantile;
 
-import cern.colt.list.*;
-import cern.jet.random.sampling.WeightedRandomSampler; 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import cern.colt.list.DoubleArrayList;
+import cern.colt.list.ObjectArrayList;
+import cern.jet.random.engine.RandomEngine;
+import cern.jet.random.sampling.WeightedRandomSampler;
 /**
  * Approximate quantile finding algorithm for unknown <tt>N</tt> requiring only one pass and little main memory; computes quantiles over a sequence of <tt>double</tt> elements.
  * This algorithm requires at most two times the memory of a corresponding approx. quantile finder knowing <tt>N</tt>.
@@ -49,7 +50,7 @@ class UnknownDoubleQuantileEstimator extends DoubleQuantileEstimator {
  * @param precomputeEpsilon the epsilon for which quantiles shall be precomputed; set this value <=0.0 if nothing shall be precomputed.
  * @param generator a uniform random number generator.
  */
-public UnknownDoubleQuantileEstimator(int b, int k, int h, double precomputeEpsilon, RandomElement generator) {
+public UnknownDoubleQuantileEstimator(int b, int k, int h, double precomputeEpsilon, RandomEngine generator) {
 	this.sampler = new WeightedRandomSampler(1,generator);
 	setUp(b,k);
 	this.treeHeightStartingSampling = h;

@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,8 +8,8 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
 import cern.jet.math.Arithmetic;
+import cern.jet.random.engine.RandomEngine;
 /**
  * HyperGeometric distribution; See the <A HREF="http://library.advanced.org/10030/6atpdvah.htm"> math definition</A>
  * 
@@ -59,7 +59,7 @@ public class HyperGeometric extends AbstractDiscreteDistribution {
 /**
  * Constructs a HyperGeometric distribution.
  */
-public HyperGeometric(int N, int s, int n, RandomElement randomGenerator) {
+public HyperGeometric(int N, int s, int n, RandomEngine randomGenerator) {
 	setRandomGenerator(randomGenerator);
 	setState(N,s,n);
 }
@@ -69,7 +69,7 @@ private static double fc_lnpk(int k, int N_Mn, int M, int n) {
 /**
  * Returns a random number from the distribution.
  */
-protected int hmdu(int N, int M, int n, RandomElement randomGenerator) {
+protected int hmdu(int N, int M, int n, RandomEngine randomGenerator) {
 
   int            I, K;
   double              p, nu, c, d, U;
@@ -127,7 +127,7 @@ protected int hmdu(int N, int M, int n, RandomElement randomGenerator) {
 /**
  * Returns a random number from the distribution.
  */
-protected int hprs(int N, int M, int n,  RandomElement randomGenerator) {
+protected int hprs(int N, int M, int n,  RandomEngine randomGenerator) {
 	int    Dk, X, V;
 	double Mp, np, p, nu, U, Y, W;       /* (X, Y) <-> (V, W) */
 
@@ -282,7 +282,7 @@ public int nextInt(int N, int s, int n) {
 /**
  * Returns a random number from the distribution; bypasses the internal state.
  */
-protected int nextInt(int N, int M, int n, RandomElement randomGenerator) {
+protected int nextInt(int N, int M, int n, RandomEngine randomGenerator) {
 /******************************************************************
  *                                                                *
  * Hypergeometric Distribution - Patchwork Rejection/Inversion    *
@@ -382,7 +382,7 @@ public String toString() {
  * Sets the uniform random number generated shared by all <b>static</b> methods.
  * @param randomGenerator the new uniform random number generator to be shared.
  */
-private static void xstaticSetRandomGenerator(RandomElement randomGenerator) {
+private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
 	synchronized (shared) {
 		shared.setRandomGenerator(randomGenerator);
 	}

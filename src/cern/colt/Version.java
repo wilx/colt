@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -25,9 +25,9 @@ private Version() {
  * Returns all version information as string.
  */
 public static String asString() {
-	if (getPackage()==null) return "unknown";
+	if (getPackage()==null) return "whoschek@lbl.gov";
 	String vendor = getPackage().getImplementationVendor();
-	if (vendor==null) vendor = "unknown";
+	if (vendor==null) vendor = "whoschek@lbl.gov";
 	return
 		"Version " + 
 		getMajorVersion()  + "." +
@@ -90,20 +90,26 @@ public static void main(String[] args) {
  */
 private static int[] numbers() {
 	int w = 4;
-	int[] numbers = new int[w];
-	//String s = "1.2.3.56 (Tue Apr 11 11:50:39 CEST 2000)";
+	//int[] numbers = new int[w];
+	int[] numbers = new int[] {1, 1, 0, 0};
+	return numbers;
+	/*
 	if (getPackage()==null) return numbers;
 	String s = getPackage().getImplementationVersion();
 	if (s==null) return numbers;
-	//System.out.println(s);
 	int k = s.indexOf('(');
 	s = s.substring(0,k);
-	s = ViolinStrings.Strings.stripBlanks(s);
-	s = ViolinStrings.Strings.translate(s, ".", " ");
+	s = s.trim();
+	//s = s.replace('.', ' ');
+	//s = ViolinStrings.Strings.stripBlanks(s);
+	//s = ViolinStrings.Strings.translate(s, ".", " ");
+	String[] words = s.split("."); // requires jdk 1.4.x
 	for (int i=0; i<w; i++) {
-		numbers[i] = Integer.parseInt(ViolinStrings.Strings.word(s, i));
+		numbers[i] = Integer.parseInt(words[i]);
+		//numbers[i] = Integer.parseInt(ViolinStrings.Strings.word(s, i));
 		//System.out.println(numbers[i]);
 	}
 	return numbers;
+	*/
 }
 }

@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,7 +8,7 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import cern.jet.random.engine.RandomEngine;
 /**
  * Von Mises distribution.
  * <p>
@@ -44,7 +44,7 @@ public class VonMises extends AbstractContinousDistribution {
  * Example: k=1.0.
  * @throws IllegalArgumentException if <tt>k &lt;= 0.0</tt>.
  */
-public VonMises(double freedom, RandomElement randomGenerator) {
+public VonMises(double freedom, RandomEngine randomGenerator) {
 	setRandomGenerator(randomGenerator);
 	setState(freedom);
 }
@@ -127,7 +127,7 @@ public String toString() {
  * Sets the uniform random number generated shared by all <b>static</b> methods.
  * @param randomGenerator the new uniform random number generator to be shared.
  */
-private static void xstaticSetRandomGenerator(RandomElement randomGenerator) {
+private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
 	synchronized (shared) {
 		shared.setRandomGenerator(randomGenerator);
 	}

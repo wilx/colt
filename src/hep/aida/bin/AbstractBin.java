@@ -1,7 +1,5 @@
 package hep.aida.bin;
 
-import cern.colt.list.DoubleArrayList;
-import cern.jet.stat.Descriptive;
 /**
  * Abstract base class for all arbitrary-dimensional bins consumes <tt>double</tt> elements.
  * First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.

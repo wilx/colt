@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,9 +8,9 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
-import cern.jet.stat.Probability;
 import cern.jet.math.Arithmetic;
+import cern.jet.random.engine.RandomEngine;
+import cern.jet.stat.Probability;
 /**
  * Poisson distribution (quick); See the <A HREF="http://www.cern.ch/RD11/rkb/AN16pp/node208.html#SECTION0002080000000000000000"> math definition</A>
  * and <A HREF="http://www.statsoft.com/textbook/glosp.html#Poisson Distribution"> animated definition</A>.
@@ -71,7 +71,7 @@ public class Poisson extends AbstractDiscreteDistribution {
  * Constructs a poisson distribution.
  * Example: mean=1.0.
  */
-public Poisson(double mean, RandomElement randomGenerator) {
+public Poisson(double mean, RandomEngine randomGenerator) {
 	setRandomGenerator(randomGenerator);
 	setMean(mean);
 }
@@ -121,7 +121,7 @@ public int nextInt(double theMean) {
  * exponential functions.                                         *
  *                                                                *
  *****************************************************************/
-	RandomElement gen = this.randomGenerator;
+	RandomEngine gen = this.randomGenerator;
 	double my = theMean;
 	
 	double t,g,my_k;
@@ -327,7 +327,7 @@ public String toString() {
  * Sets the uniform random number generated shared by all <b>static</b> methods.
  * @param randomGenerator the new uniform random number generator to be shared.
  */
-private static void xstaticSetRandomGenerator(RandomElement randomGenerator) {
+private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
 	synchronized (shared) {
 		shared.setRandomGenerator(randomGenerator);
 	}

@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,7 +8,7 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import cern.jet.random.engine.RandomEngine;
 import cern.jet.stat.Probability;
 /**
 Normal (aka Gaussian) distribution; See the <A HREF="http://www.cern.ch/RD11/rkb/AN16pp/node188.html#SECTION0001880000000000000000"> math definition</A>
@@ -54,7 +54,7 @@ public class Normal extends AbstractContinousDistribution {
  * Constructs a normal (gauss) distribution.
  * Example: mean=0.0, standardDeviation=1.0.
  */
-public Normal(double mean, double standardDeviation, RandomElement randomGenerator) {
+public Normal(double mean, double standardDeviation, RandomEngine randomGenerator) {
 	setRandomGenerator(randomGenerator);
 	setState(mean,standardDeviation);
 }
@@ -75,7 +75,7 @@ public double nextDouble() {
  */
 public double nextDouble(double mean, double standardDeviation) {
 	// Uses polar Box-Muller transformation.
-	if (cacheFilled) {
+	if (cacheFilled && this.mean == mean && this.standardDeviation == standardDeviation) {
 		cacheFilled = false;
 		return cache; 
 	};
@@ -102,7 +102,7 @@ public double pdf(double x) {
 /**
  * Sets the uniform random generator internally used.
  */
-protected void setRandomGenerator(RandomElement randomGenerator) {
+protected void setRandomGenerator(RandomEngine randomGenerator) {
 	super.setRandomGenerator(randomGenerator);
 	this.cacheFilled = false;
 }
@@ -137,7 +137,7 @@ public String toString() {
  * Sets the uniform random number generated shared by all <b>static</b> methods.
  * @param randomGenerator the new uniform random number generator to be shared.
  */
-private static void xstaticSetRandomGenerator(RandomElement randomGenerator) {
+private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
 	synchronized (shared) {
 		shared.setRandomGenerator(randomGenerator);
 	}

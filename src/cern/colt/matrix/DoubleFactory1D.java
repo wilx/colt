@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,7 +8,8 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.colt.matrix;
 
-import cern.colt.matrix.impl.*;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.impl.SparseDoubleMatrix1D;
 /**
 Factory for convenient construction of 1-d matrices holding <tt>double</tt> cells.
 Use idioms like <tt>DoubleFactory1D.dense.make(1000)</tt> to construct dense matrices, 

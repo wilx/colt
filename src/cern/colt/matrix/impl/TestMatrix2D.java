@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,14 +8,19 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.colt.matrix.impl;
 
-import cern.colt.list.*;
-import cern.colt.map.*;
-import edu.cornell.lassp.houle.RngPack.RandomElement;
-import cern.colt.matrix.linalg.*;
-import cern.colt.matrix.*;
-import cern.colt.function.DoubleFunction;
 import cern.colt.function.DoubleDoubleFunction;
+import cern.colt.function.DoubleFunction;
+import cern.colt.list.IntArrayList;
+import cern.colt.map.AbstractIntDoubleMap;
+import cern.colt.map.OpenIntDoubleHashMap;
+import cern.colt.matrix.DoubleFactory2D;
+import cern.colt.matrix.DoubleMatrix1D;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.DoubleMatrix3D;
 import cern.colt.matrix.doublealgo.DoubleMatrix2DComparator;
+import cern.colt.matrix.linalg.Algebra;
+import cern.colt.matrix.linalg.LUDecompositionQuick;
+import cern.colt.matrix.linalg.SeqBlas;
 /**
  * Quick and dirty tests.
  *
@@ -1775,57 +1780,5 @@ public static void testMax() {
   double max = d1ynamicBin.max();
   
   System.out.println("max = "+ max);
-}
-/**
- */
-public static void testPermuting() {
-//int[] piv = {1,2,3,0};
-//final double[] v = { 0,1,2,3};
-//int[] piv = {0,4,1,2,3};
-//final double[] v = { 0,1,2,3,4};
-int[] piv = {2, 3, 4, 1, 0,5};
-final double[] v = { 0,1,2,3,4,5};
-	cern.colt.Swapper swapper = new cern.colt.Swapper() {
-		public void swap(int a, int b) {
-			double t = v[a]; v[a]=v[b]; v[b] = t;
-			//System.out.println("\n"+a+" <-> "+b+"  "+new cern.colt.list.DoubleArrayList(v));
-		}
-	};
-
-System.out.println("\nsource="+new cern.colt.list.DoubleArrayList(v));
-cern.colt.GenericPermuting.permute(piv, swapper, null);
-System.out.println("\nres="+new cern.colt.list.DoubleArrayList(v));
-}
-/**
- */
-public static void testPermuting2(int runs, int size) {
-	int[] piv = new int[size];
-	for (int i=0; i<size; i++) piv[i]=i;
-	IntArrayList list = new IntArrayList(piv);
-	for (int run=0; run<runs; run++) {
-		list.shuffle();
-
-		final int[] v = new int[size];
-		for (int i=0; i<size; i++) v[i]=i;
-		IntArrayList safer = new IntArrayList(v).copy();
-		IntArrayList otherr = new IntArrayList(v).copy();
-		cern.colt.Swapper swapper = new cern.colt.Swapper() {
-			public void swap(int a, int b) {
-				int t = v[a]; v[a]=v[b]; v[b] = t;
-				//System.out.println("\n"+a+" <-> "+b+"  "+new cern.colt.list.DoubleArrayList(v));
-			}
-		};
-
-		//System.out.println("\nsource="+new cern.colt.list.IntArrayList(v));
-		//System.out.println("\nsafer="+safer.get(0));
-		cern.colt.GenericPermuting.permute(piv, swapper, null);
-		cern.colt.GenericPermuting.permute(otherr.elements(), piv);
-		IntArrayList vv = new IntArrayList(v);
-
-		
-		//System.out.println("\nres="+vv);
-		if (!(vv.equals(otherr))) throw new InternalError();
-	}
-	System.out.println("no bug detected\n\n");
 }
 }

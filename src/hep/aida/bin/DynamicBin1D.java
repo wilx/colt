@@ -1,7 +1,8 @@
 package hep.aida.bin;
 
-import cern.colt.list.IntArrayList;
 import cern.colt.list.DoubleArrayList;
+import cern.colt.list.IntArrayList;
+import cern.jet.random.engine.RandomEngine;
 import cern.jet.stat.Descriptive;
 /**
  * 1-dimensional rebinnable bin holding <tt>double</tt> elements;
@@ -247,10 +248,25 @@ public synchronized boolean equals(Object object) {
 	synchronized (other) {
 		double[] s2 = other.sortedElements_unsafe().elements();
 		int n = size();
-		return jal.DOUBLE.Sorting.includes(s1,s2,0,n,0,n) &&
-			jal.DOUBLE.Sorting.includes(s2,s1,0,n,0,n);
+		return includes(s1,s2,0,n,0,n) &&
+			includes(s2,s1,0,n,0,n);
 	}
 }
+private static boolean includes(double[] array1, double[] array2, int first1, int last1,	int first2,	int last2) {
+		while (first1 < last1 && first2 < last2) {
+			if (array2[first2] < array1[first1])
+				return false;
+			else if (array1[first1] < array2[first2])
+				++first1;
+			else {
+				++first1;
+				++first2;
+			}
+		}
+
+		return first2 == last2;
+}
+
 /**
  * Computes the frequency (number of occurances, count) of each distinct element.
  * After this call returns both <tt>distinctElements</tt> and <tt>frequencies</tt> have a new size (which is equal for both), which is the number of distinct elements currently contained.
@@ -419,7 +435,7 @@ public synchronized boolean removeAllOf(DoubleArrayList list) {
  * @throws IllegalArgumentException if <tt>!withReplacement && n > size()</tt>.
  * @see cern.jet.random.sampling
  */
-public synchronized void sample(int n, boolean withReplacement, edu.cornell.lassp.houle.RngPack.RandomElement randomGenerator, cern.colt.buffer.DoubleBuffer buffer) {
+public synchronized void sample(int n, boolean withReplacement, RandomEngine randomGenerator, cern.colt.buffer.DoubleBuffer buffer) {
 	if (randomGenerator==null) randomGenerator = cern.jet.random.Uniform.makeDefaultGenerator();
 	buffer.clear();
 	
@@ -514,7 +530,7 @@ hep.aida.bin.DynamicBin1D X = new hep.aida.bin.DynamicBin1D();
 hep.aida.bin.DynamicBin1D Y = new hep.aida.bin.DynamicBin1D();
 X.addAllOf(new cern.colt.list.DoubleArrayList(v1));
 Y.addAllOf(new cern.colt.list.DoubleArrayList(v2));
-edu.cornell.lassp.houle.RngPack.RandomElement random = new cern.jet.random.engine.MersenneTwister();
+cern.jet.random.engine.RandomEngine random = new cern.jet.random.engine.MersenneTwister();
 
 // bootstrap resampling of differences of means:
 BinBinFunction1D diff = new BinBinFunction1D() {
@@ -562,7 +578,7 @@ left 90% confidence interval = (5.0,infinity)
 @return a bootstrap bin holding the results of <tt>function</tt> of each resampling step.
 @see cern.colt.GenericPermuting#permutation(long,int)
 */
-public synchronized DynamicBin1D sampleBootstrap(DynamicBin1D other, int resamples, edu.cornell.lassp.houle.RngPack.RandomElement randomGenerator, BinBinFunction1D function) {
+public synchronized DynamicBin1D sampleBootstrap(DynamicBin1D other, int resamples, cern.jet.random.engine.RandomEngine randomGenerator, BinBinFunction1D function) {
 	if (randomGenerator==null) randomGenerator = cern.jet.random.Uniform.makeDefaultGenerator();
 
 	// since "resamples" can be quite large, we care about performance and memory

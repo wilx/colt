@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,7 +8,7 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random.sampling;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import cern.jet.random.engine.RandomEngine;
 /**
  * Space and time efficiently computes a sorted <i>Simple Random Sample Without Replacement (SRSWOR)</i>, that is, a sorted set of <tt>n</tt> random numbers from an interval of <tt>N</tt> numbers;
  * Example: Computing <tt>n=3</tt> random numbers from the interval <tt>[1,50]</tt> may yield the sorted random set <tt>(7,13,47)</tt>.
@@ -111,7 +111,7 @@ public class RandomSampler extends cern.colt.PersistentObject {
 	long my_n;
 	long my_N;
 	long my_low;
-	RandomElement my_RandomGenerator;
+	RandomEngine my_RandomGenerator;
 	//static long negalphainv; // just to determine once and for all the best value for negalphainv
 /**
  * Constructs a random sampler that computes and delivers sorted random sets in blocks.
@@ -123,7 +123,7 @@ public class RandomSampler extends cern.colt.PersistentObject {
  * @param low the interval to choose random numbers from is <tt>[low,low+N-1]</tt>. Hint: If <tt>low==0</tt>, then random numbers will be drawn from the interval <tt>[0,N-1]</tt>.
  * @param randomGenerator a random number generator. Set this parameter to <tt>null</tt> to use the default random number generator.
  */
-public RandomSampler(long n, long N, long low, RandomElement randomGenerator) {
+public RandomSampler(long n, long N, long low, RandomEngine randomGenerator) {
 	if (n<0) throw new IllegalArgumentException("n must be >= 0");
 	if (n>N) throw new IllegalArgumentException("n must by <= N");
 	this.my_n=n;
@@ -138,7 +138,7 @@ public RandomSampler(long n, long N, long low, RandomElement randomGenerator) {
  */
 public Object clone() {
 	RandomSampler copy = (RandomSampler) super.clone();
-	copy.my_RandomGenerator = (RandomElement) this.my_RandomGenerator.clone();
+	copy.my_RandomGenerator = (RandomEngine) this.my_RandomGenerator.clone();
 	return copy;
 }
 /**
@@ -195,7 +195,7 @@ public void nextBlock(int count, long[] values, int fromIndex) {
  * @param fromIndex the first index within <tt>values</tt> to be filled with numbers (inclusive).
  * @param randomGenerator a random number generator.
  */
-protected static void rejectMethodD(long n, long N, int count, long low, long[] values, int fromIndex, RandomElement randomGenerator) {
+protected static void rejectMethodD(long n, long N, int count, long low, long[] values, int fromIndex, RandomEngine randomGenerator) {
 	/*  This algorithm is applicable if a large percentage (90%..100%) of N shall be sampled.
 		In such cases it is more efficient than sampleMethodA() and sampleMethodD().
 	    The idea is that it is more efficient to express
@@ -308,7 +308,7 @@ protected static void rejectMethodD(long n, long N, int count, long low, long[] 
  * @param fromIndex the first index within <tt>values</tt> to be filled with numbers (inclusive).
  * @param randomGenerator a random number generator. Set this parameter to <tt>null</tt> to use the default random number generator.
  */
-public static void sample(long n, long N, int count, long low, long[] values, int fromIndex, RandomElement randomGenerator) {
+public static void sample(long n, long N, int count, long low, long[] values, int fromIndex, RandomEngine randomGenerator) {
 	if (n<=0 || count<=0) return;
 	if (count>n) throw new IllegalArgumentException("count must not be greater than n");
 	if (randomGenerator==null) randomGenerator = cern.jet.random.AbstractDistribution.makeDefaultGenerator();
@@ -346,7 +346,7 @@ public static void sample(long n, long N, int count, long low, long[] values, in
  * @param fromIndex the first index within <tt>values</tt> to be filled with numbers (inclusive).
  * @param randomGenerator a random number generator.
  */
-protected static void sampleMethodA(long n, long N, int count, long low, long[] values, int fromIndex, RandomElement randomGenerator) {
+protected static void sampleMethodA(long n, long N, int count, long low, long[] values, int fromIndex, RandomEngine randomGenerator) {
 	double V, quot, Nreal, top;
 	long S;
 	long chosen = -1+low;
@@ -394,7 +394,7 @@ protected static void sampleMethodA(long n, long N, int count, long low, long[] 
  * @param fromIndex the first index within <tt>values</tt> to be filled with numbers (inclusive).
  * @param randomGenerator a random number generator.
  */
-protected static void sampleMethodD(long n, long N, int count, long low, long[] values, int fromIndex, RandomElement randomGenerator) {
+protected static void sampleMethodD(long n, long N, int count, long low, long[] values, int fromIndex, RandomEngine randomGenerator) {
 	double nreal, Nreal, ninv, nmin1inv, U, X, Vprime, y1, y2, top, bottom, negSreal, qu1real;
 	long qu1, threshold, t, limit;
 	long S;

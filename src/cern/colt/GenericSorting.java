@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -152,7 +152,6 @@ public class GenericSorting extends Object {
  */
 protected GenericSorting() {}
 /**
- * See jal.DOUBLE.Sorting
  * Transforms two consecutive sorted ranges into a single sorted 
  * range.  The initial ranges are <code>[first, middle)</code>
  * and <code>[middle, last)</code>, and the resulting range is
@@ -200,7 +199,6 @@ private static void inplace_merge(int first, int middle, int last, IntComparator
 	inplace_merge(middle, secondCut, last, comp, swapper);
 }
 /**
- * See jal.DOUBLE.Sorting
  * Performs a binary search on an already-sorted range: finds the first
  * position where an element can be inserted without violating the ordering.
  * Sorting is by a user-supplied comparison function.
@@ -392,7 +390,6 @@ private static void quickSort1(int off, int len, IntComparator comp, Swapper swa
 		quickSort1(n-s, s, comp, swapper);
 }
 /** 
- * See jal.DOUBLE.Sorting
  * Reverses a sequence of elements.
  * @param array      Array containing the sequence
  * @param first      Beginning of the range
@@ -407,7 +404,6 @@ private static void reverse(int first, int last, Swapper swapper) {
 	}
 }
 /**
- * See jal.DOUBLE.Sorting
  * Rotate a range in place: <code>array[middle]</code> is put in
  * <code>array[first]</code>, <code>array[middle+1]</code> is put in
  * <code>array[first+1]</code>, etc.  Generally, the element in position
@@ -428,7 +424,6 @@ public static void rotate(int first, int middle, int last, Swapper swapper) {
 	}
 }
 /**
- * See jal.DOUBLE.Sorting
  * Performs a binary search on an already-sorted range: finds the last
  * position where an element can be inserted without violating the ordering.
  * Sorting is by a user-supplied comparison function.

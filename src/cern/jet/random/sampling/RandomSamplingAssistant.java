@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,8 +8,8 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random.sampling;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
 import cern.colt.list.BooleanArrayList;
+import cern.jet.random.engine.RandomEngine;
 /**
  * Conveniently computes a stable <i>Simple Random Sample Without Replacement (SRSWOR)</i> subsequence of <tt>n</tt> elements from a given input sequence of <tt>N</tt> elements;
  * Example: Computing a sublist of <tt>n=3</tt> random elements from a list <tt>(1,...,50)</tt> may yield the sublist <tt>(7,13,47)</tt>.
@@ -38,7 +38,7 @@ public class RandomSamplingAssistant extends cern.colt.PersistentObject {
  * @param N number of elements to choose from (must be &gt;= n).
  * @param randomGenerator a random number generator. Set this parameter to <tt>null</tt> to use the default random number generator.
  */
-public RandomSamplingAssistant(long n, long N, RandomElement randomGenerator) {
+public RandomSamplingAssistant(long n, long N, RandomEngine randomGenerator) {
 	this.n = n;
 	this.sampler = new RandomSampler(n, N, 0, randomGenerator);
 	this.buffer = new long[(int)Math.min(n,MAX_BUFFER_SIZE)];
@@ -68,7 +68,7 @@ protected void fetchNextBlock() {
 /**
  * Returns the used random generator.
  */
-public RandomElement getRandomGenerator() {
+public RandomEngine getRandomGenerator() {
 	return this.sampler.my_RandomGenerator;
 }
 /**

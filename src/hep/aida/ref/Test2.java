@@ -1,9 +1,10 @@
 package hep.aida.ref;
 
-import hep.aida.*;
+import hep.aida.IHistogram1D;
+import hep.aida.IHistogram2D;
+import hep.aida.IHistogram3D;
 
 import java.util.Random;
-import java.io.*;
 
 /**
  * A very(!) basic test of the reference implementations

@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,7 +8,7 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import cern.jet.random.engine.RandomEngine;
 /**
  * Discrete Empirical distribution (pdf's can be specified).
  * <p>
@@ -164,7 +164,7 @@ public class EmpiricalWalker extends AbstractDiscreteDistribution {
  * @param randomGenerator a uniform random number generator.
  * @throws IllegalArgumentException if at least one of the three conditions above is violated.
  */
-public EmpiricalWalker(double[] pdf, int interpolationType, RandomElement randomGenerator) {
+public EmpiricalWalker(double[] pdf, int interpolationType, RandomEngine randomGenerator) {
 	setRandomGenerator(randomGenerator);
 	setState(pdf,interpolationType);	
 	setState2(pdf);	

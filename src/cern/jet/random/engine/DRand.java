@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,7 +8,7 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random.engine;
 
-import java.util.*;
+import java.util.Date;
 /**
  * Quick medium quality uniform pseudo-random number generator.
  *
@@ -36,9 +36,6 @@ import java.util.*;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  * @see MersenneTwister
- * @see edu.cornell.lassp.houle.RngPack.Ranmar
- * @see edu.cornell.lassp.houle.RngPack.Ranlux
- * @see edu.cornell.lassp.houle.RngPack.Ranecu
  * @see java.util.Random
  */
 public class DRand extends RandomEngine {
@@ -63,7 +60,7 @@ public DRand(int seed) {
  * @param d typically <tt>new java.util.Date()</tt>
  */
 public DRand(Date d) {
-	this((int)ClockSeed(d));
+	this((int)d.getTime());
 }
 /**
  * Returns a 32 bit uniformly distributed random number in the closed interval <tt>[Integer.MIN_VALUE,Integer.MAX_VALUE]</tt> (including <tt>Integer.MIN_VALUE</tt> and <tt>Integer.MAX_VALUE</tt>).

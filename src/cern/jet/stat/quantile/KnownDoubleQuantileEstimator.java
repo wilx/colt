@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,10 +8,10 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.stat.quantile;
 
-import cern.colt.list.*;
+import cern.colt.list.DoubleArrayList;
 import cern.jet.math.Arithmetic;
+import cern.jet.random.engine.RandomEngine;
 import cern.jet.random.sampling.RandomSamplingAssistant;
-import edu.cornell.lassp.houle.RngPack.RandomElement;
 /**
  * Approximate quantile finding algorithm for known <tt>N</tt> requiring only one pass and little main memory; computes quantiles over a sequence of <tt>double</tt> elements.
  *
@@ -53,7 +53,7 @@ class KnownDoubleQuantileEstimator extends DoubleQuantileEstimator {
  * @param samplingRate 1.0 --> all elements are consumed. 10.0 --> Consumes one random element from successive blocks of 10 elements each. Etc.
  * @param generator a uniform random number generator.
  */
-public KnownDoubleQuantileEstimator(int b, int k, long N, double samplingRate, RandomElement generator) {
+public KnownDoubleQuantileEstimator(int b, int k, long N, double samplingRate, RandomEngine generator) {
 	this.samplingRate = samplingRate;
 	this.N = N;
 

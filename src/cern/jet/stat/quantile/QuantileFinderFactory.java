@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -10,7 +10,7 @@ package cern.jet.stat.quantile;
 
 //import cern.it.util.Doubles;
 import cern.jet.math.Arithmetic;
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import cern.jet.random.engine.RandomEngine;
 /**
  * Factory constructing exact and approximate quantile finders for both known and unknown <tt>N</tt>.
  * Also see {@link hep.aida.bin.QuantileBin1D}, demonstrating how this package can be used.
@@ -322,7 +322,7 @@ protected static long[] known_N_compute_B_and_K_slow(long N, double epsilon, dou
  * @param generator a uniform random number generator. Set this parameter to <tt>null</tt> to use a default generator.
  * @return the quantile finder minimizing memory requirements under the given constraints.
  */
-public static DoubleQuantileFinder newDoubleQuantileFinder(boolean known_N, long N, double epsilon, double delta, int quantiles, RandomElement generator) {
+public static DoubleQuantileFinder newDoubleQuantileFinder(boolean known_N, long N, double epsilon, double delta, int quantiles, RandomEngine generator) {
 	//boolean known_N = true;
 	//if (N==Long.MAX_VALUE) known_N = false;
 	// check parameters.

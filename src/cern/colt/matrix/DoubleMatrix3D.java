@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,9 +8,9 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.colt.matrix;
 
-import cern.colt.matrix.impl.AbstractMatrix3D;
-import cern.colt.list.IntArrayList;
 import cern.colt.list.DoubleArrayList;
+import cern.colt.list.IntArrayList;
+import cern.colt.matrix.impl.AbstractMatrix3D;
 /**
 Abstract base class for 3-d matrices holding <tt>double</tt> elements.
 First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.

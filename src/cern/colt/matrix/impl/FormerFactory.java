@@ -1,5 +1,6 @@
 package cern.colt.matrix.impl;
 
+
 /**
  * Factory producing implementations of {@link cern.colt.matrix.impl.Former} via method create();
  * Implementations of can use existing libraries such as corejava.PrintfFormat or corejava.Format or other.
@@ -45,6 +46,7 @@ public class FormerFactory {
  */
 public Former create(final String format) {
 	return new Former() {
+		//private FormatStringBuffer f = (format!=null ? new corejava.FormatStringBuffer(format) : null);
 		private corejava.Format f = (format!=null ? new corejava.Format(format) : null);
 		//private corejava.PrintfFormat f = (format!=null ? new corejava.PrintfFormat(format) : null);
 		public String form(double value) {
@@ -53,7 +55,8 @@ public Former create(final String format) {
 				// Work around bug in corejava.Format.form() for inf, -inf, NaN
 				return String.valueOf(value);
 			}
-		return f.form(value);
+		//return f.format(value).toString();
+		return f.format(value);
 		//return f.sprintf(value);
 		}
 	};

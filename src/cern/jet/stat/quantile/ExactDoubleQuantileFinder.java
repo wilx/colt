@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,8 +8,7 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.stat.quantile;
 
-import cern.colt.list.*;
-import cern.jet.math.Arithmetic;
+import cern.colt.list.DoubleArrayList;
 /**
  * Exact quantile finding algorithm for known and unknown <tt>N</tt> requiring large main memory; computes quantiles over a sequence of <tt>double</tt> elements.
  * The folkore algorithm: Keeps all elements in main memory, sorts the list, then picks the quantiles.

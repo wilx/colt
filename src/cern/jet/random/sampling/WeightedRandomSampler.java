@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,9 +8,9 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random.sampling;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
-import cern.jet.random.Uniform;
 import cern.colt.list.BooleanArrayList;
+import cern.jet.random.Uniform;
+import cern.jet.random.engine.RandomEngine;
 /**
  * Conveniently computes a stable subsequence of elements from a given input sequence;
  * Picks (samples) exactly one random element from successive blocks of <tt>weight</tt> input elements each.
@@ -45,7 +45,7 @@ public WeightedRandomSampler() {
  * @param weight the weight.
  * @param randomGenerator a random number generator. Set this parameter to <tt>null</tt> to use the default random number generator.
  */
-public WeightedRandomSampler(int weight, RandomElement randomGenerator) {
+public WeightedRandomSampler(int weight, RandomEngine randomGenerator) {
 	if (randomGenerator==null) randomGenerator = cern.jet.random.AbstractDistribution.makeDefaultGenerator();
 	this.generator = new Uniform(randomGenerator);
 	setWeight(weight);

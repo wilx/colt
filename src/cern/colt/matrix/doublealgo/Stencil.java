@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,7 +8,10 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.colt.matrix.doublealgo;
 
-import cern.colt.matrix.*;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.DoubleMatrix2DProcedure;
+import cern.colt.matrix.DoubleMatrix3D;
+import cern.colt.matrix.DoubleMatrix3DProcedure;
 /**
 Stencil operations. For efficient finite difference operations.
 Applies a function to a moving <tt>3 x 3</tt> or <tt>3 x 3 x 3</tt> window.

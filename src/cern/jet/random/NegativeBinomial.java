@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,7 +8,7 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import cern.jet.random.engine.RandomEngine;
 import cern.jet.stat.Probability;
 /**
  * Negative Binomial distribution; See the <A HREF="http://www.statlets.com/usermanual/glossary2.htm"> math definition</A>.
@@ -43,7 +43,7 @@ public class NegativeBinomial extends AbstractDiscreteDistribution {
  * @param p the probability of success.
  * @param randomGenerator a uniform random number generator.
  */
-public NegativeBinomial(int n, double p, RandomElement randomGenerator) {
+public NegativeBinomial(int n, double p, RandomEngine randomGenerator) {
 	setRandomGenerator(randomGenerator);
 	setNandP(n,p);
 	this.gamma = new Gamma(n,1.0,randomGenerator);
@@ -144,7 +144,7 @@ public String toString() {
  * Sets the uniform random number generated shared by all <b>static</b> methods.
  * @param randomGenerator the new uniform random number generator to be shared.
  */
-private static void xstaticSetRandomGenerator(RandomElement randomGenerator) {
+private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
 	synchronized (shared) {
 		shared.setRandomGenerator(randomGenerator);
 	}

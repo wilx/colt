@@ -186,7 +186,6 @@ protected void setUp(int rows, int columns) {
  */
 protected void setUp(int rows, int columns, int rowZero, int columnZero, int rowStride, int columnStride) {
 	if (rows<0 || columns<0) throw new IllegalArgumentException("negative size");
-	if ((double)columns*rows > Integer.MAX_VALUE) throw new IllegalArgumentException("matrix too large");
 	this.rows = rows;
 	this.columns = columns;
 	
@@ -197,6 +196,7 @@ protected void setUp(int rows, int columns, int rowZero, int columnZero, int row
 	this.columnStride = columnStride;
 	
 	this.isNoView = true;
+	if ((double)columns*rows > Integer.MAX_VALUE) throw new IllegalArgumentException("matrix too large");
 }
 /**
  * Returns the number of cells which is <tt>rows()*columns()</tt>.

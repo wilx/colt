@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,7 +8,7 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import cern.jet.random.engine.RandomEngine;
 /**
  * Abstract base class for all random distributions.
  *
@@ -21,11 +21,7 @@ import edu.cornell.lassp.houle.RngPack.RandomElement;
  * {@link #makeDefaultGenerator()} will conveniently construct and return such a magic thing.
  * You can also, for example, use {@link cern.jet.random.engine.DRand}, a quicker (but much weaker) uniform random number generation engine.
  * Of course, you can also use other strong uniform random number generation engines. 
- * Paul Houle's RngPack package contains some such beasts;
- * {@link edu.cornell.lassp.houle.RngPack.Ranecu}, {@link edu.cornell.lassp.houle.RngPack.Ranecu} and {@link edu.cornell.lassp.houle.RngPack.Ranlux}
- * are strong well analyzed research grade uniform pseudo-random number generators with known periods.
  *
- * More info on RngPack can be found <A HREF="http://www.honeylocust.com/RngPack/"> here</A>.
  * <p>
  * <b>Ressources on the Web:</b>
  * <dt>Check the Web version of the <A HREF="http://www.cern.ch/RD11/rkb/AN16pp/node1.html"> CERN Data Analysis Briefbook </A>. This will clarify the definitions of most distributions.
@@ -42,14 +38,13 @@ import edu.cornell.lassp.houle.RngPack.RandomElement;
  * <dt>Finally, a good link list <A HREF="http://www.execpc.com/~helberg/statistics.html"> Statistics on the Web</A>.
  * <p>
  * @see cern.jet.random.engine
- * @see edu.cornell.lassp.houle.RngPack
  * @see cern.jet.random.engine.Benchmark
  * @see cern.jet.random.Benchmark
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
 public abstract class AbstractDistribution extends cern.colt.PersistentObject implements cern.colt.function.DoubleFunction, cern.colt.function.IntFunction {
-	protected RandomElement randomGenerator;
+	protected RandomEngine randomGenerator;
 /**
  * Makes this class non instantiable, but still let's others inherit from it.
  */
@@ -76,20 +71,20 @@ public int apply(int dummy) {
  */
 public Object clone() {
 	AbstractDistribution copy = (AbstractDistribution) super.clone();
-	if (this.randomGenerator != null) copy.randomGenerator = (RandomElement) this.randomGenerator.clone();
+	if (this.randomGenerator != null) copy.randomGenerator = (RandomEngine) this.randomGenerator.clone();
 	return copy;
 }
 /**
  * Returns the used uniform random number generator;
  */
-protected RandomElement getRandomGenerator() {
+protected RandomEngine getRandomGenerator() {
 	return randomGenerator;
 }
 /**
  * Constructs and returns a new uniform random number generation engine seeded with the current time.
  * Currently this is {@link cern.jet.random.engine.MersenneTwister}.
  */
-public static RandomElement makeDefaultGenerator() {
+public static RandomEngine makeDefaultGenerator() {
 	return cern.jet.random.engine.RandomEngine.makeDefault();
 }
 /**
@@ -106,7 +101,7 @@ public int nextInt() {
 /**
  * Sets the uniform random generator internally used.
  */
-protected void setRandomGenerator(RandomElement randomGenerator) {
+protected void setRandomGenerator(RandomEngine randomGenerator) {
 	this.randomGenerator = randomGenerator;
 }
 }

@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -86,7 +86,6 @@ Swapper swapper = new Swapper() {
 
 @see cern.colt.Swapper
 @see cern.colt.GenericSorting
-@see jal.INT.Sorting
 
 @author wolfgang.hoschek@cern.ch
 @version 1.0, 10-Oct-99

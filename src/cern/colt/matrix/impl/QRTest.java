@@ -1,12 +1,8 @@
 package cern.colt.matrix.impl;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-import java.math.*;
-
-import cern.colt.matrix.*;
-import cern.colt.matrix.linalg.*;
+import cern.colt.matrix.DoubleFactory2D;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.linalg.Algebra;
 
 //import Jama.Matrix.*;
 //import Jama.*;

@@ -1,14 +1,14 @@
 package cern.jet.random.engine;
 
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
 CERN makes no representations about the suitability of this software for any purpose. 
 It is provided "as is" without expressed or implied warranty.
 */
-import java.util.*;
+import java.util.Date;
 /**
 MersenneTwister (MT19937) is one of the strongest uniform pseudo-random number generators known so far; at the same time it is quick.
 Produces uniformly distributed <tt>int</tt>'s and <tt>long</tt>'s in the closed intervals <tt>[Integer.MIN_VALUE,Integer.MAX_VALUE]</tt> and <tt>[Long.MIN_VALUE,Long.MAX_VALUE]</tt>, respectively, 
@@ -108,9 +108,6 @@ These operations generate sequences of 32 random bits (<tt>int</tt>'s).
 <p>
 @author wolfgang.hoschek@cern.ch
 @version 1.0, 09/24/99
-@see edu.cornell.lassp.houle.RngPack.Ranmar
-@see edu.cornell.lassp.houle.RngPack.Ranlux
-@see edu.cornell.lassp.houle.RngPack.Ranecu
 @see java.util.Random
 */
 public class MersenneTwister extends RandomEngine {
@@ -154,7 +151,7 @@ public MersenneTwister(int seed) {
  * @param d typically <tt>new java.util.Date()</tt>
  */
 public MersenneTwister(Date d) {
-	this((int)ClockSeed(d));
+	this((int)d.getTime());
 }
 /**
  * Returns a copy of the receiver; the copy will produce identical sequences.

@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,9 +8,14 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.colt.matrix.doublealgo;
 
-import cern.colt.matrix.*;
-import cern.colt.matrix.impl.*;
-import java.lang.Double;
+import cern.colt.matrix.DoubleMatrix1D;
+import cern.colt.matrix.DoubleMatrix2D;
+import cern.colt.matrix.DoubleMatrix3D;
+import cern.colt.matrix.impl.AbstractFormatter;
+import cern.colt.matrix.impl.AbstractMatrix1D;
+import cern.colt.matrix.impl.AbstractMatrix2D;
+import cern.colt.matrix.impl.DenseDoubleMatrix1D;
+import cern.colt.matrix.impl.Former;
 /** 
 Flexible, well human readable matrix print formatting; By default decimal point aligned. Build on top of the C-like <i>sprintf</i> functionality 
   provided by the {@link corejava.Format} class written by Cay Horstmann.

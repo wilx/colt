@@ -1,6 +1,9 @@
 package hep.aida.ref;
 
-import hep.aida.*;
+import hep.aida.IAxis;
+import hep.aida.IHistogram;
+import hep.aida.IHistogram2D;
+import hep.aida.IHistogram3D;
 /**
 Abstract base class extracting and implementing most of the redundancy of the interface.
 

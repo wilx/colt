@@ -1,5 +1,5 @@
 /*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
+Copyright ï¿½ 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
 is hereby granted without fee, provided that the above copyright notice appear in all copies and 
 that both that copyright notice and this permission notice appear in supporting documentation. 
@@ -8,8 +8,9 @@ It is provided "as is" without expressed or implied warranty.
 */
 package cern.jet.random;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
-import cern.colt.list.*;
+import cern.colt.list.DoubleArrayList;
+import cern.colt.list.IntArrayList;
+import cern.jet.random.engine.RandomEngine;
 /**
  * Benchmarks random number generation from various distributions as well as PDF and CDF lookups.
  *
@@ -17,7 +18,7 @@ import cern.colt.list.*;
  * @version 1.0, 09/24/99
  */
 public class Benchmark extends cern.colt.PersistentObject {
-	protected RandomElement randomGenerator;
+	protected RandomEngine randomGenerator;
 /**
  * Makes this class non instantiable, but still let's others inherit from it.
  */
@@ -74,77 +75,77 @@ public static void random(int size, boolean print, double mean, String generator
 
 	//int large = 100000000;
 	int largeVariance = 100;
-	RandomElement gen; // = new MersenneTwister();
+	RandomEngine gen; // = new MersenneTwister();
 	try {
-		gen = (RandomElement) Class.forName(generatorName).newInstance();
+		gen = (RandomEngine) Class.forName(generatorName).newInstance();
 	} catch (Exception exc) {
 		throw new InternalError(exc.getMessage());
 	}
 
 	/*
-	randomInstance(size,print,new Zeta(10.0, 10.0,(RandomElement)gen.clone()));
-	randomInstance(size,print,new Zeta(1.0, 1.0, (RandomElement)gen.clone()));
-	randomInstance(size,print,new Zeta(mean, mean, (RandomElement)gen.clone()));
-	randomInstance(size,print,new Zeta(mean, 1/mean, (RandomElement)gen.clone()));
-	//randomInstance(size,print,new Zeta(1/mean, mean, (RandomElement)gen.clone()));
+	randomInstance(size,print,new Zeta(10.0, 10.0,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new Zeta(1.0, 1.0, (RandomEngine)gen.clone()));
+	randomInstance(size,print,new Zeta(mean, mean, (RandomEngine)gen.clone()));
+	randomInstance(size,print,new Zeta(mean, 1/mean, (RandomEngine)gen.clone()));
+	//randomInstance(size,print,new Zeta(1/mean, mean, (RandomEngine)gen.clone()));
 */
 
 	/*
 	
-	randomInstance(size,print,new Beta(10.0, 10.0,(RandomElement)gen.clone()));
-	randomInstance(size,print,new Beta(1.0, 1.0, (RandomElement)gen.clone()));
-	randomInstance(size,print,new Beta(mean, mean, (RandomElement)gen.clone()));
-	randomInstance(size,print,new Beta(mean, 1/mean, (RandomElement)gen.clone()));
-	randomInstance(size,print,new Beta(1/mean, mean, (RandomElement)gen.clone()));
+	randomInstance(size,print,new Beta(10.0, 10.0,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new Beta(1.0, 1.0, (RandomEngine)gen.clone()));
+	randomInstance(size,print,new Beta(mean, mean, (RandomEngine)gen.clone()));
+	randomInstance(size,print,new Beta(mean, 1/mean, (RandomEngine)gen.clone()));
+	randomInstance(size,print,new Beta(1/mean, mean, (RandomEngine)gen.clone()));
 	
-	randomInstance(size,print,new Uniform((RandomElement)gen.clone()));
+	randomInstance(size,print,new Uniform((RandomEngine)gen.clone()));
 	*/
-	randomInstance(size,print,new Poisson(mean,(RandomElement)gen.clone()));
+	randomInstance(size,print,new Poisson(mean,(RandomEngine)gen.clone()));
 	/*
-	randomInstance(size,print,new PoissonSlow(mean,(RandomElement)gen.clone()));
+	randomInstance(size,print,new PoissonSlow(mean,(RandomEngine)gen.clone()));
 	
-	randomInstance(size,print,new Poisson(3.0,(RandomElement)gen.clone()));
-	randomInstance(size,print,new PoissonSlow(3.0,(RandomElement)gen.clone()));
+	randomInstance(size,print,new Poisson(3.0,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new PoissonSlow(3.0,(RandomEngine)gen.clone()));
 	
-	randomInstance(size,print,new Binomial(1,0.5,(RandomElement)gen.clone()));
-	randomInstance(size,print,new Binomial(5,0.3,(RandomElement)gen.clone()));
-	randomInstance(size,print,new Binomial((int)mean,0.999999999,(RandomElement)gen.clone()));
-	randomInstance(size,print,new Binomial((int)mean,1.0/mean,(RandomElement)gen.clone()));
+	randomInstance(size,print,new Binomial(1,0.5,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new Binomial(5,0.3,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new Binomial((int)mean,0.999999999,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new Binomial((int)mean,1.0/mean,(RandomEngine)gen.clone()));
 	
-	randomInstance(size,print,new Exponential(1.0,(RandomElement)gen.clone()));
-	randomInstance(size,print,new Exponential(3.0,(RandomElement)gen.clone()));
+	randomInstance(size,print,new Exponential(1.0,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new Exponential(3.0,(RandomEngine)gen.clone()));
 	
-	randomInstance(size,print,new Normal(0.0,1.0,(RandomElement)gen.clone()));
-	randomInstance(size,print,new Normal(3.0,1.0,(RandomElement)gen.clone()));
-	randomInstance(size,print,new Normal(mean,largeVariance,(RandomElement)gen.clone()));
+	randomInstance(size,print,new Normal(0.0,1.0,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new Normal(3.0,1.0,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new Normal(mean,largeVariance,(RandomEngine)gen.clone()));
 	
-	randomInstance(size,print,new BreitWigner(1.0, 0.2, Double.NEGATIVE_INFINITY, (RandomElement)gen.clone()));
-	randomInstance(size,print,new BreitWigner(1.0, 0.2, 1.0, (RandomElement)gen.clone()));
+	randomInstance(size,print,new BreitWigner(1.0, 0.2, Double.NEGATIVE_INFINITY, (RandomEngine)gen.clone()));
+	randomInstance(size,print,new BreitWigner(1.0, 0.2, 1.0, (RandomEngine)gen.clone()));
 	
-	randomInstance(size,print,new BreitWignerMeanSquare(1.0, 0.2, Double.NEGATIVE_INFINITY, (RandomElement)gen.clone()));	
-	randomInstance(size,print,new BreitWignerMeanSquare(1.0, 0.2, 1.0, (RandomElement)gen.clone()));
+	randomInstance(size,print,new BreitWignerMeanSquare(1.0, 0.2, Double.NEGATIVE_INFINITY, (RandomEngine)gen.clone()));	
+	randomInstance(size,print,new BreitWignerMeanSquare(1.0, 0.2, 1.0, (RandomEngine)gen.clone()));
 	
-	randomInstance(size,print,new ChiSquare(1.0,(RandomElement)gen.clone()));
-	randomInstance(size,print,new ChiSquare(5.0,(RandomElement)gen.clone()));
-	randomInstance(size,print,new ChiSquare(mean,(RandomElement)gen.clone()));
+	randomInstance(size,print,new ChiSquare(1.0,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new ChiSquare(5.0,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new ChiSquare(mean,(RandomEngine)gen.clone()));
 	
-	randomInstance(size,print,new Gamma(0.2,1.0,(RandomElement)gen.clone()));
-	randomInstance(size,print,new Gamma(1.0,1.0,(RandomElement)gen.clone()));
-	randomInstance(size,print,new Gamma(3.0,0.5,(RandomElement)gen.clone()));
-	randomInstance(size,print,new Gamma(mean,0.5,(RandomElement)gen.clone()));
-	randomInstance(size,print,new Gamma(mean,1.0/mean,(RandomElement)gen.clone()));
-	randomInstance(size,print,new Gamma(mean,mean,(RandomElement)gen.clone()));
+	randomInstance(size,print,new Gamma(0.2,1.0,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new Gamma(1.0,1.0,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new Gamma(3.0,0.5,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new Gamma(mean,0.5,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new Gamma(mean,1.0/mean,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new Gamma(mean,mean,(RandomEngine)gen.clone()));
 	
-	randomInstance(size,print,new StudentT(1.0,(RandomElement)gen.clone()));
-	randomInstance(size,print,new StudentT(2.5,(RandomElement)gen.clone()));
-	randomInstance(size,print,new StudentT(mean,(RandomElement)gen.clone()));
-	randomInstance(size,print,new StudentT(1.0/mean,(RandomElement)gen.clone()));
+	randomInstance(size,print,new StudentT(1.0,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new StudentT(2.5,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new StudentT(mean,(RandomEngine)gen.clone()));
+	randomInstance(size,print,new StudentT(1.0/mean,(RandomEngine)gen.clone()));
 
 	int probs = 10000;
 	double[] pdf = new double[probs];
 	for (int i=0; i<probs; i++) pdf[i]=i*i; // prepare f(x)=x^2 distrib.
-	randomInstance(size,print,new Empirical(pdf,Empirical.NO_INTERPOLATION, (RandomElement)gen.clone()));
-	randomInstance(size,print,new Empirical(pdf,Empirical.LINEAR_INTERPOLATION, (RandomElement)gen.clone()));
+	randomInstance(size,print,new Empirical(pdf,Empirical.NO_INTERPOLATION, (RandomEngine)gen.clone()));
+	randomInstance(size,print,new Empirical(pdf,Empirical.LINEAR_INTERPOLATION, (RandomEngine)gen.clone()));
 	*/
 }
 /**
