@@ -356,7 +356,7 @@ protected abstract String[][] format(AbstractMatrix2D matrix);
  */
 protected String[] formatRow(AbstractMatrix1D vector) {
 	Former formatter = null;
-	if (format != null) formatter = factory.create(format);
+	formatter = factory.create(format);
 	int s = vector.size();
 	String[] strings = new String[s];
 	for (int i=0; i<s; i++) {

@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: ProperyChangeMulticaster.java
 
@@ -16,6 +14,8 @@ package edu.oswego.cs.dl.util.concurrent;
   Date       Who                What
   14Mar1999   dl                 first release
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 import java.beans.VetoableChangeListener;
 import java.beans.PropertyChangeEvent;
@@ -103,7 +103,7 @@ import java.io.IOException;
  *
  * }
  * </pre>   
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 
 public class VetoableChangeMulticaster implements Serializable {
@@ -133,6 +133,16 @@ public class VetoableChangeMulticaster implements Serializable {
   protected HashMap children;
 
   /**
+   * Return the child associated with property, or null if no such
+   **/
+
+  protected synchronized VetoableChangeMulticaster getChild(String propertyName) {
+    return (children == null)? null : 
+      ((VetoableChangeMulticaster)children.get(propertyName));
+  }
+
+
+  /**
    * Constructs a <code>VetoableChangeMulticaster</code> object.
    *
    * @param sourceBean  The bean to be given as the source for any events.
@@ -140,12 +150,13 @@ public class VetoableChangeMulticaster implements Serializable {
    */
   
   public VetoableChangeMulticaster(Object sourceBean) {
-	if (sourceBean == null) {
-	  throw new NullPointerException();
-	}
+    if (sourceBean == null) {
+      throw new NullPointerException();
+    }
 
-	source = sourceBean;
-  }  
+    source = sourceBean;
+  }
+
   /**
    * Add a VetoableChangeListener to the listener list.
    * The listener is registered for all properties.
@@ -157,48 +168,16 @@ public class VetoableChangeMulticaster implements Serializable {
   
   public synchronized void addVetoableChangeListener(VetoableChangeListener listener) {
 
-	if (listener == null) throw new NullPointerException();
+    if (listener == null) throw new NullPointerException();
 
-	int len = listeners.length;
-	VetoableChangeListener[] newArray = new VetoableChangeListener[len + 1];
-	if (len > 0)
-	  System.arraycopy(listeners, 0, newArray, 0, len);
-	newArray[len] = listener;
-	listeners = newArray;
-  }  
-  /**
-   * Add a VetoableChangeListener for a specific property.  The listener
-   * will be invoked only when a call on fireVetoableChange names that
-   * specific property. However, if a listener is registered both for all
-   * properties and a specific property, it will receive multiple 
-   * notifications upon changes to that property.
-   *
-   * @param propertyName  The name of the property to listen on.
-   * @param listener  The VetoableChangeListener to be added
-   * @exception NullPointerException If listener is null
-   */
-  
-  public void addVetoableChangeListener(String propertyName,
-										VetoableChangeListener listener) {
+    int len = listeners.length;
+    VetoableChangeListener[] newArray = new VetoableChangeListener[len + 1];
+    if (len > 0)
+      System.arraycopy(listeners, 0, newArray, 0, len);
+    newArray[len] = listener;
+    listeners = newArray;
+  }
 
-	if (listener == null) throw new NullPointerException();
-
-	VetoableChangeMulticaster child = null;
-
-	synchronized(this) {
-	  if (children == null) 
-		children = new HashMap();
-	  else 
-		child = (VetoableChangeMulticaster)children.get(propertyName);
-	  
-	  if (child == null) {
-		child = new VetoableChangeMulticaster(source);
-		children.put(propertyName, child);
-	  }
-	}
-
-	child.addVetoableChangeListener(listener);
-  }  
   /**
    * Add a PropertyChangeListener to the listener list if it is 
    * not already present.
@@ -212,19 +191,93 @@ public class VetoableChangeMulticaster implements Serializable {
   
   public synchronized void addVetoableChangeListenerIfAbsent(VetoableChangeListener listener) {
 
-	if (listener == null) throw new NullPointerException();
+    if (listener == null) throw new NullPointerException();
 
-	// Copy while checking if already present.
-	int len = listeners.length; 
-	VetoableChangeListener[] newArray = new VetoableChangeListener[len + 1];
-	for (int i = 0; i < len; ++i) {
-	  newArray[i] = listeners[i];
-	  if (listener.equals(listeners[i]))
+    // Copy while checking if already present.
+    int len = listeners.length; 
+    VetoableChangeListener[] newArray = new VetoableChangeListener[len + 1];
+    for (int i = 0; i < len; ++i) {
+      newArray[i] = listeners[i];
+      if (listener.equals(listeners[i]))
 	return; // already present -- throw away copy
-	}
-	newArray[len] = listener;
-	listeners = newArray;
-  }  
+    }
+    newArray[len] = listener;
+    listeners = newArray;
+  }
+
+
+  /**
+   * Remove an occurrence of a VetoableChangeListener from the listener list.
+   * It removes at most one occurrence of the given listener.
+   * If the listener was added multiple times it must be removed
+   * mulitple times.
+   * This removes a VetoableChangeListener that was registered
+   * for all properties, and has no effect if registered for only
+   * one or more specified properties.
+   *
+   * @param listener  The VetoableChangeListener to be removed
+   */
+  
+  public synchronized void removeVetoableChangeListener(VetoableChangeListener listener) {
+
+    int newlen = listeners.length-1;
+    if (newlen < 0 || listener == null) return;
+
+    // Copy while searching for element to remove
+
+    VetoableChangeListener[] newArray = new VetoableChangeListener[newlen];
+
+    for (int i = 0; i < newlen; ++i) { 
+      if (listener.equals(listeners[i])) {
+        //  copy remaining and exit
+        for (int k = i + 1; k <= newlen; ++k) newArray[k-1] = listeners[k];
+        listeners = newArray;
+        return;
+      }
+      else
+        newArray[i] = listeners[i];
+    }
+    
+    // special-case last cell
+    if (listener.equals(listeners[newlen]))
+      listeners = newArray;
+
+  }
+
+  /**
+   * Add a VetoableChangeListener for a specific property.  The listener
+   * will be invoked only when a call on fireVetoableChange names that
+   * specific property. However, if a listener is registered both for all
+   * properties and a specific property, it will receive multiple 
+   * notifications upon changes to that property.
+   *
+   * @param propertyName  The name of the property to listen on.
+   * @param listener  The VetoableChangeListener to be added
+   * @exception NullPointerException If listener is null
+   */
+  
+  public void addVetoableChangeListener(String propertyName,
+                                        VetoableChangeListener listener) {
+
+    if (listener == null) throw new NullPointerException();
+
+    VetoableChangeMulticaster child = null;
+
+    synchronized(this) {
+      if (children == null) 
+        children = new HashMap();
+      else 
+        child = (VetoableChangeMulticaster)children.get(propertyName);
+      
+      if (child == null) {
+        child = new VetoableChangeMulticaster(source);
+        children.put(propertyName, child);
+      }
+    }
+
+    child.addVetoableChangeListener(listener);
+  }
+
   /**
    * Add a VetoableChangeListener for a specific property, if it is not
    * already registered.  The listener
@@ -237,82 +290,103 @@ public class VetoableChangeMulticaster implements Serializable {
    */
   
   public void addVetoableChangeListenerIfAbsent(String propertyName,
-										VetoableChangeListener listener) {
+                                        VetoableChangeListener listener) {
 
-	if (listener == null) throw new NullPointerException();
+    if (listener == null) throw new NullPointerException();
 
-	VetoableChangeMulticaster child = null;
+    VetoableChangeMulticaster child = null;
 
-	synchronized(this) {
-	  if (children == null) 
-		children = new HashMap();
-	  else 
-		child = (VetoableChangeMulticaster)children.get(propertyName);
-	  
-	  if (child == null) {
-		child = new VetoableChangeMulticaster(source);
-		children.put(propertyName, child);
-	  }
-	}
+    synchronized(this) {
+      if (children == null) 
+        children = new HashMap();
+      else 
+        child = (VetoableChangeMulticaster)children.get(propertyName);
+      
+      if (child == null) {
+        child = new VetoableChangeMulticaster(source);
+        children.put(propertyName, child);
+      }
+    }
 
-	child.addVetoableChangeListenerIfAbsent(listener);
-  }  
+    child.addVetoableChangeListenerIfAbsent(listener);
+  }
+
+
   /**
-   * Report a vetoable property update to any registered listeners. 
-   * Notifications are sent serially (although in no particular order)
-   * to the list of listeners,
-   * aborting if one throws PropertyVetoException. Upon this exception,
-   * fire a new event reverting this
-   * change to all listeners that have already been notified
-   * (ignoring any further vetos), 
-   * suppress notifications to all other listeners, and
-   * then rethrow the PropertyVetoException.
-   * <p>
-   * No event is fired if old and new are equal and non-null.
+   * Remove a VetoableChangeListener for a specific property.
+   * Affects only the given property. 
+   * If the listener is also registered for all properties,
+   * then it will continue to be registered for them.
    *
-   * equal and non-null.
-   * @param evt  The PropertyChangeEvent object.
-   * @exception PropertyVetoException if the recipient wishes the property
-   *              change to be rolled back.
+   * @param propertyName  The name of the property that was listened on.
+   * @param listener  The VetoableChangeListener to be removed
    */
-  public void fireVetoableChange(PropertyChangeEvent evt) throws PropertyVetoException {
-	Object oldValue = evt.getOldValue();
-	Object newValue = evt.getNewValue();
-	if (oldValue == null || newValue == null || !oldValue.equals(newValue)) 
-	  multicast(evt);
-  }  
+  
+  public void removeVetoableChangeListener(String propertyName,
+                                           VetoableChangeListener listener) {
+
+    VetoableChangeMulticaster child = getChild(propertyName);
+    if (child != null) 
+      child.removeVetoableChangeListener(listener);
+  }
+
+
   /**
-   * Report a vetoable property update to any registered listeners. 
-   * Notifications are sent serially (although in no particular order)
-   * to the list of listeners,
-   * aborting if one throws PropertyVetoException. Upon this exception,
-   * fire a new event reverting this
-   * change to all listeners that have already been notified
-   * (ignoring any further vetos), 
-   * suppress notifications to all other listeners, and
-   * then rethrow the PropertyVetoException.
-   * <p>
-   * No event is fired if old and new are equal.
-   * <p>
-   * This is merely a convenience wrapper around the more general
-   * fireVetoableChange method that takes Object values.
-   *
-   * @param propertyName  The programmatic name of the property
-   *		that was changed.
-   * @param oldValue  The old value of the property.
-   * @param newValue  The new value of the property.
-   * @exception PropertyVetoException if the recipient wishes the property
-   *              change to be rolled back.
-   */
-  public void fireVetoableChange(String propertyName, 
-								 int oldValue, int newValue) throws PropertyVetoException {
-	if (oldValue != newValue) {
-	  multicast(new PropertyChangeEvent(source,
-										propertyName, 
-										new Integer(oldValue), 
-										new Integer(newValue)));
-	}
-  }  
+   * Helper method to relay evt to all listeners. 
+   * Called by all public fireVetoableChange methods.
+   **/
+
+  protected void multicast(PropertyChangeEvent evt) throws PropertyVetoException {
+
+    VetoableChangeListener[] array;  // bind in synch block below
+    VetoableChangeMulticaster child = null;
+
+    synchronized (this) {
+      array = listeners;
+
+      if (children != null && evt.getPropertyName() != null)
+        child = (VetoableChangeMulticaster)children.get(evt.getPropertyName());
+    }
+
+    // Loop through array, and then cascade to child.
+    
+    int i = 0; // make visible to catch clause
+
+    try {
+      for (i = 0; i < array.length; ++i)
+        array[i].vetoableChange(evt);
+
+      if  (child != null)
+        child.multicast(evt);
+    }
+
+    catch (PropertyVetoException veto) {
+      
+      // Revert all that have been notified
+      
+      PropertyChangeEvent revert = 
+        new PropertyChangeEvent(evt.getSource(), 
+                                evt.getPropertyName(), 
+                                evt.getNewValue(), 
+                                evt.getOldValue());
+
+      int lastNotified = (i < array.length)? i : (array.length-1);
+
+      for (int k = 0; k <= lastNotified; ++k) {
+        try {
+          array[k].vetoableChange(revert);
+        }
+        catch (PropertyVetoException ignore) {
+          // Cannot veto a reversion
+        }
+      }
+      
+      //  Rethrow the PropertyVetoException.
+      throw veto;
+    }
+  }
+
+  
   /**
    * Report a vetoable property update to any registered listeners. 
    * Notifications are sent serially (although in no particular order)
@@ -334,16 +408,17 @@ public class VetoableChangeMulticaster implements Serializable {
    *              change to be rolled back.
    */
   public void fireVetoableChange(String propertyName, 
-								 Object oldValue, Object newValue) throws PropertyVetoException {
+                                 Object oldValue, Object newValue) throws PropertyVetoException {
    
-	if (oldValue == null || newValue == null || !oldValue.equals(newValue)) {
-	  multicast(new PropertyChangeEvent(source,
-										propertyName, 
-										oldValue, 
-										newValue));
-	}
-	
-  }  
+    if (oldValue == null || newValue == null || !oldValue.equals(newValue)) {
+      multicast(new PropertyChangeEvent(source,
+                                        propertyName, 
+                                        oldValue, 
+                                        newValue));
+    }
+    
+  }
+
   /**
    * Report a vetoable property update to any registered listeners. 
    * Notifications are sent serially (although in no particular order)
@@ -368,22 +443,74 @@ public class VetoableChangeMulticaster implements Serializable {
    *              change to be rolled back.
    */
   public void fireVetoableChange(String propertyName, 
-								 boolean oldValue, boolean newValue) throws PropertyVetoException {
-	if (oldValue != newValue) {
-	  multicast(new PropertyChangeEvent(source,
-										propertyName, 
-										new Boolean(oldValue), 
-										new Boolean(newValue)));
-	}
-  }  
-  /**
-   * Return the child associated with property, or null if no such
-   **/
+                                 int oldValue, int newValue) throws PropertyVetoException {
+    if (oldValue != newValue) {
+      multicast(new PropertyChangeEvent(source,
+                                        propertyName, 
+                                        new Integer(oldValue), 
+                                        new Integer(newValue)));
+    }
+  }
 
-  protected synchronized VetoableChangeMulticaster getChild(String propertyName) {
-	return (children == null)? null : 
-	  ((VetoableChangeMulticaster)children.get(propertyName));
-  }  
+
+  /**
+   * Report a vetoable property update to any registered listeners. 
+   * Notifications are sent serially (although in no particular order)
+   * to the list of listeners,
+   * aborting if one throws PropertyVetoException. Upon this exception,
+   * fire a new event reverting this
+   * change to all listeners that have already been notified
+   * (ignoring any further vetos), 
+   * suppress notifications to all other listeners, and
+   * then rethrow the PropertyVetoException.
+   * <p>
+   * No event is fired if old and new are equal.
+   * <p>
+   * This is merely a convenience wrapper around the more general
+   * fireVetoableChange method that takes Object values.
+   *
+   * @param propertyName  The programmatic name of the property
+   *		that was changed.
+   * @param oldValue  The old value of the property.
+   * @param newValue  The new value of the property.
+   * @exception PropertyVetoException if the recipient wishes the property
+   *              change to be rolled back.
+   */
+  public void fireVetoableChange(String propertyName, 
+                                 boolean oldValue, boolean newValue) throws PropertyVetoException {
+    if (oldValue != newValue) {
+      multicast(new PropertyChangeEvent(source,
+                                        propertyName, 
+                                        new Boolean(oldValue), 
+                                        new Boolean(newValue)));
+    }
+  }
+
+  /**
+   * Report a vetoable property update to any registered listeners. 
+   * Notifications are sent serially (although in no particular order)
+   * to the list of listeners,
+   * aborting if one throws PropertyVetoException. Upon this exception,
+   * fire a new event reverting this
+   * change to all listeners that have already been notified
+   * (ignoring any further vetos), 
+   * suppress notifications to all other listeners, and
+   * then rethrow the PropertyVetoException.
+   * <p>
+   * No event is fired if old and new are equal and non-null.
+   *
+   * equal and non-null.
+   * @param evt  The PropertyChangeEvent object.
+   * @exception PropertyVetoException if the recipient wishes the property
+   *              change to be rolled back.
+   */
+  public void fireVetoableChange(PropertyChangeEvent evt) throws PropertyVetoException {
+    Object oldValue = evt.getOldValue();
+    Object newValue = evt.getNewValue();
+    if (oldValue == null || newValue == null || !oldValue.equals(newValue)) 
+      multicast(evt);
+  }
+
   /**
    * Check if there are any listeners for a specific property.
    * If propertyName is null, return whether there are any listeners at all.
@@ -394,139 +521,24 @@ public class VetoableChangeMulticaster implements Serializable {
    */
   public boolean hasListeners(String propertyName) {
 
-	VetoableChangeMulticaster child;
+    VetoableChangeMulticaster child;
 
-	synchronized (this) {
-	  if (listeners.length > 0)
-		return true;
-	  else if (propertyName == null || children == null)
-		return false;
-	  else {
-		child = (VetoableChangeMulticaster)children.get(propertyName);
-		if (child == null)
-		  return false;
-	  }
-	}
-	
-	return child.hasListeners(null);
-  }  
-  /**
-   * Helper method to relay evt to all listeners. 
-   * Called by all public fireVetoableChange methods.
-   **/
+    synchronized (this) {
+      if (listeners.length > 0)
+        return true;
+      else if (propertyName == null || children == null)
+        return false;
+      else {
+        child = (VetoableChangeMulticaster)children.get(propertyName);
+        if (child == null)
+          return false;
+      }
+    }
+    
+    return child.hasListeners(null);
+  }
 
-  protected void multicast(PropertyChangeEvent evt) throws PropertyVetoException {
 
-	VetoableChangeListener[] array;  // bind in synch block below
-	VetoableChangeMulticaster child = null;
-
-	synchronized (this) {
-	  array = listeners;
-
-	  if (children != null && evt.getPropertyName() != null)
-		child = (VetoableChangeMulticaster)children.get(evt.getPropertyName());
-	}
-
-	// Loop through array, and then cascade to child.
-	
-	int i = 0; // make visible to catch clause
-
-	try {
-	  for (i = 0; i < array.length; ++i)
-		array[i].vetoableChange(evt);
-
-	  if  (child != null)
-		child.multicast(evt);
-	}
-
-	catch (PropertyVetoException veto) {
-	  
-	  // Revert all that have been notified
-	  
-	  PropertyChangeEvent revert = 
-		new PropertyChangeEvent(evt.getSource(), 
-								evt.getPropertyName(), 
-								evt.getNewValue(), 
-								evt.getOldValue());
-
-	  int lastNotified = (i < array.length)? i : (array.length-1);
-
-	  for (int k = 0; k <= lastNotified; ++k) {
-		try {
-		  array[k].vetoableChange(revert);
-		}
-		catch (PropertyVetoException ignore) {
-		  // Cannot veto a reversion
-		}
-	  }
-	  
-	  //  Rethrow the PropertyVetoException.
-	  throw veto;
-	}
-  }  
-  private void readObject(ObjectInputStream s) throws ClassNotFoundException, IOException {
-	listeners = new VetoableChangeListener[0];     // paranoically reset
-	s.defaultReadObject();
-	
-	Object listenerOrNull;
-	while (null != (listenerOrNull = s.readObject())) {
-	  addVetoableChangeListener((VetoableChangeListener)listenerOrNull);
-	}
-  }  
-  /**
-   * Remove an occurrence of a VetoableChangeListener from the listener list.
-   * It removes at most one occurrence of the given listener.
-   * If the listener was added multiple times it must be removed
-   * mulitple times.
-   * This removes a VetoableChangeListener that was registered
-   * for all properties, and has no effect if registered for only
-   * one or more specified properties.
-   *
-   * @param listener  The VetoableChangeListener to be removed
-   */
-  
-  public synchronized void removeVetoableChangeListener(VetoableChangeListener listener) {
-
-	int newlen = listeners.length-1;
-	if (newlen < 0 || listener == null) return;
-
-	// Copy while searching for element to remove
-
-	VetoableChangeListener[] newArray = new VetoableChangeListener[newlen];
-
-	for (int i = 0; i < newlen; ++i) { 
-	  if (listener.equals(listeners[i])) {
-		//  copy remaining and exit
-		for (int k = i + 1; k <= newlen; ++k) newArray[k-1] = listeners[k];
-		listeners = newArray;
-		return;
-	  }
-	  else
-		newArray[i] = listeners[i];
-	}
-	
-	// special-case last cell
-	if (listener.equals(listeners[newlen]))
-	  listeners = newArray;
-
-  }  
-  /**
-   * Remove a VetoableChangeListener for a specific property.
-   * Affects only the given property. 
-   * If the listener is also registered for all properties,
-   * then it will continue to be registered for them.
-   *
-   * @param propertyName  The name of the property that was listened on.
-   * @param listener  The VetoableChangeListener to be removed
-   */
-  
-  public void removeVetoableChangeListener(String propertyName,
-										   VetoableChangeListener listener) {
-
-	VetoableChangeMulticaster child = getChild(propertyName);
-	if (child != null) 
-	  child.removeVetoableChangeListener(listener);
-  }  
   /**
    * @serialData Null terminated list of <code>VetoableChangeListeners</code>.
    * <p>
@@ -535,14 +547,26 @@ public class VetoableChangeMulticaster implements Serializable {
    *
    */
   private synchronized void writeObject(ObjectOutputStream s) throws IOException {
-	s.defaultWriteObject();
-	
-	for (int i = 0; i < listeners.length; i++) {
-	  VetoableChangeListener l = listeners[i];
-	  if (listeners[i] instanceof Serializable) {
-		s.writeObject(listeners[i]);
-	  }
-	}
-	s.writeObject(null);
-  }  
+    s.defaultWriteObject();
+    
+    for (int i = 0; i < listeners.length; i++) {
+      VetoableChangeListener l = listeners[i];
+      if (listeners[i] instanceof Serializable) {
+        s.writeObject(listeners[i]);
+      }
+    }
+    s.writeObject(null);
+  }
+  
+  
+  private void readObject(ObjectInputStream s) throws ClassNotFoundException, IOException {
+    listeners = new VetoableChangeListener[0];     // paranoically reset
+    s.defaultReadObject();
+    
+    Object listenerOrNull;
+    while (null != (listenerOrNull = s.readObject())) {
+      addVetoableChangeListener((VetoableChangeListener)listenerOrNull);
+    }
+  }
+
 }

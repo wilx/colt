@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: TimeoutSync.java
 
@@ -12,6 +10,8 @@ package edu.oswego.cs.dl.util.concurrent;
   Date       Who                What
    1Aug1998  dl               Create public version
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * A TimeoutSync is an adaptor class that transforms all
@@ -34,7 +34,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * }
  * </pre>  
  *
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see Sync
 **/
 
@@ -50,16 +50,20 @@ public class TimeoutSync implements Sync {
    **/
 
   public TimeoutSync(Sync sync, long timeout) {
-	sync_ = sync;
-	timeout_ = timeout;
-  }  
+    sync_ = sync;
+    timeout_ = timeout;
+  }
+
   public void acquire() throws InterruptedException {
-	if (!sync_.attempt(timeout_)) throw new TimeoutException(timeout_);
-  }  
+    if (!sync_.attempt(timeout_)) throw new TimeoutException(timeout_);
+  }
+
   public boolean attempt(long msecs) throws InterruptedException {
-	return sync_.attempt(msecs);
-  }  
+    return sync_.attempt(msecs);
+  }
+
   public void release() {
-	sync_.release();
-  }  
+    sync_.release();
+  }
+
 }

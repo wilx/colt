@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: Takable.java
 
@@ -13,6 +11,8 @@ package edu.oswego.cs.dl.util.concurrent;
   11Jun1998  dl               Create public version
 */
 
+package edu.oswego.cs.dl.util.concurrent;
+
 /** 
  * This interface exists to enable stricter type checking
  * for channels. A method argument or instance variable
@@ -21,12 +21,26 @@ package edu.oswego.cs.dl.util.concurrent;
  * will disallow put operations.
  * <p>
  * Full method descriptions appear in the Channel interface.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see Channel
  * @see Puttable
 **/
 
 public interface Takable {
+
+  /** 
+   * Return and remove an item from channel, 
+   * possibly waiting indefinitely until
+   * such an item exists.
+   * @return  some item from the channel. Different implementations
+   *  may guarantee various properties (such as FIFO) about that item
+   * @exception InterruptedException if the current thread has
+   * been interrupted at a point at which interruption
+   * is detected, in which case state of the channel is unchanged.
+   *
+  **/
+  public Object take() throws InterruptedException;
+
 
   /** 
    * Return and remove an item from channel only if one is available within
@@ -44,17 +58,6 @@ public interface Takable {
    * (i.e., equivalent to a false return).
   **/
 
-  public Object poll(long msecs) throws InterruptedException;  
-  /** 
-   * Return and remove an item from channel, 
-   * possibly waiting indefinitely until
-   * such an item exists.
-   * @return  some item from the channel. Different implementations
-   *  may guarantee various properties (such as FIFO) about that item
-   * @exception InterruptedException if the current thread has
-   * been interrupted at a point at which interruption
-   * is detected, in which case state of the channel is unchanged.
-   *
-  **/
-  public Object take() throws InterruptedException;  
+  public Object poll(long msecs) throws InterruptedException;
+
 }

@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: Rendezvous.java
 
@@ -13,6 +11,8 @@ package edu.oswego.cs.dl.util.concurrent;
   11Jun1998  dl               Create public version
   30Jul1998  dl               Minor code simplifications
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * A rendezvous is a barrier that:
@@ -103,7 +103,7 @@ package edu.oswego.cs.dl.util.concurrent;
  *   }
  * }
  * </pre>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 
  **/
 
@@ -113,22 +113,22 @@ public class Rendezvous implements Barrier {
    * Interface for functions run at rendezvous points
    **/
   public interface RendezvousFunction {
-	/**
-	 * Perform some function on the objects presented at
-	 * a rendezvous. The objects array holds all presented
-	 * items; one per thread. Its length is the number of parties. 
-	 * The array is ordered by arrival into the rendezvous.
-	 * So, the last element (at objects[objects.length-1])
-	 * is guaranteed to have been presented by the thread performing
-	 * this function. No identifying information is
-	 * otherwise kept about which thread presented which item.
-	 * If you need to 
-	 * trace origins, you will need to use an item type for rendezvous
-	 * that includes identifying information. After return of this
-	 * function, other threads are released, and each returns with
-	 * the item with the same index as the one it presented.
-	 **/
-	public void rendezvousFunction(Object[] objects);
+    /**
+     * Perform some function on the objects presented at
+     * a rendezvous. The objects array holds all presented
+     * items; one per thread. Its length is the number of parties. 
+     * The array is ordered by arrival into the rendezvous.
+     * So, the last element (at objects[objects.length-1])
+     * is guaranteed to have been presented by the thread performing
+     * this function. No identifying information is
+     * otherwise kept about which thread presented which item.
+     * If you need to 
+     * trace origins, you will need to use an item type for rendezvous
+     * that includes identifying information. After return of this
+     * function, other threads are released, and each returns with
+     * the item with the same index as the one it presented.
+     **/
+    public void rendezvousFunction(Object[] objects);
   }
 
   /**
@@ -137,13 +137,13 @@ public class Rendezvous implements Barrier {
    * other thread (or itself, if parties is 1).
    **/
   public static class Rotator implements RendezvousFunction {
-	/** Rotate the array **/
-	public void rendezvousFunction(Object[] objects) {
-	  int lastIdx = objects.length - 1;
-	  Object first = objects[0];
-	  for (int i = 0; i < lastIdx; ++i) objects[i] = objects[i+1];
-	  objects[lastIdx] = first;
-	}
+    /** Rotate the array **/
+    public void rendezvousFunction(Object[] objects) {
+      int lastIdx = objects.length - 1;
+      Object first = objects[0];
+      for (int i = 0; i < lastIdx; ++i) objects[i] = objects[i+1];
+      objects[lastIdx] = first;
+    }
   }
 
 
@@ -185,8 +185,9 @@ public class Rendezvous implements Barrier {
    **/
 
   public Rendezvous(int parties) { 
-	this(parties, new Rotator()); 
-  }  
+    this(parties, new Rotator()); 
+  }
+
   /** 
    * Create a Barrier for the indicated number of parties.
    * and the given function to run at each barrier point.
@@ -194,12 +195,90 @@ public class Rendezvous implements Barrier {
    **/
 
   public Rendezvous(int parties, RendezvousFunction function) { 
-	if (parties <= 0) throw new IllegalArgumentException();
-	parties_ = parties; 
-	rendezvousFunction_ = function;
-	entryGate_ = new WaiterPreferenceSemaphore(parties);
-	slots_ = new Object[parties];
-  }  
+    if (parties <= 0) throw new IllegalArgumentException();
+    parties_ = parties; 
+    rendezvousFunction_ = function;
+    entryGate_ = new WaiterPreferenceSemaphore(parties);
+    slots_ = new Object[parties];
+  }
+
+  /**
+   * Set the function to call at the point at which all threads reach the
+   * rendezvous. This function is run exactly once, by the thread
+   * that trips the barrier. The function is not run if the barrier is
+   * broken. 
+   * @param function the function to run. If null, no function is run.
+   * @return the previous function
+   **/
+
+
+  public synchronized RendezvousFunction setRendezvousFunction(RendezvousFunction function) {
+    RendezvousFunction old = rendezvousFunction_;
+    rendezvousFunction_ = function;
+    return old;
+  }
+
+  public int parties() { return parties_; }
+
+  public synchronized boolean broken() { return broken_; }
+
+  /**
+   * Reset to initial state. Clears both the broken status
+   * and any record of waiting threads, and releases all
+   * currently waiting threads with indeterminate return status.
+   * This method is intended only for use in recovery actions
+   * in which it is somehow known
+   * that no thread could possibly be relying on the
+   * the synchronization properties of this barrier.
+   **/
+
+  public void restart() { 
+    // This is not very good, but probably the best that can be done
+    for (;;) {
+      synchronized(this) {
+        if (entries_ != 0) {
+          notifyAll();
+        }
+        else {
+          broken_ = false; 
+          return;
+        }
+      }
+      Thread.yield();
+    }
+  }
+
+
+  /**
+   * Enter a rendezvous; returning after all other parties arrive.
+   * @param x the item to present at rendezvous point. 
+   * By default, this item is exchanged with another.
+   * @return an item x given by some thread, and/or processed
+   * by the rendezvousFunction.
+   * @exception BrokenBarrierException 
+   * if any other thread
+   * in any previous or current barrier 
+   * since either creation or the last <code>restart</code>
+   * operation left the barrier
+   * prematurely due to interruption or time-out. (If so,
+   * the <code>broken</code> status is also set.) 
+   * Also returns as
+   * broken if the RendezvousFunction encountered a run-time exception.
+   * Threads that are noticed to have been
+   * interrupted <em>after</em> being released are not considered
+   * to have broken the barrier.
+   * In all cases, the interruption
+   * status of the current thread is preserved, so can be tested
+   * by checking <code>Thread.interrupted</code>. 
+   * @exception InterruptedException if this thread was interrupted
+   * during the exchange. If so, <code>broken</code> status is also set.
+   **/
+
+
+  public Object rendezvous(Object x) throws InterruptedException, BrokenBarrierException {
+    return doRendezvous(x, false, 0);
+  }
+
   /**
    * Wait msecs to complete a rendezvous.
    * @param x the item to present at rendezvous point. 
@@ -231,173 +310,106 @@ public class Rendezvous implements Barrier {
 
 
   public Object attemptRendezvous(Object x, long msecs) 
-	throws InterruptedException, TimeoutException, BrokenBarrierException {
-	return doRendezvous(x, true, msecs);
-  }  
-  public synchronized boolean broken() { return broken_; }  
+    throws InterruptedException, TimeoutException, BrokenBarrierException {
+    return doRendezvous(x, true, msecs);
+  }
+
   protected Object doRendezvous(Object x, boolean timed, long msecs) 
-	throws InterruptedException, TimeoutException, BrokenBarrierException {
+    throws InterruptedException, TimeoutException, BrokenBarrierException {
 
-	// rely on semaphore to throw interrupt on entry
+    // rely on semaphore to throw interrupt on entry
 
-	long startTime;
+    long startTime;
 
-	if (timed) {
-	  startTime = System.currentTimeMillis();
-	  if (!entryGate_.attempt(msecs)) {
-		throw new TimeoutException(msecs);
-	  }
-	}
-	else {
-	  startTime = 0;
-	  entryGate_.acquire();
-	}
+    if (timed) {
+      startTime = System.currentTimeMillis();
+      if (!entryGate_.attempt(msecs)) {
+        throw new TimeoutException(msecs);
+      }
+    }
+    else {
+      startTime = 0;
+      entryGate_.acquire();
+    }
 
-	synchronized(this) {
+    synchronized(this) {
 
-	  Object y = null;
+      Object y = null;
 
-	  int index =  entries_++;
-	  slots_[index] = x;
+      int index =  entries_++;
+      slots_[index] = x;
 
-	  try { 
-		// last one in runs function and releases
-		if (entries_ == parties_) {
+      try { 
+        // last one in runs function and releases
+        if (entries_ == parties_) {
 
-		  departures_ = entries_;
-		  notifyAll();
+          departures_ = entries_;
+          notifyAll();
 
-		  try {
-			if (!broken_ && rendezvousFunction_ != null)
-			rendezvousFunction_.rendezvousFunction(slots_);
-		  }
-		  catch (RuntimeException ex) {
-			broken_ = true;
-		  }
+          try {
+            if (!broken_ && rendezvousFunction_ != null)
+            rendezvousFunction_.rendezvousFunction(slots_);
+          }
+          catch (RuntimeException ex) {
+            broken_ = true;
+          }
 
-		}
+        }
 
-		else {
+        else {
 
-		  while (!broken_ && departures_ < 1) {
-			long timeLeft = 0;
-			if (timed) {
-			  timeLeft = msecs - (System.currentTimeMillis() - startTime);
-			  if (timeLeft <= 0) {
-				broken_ = true;
-				departures_ = entries_;
-				notifyAll();
-				throw new TimeoutException(msecs);
-			  }
-			}
-			
-			try {
-			  wait(timeLeft); 
-			}
-			catch (InterruptedException ex) { 
-			  if (broken_ || departures_ > 0) { // interrupted after release
-				Thread.currentThread().interrupt();
-				break;
-			  }
-			  else {
-				broken_ = true;
-				departures_ = entries_;
-				notifyAll();
-				throw ex;
-			  }
-			}
-		  }
-		}
+          while (!broken_ && departures_ < 1) {
+            long timeLeft = 0;
+            if (timed) {
+              timeLeft = msecs - (System.currentTimeMillis() - startTime);
+              if (timeLeft <= 0) {
+                broken_ = true;
+                departures_ = entries_;
+                notifyAll();
+                throw new TimeoutException(msecs);
+              }
+            }
+            
+            try {
+              wait(timeLeft); 
+            }
+            catch (InterruptedException ex) { 
+              if (broken_ || departures_ > 0) { // interrupted after release
+                Thread.currentThread().interrupt();
+                break;
+              }
+              else {
+                broken_ = true;
+                departures_ = entries_;
+                notifyAll();
+                throw ex;
+              }
+            }
+          }
+        }
 
-	  }
+      }
 
-	  finally {
+      finally {
 
-		y = slots_[index];
-		
-		// Last one out cleans up and allows next set of threads in
-		if (--departures_ <= 0) {
-		  for (int i = 0; i < slots_.length; ++i) slots_[i] = null;
-		  entryGate_.release(entries_);
-		  entries_ = 0;
-		}
-	  }
+        y = slots_[index];
+        
+        // Last one out cleans up and allows next set of threads in
+        if (--departures_ <= 0) {
+          for (int i = 0; i < slots_.length; ++i) slots_[i] = null;
+          entryGate_.release(entries_);
+          entries_ = 0;
+        }
+      }
 
-	  // continue if no IE/TO throw
-	  if (broken_)
-		throw new BrokenBarrierException(index);
-	  else
-		return y;
-	}
-  }  
-  public int parties() { return parties_; }  
-  /**
-   * Enter a rendezvous; returning after all other parties arrive.
-   * @param x the item to present at rendezvous point. 
-   * By default, this item is exchanged with another.
-   * @return an item x given by some thread, and/or processed
-   * by the rendezvousFunction.
-   * @exception BrokenBarrierException 
-   * if any other thread
-   * in any previous or current barrier 
-   * since either creation or the last <code>restart</code>
-   * operation left the barrier
-   * prematurely due to interruption or time-out. (If so,
-   * the <code>broken</code> status is also set.) 
-   * Also returns as
-   * broken if the RendezvousFunction encountered a run-time exception.
-   * Threads that are noticed to have been
-   * interrupted <em>after</em> being released are not considered
-   * to have broken the barrier.
-   * In all cases, the interruption
-   * status of the current thread is preserved, so can be tested
-   * by checking <code>Thread.interrupted</code>. 
-   * @exception InterruptedException if this thread was interrupted
-   * during the exchange. If so, <code>broken</code> status is also set.
-   **/
+      // continue if no IE/TO throw
+      if (broken_)
+        throw new BrokenBarrierException(index);
+      else
+        return y;
+    }
+  }
 
-
-  public Object rendezvous(Object x) throws InterruptedException, BrokenBarrierException {
-	return doRendezvous(x, false, 0);
-  }  
-  /**
-   * Reset to initial state. Clears both the broken status
-   * and any record of waiting threads, and releases all
-   * currently waiting threads with indeterminate return status.
-   * This method is intended only for use in recovery actions
-   * in which it is somehow known
-   * that no thread could possibly be relying on the
-   * the synchronization properties of this barrier.
-   **/
-
-  public void restart() { 
-	// This is not very good, but probably the best that can be done
-	for (;;) {
-	  synchronized(this) {
-		if (entries_ != 0) {
-		  notifyAll();
-		}
-		else {
-		  broken_ = false; 
-		  return;
-		}
-	  }
-	  Thread.yield();
-	}
-  }  
-  /**
-   * Set the function to call at the point at which all threads reach the
-   * rendezvous. This function is run exactly once, by the thread
-   * that trips the barrier. The function is not run if the barrier is
-   * broken. 
-   * @param function the function to run. If null, no function is run.
-   * @return the previous function
-   **/
-
-
-  public synchronized RendezvousFunction setRendezvousFunction(RendezvousFunction function) {
-	RendezvousFunction old = rendezvousFunction_;
-	rendezvousFunction_ = function;
-	return old;
-  }  
 }
+
+

@@ -26,16 +26,18 @@
 
 # For Unix:
 # change the next line and let it point to your JDK top directory (the one ABOVE bin)
-JDK=/afs/cern.ch/sw/java/i386_redhat61/jdk/sun-1.3.1
+#JDK=/afs/cern.ch/sw/java/i386_redhat61/jdk/ibm-1.3.1
+#JDK=/afs/cern.ch/sw/java/i386_redhat61/jdk/sun-1.4.1
 #JDK=/afs/cern.ch/sw/java/sparc_solaris26/jdk/sun-1.3.1
-# change the next line and let it point to your colt tree (the one ABOVE MySources)
+# change the next line and let it point to your colt tree (the one ABOVE src)
+
 TOPDIR = $(HOME)/coltdev
 
 # For Windows:
 # change the next line and let it point to your JDK top directory (the one ABOVE bin)
 #JDK = /Applications/Compilers/Java/jdk1.2
 #JDK = /Applications/Compilers/Java/jdk1.3
-# change the next line and let it point to your colt tree (the one ABOVE MySources)
+# change the next line and let it point to your colt tree (the one ABOVE src)
 #TOPDIR = /MyStuff/Programming/Java
 #TOPDIR = P:/.cern.ch/.user/h/hoschek/coltdev
 
@@ -48,29 +50,29 @@ JAR = jar
 BUILDDIR=.
 
 # Directory where the sources are to be found
-SOURCEDIR = $(TOPDIR)/MySources
+SOURCEDIR = $(TOPDIR)/src
 
 # Directory where the classes are to be put into
-CLASSDIR = $(TOPDIR)/MyClasses
+CLASSDIR = $(TOPDIR)/classes
 
 # Directory where the javadoc is to be put into
-JAVADOCDIR = $(TOPDIR)/MyDocs
+JAVADOCDIR = $(TOPDIR)/docs
 
 # Directory where the archives are to be put into
-JARDIR = $(TOPDIR)/MyJars
+JARDIR = $(TOPDIR)/lib
 
 # Directory where introduction, tutorials, executive summary, etc. are to be found
 DOCUDIR = $(SOURCEDIR)/cern/colt/doc-files
 
 
 # Libs for compilation
-CLASSPATH = $(CLASSDIR):.:$(JDK)/jre/lib/rt.jar:$(JDK)/lib/tools.jar
-#CLASSPATH = $(CLASSDIR)
+#CLASSPATH = $(CLASSDIR):.:$(JDK)/jre/lib/rt.jar:$(JDK)/lib/tools.jar
+CLASSPATH = $(CLASSDIR)
 
 #
 # file names for .jar and archives.
 #
-VERSION = 1.0.2
+VERSION = 1.0.3
 DOWNLOADFILE = colt$(VERSION).zip
 JARFILE = colt.jar
 SRCFILE = src.zip
@@ -81,23 +83,23 @@ SRCFILE = src.zip
 #
 # for Unix
 DOCTITLE = '$(shell cat $(SOURCEDIR)/cern/colt/doc-files/docTitle.html)'
-BOTTOM = '<font size="-1"><a href="mailto:wolfgang.hoschek@cern.ch">Submit a bug or feature</a>. Check the <a href="http://nicewww.cern.ch/~hoschek/colt/index.htm">Colt home page</a> for the latest news.</font>'
+BOTTOM = '<font size="-1"><a href="mailto:wolfgang.hoschek@cern.ch">Submit a bug or feature</a>. Check the <a href="http://cern.ch/hoschek/colt">Colt home page</a> for the latest news.</font>'
 
 # for Windows
 #DOCTITLE = "$(shell cat $(SOURCEDIR)/cern/colt/doc-files/docTitle.html)"
-#BOTTOM = "<font size="-1"><a href="mailto:wolfgang.hoschek@cern.ch">Submit a bug or feature</a>. Check the <a href="http://nicewww.cern.ch/~hoschek/colt/index.htm">Colt home page</a> for the latest news.</font>"
+#BOTTOM = "<font size="-1"><a href="mailto:wolfgang.hoschek@cern.ch">Submit a bug or feature</a>. Check the <a href="http://cern.ch/colt">Colt home page</a> for the latest news.</font>"
 
 
 HEADER = '<b>Colt $(VERSION)</b>'
 WINDOWTITLE = 'Colt $(VERSION) - API Specification'
-LINK = 'http://java.sun.com/products/jdk/1.3/docs/api'
+LINK = 'http://java.sun.com/j2se/1.4.1/docs/api'
 OVERVIEW = cern/colt/doc-files/Overview.html
 STYLESHEET = stylesheet.css
 
 
 # For mif doclet
 DOCLET_PATH=mifdoclet_C
-#DOCLET_PATH=/MyStuff/Programming/Java/MySources/mifdoclet_C
+#DOCLET_PATH=/MyStuff/Programming/Java/src/mifdoclet_C
 
 FULL_DOCLET_PATH=$(SOURCEDIR)/$(DOCLET_PATH)
 DOCTITLE_MIF = 'Open Source Libraries for High Performance Scientific and Technical Computing in Java'
@@ -168,7 +170,7 @@ DOC_PACKAGES = $(shell echo $(COMPILE_SOURCE_PACKAGES) | sed 's:\/:.:g')
 JAVAC_PARAM_SOURCES = $(COMPILE_SOURCES:%=$(SOURCEDIR)/%.java) $(COMPILE_SOURCE_PACKAGES:%=$(SOURCEDIR)/%/*.java)
 CLEAN_DEPENDENCIES = $(COMPILE_SOURCES:%=$(SOURCEDIR)/%.u) $(COMPILE_SOURCE_PACKAGES:%=$(SOURCEDIR)/%/*.u)
 JAR_PARAM_CLASSES = $(JAR_CLASS_PACKAGES:%=-C $(CLASSDIR) %) 
-JAR_PARAM_SOURCES = $(JAR_SOURCES_PACKAGES:%=-C $(SOURCEDIR) %) -C $(SOURCEDIR) README.txt GNUmakefile build manifest $(STYLESHEET) $(DOCLET_PATH)
+JAR_PARAM_SOURCES = $(JAR_SOURCES_PACKAGES:%=-C $(SOURCEDIR) %) -C $(SOURCEDIR) README.txt GNUmakefile build manifest $(STYLESHEET)
 
 
 # Prepare command line parameters for copyright license:
@@ -219,6 +221,7 @@ clean: cleanClasses cleanDoc
 cleanClasses:
 	@echo "Deleting contents of class directory "$(CLASSDIR)" ..."
 	rm -fr $(CLASSDIR)/*
+	find $(SOURCEDIR) \( -name '*.class' -exec rm {} \; \)
 	@rm -f $(SOURCEDIR)/cern/colt/list/ooObjArrayList.java
 	@rm -f $(SOURCEDIR)/cern/colt/matrix/impl/FunctionDoubleMatrix1D.java
 	@rm -fr $(SOURCEDIR)/cern/colt/benchmark/*
@@ -243,7 +246,7 @@ cleanDoc:
 javac: incrementBuild
 	@echo "Compilation can take a while (perhaps a minute)..."
 	@echo $(JAVAC_PARAM_SOURCES) > tmpFiles938X
-	$(JAVAC) -O -d $(CLASSDIR) -classpath $(CLASSPATH) @tmpFiles938X
+	$(JAVAC) -d $(CLASSDIR) -classpath $(CLASSPATH) @tmpFiles938X
 	rm tmpFiles938X
 
 
@@ -282,15 +285,14 @@ distribute:
 incrementBuild:
 	@echo $(BUILD) > build
 	@echo 'Version is $(VERSION).$(BUILD)'
-	
-#
+
 # display current version
 #
 version:
 	@echo 'Version last build was $(VERSION).$(BUILD)'
 	@echo 'Version currently is'
 	@$(JAVA) -jar $(JARDIR)/$(JARFILE)
-	
+
 license:
 	@echo 'dummy' > tmp
 	@for i in $(LICENSE_SOURCES) ; do \
@@ -379,7 +381,7 @@ restore:
 # for quick and dirty compilation only
 #
 jik:
-	$(JIKES) -classpath $(CLASSPATH):$(HOME)/coltb4/myjars/colt.jar:$(HOME)/coltb4/myjars/array.zip:$(HOME)/coltb4/myclasses:$(CLASSPATH) -d $(HOME)/coltb4/myclasses $(SOURCEDIR)/cern/colt/matrix/bench/*.java $(SOURCEDIR)/demo2/*.java 
+	$(JIKES) -classpath $(CLASSPATH):$(HOME)/coltb4/lib/colt.jar:$(HOME)/coltb4/myjars/array.zip:$(HOME)/coltb4/myclasses:$(CLASSPATH) -d $(HOME)/coltb4/myclasses $(SOURCEDIR)/cern/colt/matrix/bench/*.java $(SOURCEDIR)/demo2/*.java 
 
 #
 # for quick and dirty compilation only
@@ -399,14 +401,13 @@ copyjar:
 # for quick and dirty compilation only
 jikbt:
 	$(JIKES) -classpath /usr/local/libexec/jdk/1.2.2/jre/lib/rt.jar:$(HOME)/coltb4/myclasses:$(CLASSPATH) -d $(HOME)/coltb4/myclasses $(SOURCEDIR)/com/ibm/apps/*.java $(SOURCEDIR)/com/ibm/samples/*.java $(SOURCEDIR)/com/ibm/javaSpy/*.java $(SOURCEDIR)/com/ibm/samples/spySamp0/*.java $(SOURCEDIR)/com/ibm/samples/spySamp1/*.java $(SOURCEDIR)/com/ibm/samples/spySamp2/*.java $(SOURCEDIR)/com/ibm/subjects/*.java 
-	
+
 # for quick and dirty compilation only
 jikbench:
 	$(JAVAC) -classpath /usr/local/libexec/jdk/1.2.2/jre/lib/rt.jar:$(SOURCEDIR)/jgf/v20:$(CLASSPATH) $(SOURCEDIR)/jgf/v20/jgfutil/*.java 
 	$(JAVAC) -classpath /usr/local/libexec/jdk/1.2.2/jre/lib/rt.jar:$(SOURCEDIR)/jgf/v20:$(CLASSPATH) $(SOURCEDIR)/jgf/v20/section1/*.java  
 	$(JAVAC) -classpath /usr/local/libexec/jdk/1.2.2/jre/lib/rt.jar:$(SOURCEDIR)/jgf/v20:$(CLASSPATH) $(SOURCEDIR)/jgf/v20/section2/*.java $(SOURCEDIR)/jgf/v20/section2/crypt/*.java $(SOURCEDIR)/jgf/v20/section2/fft/*.java $(SOURCEDIR)/jgf/v20/section2/heapsort/*.java $(SOURCEDIR)/jgf/v20/section2/lufact/*.java $(SOURCEDIR)/jgf/v20/section2/series/*.java $(SOURCEDIR)/jgf/v20/section2/sor/*.java $(SOURCEDIR)/jgf/v20/section2/sparsematmult/*.java  
-	
-	
+
 # Remove dependency files generated by jikes.
 #
 cleanDependencies:
@@ -414,3 +415,47 @@ cleanDependencies:
 	    echo ">>>del "$$i" ..."; \
 	    rm $$i; \
 	done;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

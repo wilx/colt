@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: Semaphore.java
 
@@ -14,6 +12,8 @@ package edu.oswego.cs.dl.util.concurrent;
    5Aug1998  dl               replaced int counters with longs
   24Aug1999  dl               release(n): screen arguments
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * Base class for counting semaphores.
@@ -83,7 +83,7 @@ package edu.oswego.cs.dl.util.concurrent;
  *
  * }
  *</pre>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 **/
 
 
@@ -97,70 +97,68 @@ public class Semaphore implements Sync  {
    * Negative seeds are also allowed, in which case no acquires will proceed
    * until the number of releases has pushed the number of permits past 0.
   **/
-  public Semaphore(long initialPermits) {  permits_ = initialPermits; }  
+  public Semaphore(long initialPermits) {  permits_ = initialPermits; }
+
+
   /** Wait until a permit is available, and take one **/
   public void acquire() throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-	synchronized(this) {
-	  try {
-		while (permits_ <= 0) wait();
-		--permits_;
-	  }
-	  catch (InterruptedException ex) {
-		notify();
-		throw ex;
-	  }
-	}
-  }  
+    if (Thread.interrupted()) throw new InterruptedException();
+    synchronized(this) {
+      try {
+        while (permits_ <= 0) wait();
+        --permits_;
+      }
+      catch (InterruptedException ex) {
+        notify();
+        throw ex;
+      }
+    }
+  }
+
   /** Wait at most msecs millisconds for a permit. **/
   public boolean attempt(long msecs) throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
+    if (Thread.interrupted()) throw new InterruptedException();
 
-	synchronized(this) {
-	  if (permits_ > 0) { 
-		--permits_;
-		return true;
-	  }
-	  else if (msecs <= 0)   
-		return false;
-	  else {
-		try {
-		  long startTime = System.currentTimeMillis();
-		  long waitTime = msecs;
-		  
-		  for (;;) {
-			wait(waitTime);
-			if (permits_ > 0) {
-			  --permits_;
-			  return true;
-			}
-			else { 
-			  waitTime = msecs - (System.currentTimeMillis() - startTime);
-			  if (waitTime <= 0) 
-				return false;
-			}
-		  }
-		}
-		catch(InterruptedException ex) { 
-		  notify();
-		  throw ex;
-		}
-	  }
-	}
-  }  
-  /**
-   * Return the current number of available permits.
-   * Returns an accurate, but possibly unstable value,
-   * that may change immediately after returning.
-   **/
-  public synchronized long permits() {
-	return permits_;
-  }  
+    synchronized(this) {
+      if (permits_ > 0) { 
+        --permits_;
+        return true;
+      }
+      else if (msecs <= 0)   
+        return false;
+      else {
+        try {
+          long startTime = System.currentTimeMillis();
+          long waitTime = msecs;
+          
+          for (;;) {
+            wait(waitTime);
+            if (permits_ > 0) {
+              --permits_;
+              return true;
+            }
+            else { 
+              waitTime = msecs - (System.currentTimeMillis() - startTime);
+              if (waitTime <= 0) 
+                return false;
+            }
+          }
+        }
+        catch(InterruptedException ex) { 
+          notify();
+          throw ex;
+        }
+      }
+    }
+  }
+
   /** Release a permit **/
   public synchronized void release() {
-	++permits_;
-	notify();
-  }  
+    ++permits_;
+    notify();
+  }
+
+
   /** 
    * Release N permits. <code>release(n)</code> is
    * equivalent in effect to:
@@ -172,9 +170,20 @@ public class Semaphore implements Sync  {
    * @exception IllegalArgumentException if n is negative.
    **/
   public synchronized void release(long n) {
-	if (n < 0) throw new IllegalArgumentException("Negative argument");
+    if (n < 0) throw new IllegalArgumentException("Negative argument");
 
-	permits_ += n;
-	for (long i = 0; i < n; ++i) notify();
-  }  
+    permits_ += n;
+    for (long i = 0; i < n; ++i) notify();
+  }
+
+  /**
+   * Return the current number of available permits.
+   * Returns an accurate, but possibly unstable value,
+   * that may change immediately after returning.
+   **/
+  public synchronized long permits() {
+    return permits_;
+  }
+
 }
+

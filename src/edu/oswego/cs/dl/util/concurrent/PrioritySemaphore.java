@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: PrioritySemaphore.java
 
@@ -14,6 +12,8 @@ package edu.oswego.cs.dl.util.concurrent;
 */
 
 
+package edu.oswego.cs.dl.util.concurrent;
+
 /**
  * A Semaphore that grants requests to threads with higher
  * Thread priority rather than lower priority when there is
@@ -25,55 +25,11 @@ package edu.oswego.cs.dl.util.concurrent;
  * inversion --  when a new high-priority thread enters
  * while a low-priority thread is currently running, their
  * priorities are <em>not</em> artificially manipulated.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 
 **/
 
 public class PrioritySemaphore extends QueuedSemaphore {
-
-  protected static class PriorityWaitQueue extends WaitQueue {
-
-
-	/** An array of wait queues, one per priority **/
-	protected final FIFOSemaphore.FIFOWaitQueue[] cells_ = 
-	  new FIFOSemaphore.FIFOWaitQueue[Thread.MAX_PRIORITY -
-									 Thread.MIN_PRIORITY + 1];
-
-	/**
-	 * The index of the highest priority cell that may need to be signalled,
-	 * or -1 if none. Used to minimize array traversal.
-	**/
-
-	protected int maxIndex_ = -1;
-
-	protected PriorityWaitQueue() { 
-	  for (int i = 0; i < cells_.length; ++i) 
-		cells_[i] = new FIFOSemaphore.FIFOWaitQueue();
-	}
-
-	protected void insert(WaitNode w) {
-	  int idx = Thread.currentThread().getPriority() - Thread.MIN_PRIORITY;
-	  cells_[idx].insert(w); 
-	  if (idx > maxIndex_) maxIndex_ = idx;
-	}
-
-	protected WaitNode extract() {
-	  for (;;) {
-		int idx = maxIndex_;
-		if (idx < 0) 
-		  return null;
-		WaitNode w = cells_[idx].extract();
-		if (w != null) 
-		  return w;
-		else
-		  --maxIndex_;
-	  }
-	}
-  }
-
-
-
-
 
   /** 
    * Create a Semaphore with the given initial number of permits.
@@ -84,6 +40,51 @@ public class PrioritySemaphore extends QueuedSemaphore {
 
 
   public PrioritySemaphore(long initialPermits) { 
-	super(new PriorityWaitQueue(), initialPermits);
-  }  
+    super(new PriorityWaitQueue(), initialPermits);
+  }
+
+  protected static class PriorityWaitQueue extends WaitQueue {
+
+
+    /** An array of wait queues, one per priority **/
+    protected final FIFOSemaphore.FIFOWaitQueue[] cells_ = 
+      new FIFOSemaphore.FIFOWaitQueue[Thread.MAX_PRIORITY -
+                                     Thread.MIN_PRIORITY + 1];
+
+    /**
+     * The index of the highest priority cell that may need to be signalled,
+     * or -1 if none. Used to minimize array traversal.
+    **/
+
+    protected int maxIndex_ = -1;
+
+    protected PriorityWaitQueue() { 
+      for (int i = 0; i < cells_.length; ++i) 
+        cells_[i] = new FIFOSemaphore.FIFOWaitQueue();
+    }
+
+    protected void insert(WaitNode w) {
+      int idx = Thread.currentThread().getPriority() - Thread.MIN_PRIORITY;
+      cells_[idx].insert(w); 
+      if (idx > maxIndex_) maxIndex_ = idx;
+    }
+
+    protected WaitNode extract() {
+      for (;;) {
+        int idx = maxIndex_;
+        if (idx < 0) 
+          return null;
+        WaitNode w = cells_[idx].extract();
+        if (w != null) 
+          return w;
+        else
+          --maxIndex_;
+      }
+    }
+  }
+
+
+
+
+
 }

@@ -123,7 +123,6 @@ public int nextInt(double theMean) {
  *****************************************************************/
 	RandomElement gen = this.randomGenerator;
 	double my = theMean;
-
 	
 	double t,g,my_k;
 
@@ -138,12 +137,13 @@ public int nextInt(double theMean) {
 	if (my < SWITCH_MEAN) { // CASE B: Inversion- start new table and calculate p0
 		if (my != my_old) {
 			my_old = my;
-			m = (my > 1.0) ? (int)my : 1;
 			llll = 0;
 			p = Math.exp(-my);
 			q = p;
 			p0 = p;
+			//for (k=pp.length; --k >=0; ) pp[k] = 0;
 		}
+		m = (my > 1.0) ? (int)my : 1;
 		for(;;) {
 			u = gen.raw();           // Step U. Uniform sample 
 			k = 0;
@@ -173,6 +173,7 @@ public int nextInt(double theMean) {
 		int    Dk, X, Y;
 		double Ds, U, V, W;
 
+		m  = (int) my;
 		if (my != my_last) { //  set-up    
 			my_last = my;
 
@@ -181,7 +182,6 @@ public int nextInt(double theMean) {
 
 			// mode m, reflection points k2 and k4, and points k1 and k5, which    
 			// delimit the centre region of h(x)                                    
-			m  = (int) my;
 			k2 = (int) Math.ceil(my - 0.5 - Ds);
 			k4 = (int)     (my - 0.5 + Ds);
 			k1 = k2 + k2 - m + 1;

@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: FJTaskRunner.java
 
@@ -12,12 +10,12 @@ package edu.oswego.cs.dl.util.concurrent;
   Date       Who                What
   7Jan1999   dl                 First public release
   13Jan1999  dl                 correct a stat counter update; 
-								ensure inactive status on run termination;
-								misc minor cleaup
+                                ensure inactive status on run termination;
+                                misc minor cleaup
   14Jan1999  dl                 Use random starting point in scan;
-								variable renamings.
+                                variable renamings.
   18Jan1999  dl                 Runloop allowed to die on task exception;
-								remove useless timed join
+                                remove useless timed join
   22Jan1999  dl                 Rework scan to allow use of priorities.
   6Feb1999   dl                 Documentation updates.
   7Mar1999   dl                 Add array-based coInvoke
@@ -25,8 +23,10 @@ package edu.oswego.cs.dl.util.concurrent;
   27Apr1999  dl                 Renamed
   23oct1999  dl                 Earlier detect of interrupt in scanWhileIdling
   24nov1999  dl                 Now works on JVMs that do not properly
-								implement read-after-write of 2 volatiles.
+                                implement read-after-write of 2 volatiles.
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 import java.util.Random;
 
@@ -201,7 +201,7 @@ import java.util.Random;
  * scheduling on most systems, would lead to very poor performance. 
  * But on the platforms
  * tested, the performance is quite good.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see FJTask
  * @see FJTaskRunnerGroup
  **/
@@ -210,6 +210,24 @@ public class FJTaskRunner extends Thread {
   
   /** The group of which this FJTaskRunner is a member **/
   protected final FJTaskRunnerGroup group;
+
+  /**
+   *  Constructor called only during FJTaskRunnerGroup initialization
+   **/
+
+  protected FJTaskRunner(FJTaskRunnerGroup g) { 
+    group = g;
+    victimRNG = new Random(System.identityHashCode(this));
+    runPriority = getPriority();
+    setDaemon(true);
+  }
+
+  /**
+   * Return the FJTaskRunnerGroup of which this thread is a member
+   **/
+  
+  protected final FJTaskRunnerGroup getGroup() { return group; }
+
 
   /* ------------ DEQ Representation ------------------- */
 
@@ -237,34 +255,37 @@ public class FJTaskRunner extends Thread {
    **/
   
   protected final static class VolatileTaskRef {
-	/** The reference **/
-	protected volatile FJTask ref;
+    /** The reference **/
+    protected volatile FJTask ref;
 
-	/** Set the reference **/
-	protected final void put(FJTask r) { ref = r; }
-	/** Return the reference **/
-	protected final FJTask get()     { return ref; }
-	/** Return the reference and clear it **/
-	protected final FJTask take()    { FJTask r = ref; ref = null; return r;  }
+    /** Set the reference **/
+    protected final void put(FJTask r) { ref = r; }
+    /** Return the reference **/
+    protected final FJTask get()     { return ref; }
+    /** Return the reference and clear it **/
+    protected final FJTask take()    { FJTask r = ref; ref = null; return r;  }
 
-	/**
-	 * Initialization utility for constructing arrays. 
-	 * Make an array of given capacity and fill it with
-	 * VolatileTaskRefs.
-	 **/
-	protected static VolatileTaskRef[] newArray(int cap) {
-	  VolatileTaskRef[] a = new VolatileTaskRef[cap];
-	  for (int k = 0; k < cap; k++) a[k] = new VolatileTaskRef();
-	  return a;
-	}
+    /**
+     * Initialization utility for constructing arrays. 
+     * Make an array of given capacity and fill it with
+     * VolatileTaskRefs.
+     **/
+    protected static VolatileTaskRef[] newArray(int cap) {
+      VolatileTaskRef[] a = new VolatileTaskRef[cap];
+      for (int k = 0; k < cap; k++) a[k] = new VolatileTaskRef();
+      return a;
+    }
 
   }
 
   /**
    * The DEQ array.
    **/
-	
+    
   protected VolatileTaskRef[] deq = VolatileTaskRef.newArray(INITIAL_CAPACITY);
+
+  /** Current size of the task DEQ **/
+  protected int deqSize() { return deq.length; }
 
   /** 
    * Current top of DEQ. Generally acts just like a stack pointer in an 
@@ -316,6 +337,23 @@ public class FJTaskRunner extends Thread {
   protected int runPriority;
 
   /**
+   * Set the priority to use while scanning.
+   * We do not bother synchronizing access, since
+   * by the time the value is needed, both this FJTaskRunner 
+   * and its FJTaskRunnerGroup will
+   * necessarily have performed enough synchronization
+   * to avoid staleness problems of any consequence.
+   **/
+  protected void setScanPriority(int pri) { scanPriority = pri; }
+
+
+  /**
+   * Set the priority to use while running tasks.
+   * Same usage and rationale as setScanPriority.
+   **/
+  protected void setRunPriority(int pri) {  runPriority = pri; }
+
+  /**
    * Compile-time constant for statistics gathering.
    * Even when set, reported values may not be accurate
    * since all are read and written without synchronization.
@@ -341,218 +379,77 @@ public class FJTaskRunner extends Thread {
 
 
 
+  /* ------------ DEQ operations ------------------- */
+
+
   /**
-   *  Constructor called only during FJTaskRunnerGroup initialization
+   * Push a task onto DEQ.
+   * Called ONLY by current thread.
    **/
 
-  protected FJTaskRunner(FJTaskRunnerGroup g) { 
-	group = g;
-	victimRNG = new Random(System.identityHashCode(this));
-	runPriority = getPriority();
-	setDaemon(true);
-  }  
+  protected final void push(final FJTask r) {
+    int t = top;
+
+    /*
+      This test catches both overflows and index wraps.  It doesn't
+      really matter if base value is in the midst of changing in take. 
+      As long as deq length is < 2^30, we are guaranteed to catch wrap in
+      time since base can only be incremented at most length times
+      between pushes (or puts). 
+    */
+
+    if (t < (base & (deq.length-1)) + deq.length) {
+
+      deq[t & (deq.length-1)].put(r);
+      top = t + 1;
+    }
+
+    else  // isolate slow case to increase chances push is inlined
+      slowPush(r); // check overflow and retry
+  }
+
+
   /**
-   * Adjust top and base, and grow DEQ if necessary.
-   * Called only while DEQ synch lock being held.
-   * We don't expect this to be called very often. In most
-   * programs using FJTasks, it is never called.
+   * Handle slow case for push
    **/
 
-  protected void checkOverflow() { 
-	int t = top;
-	int b = base;
-	
-	if (t - b < deq.length-1) { // check if just need an index reset
-	  
-	  int newBase = b & (deq.length-1);
-	  int newTop  = top & (deq.length-1);
-	  if (newTop < newBase) newTop += deq.length;
-	  top = newTop;
-	  base = newBase;
-	  
-	  /* 
-		 Null out refs to stolen tasks. 
-		 This is the only time we can safely do it.
-	  */
-	  
-	  int i = newBase;
-	  while (i != newTop && deq[i].ref != null) {
-		deq[i].ref = null;
-		i = (i - 1) & (deq.length-1);
-	  }
-	  
-	}
-	else { // grow by doubling array
-	  
-	  int newTop = t - b;
-	  int oldcap = deq.length;
-	  int newcap = oldcap * 2;
-	  
-	  if (newcap >= MAX_CAPACITY)
-		throw new Error("FJTask queue maximum capacity exceeded");
-	  
-	  VolatileTaskRef[] newdeq = new VolatileTaskRef[newcap];
-	  
-	  // copy in bottom half of new deq with refs from old deq
-	  for (int j = 0; j < oldcap; ++j) newdeq[j] = deq[b++ & (oldcap-1)];
-	  
-	  // fill top half of new deq with new refs
-	  for (int j = oldcap; j < newcap; ++j) newdeq[j] = new VolatileTaskRef();
-	  
-	  deq = newdeq;
-	  base = 0;
-	  top = newTop;
-	}
-  }  
+  protected synchronized void slowPush(final FJTask r) {
+    checkOverflow();
+    push(r); // just recurse -- this one is sure to succeed.
+  }
+
+
   /**
-   * Array-based version of coInvoke
+   * Enqueue task at base of DEQ.
+   * Called ONLY by current thread.
+   * This method is currently not called from class FJTask. It could be used
+   * as a faster way to do FJTask.start, but most users would
+   * find the semantics too confusing and unpredictable.
    **/
 
-  protected final void coInvoke(FJTask[] tasks) {
-	int nforks = tasks.length - 1;
+  protected final synchronized void put(final FJTask r) {
+    for (;;) {
+      int b = base - 1;
+      if (top < b + deq.length) {
+        
+        int newBase = b & (deq.length-1);
+        deq[newBase].put(r);
+        base = newBase;
+        
+        if (b != newBase) { // Adjust for index underflow
+          int newTop = top & (deq.length-1);
+          if (newTop < newBase) newTop += deq.length;
+          top = newTop;
+        }
+        return;
+      }
+      else {
+        checkOverflow();
+        // ... and retry
+      }
+    }
+  }
 
-	// inline bulk push of all but one task
-
-	int t = top;
-
-	if (nforks >= 0 && t + nforks < (base & (deq.length-1)) + deq.length) {
-	  for (int i = 0; i < nforks; ++i) {
-		deq[t++ & (deq.length-1)].put(tasks[i]);
-		top = t;
-	  }
-
-	  // inline invoke of one task
-	  FJTask v = tasks[nforks];
-	  if (!v.isDone()) { 
-		if (COLLECT_STATS) ++runs; 
-		v.run(); 
-		v.setDone(); 
-	  }
-	  
-	  // inline  taskJoins
-	  
-	  for (int i = 0; i < nforks; ++i) { 
-		FJTask w = tasks[i];
-		while (!w.isDone()) {
-
-		  FJTask task = pop();
-		  if (task != null) {
-			if (!task.isDone()) {
-			  if (COLLECT_STATS) ++runs;
-			  task.run(); 
-			  task.setDone(); 
-			}
-		  }
-		  else
-			scan(w);
-		}
-	  }
-	}
-
-	else  // handle non-inlinable cases
-	  slowCoInvoke(tasks);
-  }  
-  /**
-   * A specialized expansion of
-   * <code> w.fork(); invoke(v); w.join(); </code>
-   **/
-
-
-  protected final void coInvoke(final FJTask w, final FJTask v) {
-
-	// inline  push
-
-	int t = top;
-	if (t < (base & (deq.length-1)) + deq.length) {
-
-	  deq[t & (deq.length-1)].put(w);
-	  top = t + 1;
-
-	  // inline  invoke
-
-	  if (!v.isDone()) { 
-		if (COLLECT_STATS) ++runs; 
-		v.run(); 
-		v.setDone(); 
-	  }
-	  
-	  // inline  taskJoin
-	  
-	  while (!w.isDone()) {
-		FJTask task  = pop();
-		if (task != null) {
-		  if (!task.isDone()) {
-			if (COLLECT_STATS) ++runs;
-			task.run(); 
-			task.setDone(); 
-			if (task == w) return; // fast exit if we just ran w
-		  }
-		}
-		else
-		  scan(w);
-	  }
-	}
-
-	else      // handle non-inlinable cases
-	  slowCoInvoke(w, v);
-  }  
-  /**
-   * Check under synch lock if DEQ is really empty when doing pop. 
-   * Return task if not empty, else null.
-   **/
-
-  protected final synchronized FJTask confirmPop(int provisionalTop) {
-	if (base <= provisionalTop) 
-	  return deq[provisionalTop & (deq.length-1)].take();
-	else {    // was empty
-	  /*
-		Reset DEQ indices to zero whenever it is empty.
-		This both avoids unnecessary calls to checkOverflow
-		in push, and helps keep the DEQ from accumulating garbage
-	  */
-
-	  top = base = 0;
-	  return null;
-	}
-  }  
-  /**
-   * double-check a potential take
-   **/
-  
-  protected FJTask confirmTake(int oldBase) {
-
-	/*
-	  Use a second (guaranteed uncontended) synch
-	  to serve as a barrier in case JVM does not
-	  properly process read-after-write of 2 volatiles
-	*/
-
-	synchronized(barrier) {
-	  if (oldBase < top) {
-		/*
-		  We cannot call deq[oldBase].take here because of possible races when
-		  nulling out versus concurrent push operations.  Resulting
-		  accumulated garbage is swept out periodically in
-		  checkOverflow, or more typically, just by keeping indices
-		  zero-based when found to be empty in pop, which keeps active
-		  region small and constantly overwritten. 
-		*/
-		
-		return deq[oldBase & (deq.length-1)].get();
-	  }
-	  else {
-		base = oldBase;
-		return null;
-	  }
-	}
-  }  
-  /** Current size of the task DEQ **/
-  protected int deqSize() { return deq.length; }  
-  /**
-   * Return the FJTaskRunnerGroup of which this thread is a member
-   **/
-  
-  protected final FJTaskRunnerGroup getGroup() { return group; }  
   /**
    * Return a popped task, or null if DEQ is empty.
    * Called ONLY by current thread.
@@ -567,113 +464,162 @@ public class FJTaskRunner extends Thread {
    **/
 
   protected final FJTask pop() {
-	/* 
-	   Decrement top, to force a contending take to back down.
-	*/
+    /* 
+       Decrement top, to force a contending take to back down.
+    */
 
-	int t = --top;      
+    int t = --top;      
 
-	/*
-	  To avoid problems with JVMs that do not properly implement
-	  read-after-write of a pair of volatiles, we conservatively
-	  grab without lock only if the DEQ appears to have at least two
-	  elements, thus guaranteeing that both a pop and take will succeed,
-	  even if the pre-increment in take is not seen by current thread.
-	  Otherwise we recheck under synch.
-	*/
+    /*
+      To avoid problems with JVMs that do not properly implement
+      read-after-write of a pair of volatiles, we conservatively
+      grab without lock only if the DEQ appears to have at least two
+      elements, thus guaranteeing that both a pop and take will succeed,
+      even if the pre-increment in take is not seen by current thread.
+      Otherwise we recheck under synch.
+    */
 
-	if (base + 1 < t) 
-	  return deq[t & (deq.length-1)].take();
-	else
-	  return confirmPop(t);
+    if (base + 1 < t) 
+      return deq[t & (deq.length-1)].take();
+    else
+      return confirmPop(t);
 
-  }  
-  /* ------------ DEQ operations ------------------- */
+  }
 
 
   /**
-   * Push a task onto DEQ.
-   * Called ONLY by current thread.
+   * Check under synch lock if DEQ is really empty when doing pop. 
+   * Return task if not empty, else null.
    **/
 
-  protected final void push(final FJTask r) {
-	int t = top;
+  protected final synchronized FJTask confirmPop(int provisionalTop) {
+    if (base <= provisionalTop) 
+      return deq[provisionalTop & (deq.length-1)].take();
+    else {    // was empty
+      /*
+        Reset DEQ indices to zero whenever it is empty.
+        This both avoids unnecessary calls to checkOverflow
+        in push, and helps keep the DEQ from accumulating garbage
+      */
 
-	/*
-	  This test catches both overflows and index wraps.  It doesn't
-	  really matter if base value is in the midst of changing in take. 
-	  As long as deq length is < 2^30, we are guaranteed to catch wrap in
-	  time since base can only be incremented at most length times
-	  between pushes (or puts). 
-	*/
+      top = base = 0;
+      return null;
+    }
+  }
 
-	if (t < (base & (deq.length-1)) + deq.length) {
 
-	  deq[t & (deq.length-1)].put(r);
-	  top = t + 1;
-	}
+  /** 
+   * Take a task from the base of the DEQ.
+   * Always called by other threads via scan()
+   **/
 
-	else  // isolate slow case to increase chances push is inlined
-	  slowPush(r); // check overflow and retry
-  }  
+  
+  protected final synchronized FJTask take() {
+
+    /*
+      Increment base in order to suppress a contending pop
+    */
+    
+    int b = base++;     
+    
+    if (b < top) 
+      return confirmTake(b);
+    else {
+      // back out
+      base = b; 
+      return null;
+    }
+  }
+
+
   /**
-   * Enqueue task at base of DEQ.
-   * Called ONLY by current thread.
-   * This method is currently not called from class FJTask. It could be used
-   * as a faster way to do FJTask.start, but most users would
-   * find the semantics too confusing and unpredictable.
+   * double-check a potential take
    **/
+  
+  protected FJTask confirmTake(int oldBase) {
 
-  protected final synchronized void put(final FJTask r) {
-	for (;;) {
-	  int b = base - 1;
-	  if (top < b + deq.length) {
-		
-		int newBase = b & (deq.length-1);
-		deq[newBase].put(r);
-		base = newBase;
-		
-		if (b != newBase) { // Adjust for index underflow
-		  int newTop = top & (deq.length-1);
-		  if (newTop < newBase) newTop += deq.length;
-		  top = newTop;
-		}
-		return;
-	  }
-	  else {
-		checkOverflow();
-		// ... and retry
-	  }
-	}
-  }  
-  /* ------------  composite operations ------------------- */
+    /*
+      Use a second (guaranteed uncontended) synch
+      to serve as a barrier in case JVM does not
+      properly process read-after-write of 2 volatiles
+    */
 
-	
+    synchronized(barrier) {
+      if (oldBase < top) {
+        /*
+          We cannot call deq[oldBase].take here because of possible races when
+          nulling out versus concurrent push operations.  Resulting
+          accumulated garbage is swept out periodically in
+          checkOverflow, or more typically, just by keeping indices
+          zero-based when found to be empty in pop, which keeps active
+          region small and constantly overwritten. 
+        */
+        
+        return deq[oldBase & (deq.length-1)].get();
+      }
+      else {
+        base = oldBase;
+        return null;
+      }
+    }
+  }
+
+
   /**
-   * Main runloop
+   * Adjust top and base, and grow DEQ if necessary.
+   * Called only while DEQ synch lock being held.
+   * We don't expect this to be called very often. In most
+   * programs using FJTasks, it is never called.
    **/
 
-  public void run() {
-	try{ 
-	  while (!interrupted()) {
-		
-		FJTask task = pop();
-		if (task != null) {
-		  if (!task.isDone()) {
-			// inline FJTask.invoke
-			if (COLLECT_STATS) ++runs;
-			task.run(); 
-			task.setDone(); 
-		  }
-		}
-		else
-		  scanWhileIdling();
-	  }
-	}
-	finally {
-	  group.setInactive(this);
-	}
-  }  
+  protected void checkOverflow() { 
+    int t = top;
+    int b = base;
+    
+    if (t - b < deq.length-1) { // check if just need an index reset
+      
+      int newBase = b & (deq.length-1);
+      int newTop  = top & (deq.length-1);
+      if (newTop < newBase) newTop += deq.length;
+      top = newTop;
+      base = newBase;
+      
+      /* 
+         Null out refs to stolen tasks. 
+         This is the only time we can safely do it.
+      */
+      
+      int i = newBase;
+      while (i != newTop && deq[i].ref != null) {
+        deq[i].ref = null;
+        i = (i - 1) & (deq.length-1);
+      }
+      
+    }
+    else { // grow by doubling array
+      
+      int newTop = t - b;
+      int oldcap = deq.length;
+      int newcap = oldcap * 2;
+      
+      if (newcap >= MAX_CAPACITY)
+        throw new Error("FJTask queue maximum capacity exceeded");
+      
+      VolatileTaskRef[] newdeq = new VolatileTaskRef[newcap];
+      
+      // copy in bottom half of new deq with refs from old deq
+      for (int j = 0; j < oldcap; ++j) newdeq[j] = deq[b++ & (oldcap-1)];
+      
+      // fill top half of new deq with new refs
+      for (int j = oldcap; j < newcap; ++j) newdeq[j] = new VolatileTaskRef();
+      
+      deq = newdeq;
+      base = 0;
+      top = newTop;
+    }
+  }
+
+
   /* ------------ Scheduling  ------------------- */
 
 
@@ -692,71 +638,72 @@ public class FJTaskRunner extends Thread {
 
   protected void scan(final FJTask waitingFor) {
 
-	FJTask task = null;
+    FJTask task = null;
 
-	// to delay lowering priority until first failure to steal
-	boolean lowered = false;
-	
-	/*
-	  Circularly traverse from a random start index. 
-	  
-	  This differs slightly from cilk version that uses a random index
-	  for each attempted steal.
-	  Exhaustive scanning might impede analytic tractablity of 
-	  the scheduling policy, but makes it much easier to deal with
-	  startup and shutdown.
-	*/
-	
-	FJTaskRunner[] ts = group.getArray();
-	int idx = victimRNG.nextInt(ts.length);
-	
-	for (int i = 0; i < ts.length; ++i) {
-	  
-	  FJTaskRunner t = ts[idx];
-	  if (++idx >= ts.length) idx = 0; // circularly traverse
-	  
-	  if (t != null && t != this) {
-		
-		if (waitingFor != null && waitingFor.isDone()) {
-		  break;
-		}
-		else {
-		  if (COLLECT_STATS) ++scans;
-		  task = t.take();
-		  if (task != null) {
-			if (COLLECT_STATS) ++steals;
-			break;
-		  }
-		  else if (isInterrupted()) {
-			break;
-		  }
-		  else if (!lowered) { // if this is first fail, lower priority
-			lowered = true;
-			setPriority(scanPriority);
-		  }
-		  else {           // otherwise we are at low priority; just yield
-			yield();
-		  }
-		}
-	  }
-	  
-	} 
+    // to delay lowering priority until first failure to steal
+    boolean lowered = false;
+    
+    /*
+      Circularly traverse from a random start index. 
+      
+      This differs slightly from cilk version that uses a random index
+      for each attempted steal.
+      Exhaustive scanning might impede analytic tractablity of 
+      the scheduling policy, but makes it much easier to deal with
+      startup and shutdown.
+    */
+    
+    FJTaskRunner[] ts = group.getArray();
+    int idx = victimRNG.nextInt(ts.length);
+    
+    for (int i = 0; i < ts.length; ++i) {
+      
+      FJTaskRunner t = ts[idx];
+      if (++idx >= ts.length) idx = 0; // circularly traverse
+      
+      if (t != null && t != this) {
+        
+        if (waitingFor != null && waitingFor.isDone()) {
+          break;
+        }
+        else {
+          if (COLLECT_STATS) ++scans;
+          task = t.take();
+          if (task != null) {
+            if (COLLECT_STATS) ++steals;
+            break;
+          }
+          else if (isInterrupted()) {
+            break;
+          }
+          else if (!lowered) { // if this is first fail, lower priority
+            lowered = true;
+            setPriority(scanPriority);
+          }
+          else {           // otherwise we are at low priority; just yield
+            yield();
+          }
+        }
+      }
+      
+    } 
 
-	if (task == null) {
-	  if (COLLECT_STATS) ++scans;
-	  task = group.pollEntryQueue();
-	  if (COLLECT_STATS) if (task != null) ++steals;
-	}
-	
-	if (lowered) setPriority(runPriority);
-	
-	if (task != null && !task.isDone()) {
-	  if (COLLECT_STATS) ++runs;
-	  task.run(); 
-	  task.setDone(); 
-	}
+    if (task == null) {
+      if (COLLECT_STATS) ++scans;
+      task = group.pollEntryQueue();
+      if (COLLECT_STATS) if (task != null) ++steals;
+    }
+    
+    if (lowered) setPriority(runPriority);
+    
+    if (task != null && !task.isDone()) {
+      if (COLLECT_STATS) ++runs;
+      task.run(); 
+      task.setDone(); 
+    }
 
-  }  
+  }
+
   /**
    * Same as scan, but called when current thread is idling.
    * It repeatedly scans other threads for tasks,
@@ -769,133 +716,122 @@ public class FJTaskRunner extends Thread {
    **/
 
   protected void scanWhileIdling() {
-	FJTask task = null;
-	
-	boolean lowered = false;
-	long iters = 0;
-	
-	FJTaskRunner[] ts = group.getArray();
-	int idx = victimRNG.nextInt(ts.length);
-	
-	do {
-	  for (int i = 0; i < ts.length; ++i) {
-		
-		FJTaskRunner t = ts[idx];
-		if (++idx >= ts.length) idx = 0; // circularly traverse
-		
-		if (t != null && t != this) {
-		  if (COLLECT_STATS) ++scans;
-		  
-		  task = t.take();
-		  if (task != null) {
-			if (COLLECT_STATS) ++steals;
-			if (lowered) setPriority(runPriority);
-			group.setActive(this);
-			break;
-		  }
-		}
-	  } 
-	  
-	  if (task == null) {
-		if (isInterrupted()) 
-		  return;
-		
-		if (COLLECT_STATS) ++scans;
-		task = group.pollEntryQueue();
-		
-		if (task != null) {
-		  if (COLLECT_STATS) ++steals;
-		  if (lowered) setPriority(runPriority);
-		  group.setActive(this);
-		}
-		else {
-		  ++iters;
-		  //  Check here for yield vs sleep to avoid entering group synch lock
-		  if (iters >= group.SCANS_PER_SLEEP) {
-			group.checkActive(this, iters);
-			if (isInterrupted())
-			  return;
-		  }
-		  else if (!lowered) {
-			lowered = true;
-			setPriority(scanPriority);
-		  }
-		  else {
-			yield();
-		  }
-		}
-	  }
-	} while (task == null);
+    FJTask task = null;
+    
+    boolean lowered = false;
+    long iters = 0;
+    
+    FJTaskRunner[] ts = group.getArray();
+    int idx = victimRNG.nextInt(ts.length);
+    
+    do {
+      for (int i = 0; i < ts.length; ++i) {
+        
+        FJTaskRunner t = ts[idx];
+        if (++idx >= ts.length) idx = 0; // circularly traverse
+        
+        if (t != null && t != this) {
+          if (COLLECT_STATS) ++scans;
+          
+          task = t.take();
+          if (task != null) {
+            if (COLLECT_STATS) ++steals;
+            if (lowered) setPriority(runPriority);
+            group.setActive(this);
+            break;
+          }
+        }
+      } 
+      
+      if (task == null) {
+        if (isInterrupted()) 
+          return;
+        
+        if (COLLECT_STATS) ++scans;
+        task = group.pollEntryQueue();
+        
+        if (task != null) {
+          if (COLLECT_STATS) ++steals;
+          if (lowered) setPriority(runPriority);
+          group.setActive(this);
+        }
+        else {
+          ++iters;
+          //  Check here for yield vs sleep to avoid entering group synch lock
+          if (iters >= group.SCANS_PER_SLEEP) {
+            group.checkActive(this, iters);
+            if (isInterrupted())
+              return;
+          }
+          else if (!lowered) {
+            lowered = true;
+            setPriority(scanPriority);
+          }
+          else {
+            yield();
+          }
+        }
+      }
+    } while (task == null);
 
 
-	if (!task.isDone()) {
-	  if (COLLECT_STATS) ++runs;
-	  task.run(); 
-	  task.setDone(); 
-	}
-	
-  }  
+    if (!task.isDone()) {
+      if (COLLECT_STATS) ++runs;
+      task.run(); 
+      task.setDone(); 
+    }
+    
+  }
+
+  /* ------------  composite operations ------------------- */
+
+    
   /**
-   * Set the priority to use while running tasks.
-   * Same usage and rationale as setScanPriority.
+   * Main runloop
    **/
-  protected void setRunPriority(int pri) {  runPriority = pri; }  
+
+  public void run() {
+    try{ 
+      while (!interrupted()) {
+        
+        FJTask task = pop();
+        if (task != null) {
+          if (!task.isDone()) {
+            // inline FJTask.invoke
+            if (COLLECT_STATS) ++runs;
+            task.run(); 
+            task.setDone(); 
+          }
+        }
+        else
+          scanWhileIdling();
+      }
+    }
+    finally {
+      group.setInactive(this);
+    }
+  }
+
   /**
-   * Set the priority to use while scanning.
-   * We do not bother synchronizing access, since
-   * by the time the value is needed, both this FJTaskRunner 
-   * and its FJTaskRunnerGroup will
-   * necessarily have performed enough synchronization
-   * to avoid staleness problems of any consequence.
-   **/
-  protected void setScanPriority(int pri) { scanPriority = pri; }  
-  /**
-   * Backup to handle atypical or noninlinable cases of coInvoke
+   * Execute a task in this thread. Generally called when current task
+   * cannot otherwise continue.
    **/
 
-  protected void slowCoInvoke(FJTask[] tasks) {
-	for (int i = 0; i < tasks.length; ++i) push(tasks[i]);
-	for (int i = 0; i < tasks.length; ++i) taskJoin(tasks[i]);
-  }  
-  /**
-   * Backup to handle noninlinable cases of coInvoke
-   **/
+    
+  protected final void taskYield() {
+    FJTask task = pop();
+    if (task != null) {
+      if (!task.isDone()) {
+        if (COLLECT_STATS) ++runs;
+        task.run(); 
+        task.setDone(); 
+      }
+    }
+    else
+      scan(null);
+  }
 
-  protected void slowCoInvoke(final FJTask w, final FJTask v) {
-	push(w); // let push deal with overflow
-	FJTask.invoke(v);
-	taskJoin(w);
-  }  
-  /**
-   * Handle slow case for push
-   **/
 
-  protected synchronized void slowPush(final FJTask r) {
-	checkOverflow();
-	push(r); // just recurse -- this one is sure to succeed.
-  }  
-  /** 
-   * Take a task from the base of the DEQ.
-   * Always called by other threads via scan()
-   **/
-
-  
-  protected final synchronized FJTask take() {
-
-	/*
-	  Increment base in order to suppress a contending pop
-	*/
-	
-	int b = base++;     
-	
-	if (b < top) 
-	  return confirmTake(b);
-	else {
-	  // back out
-	  base = b; 
-	  return null;
-	}
-  }  
   /**
    * Process tasks until w is done.
    * Equivalent to <code>while(!w.isDone()) taskYield(); </code>
@@ -903,37 +839,136 @@ public class FJTaskRunner extends Thread {
 
   protected final void taskJoin(final FJTask w) {
 
-	while (!w.isDone()) { 
+    while (!w.isDone()) { 
 
-	  FJTask task = pop();
-	  if (task != null) {
-		if (!task.isDone()) {
-		  if (COLLECT_STATS) ++runs;
-		  task.run(); 
-		  task.setDone(); 
-		  if (task == w) return; // fast exit if we just ran w
-		}
-	  }
-	  else
-		scan(w);
-	}
-  }  
+      FJTask task = pop();
+      if (task != null) {
+        if (!task.isDone()) {
+          if (COLLECT_STATS) ++runs;
+          task.run(); 
+          task.setDone(); 
+          if (task == w) return; // fast exit if we just ran w
+        }
+      }
+      else
+        scan(w);
+    }
+  }
+
   /**
-   * Execute a task in this thread. Generally called when current task
-   * cannot otherwise continue.
+   * A specialized expansion of
+   * <code> w.fork(); invoke(v); w.join(); </code>
    **/
 
-	
-  protected final void taskYield() {
-	FJTask task = pop();
-	if (task != null) {
-	  if (!task.isDone()) {
-		if (COLLECT_STATS) ++runs;
-		task.run(); 
-		task.setDone(); 
-	  }
-	}
-	else
-	  scan(null);
-  }  
+
+  protected final void coInvoke(final FJTask w, final FJTask v) {
+
+    // inline  push
+
+    int t = top;
+    if (t < (base & (deq.length-1)) + deq.length) {
+
+      deq[t & (deq.length-1)].put(w);
+      top = t + 1;
+
+      // inline  invoke
+
+      if (!v.isDone()) { 
+        if (COLLECT_STATS) ++runs; 
+        v.run(); 
+        v.setDone(); 
+      }
+      
+      // inline  taskJoin
+      
+      while (!w.isDone()) {
+        FJTask task  = pop();
+        if (task != null) {
+          if (!task.isDone()) {
+            if (COLLECT_STATS) ++runs;
+            task.run(); 
+            task.setDone(); 
+            if (task == w) return; // fast exit if we just ran w
+          }
+        }
+        else
+          scan(w);
+      }
+    }
+
+    else      // handle non-inlinable cases
+      slowCoInvoke(w, v);
+  }
+
+
+  /**
+   * Backup to handle noninlinable cases of coInvoke
+   **/
+
+  protected void slowCoInvoke(final FJTask w, final FJTask v) {
+    push(w); // let push deal with overflow
+    FJTask.invoke(v);
+    taskJoin(w);
+  }
+
+
+  /**
+   * Array-based version of coInvoke
+   **/
+
+  protected final void coInvoke(FJTask[] tasks) {
+    int nforks = tasks.length - 1;
+
+    // inline bulk push of all but one task
+
+    int t = top;
+
+    if (nforks >= 0 && t + nforks < (base & (deq.length-1)) + deq.length) {
+      for (int i = 0; i < nforks; ++i) {
+        deq[t++ & (deq.length-1)].put(tasks[i]);
+        top = t;
+      }
+
+      // inline invoke of one task
+      FJTask v = tasks[nforks];
+      if (!v.isDone()) { 
+        if (COLLECT_STATS) ++runs; 
+        v.run(); 
+        v.setDone(); 
+      }
+      
+      // inline  taskJoins
+      
+      for (int i = 0; i < nforks; ++i) { 
+        FJTask w = tasks[i];
+        while (!w.isDone()) {
+
+          FJTask task = pop();
+          if (task != null) {
+            if (!task.isDone()) {
+              if (COLLECT_STATS) ++runs;
+              task.run(); 
+              task.setDone(); 
+            }
+          }
+          else
+            scan(w);
+        }
+      }
+    }
+
+    else  // handle non-inlinable cases
+      slowCoInvoke(tasks);
+  }
+
+  /**
+   * Backup to handle atypical or noninlinable cases of coInvoke
+   **/
+
+  protected void slowCoInvoke(FJTask[] tasks) {
+    for (int i = 0; i < tasks.length; ++i) push(tasks[i]);
+    for (int i = 0; i < tasks.length; ++i) taskJoin(tasks[i]);
+  }
+
 }
+

@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: ReentrantWriterPreferenceReadWriteLock.java
 
@@ -12,8 +10,10 @@ package edu.oswego.cs.dl.util.concurrent;
   Date       Who                What
   26aug1998  dl                 Create public version
    7sep2000  dl                 Readers are now also reentrant
+  19jan2001  dl                 Allow read->write upgrades if the only reader 
 */
 
+package edu.oswego.cs.dl.util.concurrent;
 import java.util.*;
 
 /** 
@@ -57,7 +57,7 @@ import java.util.*;
  * </pre>
  *
  * 
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see ReentrantLock
  **/
 
@@ -74,75 +74,84 @@ public class ReentrantWriterPreferenceReadWriteLock extends WriterPreferenceRead
 
 
   protected boolean allowReader() {
-	return (activeWriter_ == null && waitingWriters_ == 0) ||
-	  activeWriter_ == Thread.currentThread();
-  }  
-  protected synchronized Signaller endRead() {
-	--activeReaders_;
-	Thread t = Thread.currentThread();
-	Object c = readers_.get(t);
-	if (c != IONE) { // more than one hold; decrement count
-	  int h = ((Integer)(c)).intValue()-1;
-	  Integer ih = (h == 1)? IONE : new Integer(h);
-	  readers_.put(t, ih);
-	  return null;
-	}
-	else {
-	  readers_.remove(t);
-	
-	  if (writeHolds_ > 0) // a write lock is still held by current thread
-		return null;
-	  else if (activeReaders_ == 0 && waitingWriters_ > 0)
-		return writerLock_;
-	  else
-		return null;
-	}
-  }  
-  protected synchronized Signaller endWrite() {
-	--writeHolds_;
-	if (writeHolds_ > 0)   // still being held
-	  return null;
-	else {
-	  activeWriter_ = null;
-	  if (waitingReaders_ > 0 && allowReader())
-		return readerLock_;
-	  else if (waitingWriters_ > 0)
-		return writerLock_;
-	  else
-		return null;
-	}
-  }  
+    return (activeWriter_ == null && waitingWriters_ == 0) ||
+      activeWriter_ == Thread.currentThread();
+  }
+
   protected synchronized boolean startRead() {
-	Thread t = Thread.currentThread();
-	Object c = readers_.get(t);
-	if (c != null) { // already held -- just increment hold count
-	  readers_.put(t, new Integer(((Integer)(c)).intValue()+1));
-	  ++activeReaders_;
-	  return true;
-	}
-	else if (allowReader()) {
-	  readers_.put(t, IONE);
-	  ++activeReaders_;
-	  return true;
-	}
-	else
-	  return false;
-  }  
+    Thread t = Thread.currentThread();
+    Object c = readers_.get(t);
+    if (c != null) { // already held -- just increment hold count
+      readers_.put(t, new Integer(((Integer)(c)).intValue()+1));
+      ++activeReaders_;
+      return true;
+    }
+    else if (allowReader()) {
+      readers_.put(t, IONE);
+      ++activeReaders_;
+      return true;
+    }
+    else
+      return false;
+  }
+
   protected synchronized boolean startWrite() {
-	if (activeWriter_ == Thread.currentThread()) { // already held; re-acquire
-	  ++writeHolds_;
-	  return true;
-	}
-	else if (writeHolds_ == 0) {
-	  if (activeReaders_ == 0) {
-		activeWriter_ = Thread.currentThread();
-		writeHolds_ = 1;
-		return true;
-	  }
-	  else
-		return false;
-	}
-	else
-	  return false;
-  }  
+    if (activeWriter_ == Thread.currentThread()) { // already held; re-acquire
+      ++writeHolds_;
+      return true;
+    }
+    else if (writeHolds_ == 0) {
+      if (activeReaders_ == 0 || 
+          (readers_.size() == 1 && 
+           readers_.get(Thread.currentThread()) != null)) {
+        activeWriter_ = Thread.currentThread();
+        writeHolds_ = 1;
+        return true;
+      }
+      else
+        return false;
+    }
+    else
+      return false;
+  }
+
+
+  protected synchronized Signaller endRead() {
+    --activeReaders_;
+    Thread t = Thread.currentThread();
+    Object c = readers_.get(t);
+    if (c != IONE) { // more than one hold; decrement count
+      int h = ((Integer)(c)).intValue()-1;
+      Integer ih = (h == 1)? IONE : new Integer(h);
+      readers_.put(t, ih);
+      return null;
+    }
+    else {
+      readers_.remove(t);
+    
+      if (writeHolds_ > 0) // a write lock is still held by current thread
+        return null;
+      else if (activeReaders_ == 0 && waitingWriters_ > 0)
+        return writerLock_;
+      else
+        return null;
+    }
+  }
+
+  protected synchronized Signaller endWrite() {
+    --writeHolds_;
+    if (writeHolds_ > 0)   // still being held
+      return null;
+    else {
+      activeWriter_ = null;
+      if (waitingReaders_ > 0 && allowReader())
+        return readerLock_;
+      else if (waitingWriters_ > 0)
+        return writerLock_;
+      else
+        return null;
+    }
+  }
+
 }
+

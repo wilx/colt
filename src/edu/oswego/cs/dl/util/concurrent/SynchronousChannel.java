@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: SynchronousChannel.java
 
@@ -13,238 +11,365 @@ package edu.oswego.cs.dl.util.concurrent;
   11Jun1998  dl               Create public version
   17Jul1998  dl               Disabled direct semaphore permit check
   31Jul1998  dl               Replaced main algorithm with one with
-							  better scaling and fairness properties.
+                              better scaling and fairness properties.
   25aug1998  dl               added peek
+  24Nov2001  dl               Replaced main algorithm with faster one.
 */
 
+package edu.oswego.cs.dl.util.concurrent;
+
 /**
- * [<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
- *  A rendezvous channel, similar to those used in CSP and Ada. 
- *  Each put must wait for a take, and vice versa.
- * <p>
- * Synchronous channels are well suited for handoff designs, in
- * which an object running in one thread must synch up with 
- * an object running in another thread in order to hand it
- * some information, event, or task. This implementation
- * uses WaiterPreferenceSemaphores to help avoid infinite overtaking
- * among multiple threads trying to perform puts or takes.
- * <p>
- * If you only need threads to synch up without exchanging information,
- * consider using a Barrier. If you need bidirectional exchanges,
- * consider using a Rendezvous.
- * <p>
- * For a usage example, see the implementation of PooledExecutor
- * <p>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * A rendezvous channel, similar to those used in CSP and Ada.  Each
+ * put must wait for a take, and vice versa.  Synchronous channels
+ * are well suited for handoff designs, in which an object running in
+ * one thread must synch up with an object running in another thread
+ * in order to hand it some information, event, or task. 
+ * <p> If you only need threads to synch up without
+ * exchanging information, consider using a Barrier. If you need
+ * bidirectional exchanges, consider using a Rendezvous.  <p>
+ *
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see CyclicBarrier
  * @see Rendezvous
- * @see PooledExecutor
 **/
 
 public class SynchronousChannel implements BoundedChannel {
 
+  /*
+    This implementation divides actions into two cases for puts:
+
+    * An arriving putter that does not already have a waiting taker 
+      creates a node holding item, and then waits for a taker to take it.
+    * An arriving putter that does already have a waiting taker fills
+      the slot node created by the taker, and notifies it to continue.
+
+   And symmetrically, two for takes:
+
+    * An arriving taker that does not already have a waiting putter
+      creates an empty slot node, and then waits for a putter to fill it.
+    * An arriving taker that does already have a waiting putter takes
+      item from the node created by the putter, and notifies it to continue.
+
+   This requires keeping two simple queues: waitingPuts and waitingTakes.
+   
+   When a put or take waiting for the actions of its counterpart
+   aborts due to interruption or timeout, it marks the node
+   it created as "CANCELLED", which causes its counterpart to retry
+   the entire put or take sequence.
+  */
 
   /** 
-   * The item currently being transferred.
+   * Special marker used in queue nodes to indicate that
+   * the thread waiting for a change in the node has timed out
+   * or been interrupted.
    **/
-  protected Object item_ = null;
-
+  protected static final Object CANCELLED = new Object();
+  
   /**
-   * Semaphore maintaining count of number of takes that
-   * are waiting for puts.
+   * Simple FIFO queue class to hold waiting puts/takes.
    **/
-  protected Semaphore unclaimedTakers_ = new WaiterPreferenceSemaphore(0);
+  protected static class Queue {
+    protected LinkedNode head;
+    protected LinkedNode last;
 
-  /** 
-   * (binary) Semaphore that is released when an item has been
-   * put, so a take may proceed.
-   **/
+    protected void enq(LinkedNode p) { 
+      if (last == null) 
+        last = head = p;
+      else 
+        last = last.next = p;
+    }
 
-  protected Semaphore itemAvailable_ = new WaiterPreferenceSemaphore(0);
+    protected LinkedNode deq() {
+      LinkedNode p = head;
+      if (p != null && (head = p.next) == null) 
+        last = null;
+      return p;
+    }
+  }
 
-  /**
-   * (binary) Semaphore that is released when an item has been
-   * taken, so a put may proceed. Since only one thread at a time can ever
-   * be waiting on this, fairness is not important, so we use cheapest
-   * implementation.
-   **/
+  protected final Queue waitingPuts = new Queue();
+  protected final Queue waitingTakes = new Queue();
 
-  protected Semaphore itemTaken_ = new Semaphore(0);
-
-
-  /**  Lock to ensure that only one put at a time proceeds **/
-
-  protected Object onePut_ = new Object();
-
-  /** 
-   * Create a new channel.
-   **/
-  public SynchronousChannel() { }  
   /**
    * @return zero --
    * Synchronous channels have no internal capacity.
    **/
-  public int capacity() { return 0; }  
-  protected void doPut(Object x) {
-	synchronized(onePut_) {
-	  insert(x);
-	  itemAvailable_.release();
-	  
-	  // Must ignore interrupts while waiting for acknowledgement
-	  boolean wasInterrupted = false;
-	  
-	  for (;;) {
-		try {
-		  itemTaken_.acquire();
-		  break;
-		}
-		catch (InterruptedException ex) {
-		  wasInterrupted = true;
-		}
-	  }
+  public int capacity() { return 0; }
 
-	  if (wasInterrupted) Thread.currentThread().interrupt();
-	}
-  }  
-  protected Object doTake(boolean timed, long msecs) throws InterruptedException {
-
-	/*
-	  Basic protocol is:
-	  1. Announce that a taker has arrived (via unclaimedTakers_ semaphore), 
-		  so that a put can proceed.
-	  2. Wait until the item is put (via itemAvailable_ semaphore).
-	  3. Take the item, and signal the put (via itemTaken_ semaphore).
-
-	  Backouts due to interrupts or timeouts are allowed
-	  only during the wait for the item to be available. However,
-	  even here, if the put of an item we should get has already
-	  begun, we ignore the interrupt/timeout and proceed.
-
-	*/
-
-	// Holds exceptions caught at times we cannot yet rethrow or reinterrupt
-	InterruptedException interruption = null;
-
-	// Records that a timeout or interrupt occurred while waiting for item
-	boolean failed = false;
-
-	// Announce that a taker is present
-	unclaimedTakers_.release();
-
-	// Wait for a put to insert an item.
-
-	try {  
-	  if (!timed) 
-		itemAvailable_.acquire();
-
-	  else if (!itemAvailable_.attempt(msecs)) 
-		failed = true;
-	}
-	catch(InterruptedException ex) {
-	  interruption = ex;
-	  failed = true;
-	}
-
-	//  Messy failure mechanics
-
-	if (failed) {
-
-	  // On interrupt or timeout, loop until either we can back out or acquire.
-	  // One of these must succeed, although it may take
-	  // multiple tries due to re-interrupts
-	  
-	  for (;;) { 
-
-		// Contortion needed to avoid catching our own throw
-		boolean backout = false; 
-
-		try {
-		  // try to deny that we ever arrived.
-		  backout = unclaimedTakers_.attempt(0);
-		  
-		  // Cannot back out because a put is active. 
-		  // So retry the acquire.
-		  
-		  if (!backout && itemAvailable_.attempt(0))
-			break;
-		}
-		catch (InterruptedException e) {
-		  if (interruption == null) // keep first one if a re-interrupt
-			interruption = e;
-		}
-		
-		if (backout) {
-		  if (interruption != null) 
-			throw interruption;
-		  else // must have been timeout
-			return null;
-		}
-	  }
-	}
-	
-	// At this point, there is surely an item waiting for us.
-	// Take it, and signal the put
+  /**
+   * @return null --
+   * Synchronous channels do not hold contents unless actively taken
+   **/
+  public Object peek() {  return null;  }
 
 
-	Object x = extract();
-	itemTaken_.release();
-
-	// if we had to continue even though interrupted, reset status
-	if (interruption != null) Thread.currentThread().interrupt();
-
-	return x;
-
-  }  
-  /** Take item known to exist **/
-  protected synchronized Object extract() { 
-	//    if (item_ == null) throw new Error("Protocol error");
-	Object x = item_;
-	item_ = null;
-	return x;
-  }  
-  /** Set the item in preparation for a take **/
-  protected synchronized void insert(Object x) { 
-	//    if (item_ != null) throw new Error("Protocol error");
-	item_ = x; 
-  }  
-  public boolean offer(Object x, long msecs) throws InterruptedException {
-
-	// Same as put, but with a timed wait for takers
-
-	if (!unclaimedTakers_.attempt(msecs)) 
-	  return false;
-
-	doPut(x);
-	return true;
-  }  
-  public synchronized Object peek() {
-	return item_;
-  }  
-  public Object poll(long msecs) throws InterruptedException {
-	return doTake(true, msecs);
-  }  
   public void put(Object x) throws InterruptedException {
+    if (x == null) throw new IllegalArgumentException();
 
-	/*
-	  Basic protocol is:
-	  1. Wait until a taker arrives (via unclaimedTakers_ semaphore)
-	  2. Wait until no other puts are active (via onePut_)
-	  3. Insert the item, and signal taker that it is ready 
-		 (via itemAvailable_ semaphore).
-	  4. Wait for item to be taken (via itemTaken_ semaphore).
-	  5. Allow another put to insert item (by releasing onePut_).
+    // This code is conceptually straightforward, but messy
+    // because we need to intertwine handling of put-arrives first
+    // vs take-arrives first cases.
 
-	  Backouts due to interrupts or (for offer) timeouts are allowed
-	  only during the wait for takers. Upon claiming a taker, puts
-	  are forced to proceed, ignoring interrupts.
-	*/
+    // Outer loop is to handle retry due to cancelled waiting taker
+    for (;;) { 
 
-	unclaimedTakers_.acquire();
-	doPut(x);
-  }  
-  // implementations of take and offer are too similar to bother separating
+      // Get out now if we are interrupted
+      if (Thread.interrupted()) throw new InterruptedException();
+
+      // Exactly one of item or slot will be nonnull at end of
+      // synchronized block, depending on whether a put or a take
+      // arrived first. 
+      LinkedNode slot;
+      LinkedNode item = null;
+
+      synchronized(this) {
+        // Try to match up with a waiting taker; fill and signal it below
+        slot = waitingTakes.deq();
+
+        // If no takers yet, create a node and wait below
+        if (slot == null) 
+          waitingPuts.enq(item = new LinkedNode(x));
+      }
+
+      if (slot != null) { // There is a waiting taker.
+        // Fill in the slot created by the taker and signal taker to
+        // continue.
+        synchronized(slot) {
+          if (slot.value != CANCELLED) {
+            slot.value = x;
+            slot.notify();
+            return;
+          }
+          // else the taker has cancelled, so retry outer loop
+        }
+      }
+
+      else { 
+        // Wait for a taker to arrive and take the item.
+        synchronized(item) {
+          try {
+            while (item.value != null)
+              item.wait();
+            return;
+          }
+          catch (InterruptedException ie) {
+            // If item was taken, return normally but set interrupt status
+            if (item.value == null) {
+              Thread.currentThread().interrupt();
+              return;
+            }
+            else {
+              item.value = CANCELLED;
+              throw ie;
+            }
+          }
+        }
+      }
+    }
+  }
 
   public Object take() throws InterruptedException {
-	return doTake(false, 0);
-  }  
+    // Entirely symmetric to put()
+
+    for (;;) {
+      if (Thread.interrupted()) throw new InterruptedException();
+
+      LinkedNode item;
+      LinkedNode slot = null;
+
+      synchronized(this) {
+        item = waitingPuts.deq();
+        if (item == null) 
+          waitingTakes.enq(slot = new LinkedNode());
+      }
+
+      if (item != null) {
+        synchronized(item) {
+          Object x = item.value;
+          if (x != CANCELLED) {
+            item.value = null;
+            item.next = null;
+            item.notify();
+            return x;
+          }
+        }
+      }
+
+      else {
+        synchronized(slot) {
+          try {
+            for (;;) {
+              Object x = slot.value;
+              if (x != null) {
+                slot.value = null;
+                slot.next = null;
+                return x;
+              }
+              else
+                slot.wait();
+            }
+          }
+          catch(InterruptedException ie) {
+            Object x = slot.value;
+            if (x != null) {
+              slot.value = null;
+              slot.next = null;
+              Thread.currentThread().interrupt();
+              return x;
+            }
+            else {
+              slot.value = CANCELLED;
+              throw ie;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /*
+    Offer and poll are just like put and take, except even messier.
+   */
+
+
+  public boolean offer(Object x, long msecs) throws InterruptedException {
+    if (x == null) throw new IllegalArgumentException();
+    long waitTime = msecs;
+    long startTime = 0; // lazily initialize below if needed
+    
+    for (;;) {
+      if (Thread.interrupted()) throw new InterruptedException();
+
+      LinkedNode slot;
+      LinkedNode item = null;
+
+      synchronized(this) {
+        slot = waitingTakes.deq();
+        if (slot == null) {
+          if (waitTime <= 0) 
+            return false;
+          else 
+            waitingPuts.enq(item = new LinkedNode(x));
+        }
+      }
+
+      if (slot != null) {
+        synchronized(slot) {
+          if (slot.value != CANCELLED) {
+            slot.value = x;
+            slot.notify();
+            return true;
+          }
+        }
+      }
+
+      long now = System.currentTimeMillis();
+      if (startTime == 0) 
+        startTime = now;
+      else 
+        waitTime = msecs - (now - startTime);
+
+      if (item != null) {
+        synchronized(item) {
+          try {
+            for (;;) {
+              if (item.value == null) 
+                return true;
+              if (waitTime <= 0) {
+                item.value = CANCELLED;
+                return false;
+              }
+              item.wait(waitTime);
+              waitTime = msecs - (System.currentTimeMillis() - startTime);
+            }
+          }
+          catch (InterruptedException ie) {
+            if (item.value == null) {
+              Thread.currentThread().interrupt();
+              return true;
+            }
+            else {
+              item.value = CANCELLED;
+              throw ie;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public Object poll(long msecs) throws InterruptedException {
+    long waitTime = msecs;
+    long startTime = 0;
+
+    for (;;) {
+      if (Thread.interrupted()) throw new InterruptedException();
+
+      LinkedNode item;
+      LinkedNode slot = null;
+
+      synchronized(this) {
+        item = waitingPuts.deq();
+        if (item == null) {
+          if (waitTime <= 0) 
+            return null;
+          else 
+            waitingTakes.enq(slot = new LinkedNode());
+        }
+      }
+
+      if (item != null) {
+        synchronized(item) {
+          Object x = item.value;
+          if (x != CANCELLED) {
+            item.value = null;
+            item.next = null;
+            item.notify();
+            return x;
+          }
+        }
+      }
+
+      long now = System.currentTimeMillis();
+      if (startTime == 0) 
+        startTime = now;
+      else 
+        waitTime = msecs - (now - startTime);
+
+      if (slot != null) {
+        synchronized(slot) {
+          try {
+            for (;;) {
+              Object x = slot.value;
+              if (x != null) {
+                slot.value = null;
+                slot.next = null;
+                return x;
+              }
+              if (waitTime <= 0) {
+                slot.value = CANCELLED;
+                return null;
+              }
+              slot.wait(waitTime);
+              waitTime = msecs - (System.currentTimeMillis() - startTime);
+            }
+          }
+          catch(InterruptedException ie) {
+            Object x = slot.value;
+            if (x != null) {
+              slot.value = null;
+              slot.next = null;
+              Thread.currentThread().interrupt();
+              return x;
+            }
+            else {
+              slot.value = CANCELLED;
+              throw ie;
+            }
+          }
+        }
+      }
+    }
+  }
+
 }

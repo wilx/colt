@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: Executor.java
 
@@ -12,6 +10,8 @@ package edu.oswego.cs.dl.util.concurrent;
   Date       Who                What
   19Jun1998  dl               Create public version
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * Interface for objects that execute Runnables,
@@ -33,7 +33,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * bookkeeping.
  * <p>
  * 
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 public interface Executor {
   /** 
@@ -61,5 +61,6 @@ public interface Executor {
    * suppress, or abort execution if interruption is detected
    * in any controllable context surrounding execution.
    **/
-  public void execute(Runnable command) throws InterruptedException;  
+  public void execute(Runnable command) throws InterruptedException;
+
 }

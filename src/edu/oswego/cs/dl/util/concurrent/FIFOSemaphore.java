@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: FIFOSemaphore.java
 
@@ -13,6 +11,8 @@ package edu.oswego.cs.dl.util.concurrent;
   11Jun1998  dl               Create public version
 */
 
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /** 
  * A First-in/First-out implementation of a Semaphore.
@@ -28,42 +28,11 @@ package edu.oswego.cs.dl.util.concurrent;
  * actually return to the caller. These depend on Java thread
  * scheduling which is not guaranteed to be predictable (although
  * JVMs tend not to go out of their way to be unfair). 
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 **/
 
 public class FIFOSemaphore extends QueuedSemaphore {
   
-  /** 
-   * Simple linked list queue used in FIFOSemaphore.
-   * Methods are not synchronized; they depend on synch of callers
-  **/
-
-  protected static class FIFOWaitQueue extends WaitQueue {
-	protected WaitNode head_ = null;
-	protected WaitNode tail_ = null;
-
-	protected void insert(WaitNode w) {
-	  if (tail_ == null) 
-		head_ = tail_ = w;
-	  else {
-		tail_.next = w;
-		tail_ = w;
-	  }
-	}
-
-	protected WaitNode extract() { 
-	  if (head_ == null) 
-		return null;
-	  else {
-		WaitNode w = head_;
-		head_ = w.next;
-		if (head_ == null) tail_ = null;
-		w.next = null;  
-		return w;
-	  }
-	}
-  }
-
   /** 
    * Create a Semaphore with the given initial number of permits.
    * Using a seed of one makes the semaphore act as a mutual exclusion lock.
@@ -72,6 +41,38 @@ public class FIFOSemaphore extends QueuedSemaphore {
   **/
 
   public FIFOSemaphore(long initialPermits) { 
-	super(new FIFOWaitQueue(), initialPermits);
-  }  
+    super(new FIFOWaitQueue(), initialPermits);
+  }
+
+  /** 
+   * Simple linked list queue used in FIFOSemaphore.
+   * Methods are not synchronized; they depend on synch of callers
+  **/
+
+  protected static class FIFOWaitQueue extends WaitQueue {
+    protected WaitNode head_ = null;
+    protected WaitNode tail_ = null;
+
+    protected void insert(WaitNode w) {
+      if (tail_ == null) 
+        head_ = tail_ = w;
+      else {
+        tail_.next = w;
+        tail_ = w;
+      }
+    }
+
+    protected WaitNode extract() { 
+      if (head_ == null) 
+        return null;
+      else {
+        WaitNode w = head_;
+        head_ = w.next;
+        if (head_ == null) tail_ = null;
+        w.next = null;  
+        return w;
+      }
+    }
+  }
+
 }

@@ -54,7 +54,7 @@ public static float run(double minSeconds, TimerProcedure procedure) {
 	}
 	long end2 = System.currentTimeMillis();
 	long elapsed = (end-begin) - (end2-begin2);
-	if (dummy != 0) throw new InternalError();
+	//if (dummy != 0) throw new RuntimeException("dummy != 0");
 	
 	return (float) elapsed/1000.0f / iter;
 }

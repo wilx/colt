@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: ObservableSync.java
 
@@ -13,6 +11,7 @@ package edu.oswego.cs.dl.util.concurrent;
   1Aug1998  dl               Create public version
 */
 
+package edu.oswego.cs.dl.util.concurrent;
 import java.util.*;
 
 /**
@@ -32,7 +31,7 @@ import java.util.*;
  * It is not hard to convert this to instead use a Listener
  * design (as seen in AWT and JavaBeans), by defining associated
  * EventObjects and forwarding them.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see LayeredSync
 **/
 
@@ -44,16 +43,16 @@ public class ObservableSync implements Sync {
    *  Interface for objects that observe ObservableSyncs.
    **/
   public interface SyncObserver {
-	/** 
-	 * Method called upon acquire or successful attempt of Sync
-	 **/
+    /** 
+     * Method called upon acquire or successful attempt of Sync
+     **/
 
-	public void onAcquire(Object arg);
+    public void onAcquire(Object arg);
 
-	/**
-	 * Method called upon release of Sync.
-	 **/
-	public void onRelease(Object arg);
+    /**
+     * Method called upon release of Sync.
+     **/
+    public void onRelease(Object arg);
   }
 
   protected final CopyOnWriteArraySet observers_ = new CopyOnWriteArraySet();
@@ -66,53 +65,69 @@ public class ObservableSync implements Sync {
    **/
 
   public ObservableSync(Object notificationArgument) {
-	arg_ = notificationArgument;
-  }  
-  public void acquire() {
-	Object arg = getNotificationArgument();
-	for (Iterator it = observers_.iterator(); it.hasNext(); ) {
-	  ((SyncObserver)it.next()).onAcquire(arg);
-	}
-  }  
-  /** Add obs to the set of observers **/
-  public void attach(SyncObserver obs) {
-	observers_.add(obs);
-  }  
-  public boolean attempt(long msecs) {
-	acquire();
-	return true;
-  }  
-  /** Remove obs from the set of observers. No effect if not in set **/
-  public void detach(SyncObserver obs) {
-	observers_.remove(obs);
-  }  
+    arg_ = notificationArgument;
+  }
+
   /**
    * Return the argument used for notifications
    **/
   public synchronized Object getNotificationArgument() {
-	return arg_;
-  }  
-  /** Return an iterator that can be used to traverse through 
-   * current set of observers
-   **/
+    return arg_;
+  }
 
-  public Iterator observers() {
-	return observers_.iterator();
-  }  
-  public void release() {
-	Object arg = getNotificationArgument();
-	for (Iterator it = observers_.iterator(); it.hasNext(); ) {
-	  ((SyncObserver)it.next()).onRelease(arg);
-	}
-  }  
   /**
    * Set the argument used for notifications.
    * @return the previous value of this argument
    **/
 
   public synchronized Object setNotificationArgument(Object notificationArg) {
-	Object old = arg_;
-	arg_ = notificationArg;
-	return old;
-  }  
+    Object old = arg_;
+    arg_ = notificationArg;
+    return old;
+  }
+
+
+
+  public void acquire() {
+    Object arg = getNotificationArgument();
+    for (Iterator it = observers_.iterator(); it.hasNext(); ) {
+      ((SyncObserver)it.next()).onAcquire(arg);
+    }
+  }
+
+  public boolean attempt(long msecs) {
+    acquire();
+    return true;
+  }
+
+  public void release() {
+    Object arg = getNotificationArgument();
+    for (Iterator it = observers_.iterator(); it.hasNext(); ) {
+      ((SyncObserver)it.next()).onRelease(arg);
+    }
+  }
+
+
+
+  /** Add obs to the set of observers **/
+  public void attach(SyncObserver obs) {
+    observers_.add(obs);
+  }
+
+  /** Remove obs from the set of observers. No effect if not in set **/
+  public void detach(SyncObserver obs) {
+    observers_.remove(obs);
+  }
+
+  /** Return an iterator that can be used to traverse through 
+   * current set of observers
+   **/
+
+  public Iterator observers() {
+    return observers_.iterator();
+  }
+
+
 }
+
+

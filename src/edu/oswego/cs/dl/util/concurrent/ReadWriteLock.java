@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: ReadWriteLock.java
 
@@ -12,6 +10,9 @@ package edu.oswego.cs.dl.util.concurrent;
   Date       Who                What
   11Jun1998  dl               Create public version
 */
+
+
+package edu.oswego.cs.dl.util.concurrent;
 
 
 /**
@@ -67,13 +68,15 @@ package edu.oswego.cs.dl.util.concurrent;
  * }
  * </pre>
  * @see Sync
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 
 **/
 
 public interface ReadWriteLock {
   /** get the readLock **/
-  Sync readLock();  
+  Sync readLock();
+
   /** get the writeLock **/
-  Sync writeLock();  
+  Sync writeLock();
 }
+

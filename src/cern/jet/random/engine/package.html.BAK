@@ -1,7 +1,0 @@
-<HTML>
-<BODY>
-Engines that generate strong uniformly distributed pseudo-random numbers;
-Most probability distributions use a uniform engine to generate numbers from their own distribution.
-Thus, the classes of this package are at the core of computational statistics, simulations, Monte Carlo methods, etc.
-</BODY>
-</HTML>

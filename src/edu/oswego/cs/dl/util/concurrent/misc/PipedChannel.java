@@ -1,6 +1,5 @@
+
 package edu.oswego.cs.dl.util.concurrent.misc;
-
-
 import edu.oswego.cs.dl.util.concurrent.*;
 
 import java.io.*;
@@ -21,7 +20,7 @@ import java.io.*;
  * without such bridges, people would have to
  * duplicate code that should work the same way in both cases.
  *
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 
 public class PipedChannel extends SemaphoreControlledChannel {
@@ -33,78 +32,86 @@ public class PipedChannel extends SemaphoreControlledChannel {
 
 
   public PipedChannel() {
-	super(1);
+    super(1);
 
-	try {
-	  outp_ = new PipedOutputStream();
-	  inp_ = new PipedInputStream();
-	  inp_.connect(outp_);
-	}
-	catch (IOException ex) {
-	  ex.printStackTrace();
-	  throw new Error("Cannot construct Pipe?");
-	}
-  }  
-  /** Shared mechanics for take-based methods **/
-  protected Object extract() {
-	try {
-	  return in().readObject();
-	}
-	catch (InterruptedIOException ex) {
-	  Thread.currentThread().interrupt();
-	  return null;
-	}
-	catch (IOException ex) {
-	  ex.printStackTrace();
-	  throw new Error("IO exception during take");
-	}
-	catch (ClassNotFoundException ex) {
-	  ex.printStackTrace();
-	  throw new Error("Serialization exception during take");
-	}
-  }  
+    try {
+      outp_ = new PipedOutputStream();
+      inp_ = new PipedInputStream();
+      inp_.connect(outp_);
+    }
+    catch (IOException ex) {
+      ex.printStackTrace();
+      throw new Error("Cannot construct Pipe?");
+    }
+  }
+
+
   /**
    * Return input stream, first constructing if necessary.
    * Needed because Object streams can block on open.
    **/
 
   protected synchronized ObjectInputStream in() {
-	try {
-	  if (in_ == null) in_ = new ObjectInputStream(inp_);
-	  return in_;
-	}
-	catch (IOException ex) { 
-	  ex.printStackTrace();
-	  throw new Error("IO exception during open");
-	}
-  }  
-  /** Shared mechanics for put-based methods **/
-  protected void insert(Object x) {
-	try {
-	  out().writeObject(x);
-	}
-	catch (InterruptedIOException ex) {
-	  Thread.currentThread().interrupt();
-	}
-	catch (IOException ex) {
-	  ex.printStackTrace();
-	  throw new Error("IO exception during put");
-	}
-  }  
+    try {
+      if (in_ == null) in_ = new ObjectInputStream(inp_);
+      return in_;
+    }
+    catch (IOException ex) { 
+      ex.printStackTrace();
+      throw new Error("IO exception during open");
+    }
+  }
+
   /**
    * Return output stream, first constructing if necessary.
    * Needed because Object streams can block on open.
    **/
   protected synchronized ObjectOutputStream out() {
-	try {
-	  if (out_ == null)  out_ = new ObjectOutputStream(outp_);
-	  return out_;
-	}
-	catch (IOException ex) { 
-	  ex.printStackTrace();
-	  throw new Error("IO exception during open");
-	}
-  }  
+    try {
+      if (out_ == null)  out_ = new ObjectOutputStream(outp_);
+      return out_;
+    }
+    catch (IOException ex) { 
+      ex.printStackTrace();
+      throw new Error("IO exception during open");
+    }
+  }
+
+
+  /** Shared mechanics for put-based methods **/
+  protected void insert(Object x) {
+    try {
+      out().writeObject(x);
+    }
+    catch (InterruptedIOException ex) {
+      Thread.currentThread().interrupt();
+    }
+    catch (IOException ex) {
+      ex.printStackTrace();
+      throw new Error("IO exception during put");
+    }
+  }
+
+  /** Shared mechanics for take-based methods **/
+  protected Object extract() {
+    try {
+      return in().readObject();
+    }
+    catch (InterruptedIOException ex) {
+      Thread.currentThread().interrupt();
+      return null;
+    }
+    catch (IOException ex) {
+      ex.printStackTrace();
+      throw new Error("IO exception during take");
+    }
+    catch (ClassNotFoundException ex) {
+      ex.printStackTrace();
+      throw new Error("Serialization exception during take");
+    }
+  }
+
   /** Stubbed out for now **/
-  public Object peek() { return null; }  
+  public Object peek() { return null; }
 }
+

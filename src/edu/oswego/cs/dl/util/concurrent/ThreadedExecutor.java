@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: ThreadedExecutor.java
 
@@ -14,12 +12,14 @@ package edu.oswego.cs.dl.util.concurrent;
   28aug1998  dl               factored out ThreadFactoryUser
 */
 
+package edu.oswego.cs.dl.util.concurrent;
+
 /**
  * 
  * An implementation of Executor that creates a new
  * Thread that invokes the run method of the supplied command.
  * 
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 public class ThreadedExecutor extends ThreadFactoryUser implements Executor {
 
@@ -27,10 +27,10 @@ public class ThreadedExecutor extends ThreadFactoryUser implements Executor {
    * Execute the given command in a new thread.
    **/
   public synchronized void execute(Runnable command) throws InterruptedException {
-	if (Thread.interrupted()) 
-	  throw new InterruptedException();
+    if (Thread.interrupted()) 
+      throw new InterruptedException();
 
-	Thread thread = getThreadFactory().newThread(command);
-	thread.start();
-  }  
+    Thread thread = getThreadFactory().newThread(command);
+    thread.start();
+  }
 }

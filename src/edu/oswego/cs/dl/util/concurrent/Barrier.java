@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 
 /*
   File: Barrier.java
@@ -13,6 +11,8 @@ package edu.oswego.cs.dl.util.concurrent;
   Date       Who                What
   11Jun1998  dl               Create public version
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * Barriers serve
@@ -34,11 +34,18 @@ package edu.oswego.cs.dl.util.concurrent;
  *     BrokenBarrierException for other threads
  *     when barriers are in broken states.
  * </ul>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 
  **/
 public interface Barrier {
 
+
+  /** 
+   * Return the number of parties that must meet per barrier
+   * point. The number of parties is always at least 1.
+   **/
+
+  public int parties();
 
   /**
    * Returns true if the barrier has been compromised
@@ -50,11 +57,5 @@ public interface Barrier {
    * to clear this status.
    **/
 
-  public boolean broken();  
-  /** 
-   * Return the number of parties that must meet per barrier
-   * point. The number of parties is always at least 1.
-   **/
-
-  public int parties();  
+  public boolean broken();
 }

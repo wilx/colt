@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: Channel.java
 
@@ -13,6 +11,8 @@ package edu.oswego.cs.dl.util.concurrent;
   11Jun1998  dl               Create public version
   25aug1998  dl               added peek
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /** 
  * Main interface for buffers, queues, pipes, conduits, etc.
@@ -82,8 +82,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * insert null. 
  * <p>
  * By design, the Channel interface does not support any methods to determine
- * the current number of elements being held in the channel, or
- * whether it is empty or full. 
+ * the current number of elements being held in the channel.
  * This decision reflects the fact that in
  * concurrent programming, such methods are so rarely useful
  * that including them invites misuse; at best they could 
@@ -114,6 +113,9 @@ package edu.oswego.cs.dl.util.concurrent;
  * of a channel, and that no time-out-based <code>offer</code> operations
  * are ever invoked, there is no guarantee that the item returned
  * by peek will be available for a subsequent take.
+ * <p>
+ * When appropriate, you can define an isEmpty method to
+ * return whether <code>peek</code> returns null.
  * <p>
  * Also, as a compromise, even though it does not appear in interface,
  * implementation classes that can readily compute the number
@@ -220,12 +222,26 @@ package edu.oswego.cs.dl.util.concurrent;
  * }
  *    
  * </pre>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see Sync 
  * @see BoundedChannel 
 **/
 
 public interface Channel extends Puttable, Takable {
+
+  /** 
+   * Place item in the channel, possibly waiting indefinitely until
+   * it can be accepted. Channels implementing the BoundedChannel
+   * subinterface are generally guaranteed to block on puts upon
+   * reaching capacity, but other implementations may or may not block.
+   * @param item the element to be inserted. Should be non-null.
+   * @exception InterruptedException if the current thread has
+   * been interrupted at a point at which interruption
+   * is detected, in which case the element is guaranteed not
+   * to be inserted. Otherwise, on normal return, the element is guaranteed
+   * to have been inserted.
+  **/
+  public void put(Object item) throws InterruptedException;
 
   /** 
    * Place item in channel only if it can be accepted within
@@ -243,13 +259,22 @@ public interface Channel extends Puttable, Takable {
    * is detected, in which case the element is guaranteed not
    * to be inserted (i.e., is equivalent to a false return).
   **/
-  public boolean offer(Object item, long msecs) throws InterruptedException;  
-  /**
-   * Return, but do not remove object at head of Channel,
-   * or null if it is empty.
-   **/
+  public boolean offer(Object item, long msecs) throws InterruptedException;
 
-  public Object peek();  
+  /** 
+   * Return and remove an item from channel, 
+   * possibly waiting indefinitely until
+   * such an item exists.
+   * @return  some item from the channel. Different implementations
+   *  may guarantee various properties (such as FIFO) about that item
+   * @exception InterruptedException if the current thread has
+   * been interrupted at a point at which interruption
+   * is detected, in which case state of the channel is unchanged.
+   *
+  **/
+  public Object take() throws InterruptedException;
+
+
   /** 
    * Return and remove an item from channel only if one is available within
    * msecs milliseconds. The time bound is interpreted in a coarse
@@ -266,30 +291,14 @@ public interface Channel extends Puttable, Takable {
    * (i.e., equivalent to a null return).
   **/
 
-  public Object poll(long msecs) throws InterruptedException;  
-  /** 
-   * Place item in the channel, possibly waiting indefinitely until
-   * it can be accepted. Channels implementing the BoundedChannel
-   * subinterface are generally guaranteed to block on puts upon
-   * reaching capacity, but other implementations may or may not block.
-   * @param item the element to be inserted. Should be non-null.
-   * @exception InterruptedException if the current thread has
-   * been interrupted at a point at which interruption
-   * is detected, in which case the element is guaranteed not
-   * to be inserted. Otherwise, on normal return, the element is guaranteed
-   * to have been inserted.
-  **/
-  public void put(Object item) throws InterruptedException;  
-  /** 
-   * Return and remove an item from channel, 
-   * possibly waiting indefinitely until
-   * such an item exists.
-   * @return  some item from the channel. Different implementations
-   *  may guarantee various properties (such as FIFO) about that item
-   * @exception InterruptedException if the current thread has
-   * been interrupted at a point at which interruption
-   * is detected, in which case state of the channel is unchanged.
-   *
-  **/
-  public Object take() throws InterruptedException;  
+  public Object poll(long msecs) throws InterruptedException;
+
+  /**
+   * Return, but do not remove object at head of Channel,
+   * or null if it is empty.
+   **/
+
+  public Object peek();
+
 }
+

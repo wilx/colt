@@ -1,11 +1,3 @@
-/*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
 package cern.colt.map;
 
 /**
@@ -37,7 +29,12 @@ public class PrimeFinder extends Object {
 	 * The next element is P3, for which the same holds with respect to P2, and so on.
 	 *
 	 * Chunks are chosen such that for any desired capacity >= 1000 
-	 * the list includes a prime number <= desired capacity * 1.11.
+	 * the list includes a prime number <= desired capacity * 1.11 (11%).
+	 * For any desired capacity >= 200 
+	 * the list includes a prime number <= desired capacity * 1.16 (16%).
+	 * For any desired capacity >= 16
+	 * the list includes a prime number <= desired capacity * 1.21 (21%).
+	 * 
 	 * Therefore, primes can be retrieved which are quite close to any desired capacity,
 	 * which in turn avoids wasting memory.
 	 * For example, the list includes 1039,1117,1201,1277,1361,1439,1523,1597,1759,1907,2081.
@@ -103,14 +100,33 @@ public class PrimeFinder extends Object {
 		379,761,1523,3049,6101,12203,24407,48817,97649,195311,390647,781301,1562611,
 		  3125257,6250537,12501169,25002389,50004791,100009607,200019221,400038451,800076929,
 		  1600153859
+		/*
+		// some more chunks for the low range [3..1000]
+		//chunk #11
+		13,29,59,127,257,521,1049,2099,4201,8419,16843,33703,67409,134837,269683,
+		539389,1078787,2157587,4315183,8630387,17260781,34521589,69043189,138086407,
+		276172823,552345671,1104691373,
+		
+		//chunk #12
+		19,41,83,167,337,677,
+		//1361,2729,5471,10949,21911,43853,87719,175447,350899,
+		//701819,1403641,2807303,5614657,11229331,22458671,44917381,89834777,179669557,
+		//359339171,718678369,1437356741,
+		
+		//chunk #13
+		53,107,223,449,907,1823,3659,7321,14653,29311,58631,117269,
+		234539,469099,938207,1876417,3752839,7505681,15011389,30022781,
+		60045577,120091177,240182359,480364727,960729461,1921458943
+		*/
 		};
+		
 
 	static { //initializer
 		// The above prime numbers are formatted for human readability.
 		// To find numbers fast, we sort them once and for all.
 		
-		//java.util.Arrays.sort(primeCapacities);
-		new cern.colt.list.IntArrayList(primeCapacities).mergeSort(); // for debug only, TODO
+		java.util.Arrays.sort(primeCapacities);
+		//new cern.colt.list.IntArrayList(primeCapacities).mergeSort(); // for debug only, TODO
 	}
 	
 /**
@@ -118,7 +134,11 @@ public class PrimeFinder extends Object {
  */
 protected PrimeFinder() {}
 /**
- * Tests correctness.
+ * Tests correctness. Try 
+ * from=1000, to=10000
+ * from=200,  to=1000
+ * from=16,   to=1000
+ * from=1000, to=Integer.MAX_VALUE
  */
 protected static void main(String args[]) {
 	int from = Integer.parseInt(args[0]);	
@@ -132,8 +152,8 @@ protected static void main(String args[]) {
  * @return the capacity which should be used for a hashtable.
  */
 public static int nextPrime(int desiredCapacity) {
-	//int i = java.util.Arrays.binarySearch(primeCapacities, desiredCapacity);
-	int i = new cern.colt.list.IntArrayList(primeCapacities).binarySearch(desiredCapacity); // for debug only TODO
+	int i = java.util.Arrays.binarySearch(primeCapacities, desiredCapacity);
+	//int i = new cern.colt.list.IntArrayList(primeCapacities).binarySearch(desiredCapacity); // for debug only TODO
 	if (i<0) {
 		// desired capacity not found, choose next prime greater than desired capacity
 		i = -i -1; // remember the semantics of binarySearch...
@@ -144,8 +164,11 @@ public static int nextPrime(int desiredCapacity) {
  * Tests correctness.
  */
 protected static void statistics(int from, int to) {
-	//int limit = Integer.MAX_VALUE;
-
+	// check that primes contain no accidental errors
+	for (int i=0; i<primeCapacities.length-1; i++) {
+		if (primeCapacities[i] >= primeCapacities[i+1]) throw new RuntimeException("primes are unsorted or contain duplicates; detected at "+i+"@"+primeCapacities[i]);
+	}
+	
 	double accDeviation = 0.0;
 	double maxDeviation = - 1.0;
 
@@ -154,7 +177,10 @@ protected static void statistics(int from, int to) {
 		//System.out.println(primeCapacity);
 		double deviation = (primeCapacity - i) / (double)i;
 		
-		if (deviation > maxDeviation) maxDeviation = deviation;
+		if (deviation > maxDeviation) {
+			maxDeviation = deviation;
+			System.out.println("new maxdev @"+i+"@dev="+maxDeviation);
+		}
 
 		accDeviation += deviation;
 	}

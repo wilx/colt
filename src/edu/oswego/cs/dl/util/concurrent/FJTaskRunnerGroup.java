@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: FJTaskRunnerGroup.java
 
@@ -17,6 +15,8 @@ package edu.oswego.cs.dl.util.concurrent;
   6Feb1999   dl                 Lazy thread starts
   27Apr1999  dl                 Renamed
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * A stripped down analog of a ThreadGroup used for
@@ -113,7 +113,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * this leads to such a tiny performance improvement that there is 
  * very little motivation to bother.
  *
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * <p>
  * @see FJTask
  * @see FJTaskRunner
@@ -131,7 +131,7 @@ public class FJTaskRunnerGroup implements Executor {
   protected int activeCount = 0;
 
   /** Number of threads that have been started. Used to avoid
-	  unecessary contention during startup of task sets.
+      unecessary contention during startup of task sets.
   **/
   protected int nstarted = 0;
 
@@ -155,68 +155,6 @@ public class FJTaskRunnerGroup implements Executor {
 
   static final int DEFAULT_SCAN_PRIORITY = Thread.MIN_PRIORITY+1;
 
-  /**
-   * The number of times to scan other threads for tasks 
-   * before transitioning to a mode where scans are
-   * interleaved with sleeps (actually timed waits).
-   * Upon transition, sleeps are for duration of
-   * scans / SCANS_PER_SLEEP milliseconds.
-   * <p>
-   * This is not treated as a user-tunable parameter because
-   * good values do not appear to vary much across JVMs or
-   * applications. Its main role is to help avoid some
-   * useless spinning and contention during task startup.
-   **/
-  static final long SCANS_PER_SLEEP = 15;
-
-  /**
-   * The maximum time (in msecs) to sleep when a thread is idle,
-   * yet others are not, so may eventually generate work that
-   * the current thread can steal. This value reflects the maximum time
-   * that a thread may sleep when it possibly should not, because there
-   * are other active threads that might generate work. In practice,
-   * designs in which some threads become stalled because others
-   * are running yet not generating tasks are not likely to work
-   * well in this framework anyway, so the exact value does not matter
-   * too much. However, keeping it in the sub-second range does
-   * help smooth out startup and shutdown effects.
-   **/
-
-  static final long MAX_SLEEP_TIME = 100;
-
-  /**
-   * Wrap wait/notify mechanics around a task so that
-   * invoke() can wait it out 
-   **/
-  protected static final class InvokableFJTask extends FJTask {
-	protected final Runnable wrapped;
-	protected boolean terminated = false;
-
-	protected InvokableFJTask(Runnable r) { wrapped = r; }
-
-	public void run() {
-	  try {
-		if (wrapped instanceof FJTask)
-		  FJTask.invoke((FJTask)(wrapped));
-		else
-		  wrapped.run();
-	  }
-	  finally {
-		setTerminated();
-	  }
-	}
-
-	protected synchronized void setTerminated() {
-	  terminated = true;
-	  notifyAll(); 
-	}
-
-	protected synchronized void awaitTermination() throws InterruptedException {
-	  while (!terminated) wait();
-	}
-  }
-
-
   /** 
    * Create a FJTaskRunnerGroup with the indicated number
    * of FJTaskRunner threads. Normally, the best size to use is
@@ -228,52 +166,11 @@ public class FJTaskRunnerGroup implements Executor {
    **/
 
   public FJTaskRunnerGroup(int groupSize) { 
-	threads = new FJTaskRunner[groupSize];
-	initializeThreads();
-	initTime = System.currentTimeMillis();
-  }  
-  /**
-   * Set active status of thread t to false, and
-   * then wait until: (a) there is a task in the entry 
-   * queue, or (b) other threads are active, or (c) the current
-   * thread is interrupted. Upon return, it
-   * is not certain that there will be work available.
-   * The thread must itself check. 
-   * <p>
-   * The main underlying reason
-   * for these mechanics is that threads do not
-   * signal each other when they add elements to their queues.
-   * (This would add to task overhead, reduce locality.
-   * and increase contention.)
-   * So we must rely on a tamed form of polling. However, tasks
-   * inserted into the entry queue do result in signals, so
-   * tasks can wait on these if all of them are otherwise idle.
-   **/
+    threads = new FJTaskRunner[groupSize];
+    initializeThreads();
+    initTime = System.currentTimeMillis();
+  }
 
-  protected synchronized void checkActive(FJTaskRunner t, long scans) {
-
-	setInactive(t);
-
-	try {
-	  // if nothing available, do a hard wait
-	  if (activeCount == 0 && entryQueue.peek() == null) { 
-		wait();
-	  }
-	  else { 
-		// If there is possibly some work,
-		// sleep for a while before rechecking 
-
-		long msecs = scans / SCANS_PER_SLEEP;
-		if (msecs > MAX_SLEEP_TIME) msecs = MAX_SLEEP_TIME;
-		int nsecs = (msecs == 0) ? 1 : 0; // forces shortest possible sleep
-		wait(msecs, nsecs);
-	  }
-	}
-	catch (InterruptedException ex) {
-	  notify(); // avoid lost notifies on interrupts
-	  Thread.currentThread().interrupt();
-	}
-  }  
   /**
    * Arrange for execution of the given task
    * by placing it in a work queue. If the argument
@@ -284,59 +181,44 @@ public class FJTaskRunnerGroup implements Executor {
    **/
 
   public void execute(Runnable r) throws InterruptedException {
-	if (r instanceof FJTask) {
-	  entryQueue.put((FJTask)r);
-	}
-	else {
-	  entryQueue.put(new FJTask.Wrap(r));
-	}
-	signalNewTask();
-  }  
+    if (r instanceof FJTask) {
+      entryQueue.put((FJTask)r);
+    }
+    else {
+      entryQueue.put(new FJTask.Wrap(r));
+    }
+    signalNewTask();
+  }
+
+
   /**
    * Specialized form of execute called only from within FJTasks
    **/
   public void executeTask(FJTask t) {
-	try {
-	  entryQueue.put(t);
-	  signalNewTask();
-	}
-	catch (InterruptedException ex) {
-	  Thread.currentThread().interrupt();
-	}
-  }  
-  /**
-   * Return active status of t.
-   * Per-thread active status can only be accessed and
-   * modified via synchronized method here in the group class.
-   **/
-
-  protected synchronized boolean getActive(FJTaskRunner t) {
-	return t.active;
-  }  
-  /** 
-   * Return the number of threads that are not idly waiting for work.
-   * Beware that even active threads might not be doing any useful
-   * work, but just spinning waiting for other dependent tasks.
-   * Also, since this is just a snapshot value, some tasks
-   * may be in the process of becoming idle.
-   **/
-  public synchronized int getActiveCount() { return activeCount; }  
-  /* ------------ Methods called only by FJTaskRunners ------------- */
+    try {
+      entryQueue.put(t);
+      signalNewTask();
+    }
+    catch (InterruptedException ex) {
+      Thread.currentThread().interrupt();
+    }
+  }
 
 
   /**
-   * Return the array of threads in this group. 
-   * Called only by FJTaskRunner.scan().
+   * Start a task and wait it out. Returns when the task completes.
+   * @exception InterruptedException if current Thread is
+   * interrupted before completion of the task.
    **/
 
-  protected FJTaskRunner[] getArray() { return threads; }  
-  /**
-   * Create all FJTaskRunner threads in this group.
-   **/
+  public void invoke(Runnable r) throws InterruptedException {
+    InvokableFJTask w = new InvokableFJTask(r);
+    entryQueue.put(w);
+    signalNewTask();
+    w.awaitTermination();
+  }
 
-  protected void initializeThreads() {
-	for (int i = 0; i < threads.length; ++i) threads[i] = new FJTaskRunner(this);
-  }  
+
   /**
    * Try to shut down all FJTaskRunner threads in this group
    * by interrupting them all. This method is designed
@@ -351,72 +233,38 @@ public class FJTaskRunnerGroup implements Executor {
    **/
 
   public void interruptAll() {
-	// paranoically interrupt current thread last if in group.
-	Thread current = Thread.currentThread();
-	boolean stopCurrent = false;
+    // paranoically interrupt current thread last if in group.
+    Thread current = Thread.currentThread();
+    boolean stopCurrent = false;
 
-	for (int i = 0; i < threads.length; ++i) {
-	  Thread t = threads[i];
-	  if (t == current) 
-		stopCurrent = true;
-	  else
-		t.interrupt();
-	}
-	if (stopCurrent)
-	  current.interrupt();
-  }  
+    for (int i = 0; i < threads.length; ++i) {
+      Thread t = threads[i];
+      if (t == current) 
+        stopCurrent = true;
+      else
+        t.interrupt();
+    }
+    if (stopCurrent)
+      current.interrupt();
+  }
+
+
   /**
-   * Start a task and wait it out. Returns when the task completes.
-   * @exception InterruptedException if current Thread is
-   * interrupted before completion of the task.
+   * Set the priority to use while a FJTaskRunner is
+   * polling for new tasks to perform. Default
+   * is currently Thread.MIN_PRIORITY+1. The value
+   * set may not go into effect immediately, but
+   * will be used at least the next time a thread scans for work.
    **/
+  public synchronized void setScanPriorities(int pri) {
+    for (int i = 0; i < threads.length; ++i) {
+      FJTaskRunner t = threads[i];
+      t.setScanPriority(pri);
+      if (!t.active) t.setPriority(pri);
+    }
+  }
 
-  public void invoke(Runnable r) throws InterruptedException {
-	InvokableFJTask w = new InvokableFJTask(r);
-	entryQueue.put(w);
-	signalNewTask();
-	w.awaitTermination();
-  }  
-  /**
-   * Return a task from entry queue, or null if empty.
-   * Called only by FJTaskRunner.scan().
-   **/
 
-  protected FJTask pollEntryQueue() {
-	try {
-	  FJTask t = (FJTask)(entryQueue.poll(0));
-	  return t;
-	}
-	catch(InterruptedException ex) { // ignore interrupts
-	  Thread.currentThread().interrupt();
-	  return null;
-	}
-  }  
-  /**
-   * Set active status of thread t to true, and notify others
-   * that might be waiting for work. 
-   **/
-
-  protected synchronized void setActive(FJTaskRunner t) {
-	if (!t.active) { 
-	  t.active = true;
-	  ++activeCount;
-	  if (nstarted < threads.length) 
-		threads[nstarted++].start();
-	  else
-		notifyAll();
-	}
-  }  
-  /**
-   * Set active status of thread t to false.
-   **/
-
-  protected synchronized void setInactive(FJTaskRunner t) {
-	if (t.active) { 
-	  t.active = false;
-	  --activeCount;
-	}
-  }  
   /**
    * Set the priority to use while a FJTaskRunner is
    * actively running tasks. Default
@@ -426,42 +274,29 @@ public class FJTaskRunnerGroup implements Executor {
    * them running at this priority even when idly waiting for work.
    **/
   public synchronized void setRunPriorities(int pri) {
-	for (int i = 0; i < threads.length; ++i) {
-	  FJTaskRunner t = threads[i];
-	  t.setRunPriority(pri);
-	  if (t.active) t.setPriority(pri);
-	}
-  }  
-  /**
-   * Set the priority to use while a FJTaskRunner is
-   * polling for new tasks to perform. Default
-   * is currently Thread.MIN_PRIORITY+1. The value
-   * set may not go into effect immediately, but
-   * will be used at least the next time a thread scans for work.
-   **/
-  public synchronized void setScanPriorities(int pri) {
-	for (int i = 0; i < threads.length; ++i) {
-	  FJTaskRunner t = threads[i];
-	  t.setScanPriority(pri);
-	  if (!t.active) t.setPriority(pri);
-	}
-  }  
-  /* ------------ Utility methods  ------------- */
+    for (int i = 0; i < threads.length; ++i) {
+      FJTaskRunner t = threads[i];
+      t.setRunPriority(pri);
+      if (t.active) t.setPriority(pri);
+    }
+  }
 
-  /**
-   * Start or wake up any threads waiting for work
-   **/
+    
 
-  protected synchronized void signalNewTask() {
-	if (COLLECT_STATS) ++entries;
-	if (nstarted < threads.length) 
-	   threads[nstarted++].start();
-	else
-	  notify();
-  }  
   /** Return the number of FJTaskRunner threads in this group **/
 
-  public int size() { return threads.length; }  
+  public int size() { return threads.length; }
+
+
+  /** 
+   * Return the number of threads that are not idly waiting for work.
+   * Beware that even active threads might not be doing any useful
+   * work, but just spinning waiting for other dependent tasks.
+   * Also, since this is just a snapshot value, some tasks
+   * may be in the process of becoming idle.
+   **/
+  public synchronized int getActiveCount() { return activeCount; }
+
   /**
    * Prints various snapshot statistics to System.out.
    * <ul>
@@ -530,55 +365,254 @@ public class FJTaskRunnerGroup implements Executor {
    **/
 
   public void stats() {
-	long time = System.currentTimeMillis() - initTime;
-	double secs = ((double)time) / 1000.0;
-	long totalRuns = 0;
-	long totalScans = 0;
-	long totalSteals = 0;
+    long time = System.currentTimeMillis() - initTime;
+    double secs = ((double)time) / 1000.0;
+    long totalRuns = 0;
+    long totalScans = 0;
+    long totalSteals = 0;
 
-	System.out.print("Thread" +
-					 "\tQ Cap" +
-					   "\tScans" +
-					   "\tNew" +
-					   "\tRuns" +
-					   "\n");
+    System.out.print("Thread" +
+                     "\tQ Cap" +
+                       "\tScans" +
+                       "\tNew" +
+                       "\tRuns" +
+                       "\n");
 
-	for (int i = 0; i < threads.length; ++i) {
-	  FJTaskRunner t = threads[i];
-	  int truns = t.runs;
-	  totalRuns += truns;
+    for (int i = 0; i < threads.length; ++i) {
+      FJTaskRunner t = threads[i];
+      int truns = t.runs;
+      totalRuns += truns;
 
-	  int tscans = t.scans;
-	  totalScans += tscans;
+      int tscans = t.scans;
+      totalScans += tscans;
 
-	  int tsteals = t.steals;
-	  totalSteals += tsteals;
+      int tsteals = t.steals;
+      totalSteals += tsteals;
 
-	  String star = (getActive(t))? "*" : " ";
+      String star = (getActive(t))? "*" : " ";
 
 
-	  System.out.print("T" + i + star +
-					   "\t" + t.deqSize() +
-					   "\t" + tscans +
-					   "\t" + tsteals +
-					   "\t" + truns +
-					   "\n");
-	}
+      System.out.print("T" + i + star +
+                       "\t" + t.deqSize() +
+                       "\t" + tscans +
+                       "\t" + tsteals +
+                       "\t" + truns +
+                       "\n");
+    }
 
-	System.out.print("Total" +
-					 "\t    " +
-					 "\t" + totalScans +
-					 "\t" + totalSteals +
-					 "\t" + totalRuns +
-					 "\n");
+    System.out.print("Total" +
+                     "\t    " +
+                     "\t" + totalScans +
+                     "\t" + totalSteals +
+                     "\t" + totalRuns +
+                     "\n");
 
-	System.out.print("Execute: " + entries); 
-	
-	System.out.print("\tTime: " + secs);
+    System.out.print("Execute: " + entries); 
+    
+    System.out.print("\tTime: " + secs);
 
-	long rps = 0;
-	if (secs != 0) rps = Math.round((double)(totalRuns) / secs);
+    long rps = 0;
+    if (secs != 0) rps = Math.round((double)(totalRuns) / secs);
 
-	System.out.println("\tRate: " + rps);
-  }  
+    System.out.println("\tRate: " + rps);
+  }
+
+
+  /* ------------ Methods called only by FJTaskRunners ------------- */
+
+
+  /**
+   * Return the array of threads in this group. 
+   * Called only by FJTaskRunner.scan().
+   **/
+
+  protected FJTaskRunner[] getArray() { return threads; }
+
+
+  /**
+   * Return a task from entry queue, or null if empty.
+   * Called only by FJTaskRunner.scan().
+   **/
+
+  protected FJTask pollEntryQueue() {
+    try {
+      FJTask t = (FJTask)(entryQueue.poll(0));
+      return t;
+    }
+    catch(InterruptedException ex) { // ignore interrupts
+      Thread.currentThread().interrupt();
+      return null;
+    }
+  }
+
+
+  /**
+   * Return active status of t.
+   * Per-thread active status can only be accessed and
+   * modified via synchronized method here in the group class.
+   **/
+
+  protected synchronized boolean getActive(FJTaskRunner t) {
+    return t.active;
+  }
+
+
+  /**
+   * Set active status of thread t to true, and notify others
+   * that might be waiting for work. 
+   **/
+
+  protected synchronized void setActive(FJTaskRunner t) {
+    if (!t.active) { 
+      t.active = true;
+      ++activeCount;
+      if (nstarted < threads.length) 
+        threads[nstarted++].start();
+      else
+        notifyAll();
+    }
+  }
+
+  /**
+   * Set active status of thread t to false.
+   **/
+
+  protected synchronized void setInactive(FJTaskRunner t) {
+    if (t.active) { 
+      t.active = false;
+      --activeCount;
+    }
+  }
+
+  /**
+   * The number of times to scan other threads for tasks 
+   * before transitioning to a mode where scans are
+   * interleaved with sleeps (actually timed waits).
+   * Upon transition, sleeps are for duration of
+   * scans / SCANS_PER_SLEEP milliseconds.
+   * <p>
+   * This is not treated as a user-tunable parameter because
+   * good values do not appear to vary much across JVMs or
+   * applications. Its main role is to help avoid some
+   * useless spinning and contention during task startup.
+   **/
+  static final long SCANS_PER_SLEEP = 15;
+
+  /**
+   * The maximum time (in msecs) to sleep when a thread is idle,
+   * yet others are not, so may eventually generate work that
+   * the current thread can steal. This value reflects the maximum time
+   * that a thread may sleep when it possibly should not, because there
+   * are other active threads that might generate work. In practice,
+   * designs in which some threads become stalled because others
+   * are running yet not generating tasks are not likely to work
+   * well in this framework anyway, so the exact value does not matter
+   * too much. However, keeping it in the sub-second range does
+   * help smooth out startup and shutdown effects.
+   **/
+
+  static final long MAX_SLEEP_TIME = 100;
+
+  /**
+   * Set active status of thread t to false, and
+   * then wait until: (a) there is a task in the entry 
+   * queue, or (b) other threads are active, or (c) the current
+   * thread is interrupted. Upon return, it
+   * is not certain that there will be work available.
+   * The thread must itself check. 
+   * <p>
+   * The main underlying reason
+   * for these mechanics is that threads do not
+   * signal each other when they add elements to their queues.
+   * (This would add to task overhead, reduce locality.
+   * and increase contention.)
+   * So we must rely on a tamed form of polling. However, tasks
+   * inserted into the entry queue do result in signals, so
+   * tasks can wait on these if all of them are otherwise idle.
+   **/
+
+  protected synchronized void checkActive(FJTaskRunner t, long scans) {
+
+    setInactive(t);
+
+    try {
+      // if nothing available, do a hard wait
+      if (activeCount == 0 && entryQueue.peek() == null) { 
+        wait();
+      }
+      else { 
+        // If there is possibly some work,
+        // sleep for a while before rechecking 
+
+        long msecs = scans / SCANS_PER_SLEEP;
+        if (msecs > MAX_SLEEP_TIME) msecs = MAX_SLEEP_TIME;
+        int nsecs = (msecs == 0) ? 1 : 0; // forces shortest possible sleep
+        wait(msecs, nsecs);
+      }
+    }
+    catch (InterruptedException ex) {
+      notify(); // avoid lost notifies on interrupts
+      Thread.currentThread().interrupt();
+    }
+  }
+
+  /* ------------ Utility methods  ------------- */
+
+  /**
+   * Start or wake up any threads waiting for work
+   **/
+
+  protected synchronized void signalNewTask() {
+    if (COLLECT_STATS) ++entries;
+    if (nstarted < threads.length) 
+       threads[nstarted++].start();
+    else
+      notify();
+  }
+
+  /**
+   * Create all FJTaskRunner threads in this group.
+   **/
+
+  protected void initializeThreads() {
+    for (int i = 0; i < threads.length; ++i) threads[i] = new FJTaskRunner(this);
+  }
+
+
+
+
+  /**
+   * Wrap wait/notify mechanics around a task so that
+   * invoke() can wait it out 
+   **/
+  protected static final class InvokableFJTask extends FJTask {
+    protected final Runnable wrapped;
+    protected boolean terminated = false;
+
+    protected InvokableFJTask(Runnable r) { wrapped = r; }
+
+    public void run() {
+      try {
+        if (wrapped instanceof FJTask)
+          FJTask.invoke((FJTask)(wrapped));
+        else
+          wrapped.run();
+      }
+      finally {
+        setTerminated();
+      }
+    }
+
+    protected synchronized void setTerminated() {
+      terminated = true;
+      notifyAll(); 
+    }
+
+    protected synchronized void awaitTermination() throws InterruptedException {
+      while (!terminated) wait();
+    }
+  }
+
+
 }
+

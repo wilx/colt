@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: Latch.java
 
@@ -12,6 +10,8 @@ package edu.oswego.cs.dl.util.concurrent;
   Date       Who                What
   11Jun1998  dl               Create public version
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * A latch is a boolean condition that is set at most once, ever.
@@ -41,55 +41,59 @@ package edu.oswego.cs.dl.util.concurrent;
  *   } 
  * }
  *</pre>
- * [<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
+ * [<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
 **/  
 
 public class Latch implements Sync {
   protected boolean latched_ = false;
 
   /*
-	This could use double-check, but doesn't.
-	If the latch is being used as an indicator of
-	the presence or state of an object, the user would
-	not necessarily get the memory barrier that comes with synch
-	that would be needed to correctly use that object. This
-	would lead to errors that users would be very hard to track down. So, to
-	be conservative, we always use synch.
+    This could use double-check, but doesn't.
+    If the latch is being used as an indicator of
+    the presence or state of an object, the user would
+    not necessarily get the memory barrier that comes with synch
+    that would be needed to correctly use that object. This
+    would lead to errors that users would be very hard to track down. So, to
+    be conservative, we always use synch.
   */
 
   public void acquire() throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-	synchronized(this) {
-	  while (!latched_) 
-		wait(); 
-	}
-  }  
+    if (Thread.interrupted()) throw new InterruptedException();
+    synchronized(this) {
+      while (!latched_) 
+        wait(); 
+    }
+  }
+
   public boolean attempt(long msecs) throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-	synchronized(this) {
-	  if (latched_) 
-		return true;
-	  else if (msecs <= 0) 
-		return false;
-	  else {
-		long waitTime = msecs;
-		long start = System.currentTimeMillis();
-		for (;;) {
-		  wait(waitTime);
-		  if (latched_) 
-			return true;
-		  else {
-			waitTime = msecs - (System.currentTimeMillis() - start);
-			if (waitTime <= 0) 
-			  return false;
-		  }
-		}
-	  }
-	}
-  }  
+    if (Thread.interrupted()) throw new InterruptedException();
+    synchronized(this) {
+      if (latched_) 
+        return true;
+      else if (msecs <= 0) 
+        return false;
+      else {
+        long waitTime = msecs;
+        long start = System.currentTimeMillis();
+        for (;;) {
+          wait(waitTime);
+          if (latched_) 
+            return true;
+          else {
+            waitTime = msecs - (System.currentTimeMillis() - start);
+            if (waitTime <= 0) 
+              return false;
+          }
+        }
+      }
+    }
+  }
+
   /** Enable all current and future acquires to pass **/
   public synchronized void release() {
-	latched_ = true;
-	notifyAll();
-  }  
+    latched_ = true;
+    notifyAll();
+  }
+
 }
+

@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: Puttable.java
 
@@ -13,6 +11,8 @@ package edu.oswego.cs.dl.util.concurrent;
   11Jun1998  dl               Create public version
 */
 
+package edu.oswego.cs.dl.util.concurrent;
+
 /** 
  * This interface exists to enable stricter type checking
  * for channels. A method argument or instance variable
@@ -21,12 +21,27 @@ package edu.oswego.cs.dl.util.concurrent;
  * will disallow take operations.
  * <p>
  * Full method descriptions appear in the Channel interface.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see Channel
  * @see Takable
 **/
 
 public interface Puttable {
+
+
+  /** 
+   * Place item in the channel, possibly waiting indefinitely until
+   * it can be accepted. Channels implementing the BoundedChannel
+   * subinterface are generally guaranteed to block on puts upon
+   * reaching capacity, but other implementations may or may not block.
+   * @param item the element to be inserted. Should be non-null.
+   * @exception InterruptedException if the current thread has
+   * been interrupted at a point at which interruption
+   * is detected, in which case the element is guaranteed not
+   * to be inserted. Otherwise, on normal return, the element is guaranteed
+   * to have been inserted.
+  **/
+  public void put(Object item) throws InterruptedException;
 
 
   /** 
@@ -45,18 +60,5 @@ public interface Puttable {
    * is detected, in which case the element is guaranteed not
    * to be inserted (i.e., is equivalent to a false return).
   **/
-  public boolean offer(Object item, long msecs) throws InterruptedException;  
-  /** 
-   * Place item in the channel, possibly waiting indefinitely until
-   * it can be accepted. Channels implementing the BoundedChannel
-   * subinterface are generally guaranteed to block on puts upon
-   * reaching capacity, but other implementations may or may not block.
-   * @param item the element to be inserted. Should be non-null.
-   * @exception InterruptedException if the current thread has
-   * been interrupted at a point at which interruption
-   * is detected, in which case the element is guaranteed not
-   * to be inserted. Otherwise, on normal return, the element is guaranteed
-   * to have been inserted.
-  **/
-  public void put(Object item) throws InterruptedException;  
+  public boolean offer(Object item, long msecs) throws InterruptedException;
 }

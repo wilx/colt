@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: TimeoutException.java
 
@@ -13,6 +11,8 @@ package edu.oswego.cs.dl.util.concurrent;
   29Jun1998  dl               Create public version
    4Aug1998  dl               Change to extend InterruptedException
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * Thrown by synchronization classes that report
@@ -34,14 +34,15 @@ public class TimeoutException extends InterruptedException {
    * Constructs a TimeoutException with given duration value.
    **/
   public TimeoutException(long time) {
-	duration = time;
-  }  
+    duration = time;
+  }
+
   /**
-	 * Constructs a TimeoutException with the
-	 * specified duration value and detail message.
-	 */
+     * Constructs a TimeoutException with the
+     * specified duration value and detail message.
+     */
   public TimeoutException(long time, String message) {
-	super(message);
-	duration = time;
-  }  
+    super(message);
+    duration = time;
+  }
 }

@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: BrokenBarrierException.java
 
@@ -12,6 +10,8 @@ package edu.oswego.cs.dl.util.concurrent;
   Date       Who                What
   29Jun1998  dl               Create public version
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * Thrown by Barrier upon interruption of participant threads
@@ -29,14 +29,15 @@ public class BrokenBarrierException extends RuntimeException {
    * Constructs a BrokenBarrierException with given index
    **/
   public BrokenBarrierException(int idx) {
-	index = idx;
-  }  
+    index = idx;
+  }
+
   /**
-	 * Constructs a BrokenBarrierException with the
-	 * specified index and detail message.
-	 */
+     * Constructs a BrokenBarrierException with the
+     * specified index and detail message.
+     */
   public BrokenBarrierException(int idx, String message) {
-	super(message);
-	index = idx;
-  }  
+    super(message);
+    index = idx;
+  }
 }

@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: ThreadFactory.java
 
@@ -13,6 +11,8 @@ package edu.oswego.cs.dl.util.concurrent;
   30Jun1998  dl               Create public version
 */
 
+package edu.oswego.cs.dl.util.concurrent;
+
 /**
  * Interface describing any class that can generate
  * new Thread objects. Using ThreadFactories removes
@@ -20,12 +20,12 @@ package edu.oswego.cs.dl.util.concurrent;
  * applications to use special thread subclasses, default
  * prioritization settings, etc.
  * <p>
- * [<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
+ * [<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
  **/
 
 public interface ThreadFactory {
   /** 
    * Create a new thread that will run the given command when started
    **/
-  public Thread newThread(Runnable command);  
+  public Thread newThread(Runnable command);
 }

@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: QueuedExecutor.java
 
@@ -15,6 +13,8 @@ package edu.oswego.cs.dl.util.concurrent;
    4may1999  dl               removed redundant interrupt detect
    7sep2000  dl               new shutdown methods
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * 
@@ -33,7 +33,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * where command objects themselves invoke execute, queuing can
  * sometimes lead to lockups, since commands that might allow
  * other threads to terminate do not run at all when they are in the queue.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 public class QueuedExecutor extends ThreadFactoryUser implements Executor {
 
@@ -48,6 +48,22 @@ public class QueuedExecutor extends ThreadFactoryUser implements Executor {
   /** true if thread should shut down after processing current task **/
   protected volatile boolean shutdown_; // latches true;
   
+  /**
+   * Return the thread being used to process commands, or
+   * null if there is no such thread. You can use this
+   * to invoke any special methods on the thread, for
+   * example, to interrupt it.
+   **/
+  public synchronized Thread getThread() { 
+    return thread_;
+  }
+
+  /** set thread_ to null to indicate termination **/
+  protected synchronized void clearThread() {
+    thread_ = null;
+  }
+
+
   /** The queue **/
   protected final Channel queue_;
 
@@ -60,41 +76,32 @@ public class QueuedExecutor extends ThreadFactoryUser implements Executor {
    * never make sense here.
    **/
   protected class RunLoop implements Runnable {
-	public void run() {
-	  try {
-		while (!shutdown_) {
-		  Runnable task = (Runnable)(queue_.take());
-		  if (task == ENDTASK) {
-			shutdown_ = true;
-			break;
-		  }
-		  else if (task != null) {
-			task.run();
-			task = null;
-		  }
-		  else
-			break;
-		}
-	  }
-	  catch (InterruptedException ex) {} // fallthrough
-	  finally {
-		clearThread();
-	  }
-	}
+    public void run() {
+      try {
+        while (!shutdown_) {
+          Runnable task = (Runnable)(queue_.take());
+          if (task == ENDTASK) {
+            shutdown_ = true;
+            break;
+          }
+          else if (task != null) {
+            task.run();
+            task = null;
+          }
+          else
+            break;
+        }
+      }
+      catch (InterruptedException ex) {} // fallthrough
+      finally {
+        clearThread();
+      }
+    }
   }
 
   protected final RunLoop runLoop_;
 
 
-  /**
-   * Construct a new QueuedExecutor that uses
-   * a BoundedLinkedQueue with the current
-   * DefaultChannelCapacity as its queue.
-   **/
-
-  public QueuedExecutor() {
-	this(new BoundedLinkedQueue());
-  }  
   /**
    * Construct a new QueuedExecutor that uses
    * the supplied Channel as its queue. 
@@ -107,13 +114,35 @@ public class QueuedExecutor extends ThreadFactoryUser implements Executor {
    **/
 
   public QueuedExecutor(Channel queue) {
-	queue_ = queue;
-	runLoop_ = new RunLoop();
-  }  
-  /** set thread_ to null to indicate termination **/
-  protected synchronized void clearThread() {
-	thread_ = null;
-  }  
+    queue_ = queue;
+    runLoop_ = new RunLoop();
+  }
+
+  /**
+   * Construct a new QueuedExecutor that uses
+   * a BoundedLinkedQueue with the current
+   * DefaultChannelCapacity as its queue.
+   **/
+
+  public QueuedExecutor() {
+    this(new BoundedLinkedQueue());
+  }
+
+  /**
+   * Start (or restart) the background thread to process commands. It has
+   * no effect if a thread is already running. This
+   * method can be invoked if the background thread crashed
+   * due to an unrecoverable exception.
+   **/
+
+  public synchronized void restart() {
+    if (thread_ == null && !shutdown_) {
+      thread_ = threadFactory_.newThread(runLoop_);
+      thread_.start();
+    }
+  }
+
+
   /** 
    * Arrange for execution of the command in the
    * background thread by adding it to the queue. 
@@ -124,31 +153,10 @@ public class QueuedExecutor extends ThreadFactoryUser implements Executor {
    * does not exist, it is created and started.
    **/
   public void execute(Runnable command) throws InterruptedException {
-	restart();
-	queue_.put(command);
-  }  
-  /**
-   * Return the thread being used to process commands, or
-   * null if there is no such thread. You can use this
-   * to invoke any special methods on the thread, for
-   * example, to interrupt it.
-   **/
-  public synchronized Thread getThread() { 
-	return thread_;
-  }  
-  /**
-   * Start (or restart) the background thread to process commands. It has
-   * no effect if a thread is already running. This
-   * method can be invoked if the background thread crashed
-   * due to an unrecoverable exception.
-   **/
+    restart();
+    queue_.put(command);
+  }
 
-  public synchronized void restart() {
-	if (thread_ == null && !shutdown_) {
-	  thread_ = threadFactory_.newThread(runLoop_);
-	  thread_.start();
-	}
-  }  
   /**
    * Terminate background thread after it processes all
    * elements currently in queue. Any tasks entered after this point will
@@ -159,30 +167,34 @@ public class QueuedExecutor extends ThreadFactoryUser implements Executor {
    * exceptions) if the task queue is a priority queue.
    **/
   public synchronized void shutdownAfterProcessingCurrentlyQueuedTasks() {
-	if (thread_ != null && !shutdown_) {
-	  try { queue_.put(ENDTASK); }
-	  catch (InterruptedException ex) {
-		Thread.currentThread().interrupt();
-	  }
-	}
-  }  
+    if (thread_ != null && !shutdown_) {
+      try { queue_.put(ENDTASK); }
+      catch (InterruptedException ex) {
+        Thread.currentThread().interrupt();
+      }
+    }
+  }
+
+
   /**
    * Terminate background thread after it processes the 
    * current task, removing other queued tasks and leaving them unprocessed.
    * A shut down thread cannot be restarted.
    **/
   public synchronized void shutdownAfterProcessingCurrentTask() {
-	shutdown_ = true;
-	if (thread_ != null) {
-	  try { 
-		while (queue_.poll(0) != null) ; // drain
-		queue_.put(ENDTASK); 
-	  }
-	  catch (InterruptedException ex) {
-		Thread.currentThread().interrupt();
-	  }
-	}
-  }  
+    shutdown_ = true;
+    if (thread_ != null) {
+      try { 
+        while (queue_.poll(0) != null) ; // drain
+        queue_.put(ENDTASK); 
+      }
+      catch (InterruptedException ex) {
+        Thread.currentThread().interrupt();
+      }
+    }
+  }
+
+
   /**
    * Terminate background thread even if it is currently processing
    * a task. This method uses Thread.interrupt, so relies on tasks
@@ -192,10 +204,13 @@ public class QueuedExecutor extends ThreadFactoryUser implements Executor {
    * A shut down thread cannot be restarted.
    **/
   public synchronized void shutdownNow() {
-	shutdown_ = true;
-	if (thread_ != null) {
-	  thread_.interrupt();
-	  shutdownAfterProcessingCurrentTask();
-	}
-  }  
+    shutdown_ = true;
+    if (thread_ != null) {
+      thread_.interrupt();
+      shutdownAfterProcessingCurrentTask();
+    }
+  }
+
+
+
 }

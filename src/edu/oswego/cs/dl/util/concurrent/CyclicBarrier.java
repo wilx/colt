@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: CyclicBarrier.java
 
@@ -13,6 +11,8 @@ package edu.oswego.cs.dl.util.concurrent;
   11Jul1998  dl               Create public version
   28Aug1998  dl               minor code simplification
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * A cyclic barrier is a reasonable choice for a barrier in contexts
@@ -80,7 +80,7 @@ package edu.oswego.cs.dl.util.concurrent;
  *    }
  * }
  * </pre>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 
  **/
 public class CyclicBarrier implements Barrier {
@@ -97,7 +97,8 @@ public class CyclicBarrier implements Barrier {
    * @exception IllegalArgumentException if parties less than or equal to zero.
    **/
 
-  public CyclicBarrier(int parties) { this(parties, null); }  
+  public CyclicBarrier(int parties) { this(parties, null); }
+
   /** 
    * Create a CyclicBarrier for the indicated number of parties.
    * and the given command to run at each barrier point.
@@ -105,11 +106,78 @@ public class CyclicBarrier implements Barrier {
    **/
 
   public CyclicBarrier(int parties, Runnable command) { 
-	if (parties <= 0) throw new IllegalArgumentException();
-	parties_ = parties; 
-	count_ = parties;
-	barrierCommand_ = command;
-  }  
+    if (parties <= 0) throw new IllegalArgumentException();
+    parties_ = parties; 
+    count_ = parties;
+    barrierCommand_ = command;
+  }
+
+  /**
+   * Set the command to run at the point at which all threads reach the
+   * barrier. This command is run exactly once, by the thread
+   * that trips the barrier. The command is not run if the barrier is
+   * broken.
+   * @param command the command to run. If null, no command is run.
+   * @return the previous command
+   **/
+
+  public synchronized Runnable setBarrierCommand(Runnable command) {
+    Runnable old = barrierCommand_;
+    barrierCommand_ = command;
+    return old;
+  }
+
+  public synchronized boolean broken() { return broken_; }
+
+  /**
+   * Reset to initial state. Clears both the broken status
+   * and any record of waiting threads, and releases all
+   * currently waiting threads with indeterminate return status.
+   * This method is intended only for use in recovery actions
+   * in which it is somehow known
+   * that no thread could possibly be relying on the
+   * the synchronization properties of this barrier.
+   **/
+
+  public synchronized void restart() { 
+    broken_ = false; 
+    ++resets_;
+    count_ = parties_;
+    notifyAll();
+  }
+  
+ 
+  public int parties() { return parties_; }
+
+  /**
+   * Enter barrier and wait for the other parties()-1 threads.
+   * @return the arrival index: the number of other parties 
+   * that were still waiting
+   * upon entry. This is a unique value from zero to parties()-1.
+   * If it is zero, then the current
+   * thread was the last party to hit barrier point
+   * and so was responsible for releasing the others. 
+   * @exception BrokenBarrierException if any other thread
+   * in any previous or current barrier 
+   * since either creation or the last <code>restart</code>
+   * operation left the barrier
+   * prematurely due to interruption or time-out. (If so,
+   * the <code>broken</code> status is also set.)
+   * Threads that are noticied to have been
+   * interrupted <em>after</em> being released are not considered
+   * to have broken the barrier.
+   * In all cases, the interruption
+   * status of the current thread is preserved, so can be tested
+   * by checking <code>Thread.interrupted</code>. 
+   * @exception InterruptedException if this thread was interrupted
+   * during the barrier, and was the one causing breakage. 
+   * If so, <code>broken</code> status is also set.
+   **/
+
+  public int barrier() throws InterruptedException, BrokenBarrierException {
+    return doBarrier(false, 0);
+  }
+
   /**
    * Enter barrier and wait at most msecs for the other parties()-1 threads.
    * @return if not timed out, the arrival index: the number of other parties 
@@ -139,136 +207,78 @@ public class CyclicBarrier implements Barrier {
    **/
 
   public int attemptBarrier(long msecs) 
-	throws InterruptedException, TimeoutException, BrokenBarrierException {
-	return doBarrier(true, msecs);
-  }  
-  /**
-   * Enter barrier and wait for the other parties()-1 threads.
-   * @return the arrival index: the number of other parties 
-   * that were still waiting
-   * upon entry. This is a unique value from zero to parties()-1.
-   * If it is zero, then the current
-   * thread was the last party to hit barrier point
-   * and so was responsible for releasing the others. 
-   * @exception BrokenBarrierException if any other thread
-   * in any previous or current barrier 
-   * since either creation or the last <code>restart</code>
-   * operation left the barrier
-   * prematurely due to interruption or time-out. (If so,
-   * the <code>broken</code> status is also set.)
-   * Threads that are noticied to have been
-   * interrupted <em>after</em> being released are not considered
-   * to have broken the barrier.
-   * In all cases, the interruption
-   * status of the current thread is preserved, so can be tested
-   * by checking <code>Thread.interrupted</code>. 
-   * @exception InterruptedException if this thread was interrupted
-   * during the barrier, and was the one causing breakage. 
-   * If so, <code>broken</code> status is also set.
-   **/
+    throws InterruptedException, TimeoutException, BrokenBarrierException {
+    return doBarrier(true, msecs);
+  }
 
-  public int barrier() throws InterruptedException, BrokenBarrierException {
-	return doBarrier(false, 0);
-  }  
-  public synchronized boolean broken() { return broken_; }  
   protected synchronized int doBarrier(boolean timed, long msecs) 
-	throws InterruptedException, TimeoutException, BrokenBarrierException  { 
-	
-	int index = --count_;
+    throws InterruptedException, TimeoutException, BrokenBarrierException  { 
+    
+    int index = --count_;
 
-	if (broken_) {
-	  throw new BrokenBarrierException(index);
-	}
-	else if (Thread.interrupted()) {
-	  broken_ = true;
-	  notifyAll();
-	  throw new InterruptedException();
-	}
-	else if (index == 0) {  // tripped
-	  count_ = parties_;
-	  ++resets_;
-	  notifyAll();
-	  try {
-		if (barrierCommand_ != null)
-		  barrierCommand_.run();
-		return 0;
-	  }
-	  catch (RuntimeException ex) {
-		broken_ = true;
-		return 0;
-	  }
-	}
-	else if (timed && msecs <= 0) {
-	  broken_ = true;
-	  notifyAll();
-	  throw new TimeoutException(msecs);
-	}
-	else {                   // wait until next reset
-	  int r = resets_;      
-	  long startTime = (timed)? System.currentTimeMillis() : 0;
-	  long waitTime = msecs;
-	  for (;;) {
-		try {
-		  wait(waitTime);
-		}
-		catch (InterruptedException ex) {
-		  // Only claim that broken if interrupted before reset
-		  if (resets_ == r) { 
-			broken_ = true;
-			notifyAll();
-			throw ex;
-		  }
-		  else {
-			Thread.currentThread().interrupt(); // propagate
-		  }
-		}
+    if (broken_) {
+      throw new BrokenBarrierException(index);
+    }
+    else if (Thread.interrupted()) {
+      broken_ = true;
+      notifyAll();
+      throw new InterruptedException();
+    }
+    else if (index == 0) {  // tripped
+      count_ = parties_;
+      ++resets_;
+      notifyAll();
+      try {
+        if (barrierCommand_ != null)
+          barrierCommand_.run();
+        return 0;
+      }
+      catch (RuntimeException ex) {
+        broken_ = true;
+        return 0;
+      }
+    }
+    else if (timed && msecs <= 0) {
+      broken_ = true;
+      notifyAll();
+      throw new TimeoutException(msecs);
+    }
+    else {                   // wait until next reset
+      int r = resets_;      
+      long startTime = (timed)? System.currentTimeMillis() : 0;
+      long waitTime = msecs;
+      for (;;) {
+        try {
+          wait(waitTime);
+        }
+        catch (InterruptedException ex) {
+          // Only claim that broken if interrupted before reset
+          if (resets_ == r) { 
+            broken_ = true;
+            notifyAll();
+            throw ex;
+          }
+          else {
+            Thread.currentThread().interrupt(); // propagate
+          }
+        }
 
-		if (broken_) 
-		  throw new BrokenBarrierException(index);
+        if (broken_) 
+          throw new BrokenBarrierException(index);
 
-		else if (r != resets_)
-		  return index;
+        else if (r != resets_)
+          return index;
 
-		else if (timed) {
-		  waitTime = msecs - (System.currentTimeMillis() - startTime);
-		  if  (waitTime <= 0) {
-			broken_ = true;
-			notifyAll();
-			throw new TimeoutException(msecs);
-		  }
-		}
-	  }
-	}
-  }  
-  public int parties() { return parties_; }  
-  /**
-   * Reset to initial state. Clears both the broken status
-   * and any record of waiting threads, and releases all
-   * currently waiting threads with indeterminate return status.
-   * This method is intended only for use in recovery actions
-   * in which it is somehow known
-   * that no thread could possibly be relying on the
-   * the synchronization properties of this barrier.
-   **/
+        else if (timed) {
+          waitTime = msecs - (System.currentTimeMillis() - startTime);
+          if  (waitTime <= 0) {
+            broken_ = true;
+            notifyAll();
+            throw new TimeoutException(msecs);
+          }
+        }
+      }
+    }
+  }
 
-  public synchronized void restart() { 
-	broken_ = false; 
-	++resets_;
-	count_ = parties_;
-	notifyAll();
-  }  
-  /**
-   * Set the command to run at the point at which all threads reach the
-   * barrier. This command is run exactly once, by the thread
-   * that trips the barrier. The command is not run if the barrier is
-   * broken.
-   * @param command the command to run. If null, no command is run.
-   * @return the previous command
-   **/
-
-  public synchronized Runnable setBarrierCommand(Runnable command) {
-	Runnable old = barrierCommand_;
-	barrierCommand_ = command;
-	return old;
-  }  
 }

@@ -20,7 +20,7 @@ This directory contains everything necessary to build the entire Colt distributi
 2. Building the distribution
 ============================
 
-This distribution was build with gmake 3.77 using IBMJDK1.3 on Linux.
+This distribution was build with gmake 3.77 using SUN JDK 1.3.1 on Linux.
 Unix:
 	Building as-is should be no problem on UNIX flavours other than Linux and Solaris.
 NT:
@@ -31,10 +31,10 @@ For the build to succeed, currently a few directories must exists.
 Perhaps the best idea is to reproduce my directory tree, then there should be no problems:
 
 TOPDIR = $(HOME)/coltdev
-TOPDIR/MySources      - this directory you are looking at now, with all subdirs (docu cern/colt cern/jet corejava etc.). You already have this in place.
-TOPDIR/MyDocs/doc     - the javadoc will go here.
-TOPDIR/MyClasses      - the classes will go here.
-TOPDIR/MyJars         - the final download file "colt1.0b4-1.zip" will go here, as well as some temporary zip and jar files (colt.jar, src.zip).
+TOPDIR/src      - this directory you are looking at now, with all subdirs (docu cern/colt cern/jet corejava etc.). You already have this in place.
+TOPDIR/docs/doc     - the javadoc will go here.
+TOPDIR/classes      - the classes will go here.
+TOPDIR/lib         - the final download file "colt1.0.3.zip" will go here, as well as some temporary zip and jar files (colt.jar, src.zip).
 
 If you organize your dirs like that, the only thing to build the distribution is take the makefile and change the line
 
@@ -46,26 +46,14 @@ TOPDIR = $(HOME)/java/stuff/colt
 
 
 
-Also change the line pointing to the JDK:
-
-JDK=/usr/local/libexec/jdk/1.2.2
-
-to your JDK, for example
-
-JDK = /usr/local/bin/jdk/1.2.2
-or
-JDK = /Applications/Compilers/Java/jdk1.2
-
-
-
-Now cd to TOPDIR/MySources and type
+Now cd to TOPDIR/src and type
 
 gmake all
 
-And a long while later "colt1.0.2.zip" should pop up in TOPDIR/MyJars.
+And a long while later "colt1.0.3.zip" should pop up in TOPDIR/lib.
 Perhaps I will improve the makefile one day, it's certainly not that elegant...
 
-CAUTION: the makefile will delete everything in the directories TOPDIR/MyClasses and TOPDIR/MyDocs/doc
+CAUTION: the makefile will delete everything in the directories TOPDIR/classes and TOPDIR/docs/doc
 In order not to regret having made a build, make sure there is nothing valuable in there.
 
 

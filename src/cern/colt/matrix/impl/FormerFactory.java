@@ -1,11 +1,3 @@
-/*
-Copyright © 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
-*/
 package cern.colt.matrix.impl;
 
 /**
@@ -53,16 +45,16 @@ public class FormerFactory {
  */
 public Former create(final String format) {
 	return new Former() {
-		//private corejava.Format f = (format!=null ? new corejava.Format(format) : null);
-		private corejava.PrintfFormat f = (format!=null ? new corejava.PrintfFormat(format) : null);
+		private corejava.Format f = (format!=null ? new corejava.Format(format) : null);
+		//private corejava.PrintfFormat f = (format!=null ? new corejava.PrintfFormat(format) : null);
 		public String form(double value) {
 			if (f==null || value == Double.POSITIVE_INFINITY || value == Double.NEGATIVE_INFINITY || value != value) {
 				// value != value <==> Double.isNaN(value)
 				// Work around bug in corejava.Format.form() for inf, -inf, NaN
 				return String.valueOf(value);
 			}
-			//return f.form(value);
-			return f.sprintf(value);
+		return f.form(value);
+		//return f.sprintf(value);
 		}
 	};
 }

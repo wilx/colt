@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: SynchronizedVariable.java
 
@@ -12,6 +10,8 @@ package edu.oswego.cs.dl.util.concurrent;
   Date       Who                What
   30Jun1998  dl               Create public version
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * Base class for simple,  small classes 
@@ -173,30 +173,33 @@ package edu.oswego.cs.dl.util.concurrent;
  *
  *
  *
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 
 public class SynchronizedVariable implements Executor {
 
   protected final Object lock_;
 
-  /** Create a SynchronizedVariable using itself as the lock **/
-  public SynchronizedVariable() { lock_ = this; }  
   /** Create a SynchronizedVariable using the supplied lock **/
-  public SynchronizedVariable(Object lock) { lock_ = lock; }  
+  public SynchronizedVariable(Object lock) { lock_ = lock; }
+
+  /** Create a SynchronizedVariable using itself as the lock **/
+  public SynchronizedVariable() { lock_ = this; }
+
+  /**
+   * Return the lock used for all synchronization for this object
+   **/
+  public Object getLock() { return lock_; }
+
   /**
    * If current thread is not interrupted, execute the given command 
    * within this object's lock
    **/
 
   public void execute(Runnable command) throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-	synchronized (lock_) { 
-	  command.run();
-	}
-  }  
-  /**
-   * Return the lock used for all synchronization for this object
-   **/
-  public Object getLock() { return lock_; }  
+    if (Thread.interrupted()) throw new InterruptedException();
+    synchronized (lock_) { 
+      command.run();
+    }
+  }
 }

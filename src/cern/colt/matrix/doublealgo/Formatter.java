@@ -13,12 +13,12 @@ import cern.colt.matrix.impl.*;
 import java.lang.Double;
 /** 
 Flexible, well human readable matrix print formatting; By default decimal point aligned. Build on top of the C-like <i>sprintf</i> functionality 
-  provided by the {@link corejava.PrintfFormat} class written by Sun's Allan Jacobs.
+  provided by the {@link corejava.Format} class written by Cay Horstmann.
   Currenly works on 1-d, 2-d and 3-d matrices.
   Note that in most cases you will not need to get familiar with this class; just call <tt>matrix.toString()</tt> and be happy with the default formatting.
   This class is for advanced requirements.
-<p> Can't exactly remember the syntax of printf format strings? See {@link corejava.PrintfFormat} 
-  or <a href="http://www.efd.lth.se/%7Ed93hb/java/printf/docs/index.html">Henrik 
+<p> Can't exactly remember the syntax of printf format strings? See {@link corejava.Format} 
+  or <a href="http://www.braju.com/docs/index.html">Henrik 
   Nordberg's documentation</a>, or the <a href="http://www.dinkumware.com/htm_cl/lib_prin.html#Print%20Functions">Dinkumware's 
   C Library Reference</a>.
   

@@ -80,6 +80,12 @@ public float nextFloatFromTo(float from, float to) {
 	return (float) nextDoubleFromTo(from,to);
 }
 /**
+ * Returns a uniformly distributed random number in the closed interval <tt>[min,max]</tt> (including <tt>min</tt> and <tt>max</tt>).
+ */
+public int nextInt() {	
+	return nextIntFromTo((int)Math.round(min), (int)Math.round(max));
+}
+/**
  * Returns a uniformly distributed random number in the closed interval <tt>[from,to]</tt> (including <tt>from</tt> and <tt>to</tt>).
  * Pre conditions: <tt>from &lt;= to</tt>.
  */

@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: WaiterPreferenceSemaphore.java
 
@@ -14,6 +12,8 @@ package edu.oswego.cs.dl.util.concurrent;
    5Aug1998  dl               replaced int counters with longs
 */
 
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * An implementation of counting Semaphores that
@@ -43,99 +43,105 @@ package edu.oswego.cs.dl.util.concurrent;
  *  been known to occur) in which case you need to use
  *  a FIFOSemaphore to maintain a reasonable approximation
  *  of fairness.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 **/
 
 
 public final class WaiterPreferenceSemaphore extends Semaphore  {
 
-  /** Number of waiting threads **/
-  protected long waits_ = 0;   
-
   /** 
    * Create a Semaphore with the given initial number of permits.
   **/
 
-  public WaiterPreferenceSemaphore(long initial) {  super(initial); }  
-  public void acquire() throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-	synchronized(this) {
-	  /*
-		Only take if there are more permits than threads waiting
-		for permits. This prevents infinite overtaking.
-	  */ 
-	  if (permits_ > waits_) { 
-		--permits_;
-		return;
-	  }
-	  else { 
-		++waits_;
-		try { 
-		  for (;;) {
-			wait(); 
-			if (permits_ > 0) {
-			  --waits_;
-			  --permits_;
-			  return;
-			}
-		  }
-		}
-		catch(InterruptedException ex) { 
-		  --waits_;
-		  notify();
-		  throw ex;
-		}
-	  }
-	}
-  }  
-  public boolean attempt(long msecs) throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
+  public WaiterPreferenceSemaphore(long initial) {  super(initial); }
 
-	synchronized(this) {
-	  if (permits_ > waits_) { 
-		--permits_;
-		return true;
-	  }
-	  else if (msecs <= 0)   
-		return false;
-	  else {
-		++waits_;
-		
-		long startTime = System.currentTimeMillis();
-		long waitTime = msecs;
-		
-		try {
-		  for (;;) {
-			wait(waitTime);
-			if (permits_ > 0) {
-			  --waits_;
-			  --permits_;
-			  return true;
-			}
-			else { // got a time-out or false-alarm notify
-			  waitTime = msecs - (System.currentTimeMillis() - startTime);
-			  if (waitTime <= 0) {
-				--waits_;
-				return false;
-			  }
-			}
-		  }
-		}
-		catch(InterruptedException ex) { 
-		  --waits_;
-		  notify();
-		  throw ex;
-		}
-	  }
-	}
-  }  
+  /** Number of waiting threads **/
+  protected long waits_ = 0;   
+
+  public void acquire() throws InterruptedException {
+    if (Thread.interrupted()) throw new InterruptedException();
+    synchronized(this) {
+      /*
+        Only take if there are more permits than threads waiting
+        for permits. This prevents infinite overtaking.
+      */ 
+      if (permits_ > waits_) { 
+        --permits_;
+        return;
+      }
+      else { 
+        ++waits_;
+        try { 
+          for (;;) {
+            wait(); 
+            if (permits_ > 0) {
+              --waits_;
+              --permits_;
+              return;
+            }
+          }
+        }
+        catch(InterruptedException ex) { 
+          --waits_;
+          notify();
+          throw ex;
+        }
+      }
+    }
+  }
+
+  public boolean attempt(long msecs) throws InterruptedException {
+    if (Thread.interrupted()) throw new InterruptedException();
+
+    synchronized(this) {
+      if (permits_ > waits_) { 
+        --permits_;
+        return true;
+      }
+      else if (msecs <= 0)   
+        return false;
+      else {
+        ++waits_;
+        
+        long startTime = System.currentTimeMillis();
+        long waitTime = msecs;
+        
+        try {
+          for (;;) {
+            wait(waitTime);
+            if (permits_ > 0) {
+              --waits_;
+              --permits_;
+              return true;
+            }
+            else { // got a time-out or false-alarm notify
+              waitTime = msecs - (System.currentTimeMillis() - startTime);
+              if (waitTime <= 0) {
+                --waits_;
+                return false;
+              }
+            }
+          }
+        }
+        catch(InterruptedException ex) { 
+          --waits_;
+          notify();
+          throw ex;
+        }
+      }
+    }
+  }
+
   public synchronized void release() {
-	++permits_;
-	notify();
-  }  
+    ++permits_;
+    notify();
+  }
+
   /** Release N permits **/
   public synchronized void release(long n) {
-	permits_ += n;
-	for (long i = 0; i < n; ++i) notify();
-  }  
+    permits_ += n;
+    for (long i = 0; i < n; ++i) notify();
+  }
+
 }
+

@@ -351,7 +351,10 @@ public static DoubleQuantileFinder newDoubleQuantileFinder(boolean known_N, long
 		double preComputeEpsilon = -1.0;
 		if (resultUnknown[3] == 1) preComputeEpsilon = epsilon;
 
-		if (N==Long.MAX_VALUE) { // no maximum N provided by user.
+		//if (N==Long.MAX_VALUE) { // no maximum N provided by user.
+		
+		// if (true) fixes bug reported by LarryPeranich@fairisaac.com
+		if (true) { // no maximum N provided by user.
 			if (b1 == 1) return new ExactDoubleQuantileFinder();
 			return new UnknownDoubleQuantileEstimator((int)b1,(int)k1, (int)h1, preComputeEpsilon, generator);
 		}
@@ -361,7 +364,7 @@ public static DoubleQuantileFinder newDoubleQuantileFinder(boolean known_N, long
 		
 		// IMPORTANT: for known finder, switch sampling off (delta == 0) !!!
 		// with knownN-sampling we can only guarantee the errors if the input sequence has EXACTLY N elements.
-		// with knownN-no samling we can also guarantee the errors for sequences SMALLER than N elements.
+		// with knownN-no sampling we can also guarantee the errors for sequences SMALLER than N elements.
 		long[] resultKnown = known_N_compute_B_and_K(N, epsilon, 0, quantiles, samplingRate);
 		
 		long b2 = resultKnown[0];

@@ -318,12 +318,15 @@ The method considers the splitter elements <tt>s[splitFrom] .. s[splitTo]</tt>.
 Upon return <tt>splitIndexes[splitFrom..splitTo]</tt> will be set accordingly.
 Therefore, must satisfy <tt>splitIndexes.length > splitTo</tt>.
 
-@param comp the comparator comparing a splitter an element of the generic data.
+@param comp the comparator comparing a splitter with an element of the generic data.
 	Takes as first argument the index <tt>a</tt> within the generic splitters <tt>s</tt>.
 	Takes as second argument the index <tt>b</tt> within the generic data <tt>g</tt>.
 @param comp2 the comparator to determine the order of the generic data.
 	Takes as first argument the index <tt>a</tt> within the generic data <tt>g</tt>.
 	Takes as second argument the index <tt>b</tt> within the generic data <tt>g</tt>.
+@param comp3 the comparator comparing a splitter with another splitter.
+	Takes as first argument the index <tt>a</tt> within the generic splitters <tt>s</tt>.
+	Takes as second argument the index <tt>b</tt> within the generic splitters <tt>g</tt>.
 @param swapper an object that knows how to swap the elements at any two indexes (a,b).
 	Takes as first argument the index <tt>b</tt> within the generic data <tt>g</tt>.
 	Takes as second argument the index <tt>c</tt> within the generic data <tt>g</tt>.
@@ -335,7 +338,7 @@ Tip: Normally you will have <tt>splitIndexes.length == s.length</tt> as well as 
 @see Sort#sort(int,int,IntComparator,Swapper)
 @see Sorting#binarySearchFromTo(int,int,IntComparator)
 */
-public static void genericPartition(int from, int to, int splitFrom, int splitTo, int[] splitIndexes, IntComparator comp, IntComparator comp2, Swapper swapper) {
+public static void genericPartition(int from, int to, int splitFrom, int splitTo, int[] splitIndexes, IntComparator comp, IntComparator comp2, IntComparator comp3, Swapper swapper) {
 	int splitter; // int, double --> template type dependent
 	
 	if (splitFrom>splitTo) return; // nothing to do
@@ -380,28 +383,30 @@ public static void genericPartition(int from, int to, int splitFrom, int splitTo
 	int	splitIndex = genericPartition(from,to,splitter,comp,swapper);
 	splitIndexes[medianIndex] = splitIndex;
 
+	
 	// Optimization: Handle special cases to cut down recursions.
 	if (splitIndex < from) { // no element falls into this bin
 		// all bins with splitters[i] <= splitter are empty
 		int i = medianIndex-1;
-		while (i>=splitFrom && (!(comp.compare(splitter,i) < 0))) splitIndexes[i--] = splitIndex;
+		while (i>=splitFrom && (!(comp3.compare(splitter,i) < 0))) splitIndexes[i--] = splitIndex;
 		splitFrom = medianIndex+1;
 	}
 	else if (splitIndex >= to) { // all elements fall into this bin
 		// all bins with splitters[i] >= splitter are empty
 		int i = medianIndex+1;
-		while (i<=splitTo && (!(comp.compare(splitter,i) > 0))) splitIndexes[i++] = splitIndex;
+		while (i<=splitTo && (!(comp3.compare(splitter,i) > 0))) splitIndexes[i++] = splitIndex;
 		splitTo = medianIndex-1;
 	}
+	
 
 	// recursively partition left half
 	if (splitFrom <= medianIndex-1) {
-		genericPartition(from,         splitIndex, splitFrom, medianIndex-1,  splitIndexes, comp, comp2, swapper);
+		genericPartition(from,         splitIndex, splitFrom, medianIndex-1,  splitIndexes, comp, comp2, comp3, swapper);
 	}
 	
 	// recursively partition right half
 	if (medianIndex+1 <= splitTo) {
-		genericPartition(splitIndex+1, to,         medianIndex+1,  splitTo,   splitIndexes, comp, comp2, swapper);
+		genericPartition(splitIndex+1, to,         medianIndex+1,  splitTo,   splitIndexes, comp, comp2, comp3, swapper);
 	}
 }
 /**

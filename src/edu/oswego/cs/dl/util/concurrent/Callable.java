@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 
 /*
   File: Callable.java
@@ -16,6 +14,8 @@ package edu.oswego.cs.dl.util.concurrent;
   27Jan1999  dl               Undo last change
 */
 
+package edu.oswego.cs.dl.util.concurrent;
+
 /**
  * Interface for runnable actions that bear results and/or throw Exceptions.
  * This interface is designed to provide a common protocol for
@@ -24,11 +24,12 @@ package edu.oswego.cs.dl.util.concurrent;
  * they are ordinarily used as the bases of Runnables that set
  * FutureResults
  * <p>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  * @see FutureResult
  **/
 
 public interface Callable {
   /** Perform some action that returns a result or throws an exception **/
-  Object call() throws Exception;  
+  Object call() throws Exception;
 }
+

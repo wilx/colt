@@ -1,6 +1,5 @@
+
 package edu.oswego.cs.dl.util.concurrent.misc;
-
-
 import  edu.oswego.cs.dl.util.concurrent.*;
 
 
@@ -13,103 +12,112 @@ public class CVBuffer implements BoundedChannel {
   private int putPtr = 0;
   private final Object[] array;
 
-  public CVBuffer() { 
-	this(DefaultChannelCapacity.get()); 
-  }  
   public CVBuffer(int cap) { 
-	array = new Object[cap];
-	mutex = new Mutex();
-	notFull = new CondVar(mutex);
-	notEmpty = new CondVar(mutex);
-  }  
-  public int capacity() { return array.length; }  
-  public boolean offer(Object x, long msecs) throws InterruptedException {
-	mutex.acquire();
-	try {
-	  if (count == array.length) {
-		notFull.timedwait(msecs);
-		if (count == array.length)
-		  return false;
-	  }
-	  array[putPtr] = x;
-	  putPtr = (putPtr + 1) % array.length;
-	  ++count;
-	  notEmpty.signal();
-	  return true;
-	}
-	finally {
-	  mutex.release();
-	}
-  }  
-  public Object peek() {
-	try {
-	  mutex.acquire();
-	  try {
-		if (count == 0) 
-		  return null;
-		else
-		  return array[takePtr];
-	  }
-	  finally {
-		mutex.release();
-	  }
-	}
-	catch (InterruptedException ex) {
-	  Thread.currentThread().interrupt();
-	  return null;
-	}
-  }  
-  public Object poll(long msecs) throws InterruptedException {
-	Object x = null;
-	mutex.acquire();
-	try {
-	  if (count == 0) {
-		notEmpty.timedwait(msecs);
-		if (count == 0)
-		  return null;
-	  }
-	  x = array[takePtr];
-	  array[takePtr] = null;
-	  takePtr = (takePtr + 1) % array.length;
-	  --count;
-	  notFull.signal();
-	}
-	finally {
-	  mutex.release();
-	}
-	return x;
-  }  
+    array = new Object[cap];
+    mutex = new Mutex();
+    notFull = new CondVar(mutex);
+    notEmpty = new CondVar(mutex);
+  }
+
+  public CVBuffer() { 
+    this(DefaultChannelCapacity.get()); 
+  }
+
+  public int capacity() { return array.length; }
+
   public void put(Object x) throws InterruptedException {
-	mutex.acquire();
-	try {
-	  while (count == array.length) {
-		notFull.await();
-	  }
-	  array[putPtr] = x;
-	  putPtr = (putPtr + 1) % array.length;
-	  ++count;
-	  notEmpty.signal();
-	}
-	finally {
-	  mutex.release();
-	}
-  }  
+    mutex.acquire();
+    try {
+      while (count == array.length) {
+        notFull.await();
+      }
+      array[putPtr] = x;
+      putPtr = (putPtr + 1) % array.length;
+      ++count;
+      notEmpty.signal();
+    }
+    finally {
+      mutex.release();
+    }
+  }
+
   public Object take() throws InterruptedException {
-	Object x = null;
-	mutex.acquire();
-	try {
-	  while (count == 0) {
-		notEmpty.await();
-	  }
-	  x = array[takePtr];
-	  array[takePtr] = null;
-	  takePtr = (takePtr + 1) % array.length;
-	  --count;
-	  notFull.signal();
-	}
-	finally {
-	  mutex.release();
-	}
-	return x;
-  }  
+    Object x = null;
+    mutex.acquire();
+    try {
+      while (count == 0) {
+        notEmpty.await();
+      }
+      x = array[takePtr];
+      array[takePtr] = null;
+      takePtr = (takePtr + 1) % array.length;
+      --count;
+      notFull.signal();
+    }
+    finally {
+      mutex.release();
+    }
+    return x;
+  }
+    
+  public boolean offer(Object x, long msecs) throws InterruptedException {
+    mutex.acquire();
+    try {
+      if (count == array.length) {
+        notFull.timedwait(msecs);
+        if (count == array.length)
+          return false;
+      }
+      array[putPtr] = x;
+      putPtr = (putPtr + 1) % array.length;
+      ++count;
+      notEmpty.signal();
+      return true;
+    }
+    finally {
+      mutex.release();
+    }
+  }
+  
+  public Object poll(long msecs) throws InterruptedException {
+    Object x = null;
+    mutex.acquire();
+    try {
+      if (count == 0) {
+        notEmpty.timedwait(msecs);
+        if (count == 0)
+          return null;
+      }
+      x = array[takePtr];
+      array[takePtr] = null;
+      takePtr = (takePtr + 1) % array.length;
+      --count;
+      notFull.signal();
+    }
+    finally {
+      mutex.release();
+    }
+    return x;
+  }
+
+  public Object peek() {
+    try {
+      mutex.acquire();
+      try {
+        if (count == 0) 
+          return null;
+        else
+          return array[takePtr];
+      }
+      finally {
+        mutex.release();
+      }
+    }
+    catch (InterruptedException ex) {
+      Thread.currentThread().interrupt();
+      return null;
+    }
+  }
+
 }
+

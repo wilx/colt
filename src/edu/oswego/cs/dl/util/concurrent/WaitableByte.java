@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: WaitableByte.java
 
@@ -13,11 +11,13 @@ package edu.oswego.cs.dl.util.concurrent;
   23Jun1998  dl               Create public version
 */
 
+package edu.oswego.cs.dl.util.concurrent;
+
 /**
  * A class useful for offloading waiting and signalling operations
  * on single byte variables. 
  * <p>
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 
 public class WaitableByte extends SynchronizedByte {
@@ -26,123 +26,142 @@ public class WaitableByte extends SynchronizedByte {
    * and using its own internal lock.
    **/
   public WaitableByte(byte initialValue) { 
-	super(initialValue); 
-  }  
+    super(initialValue); 
+  }
+
   /** 
    * Make a new WaitableByte with the given initial value,
    * and using the supplied lock.
    **/
   public WaitableByte(byte initialValue, Object lock) { 
-	super(initialValue, lock); 
-  }  
-  public byte add(byte amount) { 
-	synchronized (lock_) {
-	  lock_.notifyAll();
-	  return super.add(amount);
-	}
-  }  
-  public boolean commit(byte assumedValue, byte newValue) {
-	synchronized (lock_) {
-	  boolean success = super.commit(assumedValue, newValue);
-	  if (success) lock_.notifyAll();
-	  return success;
-	}
-  }  
-  public byte decrement() { 
-	synchronized (lock_) {
-	  lock_.notifyAll();
-	  return super.decrement();
-	}
-  }  
-  public byte divide(byte factor) { 
-	synchronized (lock_) {
-	  lock_.notifyAll();
-	  return super.divide(factor);
-	}
-  }  
-  public byte increment() { 
-	synchronized (lock_) {
-	  lock_.notifyAll();
-	  return super.increment();
-	}
-  }  
-  public byte multiply(byte factor) { 
-	synchronized (lock_) {
-	  lock_.notifyAll();
-	  return super.multiply(factor);
-	}
-  }  
+    super(initialValue, lock); 
+  }
+
+
   public byte set(byte newValue) { 
-	synchronized (lock_) {
-	  lock_.notifyAll();
-	  return super.set(newValue);
-	}
-  }  
+    synchronized (lock_) {
+      lock_.notifyAll();
+      return super.set(newValue);
+    }
+  }
+
+  public boolean commit(byte assumedValue, byte newValue) {
+    synchronized (lock_) {
+      boolean success = super.commit(assumedValue, newValue);
+      if (success) lock_.notifyAll();
+      return success;
+    }
+  }
+
+  public byte increment() { 
+    synchronized (lock_) {
+      lock_.notifyAll();
+      return super.increment();
+    }
+  }
+
+  public byte decrement() { 
+    synchronized (lock_) {
+      lock_.notifyAll();
+      return super.decrement();
+    }
+  }
+
+  public byte add(byte amount) { 
+    synchronized (lock_) {
+      lock_.notifyAll();
+      return super.add(amount);
+    }
+  }
+
   public byte subtract(byte amount) { 
-	synchronized (lock_) {
-	  lock_.notifyAll();
-	  return super.subtract(amount);
-	}
-  }  
+    synchronized (lock_) {
+      lock_.notifyAll();
+      return super.subtract(amount);
+    }
+  }
+
+  public byte multiply(byte factor) { 
+    synchronized (lock_) {
+      lock_.notifyAll();
+      return super.multiply(factor);
+    }
+  }
+
+  public byte divide(byte factor) { 
+    synchronized (lock_) {
+      lock_.notifyAll();
+      return super.divide(factor);
+    }
+  }
+
+
   /**
    * Wait until value equals c, then run action if nonnull.
    * The action is run with the synchronization lock held.
    **/
 
   public void whenEqual(byte c, Runnable action) throws InterruptedException {
-	synchronized(lock_) {
-	  while (!(value_ == c)) lock_.wait();
-	  if (action != null) action.run();
-	}
-  }  
-  /**
-   * wait until value greater than c, then run action if nonnull.
-   * The action is run with the synchronization lock held.
-   **/
-  public void whenGreater(byte c, Runnable action) throws InterruptedException {
-	synchronized (lock_) {
-	  while (!(value_ > c)) lock_.wait();
-	  if (action != null) action.run();
-	}
-  }  
-  /**
-   * wait until value greater than or equal to c, then run action if nonnull.
-   * The action is run with the synchronization lock held.
-   **/
-  public void whenGreaterEqual(byte c, Runnable action) throws InterruptedException {
-	synchronized (lock_) {
-	  while (!(value_ >= c)) lock_.wait();
-	  if (action != null) action.run();
-	}
-  }  
-  /**
-   * wait until value less than c, then run action if nonnull.
-   * The action is run with the synchronization lock held.
-   **/
-  public void whenLess(byte c, Runnable action) throws InterruptedException {
-	synchronized (lock_) {
-	  while (!(value_ < c)) lock_.wait();
-	  if (action != null) action.run();
-	}
-  }  
-  /**
-   * wait until value less than or equal to c, then run action if nonnull.
-   * The action is run with the synchronization lock held.
-   **/
-  public void whenLessEqual(byte c, Runnable action) throws InterruptedException {
-	synchronized (lock_) {
-	  while (!(value_ <= c)) lock_.wait();
-	  if (action != null) action.run();
-	}
-  }  
+    synchronized(lock_) {
+      while (!(value_ == c)) lock_.wait();
+      if (action != null) action.run();
+    }
+  }
+
   /**
    * wait until value not equal to c, then run action if nonnull.
    * The action is run with the synchronization lock held.
    **/
   public void whenNotEqual(byte c, Runnable action) throws InterruptedException {
-	synchronized (lock_) {
-	  while (!(value_ != c)) lock_.wait();
-	  if (action != null) action.run();
-	}
-  }  
+    synchronized (lock_) {
+      while (!(value_ != c)) lock_.wait();
+      if (action != null) action.run();
+    }
+  }
+
+  /**
+   * wait until value less than or equal to c, then run action if nonnull.
+   * The action is run with the synchronization lock held.
+   **/
+  public void whenLessEqual(byte c, Runnable action) throws InterruptedException {
+    synchronized (lock_) {
+      while (!(value_ <= c)) lock_.wait();
+      if (action != null) action.run();
+    }
+  }
+
+  /**
+   * wait until value less than c, then run action if nonnull.
+   * The action is run with the synchronization lock held.
+   **/
+  public void whenLess(byte c, Runnable action) throws InterruptedException {
+    synchronized (lock_) {
+      while (!(value_ < c)) lock_.wait();
+      if (action != null) action.run();
+    }
+  }
+
+  /**
+   * wait until value greater than or equal to c, then run action if nonnull.
+   * The action is run with the synchronization lock held.
+   **/
+  public void whenGreaterEqual(byte c, Runnable action) throws InterruptedException {
+    synchronized (lock_) {
+      while (!(value_ >= c)) lock_.wait();
+      if (action != null) action.run();
+    }
+  }
+
+  /**
+   * wait until value greater than c, then run action if nonnull.
+   * The action is run with the synchronization lock held.
+   **/
+  public void whenGreater(byte c, Runnable action) throws InterruptedException {
+    synchronized (lock_) {
+      while (!(value_ > c)) lock_.wait();
+      if (action != null) action.run();
+    }
+  }
+
 }
+

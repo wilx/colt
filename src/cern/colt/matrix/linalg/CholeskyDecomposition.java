@@ -107,6 +107,42 @@ Solves <tt>A*X = B</tt>; returns <tt>X</tt>.
 @exception  IllegalArgumentException  if <tt>!isSymmetricPositiveDefinite()</tt>.
 */
 public DoubleMatrix2D solve(DoubleMatrix2D B) {
+	// Copy right hand side.
+	DoubleMatrix2D X = B.copy();
+	int nx = B.columns();
+
+	// fix by MG Ferreira <mgf@webmail.co.za>
+	// old code is in method xxxSolveBuggy()
+	for (int c = 0; c < nx; c++ ) {
+		// Solve L*Y = B;
+		for (int i = 0; i < n; i++)	{
+			double sum = B.getQuick( i, c );
+			for (int k = i-1; k >= 0; k--) {
+				sum -= L.getQuick(i,k) * X.getQuick( k, c );
+			}
+			X.setQuick( i, c, sum / L.getQuick( i, i ) );
+		}
+
+		// Solve L'*X = Y;
+		for (int i = n-1; i >= 0; i--) {
+			double sum = X.getQuick( i, c );
+			for (int k = i+1; k < n; k++) {
+				sum -= L.getQuick(k,i) * X.getQuick( k, c );
+			}
+			X.setQuick( i, c, sum / L.getQuick( i, i ) );
+		}
+	}
+
+	return X;
+}
+/** 
+Solves <tt>A*X = B</tt>; returns <tt>X</tt>.
+@param  B   A Matrix with as many rows as <tt>A</tt> and any number of columns.
+@return     <tt>X</tt> so that <tt>L*L'*X = B</tt>.
+@exception  IllegalArgumentException  if <tt>B.rows() != A.rows()</tt>.
+@exception  IllegalArgumentException  if <tt>!isSymmetricPositiveDefinite()</tt>.
+*/
+private DoubleMatrix2D XXXsolveBuggy(DoubleMatrix2D B) {
 	cern.jet.math.Functions F = cern.jet.math.Functions.functions;
 	if (B.rows() != n) {
 		throw new IllegalArgumentException("Matrix row dimensions must agree.");
@@ -141,7 +177,8 @@ public DoubleMatrix2D solve(DoubleMatrix2D B) {
 		}
 	}
 	return X;
-	}
+}
+
 /**
 Returns a String with (propertyName, propertyValue) pairs.
 Useful for debugging or to quickly get the rough picture.

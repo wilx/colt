@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: BoundedPriorityQueue.java
 
@@ -15,6 +13,7 @@ package edu.oswego.cs.dl.util.concurrent;
   29aug1998  dl               pulled heap mechanics into separate class
 */
 
+package edu.oswego.cs.dl.util.concurrent;
 import java.util.Comparator;
 import java.lang.reflect.*;
 
@@ -40,28 +39,12 @@ import java.lang.reflect.*;
  * it is possible that an exception will not be thrown 
  * during insertion of non-comparable element, but will later be 
  * encountered during another insertion or extraction.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 
 public class BoundedPriorityQueue extends SemaphoreControlledChannel {
   protected final Heap heap_;
 
-  /**
-   * Create a priority queue with the current default capacity
-   * and relying on natural ordering.
-   **/
-
-  public BoundedPriorityQueue() { 
-	this(DefaultChannelCapacity.get(), null); 
-  }  
-  /**
-   * Create a priority queue with the given capacity,
-   * and relying on natural ordering.
-   **/
-
-  public BoundedPriorityQueue(int capacity) { 
-	this(capacity, null); 
-  }  
   /**
    * Create a priority queue with the given capacity and comparator
    * @exception IllegalArgumentException if capacity less or equal to zero
@@ -69,9 +52,38 @@ public class BoundedPriorityQueue extends SemaphoreControlledChannel {
 
   public BoundedPriorityQueue(int capacity, Comparator cmp) 
    throws IllegalArgumentException {
-	super(capacity);
-	heap_ = new Heap(capacity, cmp);
-  }  
+    super(capacity);
+    heap_ = new Heap(capacity, cmp);
+  }
+
+  /**
+   * Create a priority queue with the current default capacity
+   * and the given comparator
+   **/
+
+  public BoundedPriorityQueue(Comparator comparator) { 
+    this(DefaultChannelCapacity.get(), comparator); 
+  }
+
+  /**
+   * Create a priority queue with the given capacity,
+   * and relying on natural ordering.
+   **/
+
+  public BoundedPriorityQueue(int capacity) { 
+    this(capacity, null); 
+  }
+
+  /**
+   * Create a priority queue with the current default capacity
+   * and relying on natural ordering.
+   **/
+
+  public BoundedPriorityQueue() { 
+    this(DefaultChannelCapacity.get(), null); 
+  }
+
+
   /**
    * Create a priority queue with the given capacity and comparator, using
    * the supplied Semaphore class for semaphores.
@@ -87,25 +99,19 @@ public class BoundedPriorityQueue extends SemaphoreControlledChannel {
    **/
 
   public BoundedPriorityQueue(int capacity, Comparator cmp, 
-							  Class semaphoreClass) 
+                              Class semaphoreClass) 
    throws IllegalArgumentException, 
-		  NoSuchMethodException, 
-		  SecurityException, 
-		  InstantiationException, 
-		  IllegalAccessException, 
-		  InvocationTargetException {
-	super(capacity, semaphoreClass);
-	heap_ = new Heap(capacity, cmp);
-  }  
-  /**
-   * Create a priority queue with the current default capacity
-   * and the given comparator
-   **/
+          NoSuchMethodException, 
+          SecurityException, 
+          InstantiationException, 
+          IllegalAccessException, 
+          InvocationTargetException {
+    super(capacity, semaphoreClass);
+    heap_ = new Heap(capacity, cmp);
+  }
 
-  public BoundedPriorityQueue(Comparator comparator) { 
-	this(DefaultChannelCapacity.get(), comparator); 
-  }  
-  protected Object extract()      { return heap_.extract(); }  
-  protected void insert(Object x) {  heap_.insert(x);  }  
-  public Object peek()            { return heap_.peek(); }  
+  protected void insert(Object x) {  heap_.insert(x);  }
+  protected Object extract()      { return heap_.extract(); }
+  public Object peek()            { return heap_.peek(); }
+
 }

@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: ConditionVariable.java
 
@@ -12,6 +10,8 @@ package edu.oswego.cs.dl.util.concurrent;
   Date       Who                What
   11Jun1998  dl               Create public version
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * This class is designed for fans of POSIX pthreads programming.
@@ -122,7 +122,7 @@ package edu.oswego.cs.dl.util.concurrent;
  *
  * </pre>
  * @see Mutex
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 
  **/
 
@@ -147,8 +147,9 @@ public class CondVar {
    **/
  
   public CondVar(Sync mutex) {
-	mutex_ = mutex;
-  }  
+    mutex_ = mutex;
+  }
+
   /** 
    * Wait for notification. This operation at least momentarily
    * releases the mutex. The mutex is always held upon return, 
@@ -161,48 +162,37 @@ public class CondVar {
    * be probed by callers.
    **/
   public void await() throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-	try {
-	  synchronized(this) {
-		mutex_.release();
-		try {
-		  wait(); 
-		}
-		catch (InterruptedException ex) {
-		  notify();
-		  throw ex;
-		}
-	  }
-	}
-	finally { 
-	  // Must ignore interrupt on re-acquire
-	  boolean interrupted = false;
-	  for (;;) {
-		try {
-		  mutex_.acquire();
-		  break;
-		}
-		catch (InterruptedException ex) {
-		  interrupted = true;
-		}
-	  }
-	  if (interrupted) {
-		Thread.currentThread().interrupt();
-	  }
-	}
-  }  
-  /** Notify all waiting threads **/
-  public synchronized void broadcast() {
-	notifyAll();
-  }  
-  /** 
-   * Notify a waiting thread.
-   * If one exists, a non-interrupted thread will return
-   * normally (i.e., not via InterruptedException) from await or timedwait.
-   **/
-  public synchronized void signal() {
-	notify();
-  }  
+    if (Thread.interrupted()) throw new InterruptedException();
+    try {
+      synchronized(this) {
+        mutex_.release();
+        try {
+          wait(); 
+        }
+        catch (InterruptedException ex) {
+          notify();
+          throw ex;
+        }
+      }
+    }
+    finally { 
+      // Must ignore interrupt on re-acquire
+      boolean interrupted = false;
+      for (;;) {
+        try {
+          mutex_.acquire();
+          break;
+        }
+        catch (InterruptedException ex) {
+          interrupted = true;
+        }
+      }
+      if (interrupted) {
+        Thread.currentThread().interrupt();
+      }
+    }
+  }
+
   /**
    * Wait for at most msecs for notification. 
    * This operation at least momentarily
@@ -221,40 +211,54 @@ public class CondVar {
    **/
 
   public boolean timedwait(long msecs) throws  InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-	boolean success = false;
-	try {
-	  synchronized(this) {
-		mutex_.release();
-		try {
-		  if (msecs > 0) {
-			long start = System.currentTimeMillis();
-			wait(msecs); 
-			success = System.currentTimeMillis() - start <= msecs;
-		  }
-		}
-		catch (InterruptedException ex) {
-		  notify();
-		  throw ex;
-		}
-	  }
-	}
-	finally {
-	  // Must ignore interrupt on re-acquire
-	  boolean interrupted = false;
-	  for (;;) {
-		try {
-		  mutex_.acquire();
-		  break;
-		}
-		catch (InterruptedException ex) {
-		  interrupted = true;
-		}
-	  }
-	  if (interrupted) {
-		Thread.currentThread().interrupt();
-	  }
-	}
-	return success;
-  }  
+    if (Thread.interrupted()) throw new InterruptedException();
+    boolean success = false;
+    try {
+      synchronized(this) {
+        mutex_.release();
+        try {
+          if (msecs > 0) {
+            long start = System.currentTimeMillis();
+            wait(msecs); 
+            success = System.currentTimeMillis() - start <= msecs;
+          }
+        }
+        catch (InterruptedException ex) {
+          notify();
+          throw ex;
+        }
+      }
+    }
+    finally {
+      // Must ignore interrupt on re-acquire
+      boolean interrupted = false;
+      for (;;) {
+        try {
+          mutex_.acquire();
+          break;
+        }
+        catch (InterruptedException ex) {
+          interrupted = true;
+        }
+      }
+      if (interrupted) {
+        Thread.currentThread().interrupt();
+      }
+    }
+    return success;
+  }
+  
+  /** 
+   * Notify a waiting thread.
+   * If one exists, a non-interrupted thread will return
+   * normally (i.e., not via InterruptedException) from await or timedwait.
+   **/
+  public synchronized void signal() {
+    notify();
+  }
+
+  /** Notify all waiting threads **/
+  public synchronized void broadcast() {
+    notifyAll();
+  }
 }

@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   TimedCallable.java
   
@@ -15,6 +13,8 @@ package edu.oswego.cs.dl.util.concurrent;
 
  */
 
+package edu.oswego.cs.dl.util.concurrent;
+
 /**
  * TimedCallable runs a Callable function for a given length of time.
  * The function is run in its own thread. If the function completes
@@ -29,7 +29,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * @author  Joseph Bowbeer
  * @version 1.0
  *
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 
  */
 
@@ -39,25 +39,26 @@ public class TimedCallable extends ThreadFactoryUser implements Callable {
   private final long millis;
   
   public TimedCallable(Callable function, long millis) {
-	this.function = function;
-	this.millis = millis;
-  }  
+    this.function = function;
+    this.millis = millis;
+  }
+  
   public Object call() throws Exception {
-	
-	FutureResult result = new FutureResult();
+    
+    FutureResult result = new FutureResult();
 
-	Thread thread = getThreadFactory().newThread(result.setter(function));
+    Thread thread = getThreadFactory().newThread(result.setter(function));
    
-	thread.start();
-	
-	try {
-	  return result.timedGet(millis);
-	}
-	catch (InterruptedException ex) {
-	  /* Stop thread if we were interrupted or timed-out
-		 while waiting for the result. */
-	  thread.interrupt();
-	  throw ex;
-	}
-  }  
+    thread.start();
+    
+    try {
+      return result.timedGet(millis);
+    }
+    catch (InterruptedException ex) {
+      /* Stop thread if we were interrupted or timed-out
+         while waiting for the result. */
+      thread.interrupt();
+      throw ex;
+    }
+  }
 }

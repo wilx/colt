@@ -699,14 +699,15 @@ public void replaceFromToWith(int from, int to, boolean value) {
 	}
 
 	// treat leading partial unit, if any.
-	QuickBitVector.putLongFromTo(theBits,filler,bitIndex,bitIndex+toOffset-fromOffset);
-	bitIndex += toOffset-fromOffset+1;
-	/* slower:
-	for (int i=bitsPerUnit-fromOffset; --i >= 0; ) {
-		QuickBitVector.put(theBits,bitIndex++,value);
-	}*/
-	
-	fromUnit++;
+	if (fromOffset > 0) { // fix by Olivier Janssens
+		QuickBitVector.putLongFromTo(theBits,filler,bitIndex,bitIndex+bitsPerUnit-fromOffset);
+		bitIndex += bitsPerUnit-fromOffset+1;
+		/* slower:
+		for (int i=bitsPerUnit-fromOffset; --i >= 0; ) {
+			QuickBitVector.put(theBits,bitIndex++,value);
+		}*/	
+		fromUnit++;
+	}	
 	if (toOffset<bitsPerUnit-1) toUnit--; // there is a trailing partial unit
 	
 	// treat full units, if any.

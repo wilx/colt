@@ -686,8 +686,12 @@ static public double poissonComplemented(int k, double mean) throws ArithmeticEx
 static public double studentT(double k, double t) throws ArithmeticException { 
 	if( k <= 0 ) throw new IllegalArgumentException();
 	if( t == 0 ) return( 0.5 );
-
-	return 1.0 - 0.5 * Gamma.incompleteBeta( 0.5*k, 0.5, k / (k + t * t) );
+	
+	double cdf = 0.5 * Gamma.incompleteBeta( 0.5*k, 0.5, k / (k + t * t) );
+	
+	if (t >= 0) cdf = 1.0 - cdf; // fixes bug reported by stefan.bentink@molgen.mpg.de
+	 
+	return cdf;
 }
 /**
  * Returns the value, <tt>t</tt>, for which the area under the

@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: NullSync.java
 
@@ -13,6 +11,8 @@ package edu.oswego.cs.dl.util.concurrent;
   1Aug1998  dl               Create public version
 */
 
+package edu.oswego.cs.dl.util.concurrent;
+
 /**
  * A No-Op implementation of Sync. Acquire never blocks,
  * Attempt always succeeds, Release has no effect.
@@ -24,18 +24,24 @@ package edu.oswego.cs.dl.util.concurrent;
  * NullSyncs can be useful in optimizing classes when
  * it is found that locking is not strictly necesssary.
  *
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 **/
 
 
 public class NullSync implements Sync {
 
   public synchronized void acquire() throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-  }  
+    if (Thread.interrupted()) throw new InterruptedException();
+  }
+
   public synchronized boolean attempt(long msecs) throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-	return true;
-  }  
-  public synchronized void release() {}  
+    if (Thread.interrupted()) throw new InterruptedException();
+    return true;
+  }
+
+  public synchronized void release() {}
+
+
 }
+
+

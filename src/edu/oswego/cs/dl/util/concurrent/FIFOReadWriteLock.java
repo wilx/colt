@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: FIFOReadWriteLock.java
 
@@ -11,21 +9,28 @@ package edu.oswego.cs.dl.util.concurrent;
   History:
   Date       Who                What
   11Jun1998  dl               Create public version
+  23nov2001  dl               Replace main algorithm with fairer
+                              version based on one by Alexander Terekhov
 */
+
+package edu.oswego.cs.dl.util.concurrent;
+
 
 /**
  * This class implements a policy for reader/writer locks in which
- * incoming readers and writers contend in generally fair manner
- * for entry. When one reader enters, all others may enter. When
- * the last reader exits a waiting writer may enter.  This
- * does not provide globally FIFO behavior since readers arriving
- * after a writer may join other readers (in the style of a
- * Reader's preference RW lock). But it does ensure
- * FIFO ordering across writers, so earlier writers will write
- * first, modulo the caveats discussed with FIFOSemaphore, which
- * is used for queuing.
+ * threads contend in a First-in/First-out manner for access (modulo
+ * the limitations of FIFOSemaphore, which is used for queuing).  This
+ * policy does not particularly favor readers or writers.  As a
+ * byproduct of the FIFO policy, the <tt>attempt</tt> methods may
+ * return <tt>false</tt> even when the lock might logically be
+ * available, but, due to contention, cannot be accessed within the
+ * given time bound.  <p>
+ *
+ * This lock is <em>NOT>/em> reentrant. Current readers and
+ * writers should not try to re-obtain locks while holding them.
  * <p>
- * [<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
+ *
+ * [<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>] <p>
  *
  * @see FIFOSemaphore
 **/
@@ -33,55 +38,149 @@ package edu.oswego.cs.dl.util.concurrent;
 public class FIFOReadWriteLock implements ReadWriteLock {
 
   /** 
-	* FIFO queue of threads waiting for access 
-	* Also serves as the Writer lock
+   * Fair Semaphore serving as a kind of mutual exclusion lock.
+   * Writers acquire on entry, and hold until rwlock exit.
+   * Readers acquire and release only during entry (but are
+   * blocked from doing so if there is an active writer).
    **/
-  protected final FIFOSemaphore active_ = new FIFOSemaphore(1);
-  /**
-   * Control reader access to active semaphore
-  **/
-  protected final Sync readerSync_ = new ReaderSync();
-  class ReaderSync implements Sync {
+  protected final FIFOSemaphore entryLock = new FIFOSemaphore(1);
 
-	protected int readers_ = 0;
+  /** 
+   * Number of threads that have entered read lock.  Note that this is
+   * never reset to zero. Incremented only during acquisition of read
+   * lock while the "entryLock" is held, but read elsewhere, so is
+   * declared volatile.
+   **/
+  protected volatile int readers;
 
-	protected Mutex oneWaiter_ = new Mutex();
+  /** 
+   * Number of threads that have exited read lock.  Note that this is
+   * never reset to zero. Accessed only in code protected by
+   * synchronized(this). When exreaders != readers, the rwlock is
+   * being used for reading. Else if the entry lock is held, it is
+   * being used for writing (or in transition). Else it is free.
+   * Note: To distinguish these states, we assume that fewer than 2^32
+   * reader threads can simultaneously execute.
+   **/
+  protected int exreaders;
 
-	protected synchronized void incReaders() throws InterruptedException { 
-	  // if first reader, wait for access, otherwise just proceed
-	  if (readers_ == 0) active_.acquire();
-	  ++readers_;
-	}
-
-	protected synchronized boolean tryRead(long msecs) throws InterruptedException {
-	  boolean pass = (readers_ > 0 || active_.attempt(msecs));
-	  if (pass) ++readers_;
-	  return pass;
-	}
-
-	public void acquire() throws InterruptedException {
-	  oneWaiter_.acquire();  // block if another is waiting for access
-	  try     { incReaders(); }
-	  finally { oneWaiter_.release();  }
-	}
-
-	public synchronized  void release()  { 
-	  if (--readers_ == 0) active_.release();
-	}
-
-	public boolean attempt(long msecs) throws InterruptedException {
-	  long startTime = (msecs <= 0)? 0 : System.currentTimeMillis();
-	  if (!oneWaiter_.attempt(msecs)) return false;
-
-	  long timeLeft = (msecs <= 0)? 0 :
-		msecs - (System.currentTimeMillis() - startTime);
-
-	  try { return tryRead(timeLeft); }
-	  finally { oneWaiter_.release(); }
-	}
-
+  protected void acquireRead() throws InterruptedException {
+    entryLock.acquire();
+    ++readers; 
+    entryLock.release();
   }
 
-  public Sync readLock() { return readerSync_; }  
-  public Sync writeLock() { return active_; }  
+  protected synchronized void releaseRead() {
+    /*
+      If this is the last reader, notify a possibly waiting writer.
+      Because waits occur only when entry lock is held, at most one
+      writer can be waiting for this notification.  Because increments
+      to "readers" aren't protected by "this" lock, the notification
+      may be spurious (when an incoming reader in in the process of
+      updating the field), but at the point tested in acquiring write
+      lock, both locks will be held, thus avoiding false alarms. And
+      we will never miss an opportunity to send a notification when it
+      is actually needed.
+    */
+
+    if (++exreaders == readers) 
+      notify(); 
+  }
+
+  protected void acquireWrite() throws InterruptedException {
+    // Acquiring entryLock first forces subsequent entering readers
+    // (as well as writers) to block.
+    entryLock.acquire();
+    
+    // Only read "readers" once now before loop.  We know it won't
+    // change because we hold the entry lock needed to update it.
+    int r = readers;
+    
+    try {
+      synchronized(this) {
+        while (exreaders != r) 
+          wait();
+      }
+    }
+    catch (InterruptedException ie) {
+      entryLock.release();
+      throw ie;
+    }
+  }
+
+  protected void releaseWrite() {
+    entryLock.release();
+  }
+
+  protected boolean attemptRead(long msecs) throws InterruptedException {
+    if (!entryLock.attempt(msecs)) 
+      return false;
+
+    ++readers; 
+    entryLock.release();
+    return true;
+  }
+
+  protected boolean attemptWrite(long msecs) throws InterruptedException {
+    long startTime = (msecs <= 0)? 0 : System.currentTimeMillis();
+
+    if (!entryLock.attempt(msecs)) 
+      return false;
+
+    int r = readers;
+
+    try {
+      synchronized(this) {
+        while (exreaders != r) {
+          long timeLeft = (msecs <= 0)? 0:
+            msecs - (System.currentTimeMillis() - startTime);
+          
+          if (timeLeft <= 0) {
+            entryLock.release();
+            return false;
+          }
+          
+          wait(timeLeft);
+        }
+        return true;
+      }
+    }
+    catch (InterruptedException ie) {
+      entryLock.release();
+      throw ie;
+    }
+  }
+
+  // support for ReadWriteLock interface
+
+  protected class ReaderSync implements Sync {
+    public void acquire() throws InterruptedException {
+      acquireRead();
+    }
+    public  void release()  { 
+      releaseRead();
+    }
+    public boolean attempt(long msecs) throws InterruptedException {
+      return attemptRead(msecs);
+    }
+  }
+
+  protected class WriterSync implements Sync {
+    public void acquire() throws InterruptedException {
+      acquireWrite();
+    }
+    public  void release()  { 
+      releaseWrite();
+    }
+    public boolean attempt(long msecs) throws InterruptedException {
+      return attemptWrite(msecs);
+    }
+  }
+
+  protected final Sync readerSync = new ReaderSync();
+  protected final Sync writerSync = new WriterSync();
+
+  public Sync writeLock() { return writerSync; }
+  public Sync readLock() { return readerSync; }
+
 }

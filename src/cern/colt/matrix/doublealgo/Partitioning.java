@@ -136,8 +136,17 @@ public static void partition(DoubleMatrix2D matrix, int[] rowIndexes, int rowFro
 		}
 	};
 
+	// compare splitter[a] with splitter[b]
+	IntComparator comp3 = new IntComparator() {
+		public int compare(int a, int b) {
+			double av = splitters[a];
+			double bv = splitters[b];
+			return av<bv ? -1 : (av==bv ? 0 : 1);
+		}
+	};
+
 	// generic partitioning does the main work of reordering row indexes
-	cern.colt.Partitioning.genericPartition(rowFrom,rowTo,splitFrom,splitTo,splitIndexes,comp,comp2,swapper);
+	cern.colt.Partitioning.genericPartition(rowFrom,rowTo,splitFrom,splitTo,splitIndexes,comp,comp2,comp3,swapper);
 }
 /**
 Same as {@link cern.colt.Partitioning#partition(int[],int,int,int[],int,int,int[])}

@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: Heap.java
 
@@ -13,6 +11,7 @@ package edu.oswego.cs.dl.util.concurrent;
   29Aug1998  dl               Refactored from BoundedPriorityQueue
 */
 
+package edu.oswego.cs.dl.util.concurrent;
 import java.util.Comparator;
 
 /**
@@ -24,7 +23,7 @@ import java.util.Comparator;
  * in, for example, Sedgewick's Algorithms text. All methods
  * are fully synchronized. In the future,
  * it may instead use structures permitting finer-grained locking.
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 
 public class Heap  {
@@ -33,99 +32,111 @@ public class Heap  {
   protected final Comparator cmp_;  // for ordering
 
   /**
-   * Create a Heap with the given capacity,
-   * and relying on natural ordering.
-   **/
-
-  public Heap(int capacity) { 
-	this(capacity, null); 
-  }  
-  /**
    * Create a Heap with the given initial capacity and comparator
    * @exception IllegalArgumentException if capacity less or equal to zero
    **/
 
   public Heap(int capacity, Comparator cmp) 
    throws IllegalArgumentException {
-	if (capacity <= 0) throw new IllegalArgumentException();
-	nodes_ = new Object[capacity];
-	cmp_ = cmp;
-  }  
-  /** remove all elements **/
-  public synchronized void clear() {
-	count_ = 0;
-  }  
+    if (capacity <= 0) throw new IllegalArgumentException();
+    nodes_ = new Object[capacity];
+    cmp_ = cmp;
+  }
+
+  /**
+   * Create a Heap with the given capacity,
+   * and relying on natural ordering.
+   **/
+
+  public Heap(int capacity) { 
+    this(capacity, null); 
+  }
+
+
   /** perform element comaprisons using comparator or natural ordering **/
   protected int compare(Object a, Object b) {
-	if (cmp_ == null) 
-	  return ((Comparable)a).compareTo(b);
-	else
-	  return cmp_.compare(a, b);
-  }  
+    if (cmp_ == null) 
+      return ((Comparable)a).compareTo(b);
+    else
+      return cmp_.compare(a, b);
+  }
+
+
+  // indexes of heap parents and children
+  protected final int parent(int k) { return (k - 1) / 2;  }
+  protected final int left(int k)   { return 2 * k + 1; }
+  protected final int right(int k)  { return 2 * (k + 1); }
+
+  /**
+   * insert an element, resize if necessary
+   **/
+  public synchronized void insert(Object x) {
+    if (count_ >= nodes_.length) {
+      int newcap =  3 * nodes_.length / 2 + 1;
+      Object[] newnodes = new Object[newcap];
+      System.arraycopy(nodes_, 0, newnodes, 0, nodes_.length);
+      nodes_ = newnodes;
+    }
+
+    int k = count_;
+    ++count_;
+    while (k > 0) {
+      int par = parent(k);
+      if (compare(x, nodes_[par]) < 0) {
+        nodes_[k] = nodes_[par];
+        k = par;
+      }
+      else break;
+    }
+    nodes_[k] = x;
+  }
+    
+
   /**
    * Return and remove least element, or null if empty
    **/
 
   public synchronized Object extract() {
-	if (count_ < 1) return null;
+    if (count_ < 1) return null;
 
-	int k = 0; // take element at root;
-	Object least = nodes_[k];
-	--count_;
-	Object x = nodes_[count_];
-	for (;;) {
-	  int l = left(k);
-	  if (l >= count_)
-		break;
-	  else {
-		int r = right(k);
-		int child = (r >= count_ || compare(nodes_[l], nodes_[r]) < 0)? l : r; 
-		if (compare(x, nodes_[child]) > 0) {
-		  nodes_[k] = nodes_[child];
-		  k = child;
-		}
-		else break;
-	  }
-	}
-	nodes_[k] = x;
-	return least;
-  }  
-  /**
-   * insert an element, resize if necessary
-   **/
-  public synchronized void insert(Object x) {
-	if (count_ >= nodes_.length) {
-	  int newcap =  3 * nodes_.length / 2 + 1;
-	  Object[] newnodes = new Object[newcap];
-	  System.arraycopy(nodes_, 0, newnodes, 0, nodes_.length);
-	  nodes_ = newnodes;
-	}
+    int k = 0; // take element at root;
+    Object least = nodes_[k];
+    --count_;
+    Object x = nodes_[count_];
+    for (;;) {
+      int l = left(k);
+      if (l >= count_)
+        break;
+      else {
+        int r = right(k);
+        int child = (r >= count_ || compare(nodes_[l], nodes_[r]) < 0)? l : r; 
+        if (compare(x, nodes_[child]) > 0) {
+          nodes_[k] = nodes_[child];
+          k = child;
+        }
+        else break;
+      }
+    }
+    nodes_[k] = x;
+    return least;
+  }
 
-	int k = count_;
-	++count_;
-	while (k > 0) {
-	  int par = parent(k);
-	  if (compare(x, nodes_[par]) < 0) {
-		nodes_[k] = nodes_[par];
-		k = par;
-	  }
-	  else break;
-	}
-	nodes_[k] = x;
-  }  
-  protected final int left(int k)   { return 2 * k + 1; }  
-  // indexes of heap parents and children
-  protected final int parent(int k) { return (k - 1) / 2;  }  
   /** Return least element without removing it, or null if empty **/
   public synchronized Object peek() {
-	if (count_ > 0) 
-	  return nodes_[0];
-	else
-	  return null;
-  }  
-  protected final int right(int k)  { return 2 * (k + 1); }  
+    if (count_ > 0) 
+      return nodes_[0];
+    else
+      return null;
+  }
+
   /** Return number of elements **/
   public synchronized int size() {
-	return count_;
-  }  
+    return count_;
+  }
+  
+  /** remove all elements **/
+  public synchronized void clear() {
+    count_ = 0;
+  }
+
 }

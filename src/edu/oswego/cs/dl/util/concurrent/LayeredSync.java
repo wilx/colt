@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: LayeredSync.java
 
@@ -13,6 +11,8 @@ package edu.oswego.cs.dl.util.concurrent;
   1Aug1998  dl               Create public version
 */
 
+package edu.oswego.cs.dl.util.concurrent;
+
 /**
  * A class that can be used to compose Syncs.
  * A LayeredSync object manages two other Sync objects,
@@ -25,7 +25,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * by arranging that either of the managed Syncs be another
  * LayeredSync.
  *
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 **/
 
 
@@ -40,45 +40,51 @@ public class LayeredSync implements Sync {
    **/
 
   public LayeredSync(Sync outer, Sync inner) {
-	outer_ = outer;
-	inner_ = inner;
-  }  
+    outer_ = outer;
+    inner_ = inner;
+  }
+
   public void acquire() throws InterruptedException {
-	outer_.acquire();
-	try {
-	  inner_.acquire();
-	}
-	catch (InterruptedException ex) {
-	  outer_.release();
-	  throw ex;
-	}
-  }  
+    outer_.acquire();
+    try {
+      inner_.acquire();
+    }
+    catch (InterruptedException ex) {
+      outer_.release();
+      throw ex;
+    }
+  }
+
   public boolean attempt(long msecs) throws InterruptedException {
 
-	long start = (msecs <= 0)? 0 : System.currentTimeMillis();
-	long waitTime = msecs;
+    long start = (msecs <= 0)? 0 : System.currentTimeMillis();
+    long waitTime = msecs;
 
-	if (outer_.attempt(waitTime)) {
-	  try {
-		if (msecs > 0)
-		  waitTime = msecs - (System.currentTimeMillis() - start);
-		if (inner_.attempt(waitTime))
-		  return true;
-		else {
-		  outer_.release();
-		  return false;
-		}
-	  }
-	  catch (InterruptedException ex) {
-		outer_.release();
-		throw ex;
-	  }
-	}
-	else
-	  return false;
-  }  
+    if (outer_.attempt(waitTime)) {
+      try {
+        if (msecs > 0)
+          waitTime = msecs - (System.currentTimeMillis() - start);
+        if (inner_.attempt(waitTime))
+          return true;
+        else {
+          outer_.release();
+          return false;
+        }
+      }
+      catch (InterruptedException ex) {
+        outer_.release();
+        throw ex;
+      }
+    }
+    else
+      return false;
+  }
+
   public void release() {
-	inner_.release();
-	outer_.release();
-  }  
+    inner_.release();
+    outer_.release();
+  }
+
 }
+
+

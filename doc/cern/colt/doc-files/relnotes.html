@@ -5,10 +5,41 @@
 </HEAD>
 <body>
 <h1>Release Notes</h1>
-<p>The most recent version of this document can be found at the <font size="3"><a href="http://nicewww.cern.ch/%7Ehoschek/colt/index.htm">Colt 
+<p>The most recent version of this document can be found at the <font size="3"><a href="http://cern.ch/hoschek/colt">Colt 
   Homepage. </a>Also see the list of </font><font size="3"><a href="http://nicewww.cern.ch/%7Ehoschek/colt/index.htm"> 
   </a></font><a href="problems.html">Known Problems</a></p>
 <p></p>
+<h2>Colt 1.0.3</h2>
+<h3>New Features</h3>
+<h3></h3>
+<ul>
+  <li>none</li>
+</ul>
+<h3>Bug fixes</h3>
+<ul>
+  <li>Upgraded package util.concurrent from version 1.3.0 to 1.3.1</li>
+  <li>Fixed bug in cern.jet.random.Uniform.nextInt (jan.cheyns@intec.rug.ac.be)</li>
+  <li>Fixed small bug in cern.colt.Partitioning and cern.colt.matrix.doublealgo.Partitioning</li>
+  <li>Fixed Poisson.staticNextInt()</li>
+  <li>Fixed infinite loop in Logarithmic.nextDouble() for some parameter combinations</li>
+  <li>Fix for CholeskyDecomposition.solve (MG Ferreira <mgf@webmail.co.za>)</li>
+  <li>cern.jet.stat.quantile.QuantileFinderFactory should ignore N if if known_N 
+    is false.</li>
+  <li>class PrintFormat is unreliable - do not use it. matrix print formatting 
+    is now reverted back to use corejava.Format instead.</li>
+  <li> MersenneTwister had a <a href="http://www.math.keio.ac.jp/matumoto/emt.html">small 
+    problem</a>, which is now fixed with Matsumotos code from 2002/1/26. </li>
+  <li>cern.jet.stat.Probability.studentT and cern.jet.random.StudentT were only 
+    defined for values &gt;= 0</li>
+  <li>cern.colt.bitvector.BitVector.replaceFromToWith(int from, int to, boolean 
+    value) treated leading partial unit incorrectly (Olivier Janssens &lt;oj@adhoc.be&gt;) 
+  </li>
+</ul>
+<h3>Changes</h3>
+<ul>
+  <li>none</li>
+</ul>
+<hr>
 <h2>Colt 1.0.2</h2>
 <h3>New Features</h3>
 <h3></h3>
@@ -26,7 +57,7 @@
 <h3>Performance Improvements</h3>
 <h3></h3>
 <ul>
-  <li>Fix for serious SparseDoubleMatrix2D and Open<Type>Map performance degradation</li>
+  <li>Fix for serious SparseDoubleMatrix2D and Open<type>Map performance degradation</li>
   <li>RCDoubleMatrix2D.assign(otherMatrix) got faster</li>
   <li>RCDoubleMatrix2D.assign(double) got faster</li>
   <li>DenseDoubleMatrix{1,2,3}D.assign(double) got faster</li>
@@ -79,6 +110,7 @@
   <li>matrix.viewSorted(...) methods now use mergesort instead of quicksort.</li>
 </ul>
 <hr>
+<h2></h2>
 <h2>Colt 1.0.1</h2>
 <h3>New Features</h3>
 <h3></h3>

@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: Mutex.java
 
@@ -12,6 +10,8 @@ package edu.oswego.cs.dl.util.concurrent;
   Date       Who                What
   11Jun1998  dl               Create public version
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * A simple non-reentrant mutual exclusion lock.
@@ -103,7 +103,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * </pre>
  * <p>
  * @see Semaphore
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 **/
 
 public class Mutex implements Sync  {
@@ -112,53 +112,58 @@ public class Mutex implements Sync  {
   protected boolean inuse_ = false;
 
   public void acquire() throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-	synchronized(this) {
-	  try {
-		while (inuse_) wait();
-		inuse_ = true;
-	  }
-	  catch (InterruptedException ex) {
-		notify();
-		throw ex;
-	  }
-	}
-  }  
-  public boolean attempt(long msecs) throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-	synchronized(this) {
-	  if (!inuse_) {
-		inuse_ = true;
-		return true;
-	  }
-	  else if (msecs <= 0)
-		return false;
-	  else {
-		long waitTime = msecs;
-		long start = System.currentTimeMillis();
-		try {
-		  for (;;) {
-			wait(waitTime);
-			if (!inuse_) {
-			  inuse_ = true;
-			  return true;
-			}
-			else {
-			  waitTime = msecs - (System.currentTimeMillis() - start);
-			  if (waitTime <= 0) 
-				return false;
-			}
-		  }
-		}
-		catch (InterruptedException ex) {
-		  notify();
-		  throw ex;
-		}
-	  }
-	}  
-  }  
+    if (Thread.interrupted()) throw new InterruptedException();
+    synchronized(this) {
+      try {
+        while (inuse_) wait();
+        inuse_ = true;
+      }
+      catch (InterruptedException ex) {
+        notify();
+        throw ex;
+      }
+    }
+  }
+
   public synchronized void release()  {
-	inuse_ = false;
-	notify(); 
-  }  
+    inuse_ = false;
+    notify(); 
+  }
+
+
+  public boolean attempt(long msecs) throws InterruptedException {
+    if (Thread.interrupted()) throw new InterruptedException();
+    synchronized(this) {
+      if (!inuse_) {
+        inuse_ = true;
+        return true;
+      }
+      else if (msecs <= 0)
+        return false;
+      else {
+        long waitTime = msecs;
+        long start = System.currentTimeMillis();
+        try {
+          for (;;) {
+            wait(waitTime);
+            if (!inuse_) {
+              inuse_ = true;
+              return true;
+            }
+            else {
+              waitTime = msecs - (System.currentTimeMillis() - start);
+              if (waitTime <= 0) 
+                return false;
+            }
+          }
+        }
+        catch (InterruptedException ex) {
+          notify();
+          throw ex;
+        }
+      }
+    }  
+  }
+
 }
+

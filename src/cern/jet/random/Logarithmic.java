@@ -93,7 +93,7 @@ public double nextDouble(double a) {
 
 	if (a != a_prev) {                   // Set-up
 		a_prev = a;
-		if (a<0.9) t = -a / Math.log(1.0 - a);
+		if (a<0.97) t = -a / Math.log(1.0 - a);
 		else h=Math.log(1.0 - a);
 	}
 
@@ -102,6 +102,7 @@ public double nextDouble(double a) {
 		k = 1;
 		p = t;
 		while (u > p) {
+			//System.out.println("u="+u+", p="+p);
 			u -= p;
 			k++;
 			p *= a * (k-1.0)/(double)k;

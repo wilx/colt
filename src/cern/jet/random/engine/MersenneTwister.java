@@ -1,3 +1,5 @@
+package cern.jet.random.engine;
+
 /*
 Copyright © 1999 CERN - European Organization for Nuclear Research.
 Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
@@ -6,8 +8,6 @@ that both that copyright notice and this permission notice appear in supporting 
 CERN makes no representations about the suitability of this software for any purpose. 
 It is provided "as is" without expressed or implied warranty.
 */
-package cern.jet.random.engine;
-
 import java.util.*;
 /**
 MersenneTwister (MT19937) is one of the strongest uniform pseudo-random number generators known so far; at the same time it is quick.
@@ -238,6 +238,21 @@ public int nextInt() {
  * This method resets the receiver's entire internal state.
  */
 protected void setSeed(int seed) {
+	mt[0] = seed & 0xffffffff;
+	for (int i = 1; i < N; i++) {
+		mt[i] = (1812433253 * (mt[i-1] ^ (mt[i-1] >> 30)) + i); 
+		/* See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier. */
+		/* In the previous versions, MSBs of the seed affect   */
+		/* only MSBs of the array mt[].                        */
+		/* 2002/01/09 modified by Makoto Matsumoto             */
+		mt[i] &= 0xffffffff;
+		/* for >32 bit machines */
+ 	}
+	//System.out.println("init done");
+	mti = N;
+
+	/*
+	old version was:	
 	for (int i = 0; i < N; i++) {
 		mt[i] = seed & 0xffff0000;
 		seed = 69069 * seed + 1;
@@ -246,5 +261,6 @@ protected void setSeed(int seed) {
  	}
 	//System.out.println("init done");
 	mti = N;
+	*/
 }
 }

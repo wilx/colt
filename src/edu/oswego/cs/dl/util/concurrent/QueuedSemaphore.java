@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: QueuedSemaphore.java
 
@@ -16,15 +14,73 @@ package edu.oswego.cs.dl.util.concurrent;
 */
 
 
+package edu.oswego.cs.dl.util.concurrent;
+
 /** 
- * Abstract base class for semaphores relying on queued wait nodes 
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * Abstract base class for semaphores relying on queued wait nodes.
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
 **/
 
 
 public abstract class QueuedSemaphore extends Semaphore {
   
   protected final WaitQueue wq_;
+
+  QueuedSemaphore(WaitQueue q, long initialPermits) { 
+    super(initialPermits);  
+    wq_ = q;
+  }
+
+  public void acquire() throws InterruptedException {
+    if (Thread.interrupted()) throw new InterruptedException();
+    if (precheck()) return;
+    WaitQueue.WaitNode w = new WaitQueue.WaitNode();
+    w.doWait(this);
+  }
+
+  public boolean attempt(long msecs) throws InterruptedException {
+    if (Thread.interrupted()) throw new InterruptedException();
+    if (precheck()) return true;
+    if (msecs <= 0) return false;
+
+    WaitQueue.WaitNode w = new WaitQueue.WaitNode();
+    return w.doTimedWait(this, msecs);
+  }
+
+  protected synchronized boolean precheck() {
+    boolean pass = (permits_ > 0);
+    if (pass) --permits_;
+    return pass;
+  }
+
+  protected synchronized boolean recheck(WaitQueue.WaitNode w) {
+    boolean pass = (permits_ > 0);
+    if (pass) --permits_;
+    else       wq_.insert(w);
+    return pass;
+  }
+
+
+  protected synchronized WaitQueue.WaitNode getSignallee() {
+    WaitQueue.WaitNode w = wq_.extract();
+    if (w == null) ++permits_; // if none, inc permits for new arrivals
+    return w;
+  }
+
+  public void release() {
+    for (;;) {
+      WaitQueue.WaitNode w = getSignallee();
+      if (w == null) return;  // no one to signal
+      if (w.signal()) return; // notify if still waiting, else skip
+    }
+  }
+
+  /** Release N permits **/
+  public void release(long n) {
+    if (n < 0) throw new IllegalArgumentException("Negative argument");
+
+    for (long i = 0; i < n; ++i) release();
+  }
 
   /** 
    * Base class for internal queue classes for semaphores, etc.
@@ -33,130 +89,83 @@ public abstract class QueuedSemaphore extends Semaphore {
 
   protected static abstract class WaitQueue {
 
-	protected abstract void insert(WaitNode w);// assumed not to block
-	protected abstract WaitNode extract();     // should return null if empty
+    protected abstract void insert(WaitNode w);// assumed not to block
+    protected abstract WaitNode extract();     // should return null if empty
 
-	protected static class WaitNode {
-	  boolean waiting = true;
-	  WaitNode next = null;
+    protected static class WaitNode {
+      boolean waiting = true;
+      WaitNode next = null;
 
-	  protected synchronized boolean signal() {
-		boolean signalled = waiting;
-		if (signalled) {
-		  waiting = false;
-		  notify();
-		}
-		return signalled;
-	  }
+      protected synchronized boolean signal() {
+        boolean signalled = waiting;
+        if (signalled) {
+          waiting = false;
+          notify();
+        }
+        return signalled;
+      }
 
-	  protected synchronized boolean doTimedWait(QueuedSemaphore sem, 
-												 long msecs) 
-		throws InterruptedException {
-		if (sem.recheck(this) || !waiting) 
-		  return true;
-		else if (msecs <= 0) {
-		  waiting = false;
-		  return false;
-		}
-		else { 
-		  long waitTime = msecs;
-		  long start = System.currentTimeMillis();
+      protected synchronized boolean doTimedWait(QueuedSemaphore sem, 
+                                                 long msecs) 
+        throws InterruptedException {
+        if (sem.recheck(this) || !waiting) 
+          return true;
+        else if (msecs <= 0) {
+          waiting = false;
+          return false;
+        }
+        else { 
+          long waitTime = msecs;
+          long start = System.currentTimeMillis();
 
-		  try {
-			for (;;) {
-			  wait(waitTime);  
-			  if (!waiting)   // definitely signalled
-				return true;
-			  else { 
-				waitTime = msecs - (System.currentTimeMillis() - start);
-				if (waitTime <= 0) { //  timed out
-				  waiting = false;
-				  return false;
-				}
-			  }
-			}
-		  }
-		  catch(InterruptedException ex) {
-			if (waiting) { // no notification
-			  waiting = false; // invalidate for the signaller
-			  throw ex;
-			}
-			else { // thread was interrupted after it was notified
-			  Thread.currentThread().interrupt();
-			  return true;
-			}
-		  }
-		}
-	  }
+          try {
+            for (;;) {
+              wait(waitTime);  
+              if (!waiting)   // definitely signalled
+                return true;
+              else { 
+                waitTime = msecs - (System.currentTimeMillis() - start);
+                if (waitTime <= 0) { //  timed out
+                  waiting = false;
+                  return false;
+                }
+              }
+            }
+          }
+          catch(InterruptedException ex) {
+            if (waiting) { // no notification
+              waiting = false; // invalidate for the signaller
+              throw ex;
+            }
+            else { // thread was interrupted after it was notified
+              Thread.currentThread().interrupt();
+              return true;
+            }
+          }
+        }
+      }
 
-	  protected synchronized void doWait(QueuedSemaphore sem) 
-		throws InterruptedException {
-		if (!sem.recheck(this)) {
-		  try {
-			while (waiting) wait();  
-		  }
-		  catch(InterruptedException ex) {
-			if (waiting) { // no notification
-			  waiting = false; // invalidate for the signaller
-			  throw ex;
-			}
-			else { // thread was interrupted after it was notified
-			  Thread.currentThread().interrupt();
-			  return;
-			}
-		  }
-		}
-	  }
-	}
+      protected synchronized void doWait(QueuedSemaphore sem) 
+        throws InterruptedException {
+        if (!sem.recheck(this)) {
+          try {
+            while (waiting) wait();  
+          }
+          catch(InterruptedException ex) {
+            if (waiting) { // no notification
+              waiting = false; // invalidate for the signaller
+              throw ex;
+            }
+            else { // thread was interrupted after it was notified
+              Thread.currentThread().interrupt();
+              return;
+            }
+          }
+        }
+      }
+    }
 
   }
 
 
-  QueuedSemaphore(WaitQueue q, long initialPermits) { 
-	super(initialPermits);  
-	wq_ = q;
-  }  
-  public void acquire() throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-	if (precheck()) return;
-	WaitQueue.WaitNode w = new WaitQueue.WaitNode();
-	w.doWait(this);
-  }  
-  public boolean attempt(long msecs) throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-	if (precheck()) return true;
-	if (msecs <= 0) return false;
-
-	WaitQueue.WaitNode w = new WaitQueue.WaitNode();
-	return w.doTimedWait(this, msecs);
-  }  
-  protected synchronized WaitQueue.WaitNode getSignallee() {
-	WaitQueue.WaitNode w = wq_.extract();
-	if (w == null) ++permits_; // if none, inc permits for new arrivals
-	return w;
-  }  
-  protected synchronized boolean precheck() {
-	boolean pass = (permits_ > 0);
-	if (pass) --permits_;
-	return pass;
-  }  
-  protected synchronized boolean recheck(WaitQueue.WaitNode w) {
-	boolean pass = (permits_ > 0);
-	if (pass) --permits_;
-	else       wq_.insert(w);
-	return pass;
-  }  
-  public void release() {
-	for (;;) {
-	  WaitQueue.WaitNode w = getSignallee();
-	  if (w == null) return;  // no one to signal
-	  if (w.signal()) return; // notify if still waiting, else skip
-	}
-  }  
-  /** Release N permits **/
-  public void release(long n) {
-	if (n < 0) throw new IllegalArgumentException("Negative argument");
-
-	for (long i = 0; i < n; ++i) release();
-  }  
 }

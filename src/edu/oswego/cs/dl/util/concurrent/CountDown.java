@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: CountDown.java
 
@@ -12,6 +10,8 @@ package edu.oswego.cs.dl.util.concurrent;
   Date       Who                What
   11Jun1998  dl               Create public version
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 /**
  * A CountDown can serve as a simple one-shot barrier. 
@@ -48,7 +48,7 @@ package edu.oswego.cs.dl.util.concurrent;
  * }
  * </pre>
  *
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  *
 **/
 
@@ -57,57 +57,66 @@ public class CountDown implements Sync {
   protected int count_;
 
   /** Create a new CountDown with given count value **/
-  public CountDown(int count) { count_ = initialCount_ = count; }  
+  public CountDown(int count) { count_ = initialCount_ = count; }
+
+  
   /*
-	This could use double-check, but doesn't out of concern
-	for surprising effects on user programs stemming
-	from lack of memory barriers with lack of synch.
+    This could use double-check, but doesn't out of concern
+    for surprising effects on user programs stemming
+    from lack of memory barriers with lack of synch.
   */
   public void acquire() throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-	synchronized(this) {
-	  while (count_ > 0) 
-		wait();
-	}
-  }  
+    if (Thread.interrupted()) throw new InterruptedException();
+    synchronized(this) {
+      while (count_ > 0) 
+        wait();
+    }
+  }
+
+
   public boolean attempt(long msecs) throws InterruptedException {
-	if (Thread.interrupted()) throw new InterruptedException();
-	synchronized(this) {
-	  if (count_ <= 0) 
-		return true;
-	  else if (msecs <= 0) 
-		return false;
-	  else {
-		long waitTime = msecs;
-		long start = System.currentTimeMillis();
-		for (;;) {
-		  wait(waitTime);
-		  if (count_ <= 0) 
-			return true;
-		  else {
-			waitTime = msecs - (System.currentTimeMillis() - start);
-			if (waitTime <= 0) 
-			  return false;
-		  }
-		}
-	  }
-	}
-  }  
-  /** 
-   * Return the current count value.
-   * This is just a snapshot value, that may change immediately
-   * after returning.
-   **/
-  public synchronized int currentCount() { return count_; }  
-  /** Return the initial count value **/
-  public int initialCount() { return initialCount_; }  
+    if (Thread.interrupted()) throw new InterruptedException();
+    synchronized(this) {
+      if (count_ <= 0) 
+        return true;
+      else if (msecs <= 0) 
+        return false;
+      else {
+        long waitTime = msecs;
+        long start = System.currentTimeMillis();
+        for (;;) {
+          wait(waitTime);
+          if (count_ <= 0) 
+            return true;
+          else {
+            waitTime = msecs - (System.currentTimeMillis() - start);
+            if (waitTime <= 0) 
+              return false;
+          }
+        }
+      }
+    }
+  }
+
   /**
    * Decrement the count.
    * After the initialCount'th release, all current and future
    * acquires will pass
    **/
   public synchronized void release() {
-	if (--count_ == 0) 
-	  notifyAll();
-  }  
+    if (--count_ == 0) 
+      notifyAll();
+  }
+
+  /** Return the initial count value **/
+  public int initialCount() { return initialCount_; }
+
+
+  /** 
+   * Return the current count value.
+   * This is just a snapshot value, that may change immediately
+   * after returning.
+   **/
+  public synchronized int currentCount() { return count_; }
 }
+

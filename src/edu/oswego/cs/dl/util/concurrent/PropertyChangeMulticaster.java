@@ -1,5 +1,3 @@
-package edu.oswego.cs.dl.util.concurrent;
-
 /*
   File: PropertyChangeMulticaster.java
 
@@ -16,6 +14,8 @@ package edu.oswego.cs.dl.util.concurrent;
   Date       Who                What
   14Mar1999   dl                 first release
 */
+
+package edu.oswego.cs.dl.util.concurrent;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
@@ -66,7 +66,7 @@ import java.io.IOException;
  *   }
  * }
  * </pre>   
- * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/edu/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
+ * <p>[<a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html"> Introduction to this package. </a>]
  **/
 
 public class PropertyChangeMulticaster implements Serializable {
@@ -97,6 +97,16 @@ public class PropertyChangeMulticaster implements Serializable {
   protected HashMap children;
 
   /**
+   * Return the child associated with property, or null if no such
+   **/
+
+  protected synchronized PropertyChangeMulticaster getChild(String propertyName) {
+    return (children == null)? null : 
+      ((PropertyChangeMulticaster)children.get(propertyName));
+  }
+
+
+  /**
    * Constructs a <code>PropertyChangeMulticaster</code> object.
    *
    * @param sourceBean  The bean to be given as the source for any events.
@@ -104,12 +114,13 @@ public class PropertyChangeMulticaster implements Serializable {
    */
   
   public PropertyChangeMulticaster(Object sourceBean) {
-	if (sourceBean == null) {
-	  throw new NullPointerException();
-	}
+    if (sourceBean == null) {
+      throw new NullPointerException();
+    }
 
-	source = sourceBean;
-  }  
+    source = sourceBean;
+  }
+
   /**
    * Add a VetoableChangeListener to the listener list.
    * The listener is registered for all properties.
@@ -122,48 +133,17 @@ public class PropertyChangeMulticaster implements Serializable {
   
   public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
 
-	if (listener == null) throw new NullPointerException();
+    if (listener == null) throw new NullPointerException();
 
-	int len = listeners.length;
-	PropertyChangeListener[] newArray = new PropertyChangeListener[len + 1];
-	if (len > 0)
-	  System.arraycopy(listeners, 0, newArray, 0, len);
-	newArray[len] = listener;
-	listeners = newArray;
-  }  
-  /**
-   * Add a PropertyChangeListener for a specific property.  The listener
-   * will be invoked only when a call on firePropertyChange names that
-   * specific property. However, if a listener is registered both for all
-   * properties and a specific property, it will receive multiple 
-   * notifications upon changes to that property.
-   *
-   * @param propertyName  The name of the property to listen on.
-   * @param listener  The PropertyChangeListener to be added
-   * @exception NullPointerException If listener is null
-   */
-  
-  public void addPropertyChangeListener(String propertyName,
-										PropertyChangeListener listener) {
+    int len = listeners.length;
+    PropertyChangeListener[] newArray = new PropertyChangeListener[len + 1];
+    if (len > 0)
+      System.arraycopy(listeners, 0, newArray, 0, len);
+    newArray[len] = listener;
+    listeners = newArray;
+  }
 
-	if (listener == null) throw new NullPointerException();
 
-	PropertyChangeMulticaster child = null;
-
-	synchronized(this) {
-	  if (children == null) 
-		children = new HashMap();
-	  else 
-		child = (PropertyChangeMulticaster)children.get(propertyName);
-	  
-	  if (child == null) {
-		child = new PropertyChangeMulticaster(source);
-		children.put(propertyName, child);
-	  }
-	}
-
-	child.addPropertyChangeListener(listener);
-  }  
   /**
    * Add a PropertyChangeListener to the listener list if it is 
    * not already present.
@@ -177,192 +157,21 @@ public class PropertyChangeMulticaster implements Serializable {
   
   public synchronized void addPropertyChangeListenerIfAbsent(PropertyChangeListener listener) {
 
-	if (listener == null) throw new NullPointerException();
+    if (listener == null) throw new NullPointerException();
 
-	// Copy while checking if already present.
-	int len = listeners.length; 
-	PropertyChangeListener[] newArray = new PropertyChangeListener[len + 1];
-	for (int i = 0; i < len; ++i) {
-	  newArray[i] = listeners[i];
-	  if (listener.equals(listeners[i]))
+    // Copy while checking if already present.
+    int len = listeners.length; 
+    PropertyChangeListener[] newArray = new PropertyChangeListener[len + 1];
+    for (int i = 0; i < len; ++i) {
+      newArray[i] = listeners[i];
+      if (listener.equals(listeners[i]))
 	return; // already present -- throw away copy
-	}
-	newArray[len] = listener;
-	listeners = newArray;
-  }  
-  /**
-   * Add a PropertyChangeListener for a specific property, if it is not
-   * already registered.  The listener
-   * will be invoked only when a call on firePropertyChange names that
-   * specific property. 
-   *
-   * @param propertyName  The name of the property to listen on.
-   * @param listener  The PropertyChangeListener to be added
-   * @exception NullPointerException If listener is null
-   */
-  
-  public void addPropertyChangeListenerIfAbsent(String propertyName,
-										PropertyChangeListener listener) {
+    }
+    newArray[len] = listener;
+    listeners = newArray;
+  }
 
-	if (listener == null) throw new NullPointerException();
 
-	PropertyChangeMulticaster child = null;
-
-	synchronized(this) {
-	  if (children == null) 
-		children = new HashMap();
-	  else 
-		child = (PropertyChangeMulticaster)children.get(propertyName);
-	  
-	  if (child == null) {
-		child = new PropertyChangeMulticaster(source);
-		children.put(propertyName, child);
-	  }
-	}
-
-	child.addPropertyChangeListenerIfAbsent(listener);
-  }  
-  /**
-   * Fire an existing PropertyChangeEvent to any registered listeners.
-   * No event is fired if the given event's old and new values are
-   * equal and non-null.
-   * @param evt  The PropertyChangeEvent object.
-   */
-  public void firePropertyChange(PropertyChangeEvent evt) {
-	Object oldValue = evt.getOldValue();
-	Object newValue = evt.getNewValue();
-	if (oldValue == null || newValue == null || !oldValue.equals(newValue)) 
-	  multicast(evt);
-  }  
-  /**
-   * Report an int bound property update to any registered listeners.
-   * No event is fired if old and new are equal and non-null.
-   * <p>
-   * This is merely a convenience wrapper around the more general
-   * firePropertyChange method that takes Object values.
-   *
-   * @param propertyName  The programmatic name of the property
-   *		that was changed.
-   * @param oldValue  The old value of the property.
-   * @param newValue  The new value of the property.
-   */
-  public void firePropertyChange(String propertyName, 
-								 int oldValue, int newValue) {
-	if (oldValue != newValue) {
-	  multicast(new PropertyChangeEvent(source,
-										propertyName, 
-										new Integer(oldValue), 
-										new Integer(newValue)));
-	}
-  }  
-  /**
-   * Report a bound property update to any registered listeners.
-   * No event is fired if old and new are equal and non-null.
-   *
-   * @param propertyName  The programmatic name of the property
-   *		that was changed.
-   * @param oldValue  The old value of the property.
-   * @param newValue  The new value of the property.
-   */
-  public void firePropertyChange(String propertyName, 
-								 Object oldValue, Object newValue) {
-   
-	if (oldValue == null || newValue == null || !oldValue.equals(newValue)) {
-	  multicast(new PropertyChangeEvent(source,
-										propertyName, 
-										oldValue, 
-										newValue));
-	}
-	
-  }  
-  /**
-   * Report a boolean bound property update to any registered listeners.
-   * No event is fired if old and new are equal and non-null.
-   * <p>
-   * This is merely a convenience wrapper around the more general
-   * firePropertyChange method that takes Object values.
-   *
-   * @param propertyName  The programmatic name of the property
-   *		that was changed.
-   * @param oldValue  The old value of the property.
-   * @param newValue  The new value of the property.
-   */
-  public void firePropertyChange(String propertyName, 
-								 boolean oldValue, boolean newValue) {
-	if (oldValue != newValue) {
-	  multicast(new PropertyChangeEvent(source,
-										propertyName, 
-										new Boolean(oldValue), 
-										new Boolean(newValue)));
-	}
-  }  
-  /**
-   * Return the child associated with property, or null if no such
-   **/
-
-  protected synchronized PropertyChangeMulticaster getChild(String propertyName) {
-	return (children == null)? null : 
-	  ((PropertyChangeMulticaster)children.get(propertyName));
-  }  
-  /**
-   * Check if there are any listeners for a specific property.
-   * If propertyName is null, return whether there are any listeners at all.
-   *
-   * @param propertyName  the property name.
-   * @return true if there are one or more listeners for the given property
-   * 
-   */
-  public boolean hasListeners(String propertyName) {
-
-	PropertyChangeMulticaster child;
-
-	synchronized (this) {
-	  if (listeners.length > 0)
-		return true;
-	  else if (propertyName == null || children == null)
-		return false;
-	  else {
-		child = (PropertyChangeMulticaster)children.get(propertyName);
-		if (child == null)
-		  return false;
-	  }
-	}
-	
-	return child.hasListeners(null);
-  }  
-  /**
-   * Helper method to relay evt to all listeners. 
-   * Called by all public firePropertyChange methods.
-   **/
-
-  protected void multicast(PropertyChangeEvent evt) {
-
-	PropertyChangeListener[] array;  // bind in synch block below
-	PropertyChangeMulticaster child = null;
-
-	synchronized (this) {
-	  array = listeners;
-
-	  if (children != null && evt.getPropertyName() != null)
-		child = (PropertyChangeMulticaster)children.get(evt.getPropertyName());
-	}
-	
-	for (int i = 0; i < array.length; ++i) 
-	  array[i].propertyChange(evt);
-	
-	if (child != null) 
-	  child.multicast(evt);
-
-  }  
-  private void readObject(ObjectInputStream s) throws ClassNotFoundException, IOException {
-	listeners = new PropertyChangeListener[0];     // paranoically reset
-	s.defaultReadObject();
-	
-	Object listenerOrNull;
-	while (null != (listenerOrNull = s.readObject())) {
-	  addPropertyChangeListener((PropertyChangeListener)listenerOrNull);
-	}
-  }  
   /**
    * Remove a PropertyChangeListener from the listener list.
    * It removes at most one occurrence of the given listener.
@@ -377,28 +186,96 @@ public class PropertyChangeMulticaster implements Serializable {
   
   public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
 
-	int newlen = listeners.length-1;
-	if (newlen < 0 || listener == null) return;
+    int newlen = listeners.length-1;
+    if (newlen < 0 || listener == null) return;
 
-	// Copy while searching for element to remove
+    // Copy while searching for element to remove
 
-	PropertyChangeListener[] newArray = new PropertyChangeListener[newlen];
+    PropertyChangeListener[] newArray = new PropertyChangeListener[newlen];
 
-	for (int i = 0; i < newlen; ++i) { 
-	  if (listener.equals(listeners[i])) {
-		//  copy remaining and exit
-		for (int k = i + 1; k <= newlen; ++k) newArray[k-1] = listeners[k];
-		listeners = newArray;
-		return;
-	  }
-	  else
-		newArray[i] = listeners[i];
-	}
+    for (int i = 0; i < newlen; ++i) { 
+      if (listener.equals(listeners[i])) {
+        //  copy remaining and exit
+        for (int k = i + 1; k <= newlen; ++k) newArray[k-1] = listeners[k];
+        listeners = newArray;
+        return;
+      }
+      else
+        newArray[i] = listeners[i];
+    }
 
-	// special-case last cell
-	if (listener.equals(listeners[newlen]))
-	  listeners = newArray;
-  }  
+    // special-case last cell
+    if (listener.equals(listeners[newlen]))
+      listeners = newArray;
+  }
+
+  /**
+   * Add a PropertyChangeListener for a specific property.  The listener
+   * will be invoked only when a call on firePropertyChange names that
+   * specific property. However, if a listener is registered both for all
+   * properties and a specific property, it will receive multiple 
+   * notifications upon changes to that property.
+   *
+   * @param propertyName  The name of the property to listen on.
+   * @param listener  The PropertyChangeListener to be added
+   * @exception NullPointerException If listener is null
+   */
+  
+  public void addPropertyChangeListener(String propertyName,
+                                        PropertyChangeListener listener) {
+
+    if (listener == null) throw new NullPointerException();
+
+    PropertyChangeMulticaster child = null;
+
+    synchronized(this) {
+      if (children == null) 
+        children = new HashMap();
+      else 
+        child = (PropertyChangeMulticaster)children.get(propertyName);
+      
+      if (child == null) {
+        child = new PropertyChangeMulticaster(source);
+        children.put(propertyName, child);
+      }
+    }
+
+    child.addPropertyChangeListener(listener);
+  }
+
+  /**
+   * Add a PropertyChangeListener for a specific property, if it is not
+   * already registered.  The listener
+   * will be invoked only when a call on firePropertyChange names that
+   * specific property. 
+   *
+   * @param propertyName  The name of the property to listen on.
+   * @param listener  The PropertyChangeListener to be added
+   * @exception NullPointerException If listener is null
+   */
+  
+  public void addPropertyChangeListenerIfAbsent(String propertyName,
+                                        PropertyChangeListener listener) {
+
+    if (listener == null) throw new NullPointerException();
+
+    PropertyChangeMulticaster child = null;
+
+    synchronized(this) {
+      if (children == null) 
+        children = new HashMap();
+      else 
+        child = (PropertyChangeMulticaster)children.get(propertyName);
+      
+      if (child == null) {
+        child = new PropertyChangeMulticaster(source);
+        children.put(propertyName, child);
+      }
+    }
+
+    child.addPropertyChangeListenerIfAbsent(listener);
+  }
+
   /**
    * Remove a PropertyChangeListener for a specific property.
    * Affects only the given property. 
@@ -410,12 +287,147 @@ public class PropertyChangeMulticaster implements Serializable {
    */
   
   public void removePropertyChangeListener(String propertyName,
-										   PropertyChangeListener listener) {
+                                           PropertyChangeListener listener) {
 
-	PropertyChangeMulticaster child = getChild(propertyName);
-	if (child != null) 
-	  child.removePropertyChangeListener(listener);
-  }  
+    PropertyChangeMulticaster child = getChild(propertyName);
+    if (child != null) 
+      child.removePropertyChangeListener(listener);
+  }
+
+
+  /**
+   * Helper method to relay evt to all listeners. 
+   * Called by all public firePropertyChange methods.
+   **/
+
+  protected void multicast(PropertyChangeEvent evt) {
+
+    PropertyChangeListener[] array;  // bind in synch block below
+    PropertyChangeMulticaster child = null;
+
+    synchronized (this) {
+      array = listeners;
+
+      if (children != null && evt.getPropertyName() != null)
+        child = (PropertyChangeMulticaster)children.get(evt.getPropertyName());
+    }
+    
+    for (int i = 0; i < array.length; ++i) 
+      array[i].propertyChange(evt);
+    
+    if (child != null) 
+      child.multicast(evt);
+
+  }
+
+  
+  /**
+   * Report a bound property update to any registered listeners.
+   * No event is fired if old and new are equal and non-null.
+   *
+   * @param propertyName  The programmatic name of the property
+   *		that was changed.
+   * @param oldValue  The old value of the property.
+   * @param newValue  The new value of the property.
+   */
+  public void firePropertyChange(String propertyName, 
+                                 Object oldValue, Object newValue) {
+   
+    if (oldValue == null || newValue == null || !oldValue.equals(newValue)) {
+      multicast(new PropertyChangeEvent(source,
+                                        propertyName, 
+                                        oldValue, 
+                                        newValue));
+    }
+    
+  }
+
+  /**
+   * Report an int bound property update to any registered listeners.
+   * No event is fired if old and new are equal and non-null.
+   * <p>
+   * This is merely a convenience wrapper around the more general
+   * firePropertyChange method that takes Object values.
+   *
+   * @param propertyName  The programmatic name of the property
+   *		that was changed.
+   * @param oldValue  The old value of the property.
+   * @param newValue  The new value of the property.
+   */
+  public void firePropertyChange(String propertyName, 
+                                 int oldValue, int newValue) {
+    if (oldValue != newValue) {
+      multicast(new PropertyChangeEvent(source,
+                                        propertyName, 
+                                        new Integer(oldValue), 
+                                        new Integer(newValue)));
+    }
+  }
+
+
+  /**
+   * Report a boolean bound property update to any registered listeners.
+   * No event is fired if old and new are equal and non-null.
+   * <p>
+   * This is merely a convenience wrapper around the more general
+   * firePropertyChange method that takes Object values.
+   *
+   * @param propertyName  The programmatic name of the property
+   *		that was changed.
+   * @param oldValue  The old value of the property.
+   * @param newValue  The new value of the property.
+   */
+  public void firePropertyChange(String propertyName, 
+                                 boolean oldValue, boolean newValue) {
+    if (oldValue != newValue) {
+      multicast(new PropertyChangeEvent(source,
+                                        propertyName, 
+                                        new Boolean(oldValue), 
+                                        new Boolean(newValue)));
+    }
+  }
+
+  /**
+   * Fire an existing PropertyChangeEvent to any registered listeners.
+   * No event is fired if the given event's old and new values are
+   * equal and non-null.
+   * @param evt  The PropertyChangeEvent object.
+   */
+  public void firePropertyChange(PropertyChangeEvent evt) {
+    Object oldValue = evt.getOldValue();
+    Object newValue = evt.getNewValue();
+    if (oldValue == null || newValue == null || !oldValue.equals(newValue)) 
+      multicast(evt);
+  }
+
+  /**
+   * Check if there are any listeners for a specific property.
+   * If propertyName is null, return whether there are any listeners at all.
+   *
+   * @param propertyName  the property name.
+   * @return true if there are one or more listeners for the given property
+   * 
+   */
+  public boolean hasListeners(String propertyName) {
+
+    PropertyChangeMulticaster child;
+
+    synchronized (this) {
+      if (listeners.length > 0)
+        return true;
+      else if (propertyName == null || children == null)
+        return false;
+      else {
+        child = (PropertyChangeMulticaster)children.get(propertyName);
+        if (child == null)
+          return false;
+      }
+    }
+    
+    return child.hasListeners(null);
+  }
+
+
   /**
    * @serialData Null terminated list of <code>PropertyChangeListeners</code>.
    * <p>
@@ -424,14 +436,26 @@ public class PropertyChangeMulticaster implements Serializable {
    *
    */
   private synchronized void writeObject(ObjectOutputStream s) throws IOException {
-	s.defaultWriteObject();
-	
-	for (int i = 0; i < listeners.length; i++) {
-	  PropertyChangeListener l = listeners[i];
-	  if (listeners[i] instanceof Serializable) {
-		s.writeObject(listeners[i]);
-	  }
-	}
-	s.writeObject(null);
-  }  
+    s.defaultWriteObject();
+    
+    for (int i = 0; i < listeners.length; i++) {
+      PropertyChangeListener l = listeners[i];
+      if (listeners[i] instanceof Serializable) {
+        s.writeObject(listeners[i]);
+      }
+    }
+    s.writeObject(null);
+  }
+  
+  
+  private void readObject(ObjectInputStream s) throws ClassNotFoundException, IOException {
+    listeners = new PropertyChangeListener[0];     // paranoically reset
+    s.defaultReadObject();
+    
+    Object listenerOrNull;
+    while (null != (listenerOrNull = s.readObject())) {
+      addPropertyChangeListener((PropertyChangeListener)listenerOrNull);
+    }
+  }
+
 }
