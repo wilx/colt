@@ -9,12 +9,18 @@ It is provided "as is" without expressed or implied warranty.
 package cern.colt.matrix.linalg;
 
 import cern.colt.matrix.DoubleMatrix2D;
-import EDU.oswego.cs.dl.util.concurrent.FJTask;
-import EDU.oswego.cs.dl.util.concurrent.FJTaskRunnerGroup;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
+
 /*
 */
 class Smp {
-	protected FJTaskRunnerGroup taskGroup; // a very efficient and light weight thread pool
+	protected ForkJoinPool taskGroup; // a very efficient and light weight thread pool
 
 	protected int maxThreads;	
 /**
@@ -24,7 +30,7 @@ protected Smp(int maxThreads) {
 	maxThreads = Math.max(1,maxThreads);
 	this.maxThreads = maxThreads;
 	if (maxThreads>1) {
-		this.taskGroup = new FJTaskRunnerGroup(maxThreads);
+		this.taskGroup = new ForkJoinPool(maxThreads);
 	}
 	else { // avoid parallel overhead
 		this.taskGroup = null;
@@ -34,31 +40,31 @@ protected Smp(int maxThreads) {
  * Clean up deamon threads, if necessary.
  */
 public void finalize() {
-	if (this.taskGroup!=null) this.taskGroup.interruptAll();
+	if (this.taskGroup!=null) this.taskGroup.shutdownNow();
 }
+
 protected void run(final DoubleMatrix2D[] blocksA, final DoubleMatrix2D[] blocksB, final double[] results, final Matrix2DMatrix2DFunction function) {
-	final FJTask[] subTasks = new FJTask[blocksA.length];
+	final List<Callable<Double>> subTasks = new ArrayList<>(blocksA.length);
 	for (int i=0; i<blocksA.length; i++) {
 		final int k = i;
-		subTasks[i] = new FJTask() { 
-			public void run() {
-				double result = function.apply(blocksA[k],blocksB != null ? blocksB[k] : null);
-				if (results!=null) results[k] = result; 
-				//System.out.print("."); 
-			}
-		};
+		subTasks.add(() -> {
+			double result = function.apply(blocksA[k],blocksB != null ? blocksB[k] : null);
+			if (results!=null) results[k] = result;
+			//System.out.print(".");
+			return result;
+		});
 	}
 
+
 	// run tasks and wait for completion
-	try { 
-		this.taskGroup.invoke(
-			new FJTask() {
-				public void run() {	
-					coInvoke(subTasks);	
-				}
-			}
-		);
-	} catch (InterruptedException exc) {}
+	try {
+		final List<Future<Double>> futures = this.taskGroup.invokeAll(subTasks);
+		for (Future<Double> future : futures) {
+			future.get();
+		}
+	} catch (final InterruptedException | ExecutionException exc) {
+		throw new RuntimeException(exc);
+	}
 }
 protected DoubleMatrix2D[] splitBlockedNN(DoubleMatrix2D A, int threshold, long flops) {
 	/*
@@ -190,6 +196,6 @@ protected DoubleMatrix2D[] splitStridedNN(DoubleMatrix2D A, int threshold, long 
  * Prints various snapshot statistics to System.out; Simply delegates to {@link EDU.oswego.cs.dl.util.concurrent.FJTaskRunnerGroup#stats}.
  */
 public void stats() {
-	if (this.taskGroup!=null) this.taskGroup.stats();
+	// Nothing.
 }
 }

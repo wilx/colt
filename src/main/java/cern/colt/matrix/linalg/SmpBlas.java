@@ -10,7 +10,13 @@ package cern.colt.matrix.linalg;
 
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.DoubleMatrix2D;
-import EDU.oswego.cs.dl.util.concurrent.FJTask;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 /**
 Parallel implementation of the Basic Linear Algebra System for symmetric multi processing boxes.
 Currently only a few algorithms are parallelised; the others are fully functional, but run in sequential mode.
@@ -51,8 +57,6 @@ number of CPUs on a JVM, so there is no good way to automate defaults.</li>
 <li>Implemented using Doug Lea's fast lightweight task framework ({@link EDU.oswego.cs.dl.util.concurrent}) built upon Java threads, and geared for parallel computation.</li>
 </ul>
 
-@see EDU.oswego.cs.dl.util.concurrent.FJTaskRunnerGroup
-@see EDU.oswego.cs.dl.util.concurrent.FJTask
 @author wolfgang.hoschek@cern.ch
 @version 0.9, 16/04/2000
 */
@@ -194,7 +198,7 @@ public void dgemm(final boolean transposeA, final boolean transposeB, final doub
 	
 	// set up concurrent tasks
 	int span = width/noOfTasks;
-	final FJTask[] subTasks = new FJTask[noOfTasks];
+	final List<Callable<Double>> subTasks = new ArrayList<>(noOfTasks);
 	for (int i=0; i<noOfTasks; i++) {
 		final int offset = i*span;
 		if (i==noOfTasks-1) span = width - span*i; // last span may be a bit larger
@@ -213,24 +217,22 @@ public void dgemm(final boolean transposeA, final boolean transposeB, final doub
 			CC = C.viewPart(offset,0,span,p);
 		}
 				
-		subTasks[i] = new FJTask() { 
-			public void run() { 
-				seqBlas.dgemm(transposeA,transposeB,alpha,AA,BB,beta,CC); 
-				//System.out.println("Hello "+offset); 
-			}
-		};
+		subTasks.add(() ->{
+			seqBlas.dgemm(transposeA,transposeB,alpha,AA,BB,beta,CC);
+			//System.out.println("Hello "+offset);
+			return null;
+		});
 	}
 	
 	// run tasks and wait for completion
-	try { 
-		this.smp.taskGroup.invoke(
-			new FJTask() {
-				public void run() {	
-					coInvoke(subTasks);	
-				}
-			}
-		);
-	} catch (InterruptedException exc) {}
+	try {
+		final List<Future<Double>> futures = this.smp.taskGroup.invokeAll(subTasks);
+		for (Future<Double> future : futures) {
+			future.get();
+		}
+	} catch (final InterruptedException | ExecutionException exc) {
+		throw new RuntimeException(exc);
+	}
 }
 public void dgemv(final boolean transposeA, final double alpha, DoubleMatrix2D A, final DoubleMatrix1D x, final double beta, DoubleMatrix1D y) {
 	/*
@@ -267,7 +269,7 @@ public void dgemv(final boolean transposeA, final double alpha, DoubleMatrix2D A
 	
 	// set up concurrent tasks
 	int span = width/noOfTasks;
-	final FJTask[] subTasks = new FJTask[noOfTasks];
+	final ArrayList<Callable<Void>> subTasks = new ArrayList<>(noOfTasks);
 	for (int i=0; i<noOfTasks; i++) {
 		final int offset = i*span;
 		if (i==noOfTasks-1) span = width - span*i; // last span may be a bit larger
@@ -276,24 +278,22 @@ public void dgemv(final boolean transposeA, final double alpha, DoubleMatrix2D A
 		final DoubleMatrix2D AA = A.viewPart(offset,0,span,n);
 		final DoubleMatrix1D yy = y.viewPart(offset,span);
 				
-		subTasks[i] = new FJTask() { 
-			public void run() { 
-				seqBlas.dgemv(transposeA,alpha,AA,x,beta,yy); 
-				//System.out.println("Hello "+offset); 
-			}
-		};
+		subTasks.add(() -> {
+			seqBlas.dgemv(transposeA,alpha,AA,x,beta,yy);
+			//System.out.println("Hello "+offset);
+			return null;
+		});
 	}
 	
 	// run tasks and wait for completion
-	try { 
-		this.smp.taskGroup.invoke(
-			new FJTask() {
-				public void run() {	
-					coInvoke(subTasks);	
-				}
-			}
-		);
-	} catch (InterruptedException exc) {}
+	try {
+		final List<Future<Void>> futures = this.smp.taskGroup.invokeAll(subTasks);
+		for (Future<Void> future : futures) {
+			future.get();
+		}
+	} catch (final InterruptedException | ExecutionException exc) {
+		throw new RuntimeException(exc);
+	}
 }
 public void dger(double alpha, DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix2D A) {
 	seqBlas.dger(alpha,x,y,A);
