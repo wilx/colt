@@ -92,8 +92,8 @@ public ObjectMatrix1D sort(final ObjectMatrix1D vector) {
 	for (int i=indexes.length; --i >= 0; ) indexes[i] = i;
 
 	IntComparator comp = (a, b) -> {
-    Comparable av = (Comparable) (vector.getQuick(a));
-    Comparable bv = (Comparable) (vector.getQuick(b));
+    Comparable<Object> av = (Comparable<Object>) (vector.getQuick(a));
+    Comparable<Object> bv = (Comparable<Object>) (vector.getQuick(b));
     int r = av.compareTo(bv);
     return r<0 ? -1 : (r>0 ? 1 : 0);
 };
@@ -125,7 +125,7 @@ sorted = quickSort(vector,comp);
 @return a new matrix view sorted as specified.
 		<b>Note that the original vector (matrix) is left unaffected.</b>
 */
-public ObjectMatrix1D sort(final ObjectMatrix1D vector, final java.util.Comparator c) {
+public ObjectMatrix1D sort(final ObjectMatrix1D vector, final java.util.Comparator<Object> c) {
 	int[] indexes = new int[vector.size()]; // row indexes to reorder instead of matrix itself
 	for (int i=indexes.length; --i >= 0; ) indexes[i] = i;
 
@@ -181,8 +181,8 @@ public ObjectMatrix2D sort(ObjectMatrix2D matrix, int column) {
 
 	final ObjectMatrix1D col = matrix.viewColumn(column);
 	IntComparator comp = (a, b) -> {
-    Comparable av = (Comparable) (col.getQuick(a));
-    Comparable bv = (Comparable) (col.getQuick(b));
+    Comparable<Object> av = (Comparable<Object>) (col.getQuick(a));
+    Comparable<Object> bv = (Comparable<Object>) (col.getQuick(b));
     int r = av.compareTo(bv);
     return r<0 ? -1 : (r>0 ? 1 : 0);
 };
@@ -264,8 +264,8 @@ public ObjectMatrix3D sort(ObjectMatrix3D matrix, int row, int column) {
 
 	final ObjectMatrix1D sliceView = matrix.viewRow(row).viewColumn(column);
 	IntComparator comp = (a, b) -> {
-    Comparable av = (Comparable) (sliceView.getQuick(a));
-    Comparable bv = (Comparable) (sliceView.getQuick(b));
+    Comparable<Object> av = (Comparable<Object>) (sliceView.getQuick(a));
+    Comparable<Object> bv = (Comparable<Object>) (sliceView.getQuick(b));
     int r = av.compareTo(bv);
     return r<0 ? -1 : (r>0 ? 1 : 0);
 };

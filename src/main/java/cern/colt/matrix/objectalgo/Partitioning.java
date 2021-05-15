@@ -119,24 +119,24 @@ public static void partition(ObjectMatrix2D matrix, int[] rowIndexes, int rowFro
 	// compare splitter[a] with columnView[rowIndexes[b]]
 	final ObjectMatrix1D columnView = matrix.viewColumn(column);	
 	IntComparator comp = (a, b) -> {
-    Comparable av = (Comparable) (splitters[a]);
-    Comparable bv = (Comparable) (columnView.getQuick(g[b]));
+    Comparable<Object> av = (Comparable<Object>) (splitters[a]);
+    Comparable<Object> bv = (Comparable<Object>) (columnView.getQuick(g[b]));
     int r = av.compareTo(bv);
     return r<0 ? -1 : (r==0 ? 0 : 1);
 };
 
 	// compare columnView[rowIndexes[a]] with columnView[rowIndexes[b]]
 	IntComparator comp2 = (a, b) -> {
-    Comparable av = (Comparable) (columnView.getQuick(g[a]));
-    Comparable bv = (Comparable) (columnView.getQuick(g[b]));
+    Comparable<Object> av = (Comparable<Object>) (columnView.getQuick(g[a]));
+    Comparable<Object> bv = (Comparable<Object>) (columnView.getQuick(g[b]));
     int r = av.compareTo(bv);
     return r<0 ? -1 : (r==0 ? 0 : 1);
 };
 
 	// compare splitter[a] with splitter[b]
 	IntComparator comp3 = (a, b) -> {
-    Comparable av = (Comparable) (splitters[a]);
-    Comparable bv = (Comparable) (splitters[b]);
+    Comparable<Object> av = (Comparable<Object>) (splitters[a]);
+    Comparable<Object> bv = (Comparable<Object>) (splitters[b]);
     int r = av.compareTo(bv);
     return r<0 ? -1 : (r==0 ? 0 : 1);
 };

@@ -442,7 +442,7 @@ private static int med3(int[] x, int a, int b, int c) {
 /**
  * Returns the index of the median of the three indexed chars.
  */
-private static int med3(Object[] x, int a, int b, int c, java.util.Comparator comp) {
+private static int med3(Object[] x, int a, int b, int c, java.util.Comparator<Object> comp) {
 	int ab = comp.compare(x[a],x[b]);
 	int ac = comp.compare(x[a],x[c]);
 	int bc = comp.compare(x[b],x[c]);
@@ -940,7 +940,7 @@ public static int partition(int[] list, int from, int to, int splitter) {
  * Same as {@link #partition(int[],int,int,int[],int,int,int[])}
  * except that it partitions <tt>Object[]</tt> rather than <tt>int[]</tt> arrays.
  */
-public static void partition(Object[] list, int from, int to, Object[] splitters, int splitFrom, int splitTo, int[] splitIndexes, java.util.Comparator comp) {
+public static void partition(Object[] list, int from, int to, Object[] splitters, int splitFrom, int splitTo, int[] splitIndexes, java.util.Comparator<Object> comp) {
 	Object splitter; // int, double --> template type dependent
 	
 	if (splitFrom>splitTo) return; // nothing to do
@@ -1013,7 +1013,7 @@ public static void partition(Object[] list, int from, int to, Object[] splitters
  * Same as {@link #partition(int[],int,int,int)} 
  * except that it <i>synchronously</i> partitions the objects of the given list by the order of the given comparator.
  */
-public static int partition(Object[] list, int from, int to, Object splitter, java.util.Comparator comp) {
+public static int partition(Object[] list, int from, int to, Object splitter, java.util.Comparator<Object> comp) {
 	Object element;  // int, double --> template type dependent
 	for (int i=from-1; ++i<=to; ) {
 		element = list[i];

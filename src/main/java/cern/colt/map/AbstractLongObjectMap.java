@@ -288,8 +288,8 @@ public void pairsSortedByValue(final LongArrayList keyList, final ObjectArrayLis
 	};
 
 	cern.colt.function.IntComparator comp = (a, b) -> {
-		int ab = ((Comparable)v[a]).compareTo(v[b]);
-		return ab<0 ? -1 : ab>0 ? 1 : (k[a]<k[b] ? -1 : (k[a]==k[b] ? 0 : 1));
+		int ab = ((Comparable<Object>)v[a]).compareTo(v[b]);
+		return ab < 0 ? -1 : (ab > 0 ? 1 : (k[a] < k[b] ? -1 : (k[a] == k[b] ? 0 : 1)));
 		//return v[a]<v[b] ? -1 : v[a]>v[b] ? 1 : (k[a]<k[b] ? -1 : (k[a]==k[b] ? 0 : 1));
 	};
 

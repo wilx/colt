@@ -12,6 +12,9 @@ import cern.colt.function.IntObjectProcedure;
 import cern.colt.function.IntProcedure;
 import cern.colt.list.IntArrayList;
 import cern.colt.list.ObjectArrayList;
+
+import java.util.Comparator;
+
 /**
 Abstract base class for hash maps holding (key,value) associations of type <tt>(int-->Object)</tt>.
 First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.
@@ -288,8 +291,8 @@ public void pairsSortedByValue(final IntArrayList keyList, final ObjectArrayList
 	};
 
 	cern.colt.function.IntComparator comp = (a, b) -> {
-		int ab = ((Comparable)v[a]).compareTo(v[b]);
-		return ab<0 ? -1 : ab>0 ? 1 : (k[a]<k[b] ? -1 : (k[a]==k[b] ? 0 : 1));
+		int ab = ((Comparable<Object>)v[a]).compareTo(v[b]);
+		return (ab < 0) ? -1 : (ab > 0 ? 1 : (k[a] < k[b] ? -1 : (k[a] == k[b] ? 0 : 1)));
 		//return v[a]<v[b] ? -1 : v[a]>v[b] ? 1 : (k[a]<k[b] ? -1 : (k[a]==k[b] ? 0 : 1));
 	};
 

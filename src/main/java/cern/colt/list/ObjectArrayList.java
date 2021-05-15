@@ -188,7 +188,7 @@ public int binarySearchFromTo(Object key, int from, int to) {
 	while (low <= high) {
 		int mid =(low + high)/2;
 		Object midVal = elements[mid];
-		int cmp = ((Comparable)midVal).compareTo(key);
+		int cmp = ((Comparable<Object>)midVal).compareTo(key);
 
 		if (cmp < 0) low = mid + 1;
 		else if (cmp > 0) high = mid - 1;
@@ -229,7 +229,7 @@ public int binarySearchFromTo(Object key, int from, int to) {
  * @see java.util.Arrays
  * @see java.util.Comparator
  */
-public int binarySearchFromTo(Object key, int from, int to, java.util.Comparator comparator) {
+public int binarySearchFromTo(Object key, int from, int to, java.util.Comparator<Object> comparator) {
 	return cern.colt.Sorting.binarySearchFromTo(this.elements,key,from,to,comparator);
 }
 /**
@@ -480,7 +480,7 @@ public boolean isSortedFromTo(int from, int to) {
 	
 	Object[] theElements = elements;
 	for (int i=from+1; i<=to; i++ ) {
-		if (((Comparable)theElements[i]).compareTo(theElements[i-1]) < 0) return false;
+		if (((Comparable<Object>)theElements[i]).compareTo(theElements[i-1]) < 0) return false;
 	}
 	return true;
 }
@@ -587,7 +587,7 @@ public void mergeSortFromTo(int from, int to) {
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  * @see Comparator
  */
-public void mergeSortFromTo(int from, int to, java.util.Comparator c) {
+public void mergeSortFromTo(int from, int to, java.util.Comparator<Object> c) {
 	if (size==0) return;
 	checkRangeFromTo(from, to, size);
 	java.util.Arrays.sort(elements, from, to+1, c);
@@ -663,7 +663,7 @@ public void quickSortFromTo(int from, int to) {
  * @see Comparator
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
-public void quickSortFromTo(int from, int to, java.util.Comparator c) {
+public void quickSortFromTo(int from, int to, java.util.Comparator<Object> c) {
 	if (size==0) return;
 	checkRangeFromTo(from, to, size);
 	cern.colt.Sorting.quickSort(elements, from, to+1, c);

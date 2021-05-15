@@ -283,12 +283,12 @@ public static int binarySearchFromTo(long[] list, long key, int from, int to) {
  * @see java.util.Arrays
  * @see java.util.Comparator
  */
-public static int binarySearchFromTo(Object[] list, Object key, int from, int to, java.util.Comparator comparator) {
+public static int binarySearchFromTo(Object[] list, Object key, int from, int to, java.util.Comparator<Object> comparator) {
 	Object midVal;
 	while (from <= to) {
 		int mid =(from + to)/2;
 		midVal = list[mid];
-		int cmp = comparator.compare(midVal,key);
+		int cmp = comparator.compare(midVal, key);
 
 		if (cmp < 0) from = mid + 1;
 		else if (cmp > 0) to = mid - 1;
@@ -506,9 +506,9 @@ private static int med3(long[] x, int a, int b, int c, LongComparator comp) {
  * Returns the index of the median of the three indexed chars.
  */
 private static int med3(Object[] x, int a, int b, int c) {
-	int ab = ((Comparable)x[a]).compareTo(x[b]);
-	int ac = ((Comparable)x[a]).compareTo(x[c]);
-	int bc = ((Comparable)x[b]).compareTo(x[c]);
+	int ab = ((Comparable<Object>)x[a]).compareTo(x[b]);
+	int ac = ((Comparable<Object>)x[a]).compareTo(x[c]);
+	int bc = ((Comparable<Object>)x[b]).compareTo(x[c]);
 	return (ab<0 ?
 	(bc<0 ? b : ac<0 ? c : a) :
 	(bc>0 ? b : ac>0 ? c : a));
@@ -516,7 +516,7 @@ private static int med3(Object[] x, int a, int b, int c) {
 /**
  * Returns the index of the median of the three indexed chars.
  */
-private static int med3(Object[] x, int a, int b, int c, Comparator comp) {
+private static int med3(Object[] x, int a, int b, int c, Comparator<Object> comp) {
 	int ab = comp.compare(x[a],x[b]);
 	int ac = comp.compare(x[a],x[c]);
 	int bc = comp.compare(x[b],x[c]);
@@ -1766,7 +1766,7 @@ public static void quickSort(Object[] a, int fromIndex, int toIndex) {
  *	       <tt>toIndex &gt; a.length</tt>
  * @see Comparator
  */
-public static void quickSort(Object[] a, int fromIndex, int toIndex, Comparator c) {
+public static void quickSort(Object[] a, int fromIndex, int toIndex, Comparator<Object> c) {
 	rangeCheck(a.length, fromIndex, toIndex);
 	quickSort1(a, fromIndex, toIndex-fromIndex, c);
 }
@@ -1794,7 +1794,7 @@ public static void quickSort(Object[] a, int fromIndex, int toIndex, Comparator 
  *	       <tt>toIndex &gt; a.length</tt>
  * @see Comparator
  */
-public static void quickSort(Object[] a, Comparator c) {
+public static void quickSort(Object[] a, Comparator<Object> c) {
 	quickSort1(a, 0, a.length, c);
 }
 /**
@@ -2179,7 +2179,7 @@ private static void quickSort1(Object[] x, int off, int len) {
 	// Insertion sort on smallest arrays
 	if (len < SMALL) {
 	    for (int i=off; i<len+off; i++)
-		for (int j = i; j>off && ((Comparable)x[j-1]).compareTo(x[j])>0; j--)
+		for (int j = i; j>off && ((Comparable<Object>)x[j-1]).compareTo(x[j])>0; j--)
 		    swap(x, j, j-1);
 	    return;
 	}
@@ -2197,18 +2197,18 @@ private static void quickSort1(Object[] x, int off, int len) {
 	    }
 	    m = med3(x, l, m, n); // Mid-size, med of 3
 	}
-	Comparable v = (Comparable)x[m];
+	Comparable<Object> v = (Comparable<Object>)x[m];
 
 	// Establish Invariant: v* (<v)* (>v)* v*
 	int a = off, b = a, c = off + len - 1, d = c;
 	while(true) {
 		int comparison;
-	    while (b <= c && (comparison=((Comparable)x[b]).compareTo(v))<=0) {
+	    while (b <= c && (comparison=((Comparable<Object>)x[b]).compareTo(v))<=0) {
 		if (comparison == 0)
 		    swap(x, a++, b);
 		b++;
 	    }
-	    while (c >= b && (comparison=((Comparable)x[c]).compareTo(v))>=0) {
+	    while (c >= b && (comparison=((Comparable<Object>)x[c]).compareTo(v))>=0) {
 		if (comparison == 0)
 		    swap(x, c, d--);
 		c--;
@@ -2232,12 +2232,12 @@ private static void quickSort1(Object[] x, int off, int len) {
 /**
  * Sorts the specified sub-array of chars into ascending order.
  */
-private static void quickSort1(Object[] x, int off, int len, Comparator comp) {
+private static void quickSort1(Object[] x, int off, int len, Comparator<Object> comp) {
 	// Insertion sort on smallest arrays
 	if (len < SMALL) {
 		for (int i=off; i<len+off; i++)
-		for (int j=i; j>off && comp.compare(x[j-1],x[j])>0; j--)
-		    swap(x, j, j-1);
+			for (int j=i; j>off && comp.compare(x[j-1],x[j])>0; j--)
+				 swap(x, j, j-1);
 		return;
 	}
 
