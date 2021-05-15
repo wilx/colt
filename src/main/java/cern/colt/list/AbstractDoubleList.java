@@ -10,11 +10,14 @@ package cern.colt.list;
 
 import cern.colt.function.DoubleComparator;
 import cern.colt.function.DoubleProcedure;
+
+import java.util.Iterator;
+
 /**
 Abstract base class for resizable lists holding <code>double</code> elements; abstract.
 First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.
 */
-public abstract class AbstractDoubleList extends AbstractList implements cern.colt.buffer.DoubleBufferConsumer {
+public abstract class AbstractDoubleList extends AbstractList<Double> implements cern.colt.buffer.DoubleBufferConsumer {
 	/**
 	 * The size of the list.
 	 * This is a READ_ONLY variable for all methods but setSizeRaw(int newSize) !!!
@@ -646,9 +649,9 @@ public void replaceFromToWithFromTo(int from, int to, AbstractDoubleList other, 
  * @exception IndexOutOfBoundsException index is out of range (index &lt; 0 || index &gt;= size()).
  */
 @Override
-public void replaceFromWith(int from, java.util.Collection other) {
+public void replaceFromWith(int from, java.util.Collection<? extends Double> other) {
 	checkRange(from,size());
-	java.util.Iterator e = other.iterator();
+	Iterator<? extends Double> e = other.iterator();
 	int index=from;
 	int limit = Math.min(size()-from, other.size());
 	for (int i=0; i<limit; i++)
@@ -781,9 +784,9 @@ public AbstractDoubleList times(int times) {
  * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
  */
 @Override
-public java.util.ArrayList toList() {
+public java.util.ArrayList<Double> toList() {
 	int mySize = size();
-	java.util.ArrayList list = new java.util.ArrayList(mySize);
+	java.util.ArrayList<Double> list = new java.util.ArrayList<>(mySize);
 	for (int i=0; i < mySize; i++) list.add(get(i));
 	return list;
 }

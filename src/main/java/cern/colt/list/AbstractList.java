@@ -20,7 +20,7 @@ First see the <a href="package-summary.html">package summary</a> and javadoc <a 
 @see	    java.util.Vector
 @see	    java.util.Arrays
 */
-public abstract class AbstractList extends AbstractCollection {
+public abstract class AbstractList<T> extends AbstractCollection<T> {
 /**
  * Makes this class non instantiable, but still let's others inherit from it.
  */
@@ -32,7 +32,7 @@ protected AbstractList() {}
  * @exception ClassCastException if an element in the collection is not
  * of the same parameter type of the receiver.
  */
-public void addAllOf(java.util.Collection collection) {
+public void addAllOf(java.util.Collection<? extends T > collection) {
 	this.beforeInsertAllOf(size(), collection);
 }
 /** Inserts all elements of the specified collection before the specified position into the receiver. 
@@ -46,7 +46,7 @@ public void addAllOf(java.util.Collection collection) {
  * of the same parameter type of the receiver.
  * @throws IndexOutOfBoundsException if <tt>index &lt; 0 || index &gt; size()</tt>.
  */
-public void beforeInsertAllOf(int index, java.util.Collection collection) {
+public void beforeInsertAllOf(int index, java.util.Collection<? extends T> collection) {
 	this.beforeInsertDummies(index, collection.size());
 	this.replaceFromWith(index, collection);
 }
@@ -169,8 +169,8 @@ public void remove(int index) {
  * elements to the left (reduces their index).
  * This call shortens the list by <tt>(to - from + 1)</tt> elements.
  *
- * @param from index of first element to be removed.
- * @param to index of last element to be removed.
+ * @param fromIndex index of first element to be removed.
+ * @param toIndex index of last element to be removed.
  * @throws IndexOutOfBoundsException if <tt>(from&lt;0 || from&gt;to || to&gt;=size()) && to!=from-1</tt>.
  */
 public abstract void removeFromTo(int fromIndex, int toIndex);
@@ -183,7 +183,7 @@ public abstract void removeFromTo(int fromIndex, int toIndex);
  * @param other Collection to replace part of the receiver
  * @throws IndexOutOfBoundsException if <tt>index &lt; 0 || index &gt;= size()</tt>.
  */
-public abstract void replaceFromWith(int from, java.util.Collection other);
+public abstract void replaceFromWith(int from, java.util.Collection<? extends T> other);
 /**
  * Reverses the elements of the receiver.
  * Last becomes first, second last becomes second first, and so on.

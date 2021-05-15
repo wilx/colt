@@ -10,11 +10,14 @@ package cern.colt.list;
 
 import cern.colt.function.IntComparator;
 import cern.colt.function.IntProcedure;
+
+import java.util.Iterator;
+
 /**
 Abstract base class for resizable lists holding <code>int</code> elements; abstract.
 First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.
 */
-public abstract class AbstractIntList extends AbstractList implements cern.colt.buffer.IntBufferConsumer {
+public abstract class AbstractIntList extends AbstractList<Integer> implements cern.colt.buffer.IntBufferConsumer {
 	/**
 	 * The size of the list.
 	 * This is a READ_ONLY variable for all methods but setSizeRaw(int newSize) !!!
@@ -644,9 +647,9 @@ public void replaceFromToWithFromTo(int from, int to, AbstractIntList other, int
  * @exception IndexOutOfBoundsException index is out of range (index &lt; 0 || index &gt;= size()).
  */
 @Override
-public void replaceFromWith(int from, java.util.Collection other) {
+public void replaceFromWith(int from, java.util.Collection<? extends Integer> other) {
 	checkRange(from,size());
-	java.util.Iterator e = other.iterator();
+	Iterator<? extends Integer> e = other.iterator();
 	int index=from;
 	int limit = Math.min(size()-from, other.size());
 	for (int i=0; i<limit; i++)
@@ -779,9 +782,9 @@ public AbstractIntList times(int times) {
  * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
  */
 @Override
-public java.util.ArrayList toList() {
+public java.util.ArrayList<Integer> toList() {
 	int mySize = size();
-	java.util.ArrayList list = new java.util.ArrayList(mySize);
+	java.util.ArrayList<Integer> list = new java.util.ArrayList<>(mySize);
 	for (int i=0; i < mySize; i++) list.add(get(i));
 	return list;
 }

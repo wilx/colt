@@ -97,7 +97,7 @@ public BooleanArrayList clone() {
  * @return  a deep copy of the receiver.
  */
 public BooleanArrayList copy() {
-	return (BooleanArrayList) clone();
+	return clone();
 }
 /**
  * Sorts the specified range of the receiver into ascending numerical order (<tt>false &lt; true</tt>). 

@@ -9,11 +9,14 @@ It is provided "as is" without expressed or implied warranty.
 package cern.colt.list;
 
 import cern.colt.function.BooleanProcedure;
+
+import java.util.Iterator;
+
 /**
 Abstract base class for resizable lists holding <code>boolean</code> elements; abstract.
 First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.
 */
-public abstract class AbstractBooleanList extends AbstractList {
+public abstract class AbstractBooleanList extends AbstractList<Boolean> {
 	/**
 	 * The size of the list.
 	 * This is a READ_ONLY variable for all methods but setSizeRaw(int newSize) !!!
@@ -509,13 +512,13 @@ public void replaceFromToWithFromTo(int from, int to, AbstractBooleanList other,
  * @exception IndexOutOfBoundsException index is out of range (index &lt; 0 || index &gt;= size()).
  */
 @Override
-public void replaceFromWith(int from, java.util.Collection other) {
+public void replaceFromWith(int from, java.util.Collection<? extends Boolean> other) {
 	checkRange(from,size());
-	java.util.Iterator e = other.iterator();
+	Iterator<? extends Boolean> e = other.iterator();
 	int index=from;
 	int limit = Math.min(size()-from, other.size());
 	for (int i=0; i<limit; i++)
-	    set(index++, (Boolean) e.next()); //delta
+	    set(index++, e.next()); //delta
 }
 /**
 * Retains (keeps) only the elements in the receiver that are contained in the specified other list.

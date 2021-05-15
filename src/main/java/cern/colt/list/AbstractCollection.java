@@ -21,7 +21,7 @@ First see the <a href="package-summary.html">package summary</a> and javadoc <a 
 @see	    java.util.Arrays
 */
 //public abstract class AbstractCollection extends Object implements Cloneable, java.io.Serializable {
-public abstract class AbstractCollection extends cern.colt.PersistentObject {
+public abstract class AbstractCollection<T> extends cern.colt.PersistentObject {
 /**
  * Makes this class non instantiable, but still let's others inherit from it.
  */
@@ -49,7 +49,7 @@ public abstract int size();
 /**
  * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
  */
-public abstract java.util.ArrayList toList();
+public abstract java.util.ArrayList<T> toList();
 /**
 * Returns a string representation of the receiver, containing
 * the String representation of each element.
