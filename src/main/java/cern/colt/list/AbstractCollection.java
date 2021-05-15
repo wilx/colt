@@ -49,7 +49,7 @@ public abstract int size();
 /**
  * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
  */
-public abstract java.util.ArrayList<T> toList();
+public abstract java.util.List<T> toList();
 /**
 * Returns a string representation of the receiver, containing
 * the String representation of each element.

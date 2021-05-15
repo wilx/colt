@@ -11,13 +11,14 @@ package cern.colt.list;
 import cern.colt.function.ObjectProcedure;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Objects;
 
 /**
 Resizable list holding <code>Object</code> elements; implemented with arrays.
 First see the <a href="package-summary.html">package summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the broad picture.
 */
-public class ObjectArrayList extends AbstractList {
+public class ObjectArrayList extends AbstractList<Object> {
 	/**
 	 * The array buffer into which the elements of the list are stored.
 	 * The capacity of the list is the length of this array buffer.
@@ -815,9 +816,9 @@ public void replaceFromToWithFromTo(int from, int to, ObjectArrayList other, int
  * @exception IndexOutOfBoundsException index is out of range (index &lt; 0 || index &gt;= size()).
  */
 @Override
-public void replaceFromWith(int from, java.util.Collection other) {
+public void replaceFromWith(int from, java.util.Collection<?> other) {
 	checkRange(from,size);
-	java.util.Iterator e = other.iterator();
+	Iterator<?> e = other.iterator();
 	int index=from;
 	int limit = Math.min(size-from, other.size());
 	for (int i=0; i<limit; i++)
@@ -973,10 +974,10 @@ public Object[] toArray(Object[] array) {
  * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
  */
 @Override
-public java.util.ArrayList toList() {
+public java.util.ArrayList<Object> toList() {
 	int mySize = size();
 	Object[] theElements = elements;
-	java.util.ArrayList list = new java.util.ArrayList(mySize);
+	java.util.ArrayList<Object> list = new java.util.ArrayList<>(mySize);
 	list.addAll(Arrays.asList(theElements).subList(0, mySize));
 	return list;
 }
