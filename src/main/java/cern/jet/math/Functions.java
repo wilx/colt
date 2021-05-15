@@ -742,7 +742,8 @@ public static DoubleFunction less(final double b) {
 public static DoubleFunction lg(final double b) {
 	return new DoubleFunction() {
 		private final double logInv = 1 / Math.log(b); // cached for speed
-		public final double apply(double a) { return Math.log(a) * logInv; }
+		@Override
+      public final double apply(double a) { return Math.log(a) * logInv; }
 	};
 }
 /**

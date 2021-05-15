@@ -61,6 +61,7 @@ public StaticBin1D() {
  *
  * @param element element to be appended.
  */
+@Override
 public synchronized void add(double element) {
 	// prototyping implementation; inefficient; TODO
 	this.addAllOf(new DoubleArrayList(new double[] {element}));
@@ -89,6 +90,7 @@ public synchronized void add(double element) {
  * @param to the index of the last element to be added (inclusive).
  * @throws IndexOutOfBoundsException if <tt>list.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=list.size())</tt>.
  */
+@Override
 public synchronized void addAllOfFromTo(DoubleArrayList list, int from, int to) {
 	//if (this.arguments == null) setUpCache();
 	synchronized (arguments) {
@@ -113,6 +115,7 @@ public synchronized void addAllOfFromTo(DoubleArrayList list, int from, int to) 
  * Removes all elements from the receiver.
  * The receiver will be empty after this call returns.
  */
+@Override
 public synchronized void clear() {
 	clearAllMeasures();
 	this.size = 0;
@@ -133,18 +136,21 @@ protected void clearAllMeasures() {
  * If the receiver is rebinnable, the elements can be obtained via <tt>elements()</tt> methods.
  *
  */
+@Override
 public synchronized boolean isRebinnable() {
 	return false;
 }
 /**
  * Returns the maximum.
  */
+@Override
 public synchronized double max() {
 	return this.max;
 }
 /**
  * Returns the minimum.
  */
+@Override
 public synchronized double min() {
 	return this.min;
 }
@@ -153,18 +159,21 @@ public synchronized double min() {
  *
  * @returns  the number of elements contained in the receiver.
  */
+@Override
 public synchronized int size() {
 	return this.size;
 }
 /**
  * Returns the sum of all elements, which is <tt>Sum( x[i] )</tt>.
  */
+@Override
 public synchronized double sum() {
 	return this.sum;
 }
 /**
  * Returns the sum of squares, which is <tt>Sum( x[i] * x[i] )</tt>.
  */
+@Override
 public synchronized double sumOfSquares() {
 	return this.sum_xx;
 }

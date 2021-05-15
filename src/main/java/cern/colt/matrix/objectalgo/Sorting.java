@@ -46,10 +46,12 @@ public class Sorting extends cern.colt.PersistentObject {
 	 * A prefabricated mergesort.
 	 */
 	public static final Sorting mergeSort = new Sorting() { // override quicksort with mergesort
-		protected void runSort(int[] a, int fromIndex, int toIndex, IntComparator c) {
+		@Override
+      protected void runSort(int[] a, int fromIndex, int toIndex, IntComparator c) {
 			cern.colt.Sorting.mergeSort(a,fromIndex,toIndex,c);
 		}
-		protected void runSort(int fromIndex, int toIndex, IntComparator c, cern.colt.Swapper swapper) {
+		@Override
+      protected void runSort(int fromIndex, int toIndex, IntComparator c, cern.colt.Swapper swapper) {
 			cern.colt.GenericSorting.mergeSort(fromIndex, toIndex, c, swapper);
 		}
 	};

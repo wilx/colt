@@ -124,6 +124,7 @@ protected DenseDoubleMatrix3D(int slices, int rows, int columns, double[] elemen
  * @throws IllegalArgumentException if <tt>values.length != slices() || for any 0 &lt;= slice &lt; slices(): values[slice].length != rows()</tt>.
  * @throws IllegalArgumentException if <tt>for any 0 &lt;= column &lt; columns(): values[slice][row].length != columns()</tt>.
  */
+@Override
 public DoubleMatrix3D assign(double[][][] values) {
 	if (this.isNoView) {
 		if (values.length != slices) throw new IllegalArgumentException("Must have same number of slices: slices="+values.length+"slices()="+slices());
@@ -153,6 +154,7 @@ public DoubleMatrix3D assign(double[][][] values) {
  * @return <tt>this</tt> (for convenience only).
  * @throws	IllegalArgumentException if <tt>slices() != source.slices() || rows() != source.rows() || columns() != source.columns()</tt>
  */
+@Override
 public DoubleMatrix3D assign(DoubleMatrix3D source) {
 	// overriden for performance only
 	if (! (source instanceof DenseDoubleMatrix3D)) {
@@ -187,6 +189,7 @@ public DoubleMatrix3D assign(DoubleMatrix3D source) {
  * @param     column   the index of the column-coordinate.
  * @return    the value at the specified coordinate.
  */
+@Override
 public double getQuick(int slice, int row, int column) {
 	//if (debug) if (slice<0 || slice>=slices || row<0 || row>=rows || column<0 || column>=columns) throw new IndexOutOfBoundsException("slice:"+slice+", row:"+row+", column:"+column);
 	//return elements[index(slice,row,column)];
@@ -202,6 +205,7 @@ public double getQuick(int slice, int row, int column) {
  * <li><tt>this == other</tt>
  * </ul>
  */
+@Override
 protected boolean haveSharedCellsRaw(DoubleMatrix3D other) {
 	if (other instanceof SelectedDenseDoubleMatrix3D) {
 		SelectedDenseDoubleMatrix3D otherMatrix = (SelectedDenseDoubleMatrix3D) other;
@@ -220,6 +224,7 @@ protected boolean haveSharedCellsRaw(DoubleMatrix3D other) {
  * @param     row   the index of the row-coordinate.
  * @param     column   the index of the third-coordinate.
  */
+@Override
 protected int index(int slice, int row, int column) {
 	//return _sliceOffset(_sliceRank(slice)) + _rowOffset(_rowRank(row)) + _columnOffset(_columnRank(column));
 	//manually inlined:
@@ -236,6 +241,7 @@ protected int index(int slice, int row, int column) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public DoubleMatrix3D like(int slices, int rows, int columns) {
 	return new DenseDoubleMatrix3D(slices,rows,columns); 
 }
@@ -252,6 +258,7 @@ public DoubleMatrix3D like(int slices, int rows, int columns) {
  * @param columnStride the number of elements between two columns, i.e. <tt>index(i,j+1)-index(i,j)</tt>.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 protected DoubleMatrix2D like2D(int rows, int columns, int rowZero, int columnZero, int rowStride, int columnStride) {
 	return new DenseDoubleMatrix2D(rows,columns,this.elements,rowZero,columnZero,rowStride,columnStride);
 }
@@ -267,6 +274,7 @@ protected DoubleMatrix2D like2D(int rows, int columns, int rowZero, int columnZe
  * @param     column   the index of the column-coordinate.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int slice, int row, int column, double value) {
 	//if (debug) if (slice<0 || slice>=slices || row<0 || row>=rows || column<0 || column>=columns) throw new IndexOutOfBoundsException("slice:"+slice+", row:"+row+", column:"+column);
 	//elements[index(slice,row,column)] = value;
@@ -281,6 +289,7 @@ public void setQuick(int slice, int row, int column, double value) {
  * @param columnOffsets the offsets of the visible elements.
  * @return  a new view.
  */
+@Override
 protected DoubleMatrix3D viewSelectionLike(int[] sliceOffsets, int[] rowOffsets, int[] columnOffsets) {
 	return new SelectedDenseDoubleMatrix3D(this.elements,sliceOffsets,rowOffsets,columnOffsets,0);
 }
@@ -342,6 +351,7 @@ A.zAssign27Neighbors(B,f);
 @throws NullPointerException if <tt>function==null</tt>.
 @throws IllegalArgumentException if <tt>rows() != B.rows() || columns() != B.columns() || slices() != B.slices() </tt>.
 */
+@Override
 public void zAssign27Neighbors(DoubleMatrix3D B, cern.colt.function.Double27Function function) {
 	// overridden for performance only
 	if (!(B instanceof DenseDoubleMatrix3D)) {

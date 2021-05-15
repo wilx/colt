@@ -51,6 +51,7 @@ public VonMises(double freedom, RandomEngine randomGenerator) {
 /**
  * Returns a random number from the distribution.
  */
+@Override
 public double nextDouble() {
 	return nextDouble(this.my_k);
 }

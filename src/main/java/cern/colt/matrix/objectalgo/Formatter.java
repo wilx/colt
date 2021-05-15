@@ -40,6 +40,7 @@ public Formatter(String alignment) {
 /**
  * Converts a given cell to a String; no alignment considered.
  */
+@Override
 protected String form(AbstractMatrix1D matrix, int index, Former formatter) {
 	return this.form((ObjectMatrix1D) matrix, index, formatter);
 }
@@ -54,6 +55,7 @@ protected String form(ObjectMatrix1D matrix, int index, Former formatter) {
 /**
  * Returns a string representations of all cells; no alignment considered.
  */
+@Override
 protected String[][] format(AbstractMatrix2D matrix) {
 	return this.format((ObjectMatrix2D) matrix);
 }
@@ -111,6 +113,7 @@ public String toSourceCode(ObjectMatrix3D matrix) {
  * Returns a string representation of the given matrix.
  * @param matrix the matrix to convert.
  */
+@Override
 protected String toString(AbstractMatrix2D matrix) {
 	return this.toString((ObjectMatrix2D) matrix);
 }

@@ -248,6 +248,7 @@ protected int[] shape() {
 /**
  * Returns the number of cells which is <tt>slices()*rows()*columns()</tt>.
  */
+@Override
 public int size() {
 	return slices*rows*columns;
 }

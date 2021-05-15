@@ -16,21 +16,25 @@ abstract class AbstractHistogram1D extends Histogram implements IHistogram1D
 	{
 		super(title);
 	}
-	public int allEntries()
+	@Override
+   public int allEntries()
 	{
 		return entries() + extraEntries();
 	}
-	public int dimensions()
+	@Override
+   public int dimensions()
 	{
 		return 1;
 	}
-	public int entries()
+	@Override
+   public int entries()
 	{
 		int entries = 0;
 		for (int i=xAxis.bins(); --i >= 0; ) entries += binEntries(i);
 		return entries;
 	}
-	public int extraEntries()
+	@Override
+   public int extraEntries()
 	{
 		//return entries[xAxis.under] + entries[xAxis.over];
 		return binEntries(UNDERFLOW) + binEntries(OVERFLOW);
@@ -48,7 +52,8 @@ abstract class AbstractHistogram1D extends Histogram implements IHistogram1D
 		if (index == IHistogram.OVERFLOW) return bins-1;
 		throw new IllegalArgumentException("bin="+index);
 	}
-	public int[] minMaxBins()
+	@Override
+   public int[] minMaxBins()
 	{
 		double minValue = Double.MAX_VALUE;
 		double maxValue = Double.MIN_VALUE;
@@ -68,22 +73,26 @@ abstract class AbstractHistogram1D extends Histogram implements IHistogram1D
 		int[] result = {minBinX,maxBinX};
 		return result;
 	}
-	public double sumAllBinHeights()
+	@Override
+   public double sumAllBinHeights()
 	{
 		return sumBinHeights() + sumExtraBinHeights();
 	}
-	public double sumBinHeights()
+	@Override
+   public double sumBinHeights()
 	{
 		double sum = 0;
 		for (int i=xAxis.bins(); --i >= 0; ) sum += binHeight(i);
 		return sum;
 	}
-	public double sumExtraBinHeights()
+	@Override
+   public double sumExtraBinHeights()
 	{
 		return binHeight(UNDERFLOW) + binHeight(OVERFLOW);
 		//return heights[xAxis.under] + heights[xAxis.over];
 	}
-	public IAxis xAxis()
+	@Override
+   public IAxis xAxis()
 	{
 		return xAxis;
 	}

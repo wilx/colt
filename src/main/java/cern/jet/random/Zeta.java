@@ -123,6 +123,7 @@ protected long generateZeta(double ro, double pk, RandomEngine randomGenerator) 
 /**
  * Returns a random number from the distribution.
  */
+@Override
 public int nextInt() {
 	return (int) generateZeta(ro, pk, randomGenerator); 
 }

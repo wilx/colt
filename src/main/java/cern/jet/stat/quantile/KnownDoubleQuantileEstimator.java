@@ -98,6 +98,7 @@ protected void addInfinities(int missingInfinities,  DoubleBuffer buffer) {
 /**
  * Not yet commented.
  */
+@Override
 protected DoubleBuffer[] buffersToCollapse() {
 	int minLevel = bufferSet._getMinLevelOfFullOrPartialBuffers();
 	return bufferSet._getFullOrPartialBuffersWithLevel(minLevel);
@@ -106,6 +107,7 @@ protected DoubleBuffer[] buffersToCollapse() {
  * Removes all elements from the receiver.  The receiver will
  * be empty after this call returns, and its memory requirements will be close to zero.
  */
+@Override
 public void clear() {
 	super.clear();
 	this.beta=1.0;
@@ -122,6 +124,7 @@ public void clear() {
  *
  * @return a deep copy of the receiver.
  */
+@Override
 public Object clone() {
 	KnownDoubleQuantileEstimator copy = (KnownDoubleQuantileEstimator) super.clone();
 	if (this.samplingAssistant != null) copy.samplingAssistant = (RandomSamplingAssistant) copy.samplingAssistant.clone();
@@ -130,6 +133,7 @@ public Object clone() {
 /**
  * Not yet commented.
  */
+@Override
 protected void newBuffer() {
 	int numberOfEmptyBuffers = this.bufferSet._getNumberOfEmptyBuffers();
 	//DoubleBuffer[] emptyBuffers = this.bufferSet._getEmptyBuffers();
@@ -154,11 +158,13 @@ protected void newBuffer() {
 /**
  * Not yet commented.
  */
+@Override
 protected void postCollapse(DoubleBuffer[] toCollapse) {
 	this.weHadMoreThanOneEmptyBuffer = false;
 }
 /**
  */
+@Override
 protected DoubleArrayList preProcessPhis(DoubleArrayList phis) {
 	if (beta>1.0) {
 		phis = phis.copy();
@@ -173,6 +179,7 @@ protected DoubleArrayList preProcessPhis(DoubleArrayList phis) {
  * @param phis the quantiles for which elements are to be computed. Each phi must be in the interval [0.0,1.0]. <tt>phis</tt> must be sorted ascending.
  * @return the approximate quantile elements.
  */
+@Override
 public DoubleArrayList quantileElements(DoubleArrayList phis) {
 	/*
 	* The KNOWN quantile finder reads off quantiles from FULL buffers only.
@@ -237,6 +244,7 @@ protected void removeInfinitiesFrom(int infinities, DoubleBuffer buffer) {
 /**
  * Not yet commented.
  */
+@Override
 protected boolean sampleNextElement() {
 	if (samplingAssistant == null) return true;
 

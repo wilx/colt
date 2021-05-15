@@ -139,6 +139,7 @@ protected SparseDoubleMatrix2D(int rows, int columns, AbstractIntDoubleMap eleme
  * @param    value the value to be filled into the cells.
  * @return <tt>this</tt> (for convenience only).
  */
+@Override
 public DoubleMatrix2D assign(double value) {
 	// overriden for performance only
 	if (this.isNoView && value==0) this.elements.clear();
@@ -167,6 +168,7 @@ For further examples, see the <a href="package-summary.html#FunctionObjects">pac
 @return <tt>this</tt> (for convenience only).
 @see cern.jet.math.Functions
 */
+@Override
 public DoubleMatrix2D assign(cern.colt.function.DoubleFunction function) {
 	if (this.isNoView && function instanceof cern.jet.math.Mult) { // x[i] = mult*x[i]
 		this.elements.assign(function);
@@ -185,6 +187,7 @@ public DoubleMatrix2D assign(cern.colt.function.DoubleFunction function) {
  * @return <tt>this</tt> (for convenience only).
  * @throws	IllegalArgumentException if <tt>columns() != source.columns() || rows() != source.rows()</tt>
  */
+@Override
 public DoubleMatrix2D assign(DoubleMatrix2D source) {
 	// overriden for performance only
 	if (! (source instanceof SparseDoubleMatrix2D)) {
@@ -200,6 +203,7 @@ public DoubleMatrix2D assign(DoubleMatrix2D source) {
 	}
 	return super.assign(source);
 }
+@Override
 public DoubleMatrix2D assign(final DoubleMatrix2D y, cern.colt.function.DoubleDoubleFunction function) {
 	if (!this.isNoView) return super.assign(y,function);
 	
@@ -246,6 +250,7 @@ public DoubleMatrix2D assign(final DoubleMatrix2D y, cern.colt.function.DoubleDo
 /**
  * Returns the number of cells having non-zero values.
  */
+@Override
 public int cardinality() {
 	if (this.isNoView) return this.elements.size();
 	else return super.cardinality();
@@ -260,9 +265,11 @@ public int cardinality() {
  *
  * @param   minNonZeros   the desired minimum number of non-zero cells.
  */
+@Override
 public void ensureCapacity(int minCapacity) {
 	this.elements.ensureCapacity(minCapacity);
 }
+@Override
 public DoubleMatrix2D forEachNonZero(final cern.colt.function.IntIntDoubleFunction function) {
 	if (this.isNoView) {
 		this.elements.forEachPair(
@@ -291,6 +298,7 @@ public DoubleMatrix2D forEachNonZero(final cern.colt.function.IntIntDoubleFuncti
  * @param     column   the index of the column-coordinate.
  * @return    the value at the specified coordinate.
  */
+@Override
 public double getQuick(int row, int column) {
 	//if (debug) if (column<0 || column>=columns || row<0 || row>=rows) throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
 	//return this.elements.get(index(row,column));
@@ -306,6 +314,7 @@ public double getQuick(int row, int column) {
  * <li><tt>this == other</tt>
  * </ul>
  */
+@Override
 protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
 	if (other instanceof SelectedSparseDoubleMatrix2D) {
 		SelectedSparseDoubleMatrix2D otherMatrix = (SelectedSparseDoubleMatrix2D) other;
@@ -323,6 +332,7 @@ protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
  * @param     row   the index of the row-coordinate.
  * @param     column   the index of the column-coordinate.
  */
+@Override
 protected int index(int row, int column) {
 	// return super.index(row,column);
 	// manually inlined for speed:
@@ -338,6 +348,7 @@ protected int index(int row, int column) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public DoubleMatrix2D like(int rows, int columns) {
 	return new SparseDoubleMatrix2D(rows, columns);
 }
@@ -349,6 +360,7 @@ public DoubleMatrix2D like(int rows, int columns) {
  * @param size the number of cells the matrix shall have.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 public DoubleMatrix1D like1D(int size) {
 	return new SparseDoubleMatrix1D(size);
 }
@@ -362,6 +374,7 @@ public DoubleMatrix1D like1D(int size) {
  * @param stride the number of indexes between any two elements, i.e. <tt>index(i+1)-index(i)</tt>.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 protected DoubleMatrix1D like1D(int size, int offset, int stride) {
 	return new SparseDoubleMatrix1D(size,this.elements,offset,stride);
 }
@@ -376,6 +389,7 @@ protected DoubleMatrix1D like1D(int size, int offset, int stride) {
  * @param     column   the index of the column-coordinate.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int row, int column, double value) {
 	//if (debug) if (column<0 || column>=columns || row<0 || row>=rows) throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
 	//int index =	index(row,column);
@@ -405,6 +419,7 @@ public void setQuick(int row, int column, double value) {
  * Such as sequence generates obsolete memory that is automatically reclaimed from time to time or can manually be reclaimed by calling <tt>trimToSize()</tt>.
  * Putting zeros into cells already containing zeros does not generate obsolete memory since no memory was allocated to them in the first place.
  */
+@Override
 public void trimToSize() {
 	this.elements.trimToSize();
 }
@@ -415,9 +430,11 @@ public void trimToSize() {
  * @param columnOffsets the offsets of the visible elements.
  * @return  a new view.
  */
+@Override
 protected DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
 	return new SelectedSparseDoubleMatrix2D(this.elements,rowOffsets,columnOffsets,0);
 }
+@Override
 public DoubleMatrix1D zMult(DoubleMatrix1D y, DoubleMatrix1D z, double alpha, double beta, final boolean transposeA) {
 	int m = rows;
 	int n = columns;
@@ -478,6 +495,7 @@ public DoubleMatrix1D zMult(DoubleMatrix1D y, DoubleMatrix1D z, double alpha, do
 	if (alpha!=1) z.assign(cern.jet.math.Functions.mult(alpha));
 	return z;
 }
+@Override
 public DoubleMatrix2D zMult(DoubleMatrix2D B, DoubleMatrix2D C, final double alpha, double beta, final boolean transposeA, boolean transposeB) {
 	if (!(this.isNoView)) {
 		return super.zMult(B,C,alpha,beta,transposeA,transposeB);

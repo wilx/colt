@@ -90,6 +90,7 @@ protected SelectedSparseObjectMatrix1D(AbstractIntObjectMap elements, int[] offs
  * @param  rank   the absolute rank of the element.
  * @return the position.
  */
+@Override
 protected int _offset(int absRank) {
 	return offsets[absRank];
 }
@@ -103,6 +104,7 @@ protected int _offset(int absRank) {
  * @param     index   the index of the cell.
  * @return    the value of the specified cell.
  */
+@Override
 public Object getQuick(int index) {
 	//if (debug) if (index<0 || index>=size) checkIndex(index);
 	//return elements.get(index(index));
@@ -112,6 +114,7 @@ public Object getQuick(int index) {
 /**
  * Returns <tt>true</tt> if both matrices share at least one identical cell.
  */
+@Override
 protected boolean haveSharedCellsRaw(ObjectMatrix1D other) {
 	if (other instanceof SelectedSparseObjectMatrix1D) {
 		SelectedSparseObjectMatrix1D otherMatrix = (SelectedSparseObjectMatrix1D) other;
@@ -129,6 +132,7 @@ protected boolean haveSharedCellsRaw(ObjectMatrix1D other) {
  *
  * @param     rank   the rank of the element.
  */
+@Override
 protected int index(int rank) {
 	//return this.offset + super.index(rank);
 	// manually inlined:
@@ -143,6 +147,7 @@ protected int index(int rank) {
  * @param size the number of cell the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public ObjectMatrix1D like(int size) {
 	return new SparseObjectMatrix1D(size);
 }
@@ -155,6 +160,7 @@ public ObjectMatrix1D like(int size) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 public ObjectMatrix2D like2D(int rows, int columns) {
 	return new SparseObjectMatrix2D(rows,columns);
 }
@@ -168,6 +174,7 @@ public ObjectMatrix2D like2D(int rows, int columns) {
  * @param     index   the index of the cell.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int index, Object value) {
 	//if (debug) if (index<0 || index>=size) checkIndex(index);
 	//int i =	index(index);
@@ -182,6 +189,7 @@ public void setQuick(int index, Object value) {
  * Sets up a matrix with a given number of cells.
  * @param size the number of cells the matrix shall have.
  */
+@Override
 protected void setUp(int size) {
 	super.setUp(size);
 	this.stride = 1;
@@ -193,6 +201,7 @@ protected void setUp(int size) {
  * @param offsets the offsets of the visible elements.
  * @return  a new view.
  */
+@Override
 protected ObjectMatrix1D viewSelectionLike(int[] offsets) {
 	return new SelectedSparseObjectMatrix1D(this.elements,offsets);
 }

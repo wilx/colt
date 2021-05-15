@@ -201,6 +201,7 @@ protected void setUp(int rows, int columns, int rowZero, int columnZero, int row
 /**
  * Returns the number of cells which is <tt>rows()*columns()</tt>.
  */
+@Override
 public int size() {
 	return rows*columns;
 }

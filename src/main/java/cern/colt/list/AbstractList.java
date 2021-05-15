@@ -81,6 +81,7 @@ protected static void checkRangeFromTo(int from, int to, int theSize) {
  * Removes all elements from the receiver.  The receiver will
  * be empty after this call returns, but keep its current capacity.
  */
+@Override
 public void clear() {
 	removeFromTo(0,size()-1);
 }

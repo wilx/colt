@@ -84,6 +84,7 @@ public OpenIntIntHashMap(int initialCapacity, double minLoadFactor, double maxLo
  * Removes all (key,value) associations from the receiver.
  * Implicitly calls <tt>trimToSize()</tt>.
  */
+@Override
 public void clear() {
 	new ByteArrayList(this.state).fillFromToWith(0, this.state.length-1, FREE);
    	//new IntArrayList(values).fillFromToWith(0, state.length-1, 0); // delta
@@ -97,6 +98,7 @@ public void clear() {
  *
  * @return  a deep copy of the receiver.
  */
+@Override
 public Object clone() {
 	OpenIntIntHashMap copy = (OpenIntIntHashMap) super.clone();
 	copy.table = copy.table.clone();
@@ -109,6 +111,7 @@ public Object clone() {
  *
  * @return <tt>true</tt> if the receiver contains the specified key.
  */
+@Override
 public boolean containsKey(int key) {
 	return indexOfKey(key) >= 0;
 }
@@ -117,6 +120,7 @@ public boolean containsKey(int key) {
  *
  * @return <tt>true</tt> if the receiver contains the specified value.
  */
+@Override
 public boolean containsValue(int value) {
 	return indexOfValue(value) >= 0;
 }
@@ -130,6 +134,7 @@ public boolean containsValue(int value) {
  *
  * @param   minCapacity   the desired minimum capacity.
  */
+@Override
 public void ensureCapacity(int minCapacity) {
 	if (table.length < minCapacity) {
 		int newCapacity = nextPrime(minCapacity);
@@ -146,6 +151,7 @@ public void ensureCapacity(int minCapacity) {
  * @param procedure    the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise continues. 
  * @return <tt>false</tt> if the procedure stopped before all keys where iterated over, <tt>true</tt> otherwise. 
  */
+@Override
 public boolean forEachKey(IntProcedure procedure) {
 	for (int i = table.length ; i-- > 0 ;) {
 		if (state[i]==FULL) if (! procedure.apply(table[i])) return false;
@@ -159,6 +165,7 @@ public boolean forEachKey(IntProcedure procedure) {
  * @param procedure    the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise continues. 
  * @return <tt>false</tt> if the procedure stopped before all keys where iterated over, <tt>true</tt> otherwise. 
  */
+@Override
 public boolean forEachPair(final IntIntProcedure procedure) {
 	for (int i = table.length ; i-- > 0 ;) {
 		if (state[i]==FULL) if (! procedure.apply(table[i],values[i])) return false;
@@ -172,6 +179,7 @@ public boolean forEachPair(final IntIntProcedure procedure) {
  * @param key the key to be searched for.
  * @return the value associated with the specified key; <tt>0</tt> if no such key is present.
  */
+@Override
 public int get(int key) {
 	int i = indexOfKey(key);
 	if (i<0) return 0; //not contained
@@ -276,6 +284,7 @@ protected int indexOfValue(int value) {
  * @return the first key for which holds <tt>get(key) == value</tt>; 
  *		   returns <tt>Integer.MIN_VALUE</tt> if no such key exists.
  */
+@Override
 public int keyOf(int value) {
 	//returns the first key found; there may be more matching keys, however.
 	int i = indexOfValue(value);
@@ -292,6 +301,7 @@ public int keyOf(int value) {
  *
  * @param list the list to be filled, can have any size.
  */
+@Override
 public void keys(IntArrayList list) {
 	list.setSize(distinct);
 	int[] elements = list.elements();
@@ -323,6 +333,7 @@ keys = (8,7,6), values = (1,2,2) --> keyList = (6,8), valueList = (2,1)</tt>
 @param keyList the list to be filled with keys, can have any size.
 @param valueList the list to be filled with values, can have any size.
 */
+@Override
 public void pairsMatching(final IntIntProcedure condition, final IntArrayList keyList, final IntArrayList valueList) {
 	keyList.clear();
 	valueList.clear();
@@ -343,6 +354,7 @@ public void pairsMatching(final IntIntProcedure condition, final IntArrayList ke
  * @return <tt>true</tt> if the receiver did not already contain such a key;
  *         <tt>false</tt> if the receiver did already contain such a key - the new value has now replaced the formerly associated value.
  */
+@Override
 public boolean put(int key, int value) {
 	int i = indexOfInsertion(key);	
 	if (i<0) { //already contained
@@ -416,6 +428,7 @@ protected void rehash(int newCapacity) {
  * @param key the key to be removed from the receiver.
  * @return <tt>true</tt> if the receiver contained the specified key, <tt>false</tt> otherwise.
  */
+@Override
 public boolean removeKey(int key) {
 	int i = indexOfKey(key);
 	if (i<0) return false; // key not contained
@@ -445,6 +458,7 @@ public boolean removeKey(int key) {
  * @param      maxLoadFactor        the maxLoadFactor of the receiver.
  * @throws	IllegalArgumentException if <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>.
  */
+@Override
 protected void setUp(int initialCapacity, double minLoadFactor, double maxLoadFactor) {
 	int capacity = initialCapacity;
 	super.setUp(capacity, minLoadFactor, maxLoadFactor);
@@ -475,6 +489,7 @@ protected void setUp(int initialCapacity, double minLoadFactor, double maxLoadFa
  * size. Releases any superfluous internal memory. An application can use this operation to minimize the 
  * storage of the receiver.
  */
+@Override
 public void trimToSize() {
 	// * 1.2 because open addressing's performance exponentially degrades beyond that point
 	// so that even rehashing the table can take very long
@@ -493,6 +508,7 @@ public void trimToSize() {
  *
  * @param list the list to be filled, can have any size.
  */
+@Override
 public void values(IntArrayList list) {
 	list.setSize(distinct);
 	int[] elements = list.elements();

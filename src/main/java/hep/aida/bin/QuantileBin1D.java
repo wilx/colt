@@ -635,6 +635,7 @@ public QuantileBin1D(boolean known_N, long N, double epsilon, double delta, int 
  * @param to the index of the last element to be added (inclusive).
  * @throws IndexOutOfBoundsException if <tt>list.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=list.size())</tt>.
  */
+@Override
 public synchronized void addAllOfFromTo(DoubleArrayList list, int from, int to) {
 	super.addAllOfFromTo(list, from, to);
 	if (this.finder != null) this.finder.addAllOfFromTo(list, from, to);
@@ -643,6 +644,7 @@ public synchronized void addAllOfFromTo(DoubleArrayList list, int from, int to) 
  * Removes all elements from the receiver.
  * The receiver will be empty after this call returns.
  */
+@Override
 public synchronized void clear() {
 	super.clear();
 	if (this.finder != null) this.finder.clear();
@@ -652,6 +654,7 @@ public synchronized void clear() {
  *
  * @return a deep copy of the receiver.
  */
+@Override
 public synchronized Object clone() {
 	QuantileBin1D clone = (QuantileBin1D) super.clone();
 	if (this.finder != null) clone.finder = (DoubleQuantileFinder) clone.finder.clone();
@@ -662,6 +665,7 @@ public synchronized Object clone() {
  * @param other the other bin to compare with
  * @return a summary of the deviations.
  */
+@Override
 public String compareWith(AbstractBin1D other) {
 	StringBuilder buf = new StringBuilder(super.compareWith(other));
 	if (other instanceof QuantileBin1D) {

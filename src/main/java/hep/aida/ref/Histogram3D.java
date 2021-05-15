@@ -81,27 +81,33 @@ public class Histogram3D extends AbstractHistogram3D implements IHistogram3D
 		errors = new double[xBins+2][yBins+2][zBins+2];
 
 	}
-	public int allEntries()
+	@Override
+   public int allEntries()
 	{
 		return nEntry;
 	}
-	public int binEntries(int indexX, int indexY, int indexZ)
+	@Override
+   public int binEntries(int indexX, int indexY, int indexZ)
 	{
 		return entries[mapX(indexX)][mapY(indexY)][mapZ(indexZ)];
 	}
-	public double binError(int indexX, int indexY, int indexZ)
+	@Override
+   public double binError(int indexX, int indexY, int indexZ)
 	{
 		return Math.sqrt(errors[mapX(indexX)][mapY(indexY)][mapZ(indexZ)]);
 	}
-	public double binHeight(int indexX, int indexY, int indexZ)
+	@Override
+   public double binHeight(int indexX, int indexY, int indexZ)
 	{
 		return heights[mapX(indexX)][mapY(indexY)][mapZ(indexZ)];
 	}
-	public double equivalentBinEntries()
+	@Override
+   public double equivalentBinEntries()
 	{
 		return sumWeight*sumWeight/sumWeightSquared;
 	}
-	public void fill(double x, double y, double z)
+	@Override
+   public void fill(double x, double y, double z)
 	{
 		int xBin = mapX(xAxis.coordToIndex(x));
 		int yBin = mapY(yAxis.coordToIndex(y));
@@ -119,7 +125,8 @@ public class Histogram3D extends AbstractHistogram3D implements IHistogram3D
 		meanZ += z;
 		rmsZ += z;
 	}
-	public void fill(double x, double y, double z, double weight)
+	@Override
+   public void fill(double x, double y, double z, double weight)
 	{
 		int xBin = mapX(xAxis.coordToIndex(x));
 		int yBin = mapY(yAxis.coordToIndex(y));
@@ -147,7 +154,8 @@ public class Histogram3D extends AbstractHistogram3D implements IHistogram3D
 	 * <b>Note 2</b>indexX1 and indexX2 may include the use of under and over flow bins
 	 * <b>Note 3</b>There is no note 3 (yet)
 	 */
-	protected IHistogram2D internalSliceXY(String title, int indexZ1, int indexZ2)
+	@Override
+   protected IHistogram2D internalSliceXY(String title, int indexZ1, int indexZ2)
 	{
 		// Attention: our internal definition of bins has been choosen
 		// so that this works properly even if the indeces passed in include
@@ -186,7 +194,8 @@ public class Histogram3D extends AbstractHistogram3D implements IHistogram3D
 	 * <b>Note 2</b>indexY1 and indexY2 may include the use of under and over flow bins
 	 * <b>Note 3</b>There is no note 3 (yet)
 	 */
-	protected IHistogram2D internalSliceXZ(String title, int indexY1, int indexY2)
+	@Override
+   protected IHistogram2D internalSliceXZ(String title, int indexY1, int indexY2)
 	{
 		// Attention: our internal definition of bins has been choosen
 		// so that this works properly even if the indeces passed in include
@@ -225,7 +234,8 @@ public class Histogram3D extends AbstractHistogram3D implements IHistogram3D
 	 * <b>Note 2</b>indexX1 and indexX2 may include the use of under and over flow bins
 	 * <b>Note 3</b>There is no note 3 (yet)
 	 */
-	protected IHistogram2D internalSliceYZ(String title, int indexX1, int indexX2)
+	@Override
+   protected IHistogram2D internalSliceYZ(String title, int indexX1, int indexX2)
 	{
 		// Attention: our internal definition of bins has been choosen
 		// so that this works properly even if the indeces passed in include
@@ -254,19 +264,23 @@ public class Histogram3D extends AbstractHistogram3D implements IHistogram3D
 		result.setContents(sliceEntries,sliceHeights,sliceErrors);
 		return result;
 	}
-	public double meanX()
+	@Override
+   public double meanX()
 	{
 		return meanX/sumWeight;
 	}
-	public double meanY()
+	@Override
+   public double meanY()
 	{
 		return meanY/sumWeight;
 	}
-	public double meanZ()
+	@Override
+   public double meanZ()
 	{
 		return meanZ/sumWeight;
 	}
-	public void reset()
+	@Override
+   public void reset()
 	{
 		 for (int i=0; i<entries.length; i++)
 			 for (int j=0; j<entries[0].length; j++)
@@ -286,19 +300,23 @@ public class Histogram3D extends AbstractHistogram3D implements IHistogram3D
 		 meanZ = 0;
 		 rmsZ = 0;
 	}
-	public double rmsX()
+	@Override
+   public double rmsX()
 	{
 		return Math.sqrt(rmsX/sumWeight - meanX*meanX/sumWeight/sumWeight);
 	}
-	public double rmsY()
+	@Override
+   public double rmsY()
 	{
 		return Math.sqrt(rmsY/sumWeight - meanY*meanY/sumWeight/sumWeight);
 	}
-	public double rmsZ()
+	@Override
+   public double rmsZ()
 	{
 		return Math.sqrt(rmsZ/sumWeight - meanZ*meanZ/sumWeight/sumWeight);
 	}
-	public double sumAllBinHeights()
+	@Override
+   public double sumAllBinHeights()
 	{
 		return sumWeight;
 	}

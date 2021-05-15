@@ -35,6 +35,7 @@ protected PlusMult(final double multiplicator) {
 /**
  * Returns the result of the function evaluation.
  */
+@Override
 public final double apply(double a, double b) {
 	return a + b*multiplicator;
 }

@@ -87,6 +87,7 @@ public double cdf(int k) {
  *
  * @return a copy of the receiver.
  */
+@Override
 public Object clone() {
 	Poisson copy = (Poisson) super.clone();
 	if (this.pp != null) copy.pp = this.pp.clone();
@@ -98,6 +99,7 @@ private static double f(int k, double l_nu, double c_pm) {
 /**
  * Returns a random number from the distribution.
  */
+@Override
 public int nextInt() {
 	return nextInt(this.mean);
 }

@@ -144,6 +144,7 @@ protected void clear(int k) {
  *
  * @return a deep copy of the receiver.
  */
+@Override
 public Object clone() {
 	DoubleBufferSet copy = (DoubleBufferSet) super.clone();
 

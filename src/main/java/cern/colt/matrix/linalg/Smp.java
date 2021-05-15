@@ -39,6 +39,7 @@ protected Smp(int maxThreads) {
 /**
  * Clean up deamon threads, if necessary.
  */
+@Override
 public void finalize() {
 	if (this.taskGroup!=null) this.taskGroup.shutdownNow();
 }

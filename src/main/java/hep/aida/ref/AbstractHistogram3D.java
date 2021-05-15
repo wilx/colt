@@ -17,7 +17,8 @@ abstract class AbstractHistogram3D extends Histogram implements IHistogram3D
 	{
 		super(title);
 	}
-	public int allEntries()
+	@Override
+   public int allEntries()
 	{
 		int n = 0;
 		for (int i=xAxis.bins(); --i >= -2;)
@@ -28,11 +29,13 @@ abstract class AbstractHistogram3D extends Histogram implements IHistogram3D
 		}
 		return n;
 	}
-	public int dimensions()
+	@Override
+   public int dimensions()
 	{
 		return 3;
 	}
-	public int entries()
+	@Override
+   public int entries()
 	{
 		int n = 0;
 		for (int i=0; i<xAxis.bins(); i++)
@@ -43,11 +46,13 @@ abstract class AbstractHistogram3D extends Histogram implements IHistogram3D
 		}
 		return n;
 	}
-	public int extraEntries()
+	@Override
+   public int extraEntries()
 	{
 		return allEntries() - entries();
 	}
-	public void fill(double x, double y, double z)
+	@Override
+   public void fill(double x, double y, double z)
 	{
 		fill(x,y,z,1);
 	}
@@ -123,7 +128,8 @@ abstract class AbstractHistogram3D extends Histogram implements IHistogram3D
 		if (index == IHistogram.OVERFLOW) return bins-1;
 		throw new IllegalArgumentException("bin="+index);
 	}
-	public int[] minMaxBins()
+	@Override
+   public int[] minMaxBins()
 	{
 		double minValue = Double.MAX_VALUE;
 		double maxValue = Double.MIN_VALUE;
@@ -155,55 +161,65 @@ abstract class AbstractHistogram3D extends Histogram implements IHistogram3D
 		int[] result = {minBinX,minBinY,minBinZ, maxBinX,maxBinY,maxBinZ};
 		return result;
 	}
-	public IHistogram2D projectionXY()
+	@Override
+   public IHistogram2D projectionXY()
 	{
 		String newTitle = title() + " (projectionXY)";
 		return internalSliceXY(newTitle,mapZ(IHistogram.UNDERFLOW),mapZ(IHistogram.OVERFLOW));
 	}
-	public IHistogram2D projectionXZ()
+	@Override
+   public IHistogram2D projectionXZ()
 	{
 		String newTitle = title() + " (projectionXZ)";
 		return internalSliceXZ(newTitle,mapY(IHistogram.UNDERFLOW),mapY(IHistogram.OVERFLOW));
 	}
-	public IHistogram2D projectionYZ()
+	@Override
+   public IHistogram2D projectionYZ()
 	{
 		String newTitle = title() + " (projectionYZ)";
 		return internalSliceYZ(newTitle,mapX(IHistogram.UNDERFLOW),mapX(IHistogram.OVERFLOW));
 	}
-	public IHistogram2D sliceXY(int indexZ )
+	@Override
+   public IHistogram2D sliceXY(int indexZ )
 	{
 		return sliceXY(indexZ,indexZ);
 	}
-	public IHistogram2D sliceXY(int indexZ1, int indexZ2)
+	@Override
+   public IHistogram2D sliceXY(int indexZ1, int indexZ2)
 	{
 		int start = mapZ(indexZ1);
 		int stop = mapZ(indexZ2);
 		String newTitle = title() + " (sliceXY ["+indexZ1+":"+indexZ2+"])";
 		return internalSliceXY(newTitle,start,stop);
 	}
-	public IHistogram2D sliceXZ(int indexY )
+	@Override
+   public IHistogram2D sliceXZ(int indexY )
 	{
 		return sliceXZ(indexY,indexY);
 	}
-	public IHistogram2D sliceXZ(int indexY1, int indexY2)
+	@Override
+   public IHistogram2D sliceXZ(int indexY1, int indexY2)
 	{
 		int start = mapY(indexY1);
 		int stop = mapY(indexY2);
 		String newTitle = title() + " (sliceXZ ["+indexY1+":"+indexY2+"])";
 		return internalSliceXY(newTitle,start,stop);
 	}
-	public IHistogram2D sliceYZ(int indexX )
+	@Override
+   public IHistogram2D sliceYZ(int indexX )
 	{
 		return sliceYZ(indexX,indexX);
 	}
-	public IHistogram2D sliceYZ(int indexX1, int indexX2)
+	@Override
+   public IHistogram2D sliceYZ(int indexX1, int indexX2)
 	{
 		int start = mapX(indexX1);
 		int stop = mapX(indexX2);
 		String newTitle = title() + " (sliceYZ ["+indexX1+":"+indexX2+"])";
 		return internalSliceYZ(newTitle,start,stop);
 	}
-	public double sumAllBinHeights()
+	@Override
+   public double sumAllBinHeights()
 	{
 		double n = 0;
 		for (int i=xAxis.bins(); --i >= -2;)
@@ -214,7 +230,8 @@ abstract class AbstractHistogram3D extends Histogram implements IHistogram3D
 		}
 		return n;
 	}
-	public double sumBinHeights()
+	@Override
+   public double sumBinHeights()
 	{
 		double n = 0;
 		for (int i=0; i<xAxis.bins(); i++)
@@ -225,19 +242,23 @@ abstract class AbstractHistogram3D extends Histogram implements IHistogram3D
 		}
 		return n;
 	}
-	public double sumExtraBinHeights()
+	@Override
+   public double sumExtraBinHeights()
 	{
 		return sumAllBinHeights() - sumBinHeights();
 	}
-	public IAxis xAxis()
+	@Override
+   public IAxis xAxis()
 	{
 		return xAxis;
 	}
-	public IAxis yAxis()
+	@Override
+   public IAxis yAxis()
 	{
 		return yAxis;
 	}
-	public IAxis zAxis()
+	@Override
+   public IAxis zAxis()
 	{
 		return zAxis;
 	}

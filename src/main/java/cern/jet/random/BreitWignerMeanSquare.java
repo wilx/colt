@@ -40,6 +40,7 @@ public BreitWignerMeanSquare(double mean, double gamma, double cut, RandomEngine
  *
  * @return a copy of the receiver.
  */
+@Override
 public Object clone() {
 	BreitWignerMeanSquare copy = (BreitWignerMeanSquare) super.clone();
 	if (this.uniform != null) copy.uniform = new Uniform(copy.randomGenerator);
@@ -49,7 +50,8 @@ public Object clone() {
  * Returns a mean-squared random number from the distribution; bypasses the internal state.
  * @param cut </tt>cut==Double.NEGATIVE_INFINITY</tt> indicates "don't cut".
  */
-public double nextDouble(double mean,double gamma,double cut) {
+@Override
+public double nextDouble(double mean, double gamma, double cut) {
 	if (gamma == 0.0) return mean;
 	if (cut==Double.NEGATIVE_INFINITY) { // don't cut
 		double val = Math.atan(-mean/gamma);

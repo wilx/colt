@@ -41,31 +41,37 @@ public class FixedAxis implements IAxis
 		//this.over = bins+1;
 
 	}
-	public double binCentre(int index)
+	@Override
+   public double binCentre(int index)
 	{
 		return min + binWidth*index + binWidth/2;
 	}
-	public double binLowerEdge(int index)
+	@Override
+   public double binLowerEdge(int index)
 	{
 		if (index == IHistogram.UNDERFLOW) return Double.NEGATIVE_INFINITY;
 		if (index == IHistogram.OVERFLOW) return upperEdge();
 		return min + binWidth*index;
 	}
-	public int bins()
+	@Override
+   public int bins()
 	{
 		return bins;
 	}
-	public double binUpperEdge(int index)
+	@Override
+   public double binUpperEdge(int index)
 	{
 		if (index == IHistogram.UNDERFLOW) return min;
 		if (index == IHistogram.OVERFLOW) return Double.POSITIVE_INFINITY;
 		return min + binWidth*(index+1);
 	}
-	public double binWidth(int index)
+	@Override
+   public double binWidth(int index)
 	{
 		return binWidth;
 	}
-	public int coordToIndex(double coord)
+	@Override
+   public int coordToIndex(double coord)
 	{
 		if (coord < min) return IHistogram.UNDERFLOW;
 		int index = (int) Math.floor((coord - min)/binWidth);
@@ -73,11 +79,13 @@ public class FixedAxis implements IAxis
 		
 		return index;
 	}
-	public double lowerEdge()
+	@Override
+   public double lowerEdge()
 	{
 		return min;
 	}
-	public double upperEdge()
+	@Override
+   public double upperEdge()
 	{
 		return min + binWidth*bins;
 	}

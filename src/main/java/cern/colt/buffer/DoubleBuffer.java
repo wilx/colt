@@ -48,6 +48,7 @@ public void add(double element) {
  * Adds all elements of the specified list to the receiver.
  * @param list the list of which all elements shall be added.
  */
+@Override
 public void addAllOf(DoubleArrayList list) {
 	int listSize = list.size();
 	if (this.size + listSize >= this.capacity) flush();

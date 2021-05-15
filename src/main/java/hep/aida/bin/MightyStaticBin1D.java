@@ -57,6 +57,7 @@ public MightyStaticBin1D(boolean hasSumOfLogarithms, boolean hasSumOfInversions,
  * @param to the index of the last element to be added (inclusive).
  * @throws IndexOutOfBoundsException if <tt>list.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=list.size())</tt>.
  */
+@Override
 public synchronized void addAllOfFromTo(DoubleArrayList list, int from, int to) {
 	super.addAllOfFromTo(list, from, to);
 	
@@ -76,6 +77,7 @@ public synchronized void addAllOfFromTo(DoubleArrayList list, int from, int to) 
 /**
  * Resets the values of all measures.
  */
+@Override
 protected void clearAllMeasures() {
 	super.clearAllMeasures();
 	
@@ -93,6 +95,7 @@ protected void clearAllMeasures() {
  *
  * @return a deep copy of the receiver.
  */
+@Override
 public synchronized Object clone() {
 	MightyStaticBin1D clone = (MightyStaticBin1D) super.clone();
 	if (this.sumOfPowers != null) clone.sumOfPowers = clone.sumOfPowers.clone();
@@ -103,6 +106,7 @@ public synchronized Object clone() {
  * @param other the other bin to compare with
  * @return a summary of the deviations.
  */
+@Override
 public String compareWith(AbstractBin1D other) {
 	StringBuilder buf = new StringBuilder(super.compareWith(other));
 	if (other instanceof MightyStaticBin1D) {

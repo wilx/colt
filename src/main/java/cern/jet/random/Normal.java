@@ -67,6 +67,7 @@ public double cdf(double x) {
 /**
  * Returns a random number from the distribution.
  */
+@Override
 public double nextDouble() {
 	return nextDouble(this.mean,this.standardDeviation);
 }
@@ -102,6 +103,7 @@ public double pdf(double x) {
 /**
  * Sets the uniform random generator internally used.
  */
+@Override
 protected void setRandomGenerator(RandomEngine randomGenerator) {
 	super.setRandomGenerator(randomGenerator);
 	this.cacheFilled = false;

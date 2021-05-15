@@ -71,6 +71,7 @@ public DistinctNumberList(long[] distinctValues, int initialCapacity) {
  *
  * @param element element to be appended to this list.
  */
+@Override
 public void add(long element) {
 	//overridden for performance only.
 	elements.add(codeOf(element));
@@ -90,6 +91,7 @@ protected int codeOf(long element) {
  *
  * @param   minCapacity   the desired minimum capacity.
  */
+@Override
 public void ensureCapacity(int minCapacity) {
 	elements.ensureCapacity(minCapacity);
 }
@@ -101,6 +103,7 @@ public void ensureCapacity(int minCapacity) {
  *
  * @param index index of element to return.
  */
+@Override
 public long getQuick(int index) {
 	return distinctValues[(int)(elements.getQuick(index))];
 }
@@ -114,6 +117,7 @@ public long getQuick(int index) {
  * @param to index of last element to be removed.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public void removeFromTo(int from, int to) {
 	elements.removeFromTo(from,to);
 	size -= to-from+1;
@@ -127,6 +131,7 @@ public void removeFromTo(int from, int to) {
  * @param index index of element to replace.
  * @param element element to be stored at the specified position.
  */
+@Override
 public void setQuick(int index, long element) {
 	elements.setQuick(index,codeOf(element));
 }
@@ -134,6 +139,7 @@ public void setQuick(int index, long element) {
  * Sets the size of the receiver without modifying it otherwise.
  * This method should not release or allocate new memory but simply set some instance variable like <tt>size</tt>.
  */
+@Override
 protected void setSizeRaw(int newSize) {
 	super.setSizeRaw(newSize);
 	elements.setSizeRaw(newSize);
@@ -154,6 +160,7 @@ protected void setUp(long[] distinctValues, int initialCapacity) {
  * size. An application can use this operation to minimize the 
  * storage of the receiver. 
  */
+@Override
 public void trimToSize() {
 	elements.trimToSize();
 }

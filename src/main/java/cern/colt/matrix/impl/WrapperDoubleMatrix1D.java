@@ -29,6 +29,7 @@ public WrapperDoubleMatrix1D(DoubleMatrix1D newContent) {
  * Returns the content of this matrix if it is a wrapper; or <tt>this</tt> otherwise.
  * Override this method in wrappers.
  */
+@Override
 protected DoubleMatrix1D getContent() {
 	return this.content;
 }
@@ -42,6 +43,7 @@ protected DoubleMatrix1D getContent() {
  * @param     index   the index of the cell.
  * @return    the value of the specified cell.
  */
+@Override
 public double getQuick(int index) {
 	return content.getQuick(index);
 }
@@ -54,6 +56,7 @@ public double getQuick(int index) {
  * @param size the number of cell the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public DoubleMatrix1D like(int size) {
 	return content.like(size);
 }
@@ -66,6 +69,7 @@ public DoubleMatrix1D like(int size) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 public DoubleMatrix2D like2D(int rows, int columns) {
 	return content.like2D(rows,columns);
 }
@@ -79,6 +83,7 @@ public DoubleMatrix2D like2D(int rows, int columns) {
  * @param     index   the index of the cell.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int index, double value) {
 	content.setQuick(index, value);
 }
@@ -89,12 +94,15 @@ The returned view is backed by this matrix, so changes in the returned view are 
 
 @return a new flip view.
 */
+@Override
 public DoubleMatrix1D viewFlip() {
 	DoubleMatrix1D view = new WrapperDoubleMatrix1D(this) {
-		public double getQuick(int index) {
+		@Override
+      public double getQuick(int index) {
 			return content.get(size-1-index);
 		}
-		public void setQuick(int index, double value) {
+		@Override
+      public void setQuick(int index, double value) {
 			content.set(size-1-index,value); 
 		}
 	};
@@ -121,13 +129,16 @@ As usual, any attempt to access a cell at other coordinates will throw an <tt>In
 @return the new view.
 		
 */
+@Override
 public DoubleMatrix1D viewPart(final int index, int width) {
 	checkRange(index,width);
 	DoubleMatrix1D view = new WrapperDoubleMatrix1D(this) {
-		public double getQuick(int i) {
+		@Override
+      public double getQuick(int i) {
 			return content.get(index+i);
 		}
-		public void setQuick(int i, double value) {
+		@Override
+      public void setQuick(int i, double value) {
 			content.set(index+i,value); 
 		}
 	};
@@ -154,6 +165,7 @@ The returned view is backed by this matrix, so changes in the returned view are 
 @return the new view.
 @throws IndexOutOfBoundsException if <tt>!(0 <= indexes[i] < size())</tt> for any <tt>i=0..indexes.length()-1</tt>.
 */
+@Override
 public DoubleMatrix1D viewSelection(int[] indexes) {
 	// check for "all"
 	if (indexes==null) {
@@ -165,10 +177,12 @@ public DoubleMatrix1D viewSelection(int[] indexes) {
 	final int[] idx = indexes;
 
 	DoubleMatrix1D view = new WrapperDoubleMatrix1D(this) {
-		public double getQuick(int i) {
+		@Override
+      public double getQuick(int i) {
 			return content.get(idx[i]);
 		}
-		public void setQuick(int i, double value) {
+		@Override
+      public void setQuick(int i, double value) {
 			content.set(idx[i],value); 
 		}
 	};
@@ -181,6 +195,7 @@ public DoubleMatrix1D viewSelection(int[] indexes) {
  * @param offsets the offsets of the visible elements.
  * @return  a new view.
  */
+@Override
 protected DoubleMatrix1D viewSelectionLike(int[] offsets) {
 	throw new InternalError(); // should never get called
 }
@@ -193,13 +208,16 @@ More specifically, the view has size <tt>this.size()/stride</tt> holding cells <
 @return the new view.
 		
 */
+@Override
 public DoubleMatrix1D viewStrides(final int _stride) {
 	if (stride<=0) throw new IndexOutOfBoundsException("illegal stride: "+stride);
 	DoubleMatrix1D view = new WrapperDoubleMatrix1D(this) {
-		public double getQuick(int index) {
+		@Override
+      public double getQuick(int index) {
 			return content.get(index*_stride);
 		}
-		public void setQuick(int index, double value) {
+		@Override
+      public void setQuick(int index, double value) {
 			content.set(index*_stride,value); 
 		}
 	};

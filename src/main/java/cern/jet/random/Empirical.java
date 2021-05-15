@@ -71,6 +71,7 @@ public double cdf(int k) {
  *
  * @return a copy of the receiver.
  */
+@Override
 public Object clone() {
 	Empirical copy = (Empirical) super.clone();
 	if (this.cdf != null) copy.cdf = this.cdf.clone();
@@ -79,6 +80,7 @@ public Object clone() {
 /**
  * Returns a random number from the distribution.
  */
+@Override
 public double nextDouble() {
 	double rand = randomGenerator.raw();
 	if (this.cdf==null) return rand; // Non-existing pdf
@@ -165,7 +167,7 @@ public void setState(double[] pdf, int interpolationType) {
 		if (prob < 0.0) throw new IllegalArgumentException("Negative probability");
 		cdf[ptn+1] = cdf[ptn] + prob;
 	}
-	if (cdf[nBins] <=0.0) throw new IllegalArgumentException("At leat one probability must be > 0.0");
+	if (cdf[nBins] <=0.0) throw new IllegalArgumentException("At least one probability must be > 0.0");
 	for (int ptn = 0; ptn < nBins+1; ++ptn ) {
 		cdf[ptn] /= cdf[nBins];
 	}

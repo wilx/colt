@@ -55,6 +55,7 @@ public void add(double x, double y) {
  * @param x the x-coordinates of the points to add.
  * @param y the y-coordinates of the points to add.
  */
+@Override
 public void addAllOf(DoubleArrayList x, DoubleArrayList y) {
 	int listSize = x.size();
 	if (this.size + listSize >= this.capacity) flush();

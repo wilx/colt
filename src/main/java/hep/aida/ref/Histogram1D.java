@@ -58,30 +58,36 @@ public class Histogram1D extends AbstractHistogram1D implements IHistogram1D
 		heights = new double[bins+2];
 		errors = new double[bins+2];
 	}
-	public int allEntries() // perhaps to be deleted (default impl. in superclass sufficient)
+	@Override
+   public int allEntries() // perhaps to be deleted (default impl. in superclass sufficient)
 	{
 		return nEntry;
 	}
-	public int binEntries(int index)
+	@Override
+   public int binEntries(int index)
 	{
 		//return entries[xAxis.map(index)];
 		return entries[map(index)];
 	}
-	public double binError(int index)
+	@Override
+   public double binError(int index)
 	{
 		//return Math.sqrt(errors[xAxis.map(index)]);
 		return Math.sqrt(errors[map(index)]);
 	}
-	public double binHeight(int index)
+	@Override
+   public double binHeight(int index)
 	{
 		//return heights[xAxis.map(index)];
 		return heights[map(index)];
 	}
-	public double equivalentBinEntries()
+	@Override
+   public double equivalentBinEntries()
 	{
 		return sumWeight*sumWeight/sumWeightSquared;
 	}
-	public void fill(double x)
+	@Override
+   public void fill(double x)
 	{
 		//int bin = xAxis.getBin(x);
 		int bin = map(xAxis.coordToIndex(x));
@@ -94,7 +100,8 @@ public class Histogram1D extends AbstractHistogram1D implements IHistogram1D
 		mean += x;
 		rms += x*x;
 	}
-	public void fill(double x, double weight)
+	@Override
+   public void fill(double x, double weight)
 	{
 		//int bin = xAxis.getBin(x);
 		int bin = map(xAxis.coordToIndex(x));
@@ -107,11 +114,13 @@ public class Histogram1D extends AbstractHistogram1D implements IHistogram1D
 		mean += x*weight;
 		rms += x*weight*weight;
 	}
-	public double mean()
+	@Override
+   public double mean()
 	{
 		return mean/sumWeight;
 	}
-	public void reset()
+	@Override
+   public void reset()
 	{
 		 for (int i=0; i<entries.length; i++)
 		 {
@@ -125,7 +134,8 @@ public class Histogram1D extends AbstractHistogram1D implements IHistogram1D
 		 mean = 0;
 		 rms = 0;
 	}
-	public double rms()
+	@Override
+   public double rms()
 	{
 		return Math.sqrt(rms/sumWeight - mean*mean/sumWeight/sumWeight);
 	}

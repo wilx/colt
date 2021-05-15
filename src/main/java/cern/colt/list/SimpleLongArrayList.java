@@ -62,6 +62,7 @@ public SimpleLongArrayList(int initialCapacity) {
  *
  * @param   minCapacity   the desired minimum capacity.
  */
+@Override
 public void ensureCapacity(int minCapacity) {
 	elements = cern.colt.Arrays.ensureCapacity(elements,minCapacity);
 }
@@ -73,6 +74,7 @@ public void ensureCapacity(int minCapacity) {
  *
  * @param index index of element to return.
  */
+@Override
 protected long getQuick(int index) {
 	return elements[index];
 }
@@ -85,6 +87,7 @@ protected long getQuick(int index) {
  * @param index index of element to replace.
  * @param element element to be stored at the specified position.
  */
+@Override
 protected void setQuick(int index, long element) {
 	elements[index] = element;
 }
@@ -93,6 +96,7 @@ protected void setQuick(int index, long element) {
 * size. An application can use this operation to minimize the 
 * storage of the receiver. 
 */
+@Override
 public void trimToSize() {
 	elements = cern.colt.Arrays.trimToCapacity(elements,size());
 }

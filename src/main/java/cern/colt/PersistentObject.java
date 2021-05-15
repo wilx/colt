@@ -27,6 +27,7 @@ protected PersistentObject() {
  *
  * @return a copy of the receiver.
  */
+@Override
 public Object clone() {
 	try {
 		return super.clone();

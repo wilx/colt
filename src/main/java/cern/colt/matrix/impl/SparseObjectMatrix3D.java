@@ -149,6 +149,7 @@ protected SparseObjectMatrix3D(int slices, int rows, int columns, AbstractIntObj
 /**
  * Returns the number of cells having non-zero values.
  */
+@Override
 public int cardinality() {
 	if (this.isNoView) return this.elements.size();
 	else return super.cardinality();
@@ -163,6 +164,7 @@ public int cardinality() {
  *
  * @param   minNonZeros   the desired minimum number of non-zero cells.
  */
+@Override
 public void ensureCapacity(int minCapacity) {
 	this.elements.ensureCapacity(minCapacity);
 }
@@ -178,6 +180,7 @@ public void ensureCapacity(int minCapacity) {
  * @param     column   the index of the column-coordinate.
  * @return    the value at the specified coordinate.
  */
+@Override
 public Object getQuick(int slice, int row, int column) {
 	//if (debug) if (slice<0 || slice>=slices || row<0 || row>=rows || column<0 || column>=columns) throw new IndexOutOfBoundsException("slice:"+slice+", row:"+row+", column:"+column);
 	//return elements.get(index(slice,row,column));
@@ -187,6 +190,7 @@ public Object getQuick(int slice, int row, int column) {
 /**
  * Returns <tt>true</tt> if both matrices share at least one identical cell.
  */
+@Override
 protected boolean haveSharedCellsRaw(ObjectMatrix3D other) {
 	if (other instanceof SelectedSparseObjectMatrix3D) {
 		SelectedSparseObjectMatrix3D otherMatrix = (SelectedSparseObjectMatrix3D) other;
@@ -205,6 +209,7 @@ protected boolean haveSharedCellsRaw(ObjectMatrix3D other) {
  * @param     row   the index of the row-coordinate.
  * @param     column   the index of the third-coordinate.
  */
+@Override
 protected int index(int slice, int row, int column) {
 	//return _sliceOffset(_sliceRank(slice)) + _rowOffset(_rowRank(row)) + _columnOffset(_columnRank(column));
 	//manually inlined:
@@ -221,6 +226,7 @@ protected int index(int slice, int row, int column) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public ObjectMatrix3D like(int slices, int rows, int columns) {
 	return new SparseObjectMatrix3D(slices,rows,columns); 
 }
@@ -237,6 +243,7 @@ public ObjectMatrix3D like(int slices, int rows, int columns) {
  * @param columnStride the number of elements between two columns, i.e. <tt>index(i,j+1)-index(i,j)</tt>.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 protected ObjectMatrix2D like2D(int rows, int columns, int rowZero, int columnZero, int rowStride, int columnStride) {
 	return new SparseObjectMatrix2D(rows,columns,this.elements,rowZero,columnZero,rowStride,columnStride);
 }
@@ -252,6 +259,7 @@ protected ObjectMatrix2D like2D(int rows, int columns, int rowZero, int columnZe
  * @param     column   the index of the column-coordinate.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int slice, int row, int column, Object value) {
 	//if (debug) if (slice<0 || slice>=slices || row<0 || row>=rows || column<0 || column>=columns) throw new IndexOutOfBoundsException("slice:"+slice+", row:"+row+", column:"+column);
 	//int index =	index(slice,row,column);
@@ -279,6 +287,7 @@ public void setQuick(int slice, int row, int column, Object value) {
  * Such as sequence generates obsolete memory that is automatically reclaimed from time to time or can manually be reclaimed by calling <tt>trimToSize()</tt>.
  * Putting zeros into cells already containing zeros does not generate obsolete memory since no memory was allocated to them in the first place.
  */
+@Override
 public void trimToSize() {
 	this.elements.trimToSize();
 }
@@ -290,6 +299,7 @@ public void trimToSize() {
  * @param columnOffsets the offsets of the visible elements.
  * @return  a new view.
  */
+@Override
 protected ObjectMatrix3D viewSelectionLike(int[] sliceOffsets, int[] rowOffsets, int[] columnOffsets) {
 	return new SelectedSparseObjectMatrix3D(this.elements,sliceOffsets,rowOffsets,columnOffsets,0);
 }

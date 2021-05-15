@@ -39,6 +39,7 @@ public WrapperDoubleMatrix2D(DoubleMatrix2D newContent) {
  * Returns the content of this matrix if it is a wrapper; or <tt>this</tt> otherwise.
  * Override this method in wrappers.
  */
+@Override
 protected DoubleMatrix2D getContent() {
 	return content;
 }
@@ -53,6 +54,7 @@ protected DoubleMatrix2D getContent() {
  * @param     column   the index of the column-coordinate.
  * @return    the value at the specified coordinate.
  */
+@Override
 public double getQuick(int row, int column) {
 	return content.getQuick(row,column);
 }
@@ -66,6 +68,7 @@ public double getQuick(int row, int column) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public DoubleMatrix2D like(int rows, int columns) {
 	return content.like(rows,columns);
 }
@@ -77,6 +80,7 @@ public DoubleMatrix2D like(int rows, int columns) {
  * @param size the number of cells the matrix shall have.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 public DoubleMatrix1D like1D(int size) {
 	return content.like1D(size);
 }
@@ -90,6 +94,7 @@ public DoubleMatrix1D like1D(int size) {
  * @param stride the number of indexes between any two elements, i.e. <tt>index(i+1)-index(i)</tt>.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 protected DoubleMatrix1D like1D(int size, int offset, int stride) {
 	throw new InternalError(); // should never get called
 }
@@ -104,6 +109,7 @@ protected DoubleMatrix1D like1D(int size, int offset, int stride) {
  * @param     column   the index of the column-coordinate.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int row, int column, double value) {
 	content.setQuick(row,column, value);
 }
@@ -129,6 +135,7 @@ To obtain a slice view on subranges, construct a sub-ranging view (<tt>viewPart(
 @throws IndexOutOfBoundsException if <tt>column < 0 || column >= columns()</tt>.
 @see #viewRow(int)
 */
+@Override
 public DoubleMatrix1D viewColumn(int column) {
 	return viewDice().viewRow(column);
 }
@@ -157,13 +164,16 @@ The returned view is backed by this matrix, so changes in the returned view are 
 @return a new flip view.
 @see #viewRowFlip()
 */
+@Override
 public DoubleMatrix2D viewColumnFlip() {
 	if (columns==0) return this;
 	DoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
-		public double getQuick(int row, int column) {
+		@Override
+      public double getQuick(int row, int column) {
 			return content.get(row,columns-1-column);
 		}
-		public void setQuick(int row, int column, double value) {
+		@Override
+      public void setQuick(int row, int column, double value) {
 			content.set(row,columns-1-column,value); 
 		}
 	};
@@ -197,12 +207,15 @@ Use idioms like <tt>result = viewDice(A).copy()</tt> to generate an independent 
 
 @return a new dice view.
 */
+@Override
 public DoubleMatrix2D viewDice() {
 	DoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
-		public double getQuick(int row, int column) {
+		@Override
+      public double getQuick(int row, int column) {
 			return content.get(column,row);
 		}
-		public void setQuick(int row, int column, double value) {
+		@Override
+      public void setQuick(int row, int column, double value) {
 			content.set(column,row,value); 
 		}
 	};
@@ -233,13 +246,16 @@ As usual, any attempt to access a cell at a coordinate <tt>column&lt;0 || column
 @return the new view.
 		
 */
+@Override
 public DoubleMatrix2D viewPart(final int row, final int column, int height, int width) {
 	checkBox(row,column,height,width);
 	DoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
-		public double getQuick(int i, int j) {
+		@Override
+      public double getQuick(int i, int j) {
 			return content.get(row+i,column+j);
 		}
-		public void setQuick(int i, int j, double value) {
+		@Override
+      public void setQuick(int i, int j, double value) {
 			content.set(row+i,column+j,value); 
 		}
 	};
@@ -270,6 +286,7 @@ To obtain a slice view on subranges, construct a sub-ranging view (<tt>viewPart(
 @throws IndexOutOfBoundsException if <tt>row < 0 || row >= rows()</tt>.
 @see #viewColumn(int)
 */
+@Override
 public DoubleMatrix1D viewRow(int row) {
 	checkRow(row);
 	return new DelegateDoubleMatrix1D(this,row);
@@ -299,13 +316,16 @@ The returned view is backed by this matrix, so changes in the returned view are 
 @return a new flip view.
 @see #viewColumnFlip()
 */
+@Override
 public DoubleMatrix2D viewRowFlip() {
 	if (rows==0) return this;
 	DoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
-		public double getQuick(int row, int column) {
+		@Override
+      public double getQuick(int row, int column) {
 			return content.get(rows-1-row,column);
 		}
-		public void setQuick(int row, int column, double value) {
+		@Override
+      public void setQuick(int row, int column, double value) {
 			content.set(rows-1-row,column,value); 
 		}
 	};
@@ -338,6 +358,7 @@ To indicate "all" rows or "all columns", simply set the respective parameter
 @throws IndexOutOfBoundsException if <tt>!(0 <= rowIndexes[i] < rows())</tt> for any <tt>i=0..rowIndexes.length()-1</tt>.
 @throws IndexOutOfBoundsException if <tt>!(0 <= columnIndexes[i] < columns())</tt> for any <tt>i=0..columnIndexes.length()-1</tt>.
 */
+@Override
 public DoubleMatrix2D viewSelection(int[] rowIndexes, int[] columnIndexes) {
 	// check for "all"
 	if (rowIndexes==null) {
@@ -355,10 +376,12 @@ public DoubleMatrix2D viewSelection(int[] rowIndexes, int[] columnIndexes) {
 	final int[] cix = columnIndexes;
 	
 	DoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
-		public double getQuick(int i, int j) {
+		@Override
+      public double getQuick(int i, int j) {
 			return content.get(rix[i],cix[j]);
 		}
-		public void setQuick(int i, int j, double value) {
+		@Override
+      public void setQuick(int i, int j, double value) {
 			content.set(rix[i],cix[j],value); 
 		}
 	};
@@ -374,6 +397,7 @@ public DoubleMatrix2D viewSelection(int[] rowIndexes, int[] columnIndexes) {
  * @param columnOffsets the offsets of the visible elements.
  * @return  a new view.
  */
+@Override
 protected DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
 	throw new InternalError(); // should never be called
 }
@@ -387,13 +411,16 @@ The returned view is backed by this matrix, so changes in the returned view are 
 @return a new view.
 @throws	IndexOutOfBoundsException if <tt>rowStride<=0 || columnStride<=0</tt>.
 */
+@Override
 public DoubleMatrix2D viewStrides(final int _rowStride, final int _columnStride) {
 	if (_rowStride<=0 || _columnStride<=0) throw new IndexOutOfBoundsException("illegal stride");
 	DoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
-		public double getQuick(int row, int column) {
+		@Override
+      public double getQuick(int row, int column) {
 			return content.get(_rowStride*row, _columnStride*column);
 		}
-		public void setQuick(int row, int column, double value) {
+		@Override
+      public void setQuick(int row, int column, double value) {
 			content.set(_rowStride*row, _columnStride*column, value); 
 		}
 	};

@@ -40,6 +40,7 @@ public BreitWigner(double mean, double gamma, double cut, RandomEngine randomGen
 /**
  * Returns a random number from the distribution.
  */
+@Override
 public double nextDouble() {
 	return nextDouble(mean, gamma, cut);
 }

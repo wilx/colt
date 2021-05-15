@@ -41,6 +41,7 @@ public MersenneTwister64(Date d) {
 /**
  * Returns a 64 bit uniformly distributed random number in the open unit interval <code>(0.0,1.0)</code> (excluding 0.0 and 1.0).
  */
+@Override
 public double raw() {
 	return nextDouble();
 }

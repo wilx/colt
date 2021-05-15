@@ -33,6 +33,7 @@ protected Mult(final double multiplicator) {
 /**
  * Returns the result of the function evaluation.
  */
+@Override
 public final double apply(double a) {
 	return a * multiplicator;
 }

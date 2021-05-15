@@ -62,6 +62,7 @@ public boolean nextBoolean() {
 /**
  * Returns a uniformly distributed random number in the open interval <tt>(min,max)</tt> (excluding <tt>min</tt> and <tt>max</tt>).
  */
+@Override
 public double nextDouble() {
 	return min+(max-min)*randomGenerator.raw();
 }
@@ -82,7 +83,8 @@ public float nextFloatFromTo(float from, float to) {
 /**
  * Returns a uniformly distributed random number in the closed interval <tt>[min,max]</tt> (including <tt>min</tt> and <tt>max</tt>).
  */
-public int nextInt() {	
+@Override
+public int nextInt() {
 	return nextIntFromTo((int)Math.round(min), (int)Math.round(max));
 }
 /**

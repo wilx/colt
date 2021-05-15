@@ -82,6 +82,7 @@ public DynamicBin1D() {
  *
  * @param element element to be appended.
  */
+@Override
 public synchronized void add(double element) {
 	elements.add(element);
 	invalidateAll();
@@ -94,6 +95,7 @@ public synchronized void add(double element) {
  * @param to the index of the last element to be added (inclusive).
  * @throws IndexOutOfBoundsException if <tt>list.size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=list.size())</tt>.
  */
+@Override
 public synchronized void addAllOfFromTo(DoubleArrayList list, int from, int to) {
 	this.elements.addAllOfFromTo(list, from, to);
 	this.invalidateAll();
@@ -131,6 +133,7 @@ public synchronized double aggregate(cern.colt.function.DoubleDoubleFunction agg
  * Removes all elements from the receiver.
  * The receiver will be empty after this call returns.
  */
+@Override
 public synchronized void clear() {
 	super.clear();
 
@@ -142,6 +145,7 @@ public synchronized void clear() {
 /**
  * Resets the values of all measures.
  */
+@Override
 protected void clearAllMeasures() {
 	super.clearAllMeasures();
 	
@@ -153,6 +157,7 @@ protected void clearAllMeasures() {
  *
  * @return a deep copy of the receiver.
  */
+@Override
 public synchronized Object clone() {
 	DynamicBin1D clone = (DynamicBin1D) super.clone();
 	if (this.elements != null) clone.elements = clone.elements.copy();
@@ -318,6 +323,7 @@ private synchronized cern.colt.map.AbstractDoubleIntMap frequencyMap() {
  * @see #hasSumOfPowers(int)
  * @see #sumOfPowers(int)
  */
+@Override
 public int getMaxOrderForSumOfPowers() {
 	return Integer.MAX_VALUE;
 }
@@ -326,6 +332,7 @@ public int getMaxOrderForSumOfPowers() {
  * @see #hasSumOfPowers(int)
  * @see #sumOfPowers(int)
  */
+@Override
 public int getMinOrderForSumOfPowers() {
 	return Integer.MIN_VALUE;
 }
@@ -351,12 +358,14 @@ protected void invalidateAll() {
  * If the receiver is rebinnable, the elements can be obtained via <tt>elements()</tt> methods.
  *
  */
+@Override
 public synchronized boolean isRebinnable() {
 	return true;
 }
 /**
  * Returns the maximum.
  */
+@Override
 public synchronized double max() {
 	if (! isIncrementalStatValid) updateIncrementalStats();
 	return this.max;
@@ -364,6 +373,7 @@ public synchronized double max() {
 /**
  * Returns the minimum.
  */
+@Override
 public synchronized double min() {
 	if (! isIncrementalStatValid) updateIncrementalStats();
 	return this.min;
@@ -374,6 +384,7 @@ public synchronized double min() {
  * @param k the order; any number - can be less than zero, zero or greater than zero.
  * @param c any number.
  */
+@Override
 public synchronized double moment(int k, double c) {
 	// currently no caching for this parameter
 	return Descriptive.moment(this.elements, k, c);
@@ -382,6 +393,7 @@ public synchronized double moment(int k, double c) {
  * Returns the exact <tt>phi-</tt>quantile; that is, the smallest contained element <tt>elem</tt> for which holds that <tt>phi</tt> percent of elements are less than <tt>elem</tt>.
  * @param phi must satisfy <tt>0 &lt; phi &lt; 1</tt>.
  */
+@Override
 public synchronized double quantile(double phi) {
 	return Descriptive.quantile(sortedElements_unsafe(),phi);
 }
@@ -392,6 +404,7 @@ public synchronized double quantile(double phi) {
  * @param element the element to search for.
  * @return the exact percentage <tt>phi</tt> of elements <tt>&lt;= element</tt> (<tt>0.0 &lt;= phi &lt;= 1.0)</tt>.
  */
+@Override
 public synchronized double quantileInverse(double element) {
 	return Descriptive.quantileInverse(sortedElements_unsafe(),element);
 }
@@ -401,6 +414,7 @@ public synchronized double quantileInverse(double element) {
  * Each percentage must be in the interval <tt>(0.0,1.0]</tt>. <tt>percentages</tt> must be sorted ascending.
  * @return the exact quantiles.
  */
+@Override
 public DoubleArrayList quantiles(DoubleArrayList percentages) {
 	return Descriptive.quantiles(sortedElements_unsafe(),percentages);
 }
@@ -629,6 +643,7 @@ public void setFixedOrder(boolean fixedOrder) {
  *
  * @returns  the number of elements contained in the receiver.
  */
+@Override
 public synchronized int size() {
 	return elements.size();
 	// Never ever use "this.size" as it would be intuitive!
@@ -711,6 +726,7 @@ public synchronized void standardize(double mean, double standardDeviation) {
 /**
  * Returns the sum of all elements, which is <tt>Sum( x[i] )</tt>.
  */
+@Override
 public synchronized double sum() {
 	if (!isIncrementalStatValid) updateIncrementalStats();
 	return this.sum;
@@ -718,6 +734,7 @@ public synchronized double sum() {
 /**
  * Returns the sum of inversions, which is <tt>Sum( 1 / x[i] )</tt>.
  */
+@Override
 public synchronized double sumOfInversions() {
 	if (!isSumOfInversionsValid) updateSumOfInversions();
 	return this.sumOfInversions;
@@ -725,6 +742,7 @@ public synchronized double sumOfInversions() {
 /**
  * Returns the sum of logarithms, which is <tt>Sum( Log(x[i]) )</tt>.
  */
+@Override
 public synchronized double sumOfLogarithms() {
 	if (!isSumOfLogarithmsValid) updateSumOfLogarithms();
 	return this.sumOfLogarithms;
@@ -734,6 +752,7 @@ public synchronized double sumOfLogarithms() {
  * @param k the order of the powers.
  * @return the sum of powers.
  */
+@Override
 public synchronized double sumOfPowers(int k) {
 	// no chaching for this measure
 	if (k >= -1 && k <= 2) return super.sumOfPowers(k);
@@ -743,6 +762,7 @@ public synchronized double sumOfPowers(int k) {
 /**
  * Returns the sum of squares, which is <tt>Sum( x[i] * x[i] )</tt>.
  */
+@Override
 public synchronized double sumOfSquares() {
 	if (!isIncrementalStatValid) updateIncrementalStats();
 	return this.sum_xx;
@@ -796,6 +816,7 @@ public synchronized double trimmedMean(int s, int l) {
  * An application can use this operation to minimize the storage of the receiver.
  * Does not affect functionality.
  */
+@Override
 public synchronized void trimToSize() {
 	this.elements.trimToSize();
 	

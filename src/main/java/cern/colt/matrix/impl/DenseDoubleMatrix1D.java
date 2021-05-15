@@ -80,6 +80,7 @@ protected DenseDoubleMatrix1D(int size, double[] elements, int zero, int stride)
  * @return <tt>this</tt> (for convenience only).
  * @throws IllegalArgumentException if <tt>values.length != size()</tt>.
  */
+@Override
 public DoubleMatrix1D assign(double[] values) {
 	if (isNoView) {
 		if (values.length != size) throw new IllegalArgumentException("Must have same number of cells: length="+values.length+"size()="+size());
@@ -95,6 +96,7 @@ public DoubleMatrix1D assign(double[] values) {
  * @param    value the value to be filled into the cells.
  * @return <tt>this</tt> (for convenience only).
  */
+@Override
 public DoubleMatrix1D assign(double value) {
 	int index = index(0);
 	int s = this.stride;
@@ -123,6 +125,7 @@ For further examples, see the <a href="package-summary.html#FunctionObjects">pac
 @return <tt>this</tt> (for convenience only).
 @see cern.jet.math.Functions
 */
+@Override
 public DoubleMatrix1D assign(cern.colt.function.DoubleFunction function) {
 	int s=stride;
 	int i=index(0);
@@ -155,6 +158,7 @@ public DoubleMatrix1D assign(cern.colt.function.DoubleFunction function) {
  * @return <tt>this</tt> (for convenience only).
  * @throws	IllegalArgumentException if <tt>size() != other.size()</tt>.
  */
+@Override
 public DoubleMatrix1D assign(DoubleMatrix1D source) {
 	// overriden for performance only
 	if (! (source instanceof DenseDoubleMatrix1D)) {
@@ -219,6 +223,7 @@ and as second argument the current cell's value of <tt>y</tt>,
 @throws	IllegalArgumentException if <tt>size() != y.size()</tt>.
 @see cern.jet.math.Functions
 */
+@Override
 public DoubleMatrix1D assign(DoubleMatrix1D y, cern.colt.function.DoubleDoubleFunction function) {
 	// overriden for performance only
 	if (! (y instanceof DenseDoubleMatrix1D)) {
@@ -289,6 +294,7 @@ public DoubleMatrix1D assign(DoubleMatrix1D y, cern.colt.function.DoubleDoubleFu
 /**
  * Returns the number of cells having non-zero values, but at most maxCardinality; ignores tolerance.
  */
+@Override
 protected int cardinality(int maxCardinality) {
 	int cardinality = 0;
 	int index = index(0);
@@ -311,6 +317,7 @@ protected int cardinality(int maxCardinality) {
  * @param     index   the index of the cell.
  * @return    the value of the specified cell.
  */
+@Override
 public double getQuick(int index) {
 	//if (debug) if (index<0 || index>=size) checkIndex(index);
 	//return elements[index(index)];
@@ -320,6 +327,7 @@ public double getQuick(int index) {
 /**
  * Returns <tt>true</tt> if both matrices share at least one identical cell.
  */
+@Override
 protected boolean haveSharedCellsRaw(DoubleMatrix1D other) {
 	if (other instanceof SelectedDenseDoubleMatrix1D) {
 		SelectedDenseDoubleMatrix1D otherMatrix = (SelectedDenseDoubleMatrix1D) other;
@@ -337,6 +345,7 @@ protected boolean haveSharedCellsRaw(DoubleMatrix1D other) {
  *
  * @param     rank   the rank of the element.
  */
+@Override
 protected int index(int rank) {
 	// overriden for manual inlining only
 	//return _offset(_rank(rank));
@@ -351,6 +360,7 @@ protected int index(int rank) {
  * @param size the number of cell the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public DoubleMatrix1D like(int size) {
 	return new DenseDoubleMatrix1D(size);
 }
@@ -363,6 +373,7 @@ public DoubleMatrix1D like(int size) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 public DoubleMatrix2D like2D(int rows, int columns) {
 	return new DenseDoubleMatrix2D(rows,columns);
 }
@@ -376,6 +387,7 @@ public DoubleMatrix2D like2D(int rows, int columns) {
  * @param     index   the index of the cell.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int index, double value) {
 	//if (debug) if (index<0 || index>=size) checkIndex(index);
 	//elements[index(index)] = value;
@@ -386,6 +398,7 @@ public void setQuick(int index, double value) {
 Swaps each element <tt>this[i]</tt> with <tt>other[i]</tt>.
 @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
 */
+@Override
 public void swap(DoubleMatrix1D other) {
 	// overriden for performance only
 	if (! (other instanceof DenseDoubleMatrix1D)) {
@@ -420,6 +433,7 @@ After this call returns the array <tt>values</tt> has the form
 
 @throws IllegalArgumentException if <tt>values.length < size()</tt>.
 */
+@Override
 public void toArray(double[] values) {
 	if (values.length < size) throw new IllegalArgumentException("values too small");
 	if (this.isNoView) System.arraycopy(this.elements,0,values,0,this.elements.length);
@@ -431,6 +445,7 @@ public void toArray(double[] values) {
  * @param offsets the offsets of the visible elements.
  * @return  a new view.
  */
+@Override
 protected DoubleMatrix1D viewSelectionLike(int[] offsets) {
 	return new SelectedDenseDoubleMatrix1D(this.elements,offsets);
 }
@@ -443,6 +458,7 @@ protected DoubleMatrix1D viewSelectionLike(int[] offsets) {
  * @param length the number of cells to be considered.
  * @return the sum of products; zero if <tt>from<0 || length<0</tt>.
  */
+@Override
 public double zDotProduct(DoubleMatrix1D y, int from, int length) {
 	if (!(y instanceof DenseDoubleMatrix1D)) {
 		return super.zDotProduct(y, from, length);
@@ -492,6 +508,7 @@ public double zDotProduct(DoubleMatrix1D y, int from, int length) {
  * Returns the sum of all cells; <tt>Sum( x[i] )</tt>.
  * @return the sum.
  */
+@Override
 public double zSum() {
 	double sum = 0;
 	int s=stride;

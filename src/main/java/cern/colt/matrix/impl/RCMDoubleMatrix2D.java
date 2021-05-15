@@ -55,6 +55,7 @@ public RCMDoubleMatrix2D(int rows, int columns) {
  * @param    value the value to be filled into the cells.
  * @return <tt>this</tt> (for convenience only).
  */
+@Override
 public DoubleMatrix2D assign(double value) {
 	// overriden for performance only
 	if (value==0) {
@@ -70,6 +71,7 @@ public DoubleMatrix2D assign(double value) {
  * Returns the content of this matrix if it is a wrapper; or <tt>this</tt> otherwise.
  * Override this method in wrappers.
  */
+@Override
 protected DoubleMatrix2D getContent() {
 	return this;
 }
@@ -84,6 +86,7 @@ protected DoubleMatrix2D getContent() {
  * @param     column   the index of the column-coordinate.
  * @return    the value at the specified coordinate.
  */
+@Override
 public double getQuick(int row, int column) {
 	int k=-1;
 	if (indexes[row] != null) k = indexes[row].binarySearch(column);
@@ -100,6 +103,7 @@ public double getQuick(int row, int column) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public DoubleMatrix2D like(int rows, int columns) {
 	return new RCMDoubleMatrix2D(rows,columns);
 }
@@ -111,6 +115,7 @@ public DoubleMatrix2D like(int rows, int columns) {
  * @param size the number of cells the matrix shall have.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 public DoubleMatrix1D like1D(int size) {
 	return new SparseDoubleMatrix1D(size);
 }
@@ -125,6 +130,7 @@ public DoubleMatrix1D like1D(int size) {
  * @param     column   the index of the column-coordinate.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int row, int column, double value) {
 	int i=row;
 	int j=column;

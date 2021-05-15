@@ -50,6 +50,7 @@ protected void allocate() {
 /**
  * Clears the receiver.
  */
+@Override
 public void clear() {
 	values.clear();
 }
@@ -58,6 +59,7 @@ public void clear() {
  *
  * @return a deep copy of the receiver.
  */
+@Override
 public Object clone() {
 	DoubleBuffer copy = (DoubleBuffer) super.clone();
 	if (this.values != null) copy.values = copy.values.copy();
@@ -73,12 +75,14 @@ public boolean contains(double element) {
 /**
  * Returns whether the receiver is empty.
  */
+@Override
 public boolean isEmpty() {
 	return values.size()==0;
 }
 /**
  * Returns whether the receiver is empty.
  */
+@Override
 public boolean isFull() {
 	return values.size()==k;
 }
@@ -106,12 +110,14 @@ public double rank(double element) {
 /**
  * Returns the number of elements contained in the receiver.
  */
+@Override
 public int size() {
 	return values.size();
 }
 /**
  * Sorts the receiver.
  */
+@Override
 public void sort() {
 	if (! this.isSorted) {
 		// IMPORTANT: TO DO : replace mergeSort with quickSort!

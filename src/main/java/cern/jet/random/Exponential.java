@@ -45,6 +45,7 @@ public double cdf(double x) {
 /**
  * Returns a random number from the distribution.
  */
+@Override
 public double nextDouble() {
 	return nextDouble(lambda);
 }

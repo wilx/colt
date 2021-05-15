@@ -100,6 +100,7 @@ protected SelectedSparseDoubleMatrix2D(AbstractIntDoubleMap elements, int[] rowO
  * @param  rank   the absolute rank of the element.
  * @return the position.
  */
+@Override
 protected int _columnOffset(int absRank) {
 	return columnOffsets[absRank];
 }
@@ -110,6 +111,7 @@ protected int _columnOffset(int absRank) {
  * @param  rank   the absolute rank of the element.
  * @return the position.
  */
+@Override
 protected int _rowOffset(int absRank) {
 	return rowOffsets[absRank];
 }
@@ -124,6 +126,7 @@ protected int _rowOffset(int absRank) {
  * @param     column   the index of the column-coordinate.
  * @return    the value at the specified coordinate.
  */
+@Override
 public double getQuick(int row, int column) {
 	//if (debug) if (column<0 || column>=columns || row<0 || row>=rows) throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
 	//return elements.get(index(row,column));
@@ -139,6 +142,7 @@ public double getQuick(int row, int column) {
  * <li><tt>this == other</tt>
  * </ul>
  */
+@Override
 protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
 	if (other instanceof SelectedSparseDoubleMatrix2D) {
 		SelectedSparseDoubleMatrix2D otherMatrix = (SelectedSparseDoubleMatrix2D) other;
@@ -156,6 +160,7 @@ protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
  * @param     row   the index of the row-coordinate.
  * @param     column   the index of the column-coordinate.
  */
+@Override
 protected int index(int row, int column) {
 	//return this.offset + super.index(row,column);
 	//manually inlined:
@@ -171,6 +176,7 @@ protected int index(int row, int column) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public DoubleMatrix2D like(int rows, int columns) {
 	return new SparseDoubleMatrix2D(rows, columns);
 }
@@ -182,6 +188,7 @@ public DoubleMatrix2D like(int rows, int columns) {
  * @param size the number of cells the matrix shall have.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 public DoubleMatrix1D like1D(int size) {
 	return new SparseDoubleMatrix1D(size);
 }
@@ -195,6 +202,7 @@ public DoubleMatrix1D like1D(int size) {
  * @param stride the number of indexes between any two elements, i.e. <tt>index(i+1)-index(i)</tt>.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 protected DoubleMatrix1D like1D(int size, int zero, int stride) {
 	throw new InternalError(); // this method is never called since viewRow() and viewColumn are overridden properly.
 }
@@ -209,6 +217,7 @@ protected DoubleMatrix1D like1D(int size, int zero, int stride) {
  * @param     column   the index of the column-coordinate.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int row, int column, double value) {
 	//if (debug) if (column<0 || column>=columns || row<0 || row>=rows) throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
 	//int index =	index(row,column);
@@ -226,6 +235,7 @@ public void setQuick(int row, int column, double value) {
  * @param columns the number of columns the matrix shall have.
  * @throws	IllegalArgumentException if <tt>(double)columns*rows > Integer.MAX_VALUE</tt>.
  */
+@Override
 protected void setUp(int rows, int columns) {
 	super.setUp(rows,columns);
 	this.rowStride = 1;
@@ -235,6 +245,7 @@ protected void setUp(int rows, int columns) {
 /**
 Self modifying version of viewDice().
 */
+@Override
 protected AbstractMatrix2D vDice() {
 	super.vDice();
 	// swap
@@ -267,6 +278,7 @@ To obtain a slice view on subranges, construct a sub-ranging view (<tt>viewPart(
 @throws IllegalArgumentException if <tt>column < 0 || column >= columns()</tt>.
 @see #viewRow(int)
 */
+@Override
 public DoubleMatrix1D viewColumn(int column) {
 	checkColumn(column);
 	int viewSize = this.rows;
@@ -298,6 +310,7 @@ To obtain a slice view on subranges, construct a sub-ranging view (<tt>viewPart(
 @throws IndexOutOfBoundsException if <tt>row < 0 || row >= rows()</tt>.
 @see #viewColumn(int)
 */
+@Override
 public DoubleMatrix1D viewRow(int row) {
 	checkRow(row);
 	int viewSize = this.columns;
@@ -314,6 +327,7 @@ public DoubleMatrix1D viewRow(int row) {
  * @param columnOffsets the offsets of the visible elements.
  * @return  a new view.
  */
+@Override
 protected DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
 	return new SelectedSparseDoubleMatrix2D(this.elements,rowOffsets,columnOffsets,this.offset);
 }

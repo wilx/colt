@@ -140,6 +140,7 @@ protected void setUp(int size, int zero, int stride) {
 /**
  * Returns the number of cells.
  */
+@Override
 public int size() {
 	return size;
 }

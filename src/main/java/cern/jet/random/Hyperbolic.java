@@ -51,6 +51,7 @@ public Hyperbolic(double alpha, double beta, RandomEngine randomGenerator) {
 /**
  * Returns a random number from the distribution.
  */
+@Override
 public double nextDouble() {
 	return nextDouble(alpha, beta);
 }

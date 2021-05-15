@@ -136,6 +136,7 @@ protected SparseObjectMatrix2D(int rows, int columns, AbstractIntObjectMap eleme
 /**
  * Returns the number of cells having non-zero values.
  */
+@Override
 public int cardinality() {
 	if (this.isNoView) return this.elements.size();
 	else return super.cardinality();
@@ -150,6 +151,7 @@ public int cardinality() {
  *
  * @param   minNonZeros   the desired minimum number of non-zero cells.
  */
+@Override
 public void ensureCapacity(int minCapacity) {
 	this.elements.ensureCapacity(minCapacity);
 }
@@ -164,6 +166,7 @@ public void ensureCapacity(int minCapacity) {
  * @param     column   the index of the column-coordinate.
  * @return    the value at the specified coordinate.
  */
+@Override
 public Object getQuick(int row, int column) {
 	//if (debug) if (column<0 || column>=columns || row<0 || row>=rows) throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
 	//return this.elements.get(index(row,column));
@@ -179,6 +182,7 @@ public Object getQuick(int row, int column) {
  * <li><tt>this == other</tt>
  * </ul>
  */
+@Override
 protected boolean haveSharedCellsRaw(ObjectMatrix2D other) {
 	if (other instanceof SelectedSparseObjectMatrix2D) {
 		SelectedSparseObjectMatrix2D otherMatrix = (SelectedSparseObjectMatrix2D) other;
@@ -196,6 +200,7 @@ protected boolean haveSharedCellsRaw(ObjectMatrix2D other) {
  * @param     row   the index of the row-coordinate.
  * @param     column   the index of the column-coordinate.
  */
+@Override
 protected int index(int row, int column) {
 	// return super.index(row,column);
 	// manually inlined for speed:
@@ -211,6 +216,7 @@ protected int index(int row, int column) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public ObjectMatrix2D like(int rows, int columns) {
 	return new SparseObjectMatrix2D(rows, columns);
 }
@@ -222,6 +228,7 @@ public ObjectMatrix2D like(int rows, int columns) {
  * @param size the number of cells the matrix shall have.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 public ObjectMatrix1D like1D(int size) {
 	return new SparseObjectMatrix1D(size);
 }
@@ -235,6 +242,7 @@ public ObjectMatrix1D like1D(int size) {
  * @param stride the number of indexes between any two elements, i.e. <tt>index(i+1)-index(i)</tt>.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 protected ObjectMatrix1D like1D(int size, int offset, int stride) {
 	return new SparseObjectMatrix1D(size,this.elements,offset,stride);
 }
@@ -249,6 +257,7 @@ protected ObjectMatrix1D like1D(int size, int offset, int stride) {
  * @param     column   the index of the column-coordinate.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int row, int column, Object value) {
 	//if (debug) if (column<0 || column>=columns || row<0 || row>=rows) throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
 	//int index =	index(row,column);
@@ -277,6 +286,7 @@ public void setQuick(int row, int column, Object value) {
  * Such as sequence generates obsolete memory that is automatically reclaimed from time to time or can manually be reclaimed by calling <tt>trimToSize()</tt>.
  * Putting zeros into cells already containing zeros does not generate obsolete memory since no memory was allocated to them in the first place.
  */
+@Override
 public void trimToSize() {
 	this.elements.trimToSize();
 }
@@ -287,6 +297,7 @@ public void trimToSize() {
  * @param columnOffsets the offsets of the visible elements.
  * @return  a new view.
  */
+@Override
 protected ObjectMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
 	return new SelectedSparseObjectMatrix2D(this.elements,rowOffsets,columnOffsets,0);
 }

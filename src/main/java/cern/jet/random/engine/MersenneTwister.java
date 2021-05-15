@@ -159,6 +159,7 @@ public MersenneTwister(Date d) {
  *
  * @return a copy of the receiver.
  */
+@Override
 public Object clone() {
 	MersenneTwister clone = (MersenneTwister) super.clone();
 	clone.mt = this.mt.clone();
@@ -217,6 +218,7 @@ protected void nextBlock() {
 /**
  * Returns a 32 bit uniformly distributed random number in the closed interval <tt>[Integer.MIN_VALUE,Integer.MAX_VALUE]</tt> (including <tt>Integer.MIN_VALUE</tt> and <tt>Integer.MAX_VALUE</tt>).
  */
+@Override
 public int nextInt() {
 	/* Each single bit including the sign bit will be random */
   	if (mti == N) nextBlock(); // generate N ints at one time

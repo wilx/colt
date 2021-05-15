@@ -270,6 +270,7 @@ protected int hprs(int N, int M, int n,  RandomEngine randomGenerator) {
 /**
  * Returns a random number from the distribution.
  */
+@Override
 public int nextInt() {
 	return nextInt(this.my_N, this.my_s, this.my_n, this.randomGenerator);
 }

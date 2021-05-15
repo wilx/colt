@@ -542,6 +542,7 @@ protected String form(DoubleMatrix1D matrix, int index, Former formatter) {
 /**
  * Converts a given cell to a String; no alignment considered.
  */
+@Override
 protected String form(AbstractMatrix1D matrix, int index, Former formatter) {
 	return this.form((DoubleMatrix1D) matrix, index, formatter);
 }
@@ -556,6 +557,7 @@ public String[][] format(DoubleMatrix2D matrix) {
 /**
  * Returns a string representations of all cells; no alignment considered.
  */
+@Override
 protected String[][] format(AbstractMatrix2D matrix) {
 	return this.format((DoubleMatrix2D) matrix);
 }
@@ -572,6 +574,7 @@ protected int indexOfDecimalPoint(String s) {
 /**
  * Returns the number of characters before the decimal point.
  */
+@Override
 protected int lead(String s) {
 	if (alignment.equals(DECIMAL)) return indexOfDecimalPoint(s);
 	return super.lead(s);
@@ -654,6 +657,7 @@ public String toString(DoubleMatrix3D matrix) {
  * Returns a string representation of the given matrix.
  * @param matrix the matrix to convert.
  */
+@Override
 protected String toString(AbstractMatrix2D matrix) {
 	return this.toString((DoubleMatrix2D) matrix);
 }

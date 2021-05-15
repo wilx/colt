@@ -49,6 +49,7 @@ public ExponentialPower(double tau, RandomEngine randomGenerator) {
 /**
  * Returns a random number from the distribution.
  */
+@Override
 public double nextDouble() {
 	return nextDouble(this.tau);
 }

@@ -42,6 +42,7 @@ public DelegateDoubleMatrix1D(DoubleMatrix2D newContent, int row) {
  * @param     index   the index of the cell.
  * @return    the value of the specified cell.
  */
+@Override
 public double getQuick(int index) {
 	return content.getQuick(row,index);
 }
@@ -54,6 +55,7 @@ public double getQuick(int index) {
  * @param size the number of cell the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public DoubleMatrix1D like(int size) {
 	return content.like1D(size);
 }
@@ -66,6 +68,7 @@ public DoubleMatrix1D like(int size) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 public DoubleMatrix2D like2D(int rows, int columns) {
 	return content.like(rows,columns);
 }
@@ -79,6 +82,7 @@ public DoubleMatrix2D like2D(int rows, int columns) {
  * @param     index   the index of the cell.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int index, double value) {
 	content.setQuick(row,index, value);
 }

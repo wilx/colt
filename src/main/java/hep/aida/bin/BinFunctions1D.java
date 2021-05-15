@@ -21,78 +21,98 @@ public class BinFunctions1D {
 	 * Function that returns <tt>bin.max()</tt>.
 	 */
 	public static final BinFunction1D max = new BinFunction1D() {
-		public final double apply(DynamicBin1D bin) { return bin.max(); }
-		public final String name() { return "Max"; }
+		@Override
+      public final double apply(DynamicBin1D bin) { return bin.max(); }
+		@Override
+      public final String name() { return "Max"; }
 	};		
 
 	/**
 	 * Function that returns <tt>bin.mean()</tt>.
 	 */
 	public static final BinFunction1D mean = new BinFunction1D() {
-		public final double apply(DynamicBin1D bin) { return bin.mean(); }
-		public final String name() { return "Mean"; }
+		@Override
+      public final double apply(DynamicBin1D bin) { return bin.mean(); }
+		@Override
+      public final String name() { return "Mean"; }
 	};		
 
 	/**
 	 * Function that returns <tt>bin.median()</tt>.
 	 */
 	public static final BinFunction1D median = new BinFunction1D() {
-		public final double apply(DynamicBin1D bin) { return bin.median(); }
-		public final String name() { return "Median"; }
+		@Override
+      public final double apply(DynamicBin1D bin) { return bin.median(); }
+		@Override
+      public final String name() { return "Median"; }
 	};		
 
 	/**
 	 * Function that returns <tt>bin.min()</tt>.
 	 */
 	public static final BinFunction1D min = new BinFunction1D() {
-		public final double apply(DynamicBin1D bin) { return bin.min(); }
-		public final String name() { return "Min"; }
+		@Override
+      public final double apply(DynamicBin1D bin) { return bin.min(); }
+		@Override
+      public final String name() { return "Min"; }
 	};		
 
 	/**
 	 * Function that returns <tt>bin.rms()</tt>.
 	 */
 	public static final BinFunction1D rms = new BinFunction1D() {
-		public final double apply(DynamicBin1D bin) { return bin.rms(); }
-		public final String name() { return "RMS"; }
+		@Override
+      public final double apply(DynamicBin1D bin) { return bin.rms(); }
+		@Override
+      public final String name() { return "RMS"; }
 	};		
 
 	/**
 	 * Function that returns <tt>bin.size()</tt>.
 	 */
 	public static final BinFunction1D size = new BinFunction1D() {
-		public final double apply(DynamicBin1D bin) { return bin.size(); }
-		public final String name() { return "Size"; }
+		@Override
+      public final double apply(DynamicBin1D bin) { return bin.size(); }
+		@Override
+      public final String name() { return "Size"; }
 	};		
 
 	/**
 	 * Function that returns <tt>bin.standardDeviation()</tt>.
 	 */
 	public static final BinFunction1D stdDev = new BinFunction1D() {
-		public final double apply(DynamicBin1D bin) { return bin.standardDeviation(); }
-		public final String name() { return "StdDev"; }
+		@Override
+      public final double apply(DynamicBin1D bin) { return bin.standardDeviation(); }
+		@Override
+      public final String name() { return "StdDev"; }
 	};		
 
 	/**
 	 * Function that returns <tt>bin.sum()</tt>.
 	 */
 	public static final BinFunction1D sum = new BinFunction1D() {
-		public final double apply(DynamicBin1D bin) { return bin.sum(); }
-		public final String name() { return "Sum"; }
+		@Override
+      public final double apply(DynamicBin1D bin) { return bin.sum(); }
+		@Override
+      public final String name() { return "Sum"; }
 	};
 	/**
 	 * Function that returns <tt>bin.sumOfLogarithms()</tt>.
 	 */
 	public static final BinFunction1D sumLog = new BinFunction1D() {
-		public final double apply(DynamicBin1D bin) { return bin.sumOfLogarithms(); }
-		public final String name() { return "SumLog"; }
+		@Override
+      public final double apply(DynamicBin1D bin) { return bin.sumOfLogarithms(); }
+		@Override
+      public final String name() { return "SumLog"; }
 	};
 	/**
 	 * Function that returns <tt>bin.geometricMean()</tt>.
 	 */
 	public static final BinFunction1D geometricMean = new BinFunction1D() {
-		public final double apply(DynamicBin1D bin) { return bin.geometricMean(); }
-		public final String name() { return "GeomMean"; }
+		@Override
+      public final double apply(DynamicBin1D bin) { return bin.geometricMean(); }
+		@Override
+      public final String name() { return "GeomMean"; }
 	};		
 
 
@@ -106,8 +126,10 @@ protected BinFunctions1D() {}
  */
 public static BinFunction1D quantile(final double percentage) {
 	return new BinFunction1D() {
-		public final double apply(DynamicBin1D bin) { return bin.quantile(percentage); }
-		public final String name() { return new cern.colt.matrix.impl.FormerFactory().create("%1.2G").form(percentage*100)+"% Q."; }
+		@Override
+      public final double apply(DynamicBin1D bin) { return bin.quantile(percentage); }
+		@Override
+      public final String name() { return new cern.colt.matrix.impl.FormerFactory().create("%1.2G").form(percentage*100)+"% Q."; }
 	};
 }
 }

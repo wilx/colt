@@ -29,6 +29,7 @@ public abstract void add(double element);
  * Adds all values of the specified list to the receiver.
  * @param list the list of which all values shall be added.
  */
+@Override
 public final synchronized void addAllOf(DoubleArrayList list) {
 	addAllOfFromTo(list,0,list.size()-1);
 }
@@ -161,6 +162,7 @@ public synchronized String toString() {
  * An application can use this operation to minimize the storage of the receiver.
  * This default implementation does nothing.
  */
+@Override
 public synchronized void trimToSize() {}
 /**
  * Returns the sample variance, which is <tt>Sum( (x[i]-mean())<sup>2</sup> )  /  (size()-1)</tt>.

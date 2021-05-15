@@ -35,31 +35,37 @@ public class VariableAxis implements IAxis
 		this.bins = edges.length - 1;
 		this.edges = edges.clone();
 	}
-	public double binCentre(int index)
+	@Override
+   public double binCentre(int index)
 	{
 		return (binLowerEdge(index) + binUpperEdge(index)) / 2;
 	}
-	public double binLowerEdge(int index)
+	@Override
+   public double binLowerEdge(int index)
 	{
 		if (index == IHistogram.UNDERFLOW) return Double.NEGATIVE_INFINITY;
 		if (index == IHistogram.OVERFLOW) return upperEdge();
 		return edges[index];
 	}
-	public int bins()
+	@Override
+   public int bins()
 	{
 		return bins;
 	}
-	public double binUpperEdge(int index)
+	@Override
+   public double binUpperEdge(int index)
 	{
 		if (index == IHistogram.UNDERFLOW) return lowerEdge();
 		if (index == IHistogram.OVERFLOW) return Double.POSITIVE_INFINITY;
 		return edges[index+1];
 	}
-	public double binWidth(int index)
+	@Override
+   public double binWidth(int index)
 	{
 		return binUpperEdge(index) - binLowerEdge(index);
 	}
-	public int coordToIndex(double coord)
+	@Override
+   public int coordToIndex(double coord)
 	{
 		if (coord < min) return IHistogram.UNDERFLOW;
 		
@@ -72,7 +78,8 @@ public class VariableAxis implements IAxis
 		
 		return index;
 	}
-	public double lowerEdge()
+	@Override
+   public double lowerEdge()
 	{
 		return min;
 	}
@@ -95,7 +102,8 @@ public class VariableAxis implements IAxis
 		buf.append("]");
 		return buf.toString();
 	}
-	public double upperEdge()
+	@Override
+   public double upperEdge()
 	{
 		return edges[edges.length-1];
 	}

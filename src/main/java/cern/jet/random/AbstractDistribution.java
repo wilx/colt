@@ -53,6 +53,7 @@ protected AbstractDistribution() {}
 Equivalent to <tt>nextDouble()</tt>.
 This has the effect that distributions can now be used as function objects, returning a random number upon function evaluation.
 */
+@Override
 public double apply(double dummy) {
 	return nextDouble();
 }
@@ -60,6 +61,7 @@ public double apply(double dummy) {
 Equivalent to <tt>nextInt()</tt>.
 This has the effect that distributions can now be used as function objects, returning a random number upon function evaluation.
 */
+@Override
 public int apply(int dummy) {
 	return nextInt();
 }
@@ -69,6 +71,7 @@ public int apply(int dummy) {
  *
  * @return a copy of the receiver.
  */
+@Override
 public Object clone() {
 	AbstractDistribution copy = (AbstractDistribution) super.clone();
 	if (this.randomGenerator != null) copy.randomGenerator = (RandomEngine) this.randomGenerator.clone();

@@ -13,7 +13,8 @@ abstract class Histogram implements hep.aida.IHistogram
 	{
 		this.title = title;
 	}
-	public String title()
+	@Override
+   public String title()
 	{
 		return title;
 	}

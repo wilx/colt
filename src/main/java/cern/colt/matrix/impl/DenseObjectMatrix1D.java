@@ -80,6 +80,7 @@ protected DenseObjectMatrix1D(int size, Object[] elements, int zero, int stride)
  * @return <tt>this</tt> (for convenience only).
  * @throws IllegalArgumentException if <tt>values.length != size()</tt>.
  */
+@Override
 public ObjectMatrix1D assign(Object[] values) {
 	if (isNoView) {
 		if (values.length != size) throw new IllegalArgumentException("Must have same number of cells: length="+values.length+"size()="+size());
@@ -108,6 +109,7 @@ For further examples, see the <a href="package-summary.html#FunctionObjects">pac
 @return <tt>this</tt> (for convenience only).
 @see cern.jet.math.Functions
 */
+@Override
 public ObjectMatrix1D assign(cern.colt.function.ObjectFunction function) {
 	int s=stride;
 	int i=index(0);
@@ -130,6 +132,7 @@ public ObjectMatrix1D assign(cern.colt.function.ObjectFunction function) {
  * @return <tt>this</tt> (for convenience only).
  * @throws	IllegalArgumentException if <tt>size() != other.size()</tt>.
  */
+@Override
 public ObjectMatrix1D assign(ObjectMatrix1D source) {
 	// overriden for performance only
 	if (! (source instanceof DenseObjectMatrix1D)) {
@@ -194,6 +197,7 @@ and as second argument the current cell's value of <tt>y</tt>,
 @throws	IllegalArgumentException if <tt>size() != y.size()</tt>.
 @see cern.jet.math.Functions
 */
+@Override
 public ObjectMatrix1D assign(ObjectMatrix1D y, cern.colt.function.ObjectObjectFunction function) {
 	// overriden for performance only
 	if (! (y instanceof DenseObjectMatrix1D)) {
@@ -228,6 +232,7 @@ public ObjectMatrix1D assign(ObjectMatrix1D y, cern.colt.function.ObjectObjectFu
  * @param     index   the index of the cell.
  * @return    the value of the specified cell.
  */
+@Override
 public Object getQuick(int index) {
 	//if (debug) if (index<0 || index>=size) checkIndex(index);
 	//return elements[index(index)];
@@ -237,6 +242,7 @@ public Object getQuick(int index) {
 /**
  * Returns <tt>true</tt> if both matrices share at least one identical cell.
  */
+@Override
 protected boolean haveSharedCellsRaw(ObjectMatrix1D other) {
 	if (other instanceof SelectedDenseObjectMatrix1D) {
 		SelectedDenseObjectMatrix1D otherMatrix = (SelectedDenseObjectMatrix1D) other;
@@ -254,6 +260,7 @@ protected boolean haveSharedCellsRaw(ObjectMatrix1D other) {
  *
  * @param     rank   the rank of the element.
  */
+@Override
 protected int index(int rank) {
 	// overriden for manual inlining only
 	//return _offset(_rank(rank));
@@ -268,6 +275,7 @@ protected int index(int rank) {
  * @param size the number of cell the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public ObjectMatrix1D like(int size) {
 	return new DenseObjectMatrix1D(size);
 }
@@ -280,6 +288,7 @@ public ObjectMatrix1D like(int size) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 public ObjectMatrix2D like2D(int rows, int columns) {
 	return new DenseObjectMatrix2D(rows,columns);
 }
@@ -293,6 +302,7 @@ public ObjectMatrix2D like2D(int rows, int columns) {
  * @param     index   the index of the cell.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int index, Object value) {
 	//if (debug) if (index<0 || index>=size) checkIndex(index);
 	//elements[index(index)] = value;
@@ -303,6 +313,7 @@ public void setQuick(int index, Object value) {
 Swaps each element <tt>this[i]</tt> with <tt>other[i]</tt>.
 @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
 */
+@Override
 public void swap(ObjectMatrix1D other) {
 	// overriden for performance only
 	if (! (other instanceof DenseObjectMatrix1D)) {
@@ -337,6 +348,7 @@ After this call returns the array <tt>values</tt> has the form
 
 @throws IllegalArgumentException if <tt>values.length < size()</tt>.
 */
+@Override
 public void toArray(Object[] values) {
 	if (values.length < size) throw new IllegalArgumentException("values too small");
 	if (this.isNoView) System.arraycopy(this.elements,0,values,0,this.elements.length);
@@ -348,6 +360,7 @@ public void toArray(Object[] values) {
  * @param offsets the offsets of the visible elements.
  * @return  a new view.
  */
+@Override
 protected ObjectMatrix1D viewSelectionLike(int[] offsets) {
 	return new SelectedDenseObjectMatrix1D(this.elements,offsets);
 }

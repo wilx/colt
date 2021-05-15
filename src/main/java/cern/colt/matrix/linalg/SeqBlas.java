@@ -35,36 +35,47 @@ public class SeqBlas implements Blas {
 Makes this class non instantiable, but still let's others inherit from it.
 */
 protected SeqBlas() {}
+@Override
 public void assign(DoubleMatrix2D A, cern.colt.function.DoubleFunction function) {
 	A.assign(function);
 }
+@Override
 public void assign(DoubleMatrix2D A, DoubleMatrix2D B, cern.colt.function.DoubleDoubleFunction function) {
 	A.assign(B,function);
 }
+@Override
 public double dasum(DoubleMatrix1D x) {
 	return x.aggregate(F.plus, F.abs);
 }
+@Override
 public void daxpy(double alpha, DoubleMatrix1D x, DoubleMatrix1D y) {
 	y.assign(x,F.plusMult(alpha));
 }
+@Override
 public void daxpy(double alpha, DoubleMatrix2D A, DoubleMatrix2D B) {
 	B.assign(A, F.plusMult(alpha));
 }
+@Override
 public void dcopy(DoubleMatrix1D x, DoubleMatrix1D y) {
 	y.assign(x);
 }
+@Override
 public void dcopy(DoubleMatrix2D A, DoubleMatrix2D B) {
 	B.assign(A);
 }
+@Override
 public double ddot(DoubleMatrix1D x, DoubleMatrix1D y) {
 	return x.zDotProduct(y);
 }
+@Override
 public void dgemm(boolean transposeA, boolean transposeB, double alpha, DoubleMatrix2D A, DoubleMatrix2D B, double beta, DoubleMatrix2D C) {
 	A.zMult(B,C,alpha,beta,transposeA,transposeB);
 }
+@Override
 public void dgemv(boolean transposeA, double alpha, DoubleMatrix2D A, DoubleMatrix1D x, double beta, DoubleMatrix1D y) {
 	A.zMult(x,y,alpha,beta,transposeA);
 }
+@Override
 public void dger(double alpha, DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix2D A) {
 	cern.jet.math.PlusMult fun = cern.jet.math.PlusMult.plusMult(0);
 	for (int i=A.rows(); --i >= 0; ) {
@@ -73,9 +84,11 @@ public void dger(double alpha, DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix2
 		
 	}
 }
+@Override
 public double dnrm2(DoubleMatrix1D x) {
 	return Math.sqrt(Algebra.DEFAULT.norm2(x));
 }
+@Override
 public void drot(DoubleMatrix1D x, DoubleMatrix1D y, double c, double s) {
 	x.checkSize(y);
 	DoubleMatrix1D tmp = x.copy();
@@ -86,6 +99,7 @@ public void drot(DoubleMatrix1D x, DoubleMatrix1D y, double c, double s) {
 	y.assign(F.mult(c));
 	y.assign(tmp,F.minusMult(s));
 }
+@Override
 public void drotg(double a, double b, double[] rotvec) {
 	double c,s,roe,scale,r,z,ra,rb;
 
@@ -125,22 +139,27 @@ public void drotg(double a, double b, double[] rotvec) {
 	rotvec[3] = s;
 
 }
+@Override
 public void dscal(double alpha, DoubleMatrix1D x) {
 	x.assign(F.mult(alpha));
 }
 
+@Override
 public void dscal(double alpha, DoubleMatrix2D A) {
 	A.assign(F.mult(alpha));
 }
 
+@Override
 public void dswap(DoubleMatrix1D x, DoubleMatrix1D y) {
 	y.swap(x);
 }
+@Override
 public void dswap(DoubleMatrix2D A, DoubleMatrix2D B) {
 	//B.swap(A); not yet implemented
 	A.checkShape(B);
 	for(int i = A.rows(); --i >= 0;) A.viewRow(i).swap(B.viewRow(i));
 }
+@Override
 public void dsymv(boolean isUpperTriangular, double alpha, DoubleMatrix2D A, DoubleMatrix1D x, double beta, DoubleMatrix1D y) {
 	if (isUpperTriangular) A = A.viewDice();
 	Property.DEFAULT.checkSquare(A);
@@ -161,6 +180,7 @@ public void dsymv(boolean isUpperTriangular, double alpha, DoubleMatrix2D A, Dou
 	}
 	y.assign(tmp);
 }
+@Override
 public void dtrmv(boolean isUpperTriangular, boolean transposeA, boolean isUnitTriangular, DoubleMatrix2D A, DoubleMatrix1D x) {
 	if (transposeA) {
 		A = A.viewDice();
@@ -201,6 +221,7 @@ public void dtrmv(boolean isUpperTriangular, boolean transposeA, boolean isUnitT
 	}
 	x.assign(b);
 }
+@Override
 public int idamax(DoubleMatrix1D x) {
 	int maxIndex = -1;
 	double maxValue = Double.MIN_VALUE;

@@ -120,6 +120,7 @@ public void beforeInsertAllOfFromTo(int index, ObjectArrayList other, int from, 
  * @param index index before which to insert dummies (must be in [0,size])..
  * @param length number of dummies to be inserted.
  */
+@Override
 protected void beforeInsertDummies(int index, int length) {
 	if (index > size || index < 0) 
 		throw new IndexOutOfBoundsException("Index: "+index+", Size: "+size);
@@ -237,6 +238,7 @@ public int binarySearchFromTo(Object key, int from, int to, java.util.Comparator
  *
  * @return  a copy of the receiver.
  */
+@Override
 public Object clone() {
 	ObjectArrayList v = (ObjectArrayList)super.clone();
 	v.elements = elements.clone();
@@ -549,6 +551,7 @@ public int lastIndexOfFromTo(Object element, int from, int to, boolean testForEq
  * @param to the index of the last element (inclusive) to be sorted.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public void mergeSortFromTo(int from, int to) {
 	if (size==0) return;
 	checkRangeFromTo(from, to, size);
@@ -627,6 +630,7 @@ public ObjectArrayList partFromTo(int from, int to) {
  * @param to the index of the last element (inclusive) to be sorted.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public void quickSortFromTo(int from, int to) {
 	if (size==0) return;
 	checkRangeFromTo(from, to, size);
@@ -694,6 +698,7 @@ public boolean removeAll(ObjectArrayList other, boolean testForEquality) {
  * @param to index of last element to be removed.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public void removeFromTo(int from, int to) {
 	checkRangeFromTo(from, to, size);
 	int numMoved = size - to - 1;
@@ -809,6 +814,7 @@ public void replaceFromToWithFromTo(int from, int to, ObjectArrayList other, int
  * @param other Collection to replace part of the receiver
  * @exception IndexOutOfBoundsException index is out of range (index &lt; 0 || index &gt;= size()).
  */
+@Override
 public void replaceFromWith(int from, java.util.Collection other) {
 	checkRange(from,size);
 	java.util.Iterator e = other.iterator();
@@ -849,6 +855,7 @@ public boolean retainAll(ObjectArrayList other, boolean testForEquality) {
  * Reverses the elements of the receiver.
  * Last becomes first, second last becomes second first, and so on.
  */
+@Override
 public void reverse() {
 	Object tmp;
 	int limit=size/2;
@@ -892,6 +899,7 @@ public void setQuick(int index, Object element) {
  * @param to the index of the last element (inclusive) to be permuted.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public void shuffleFromTo(int from, int to) {
 	if (size == 0) return;
 	checkRangeFromTo(from, to, size);
@@ -914,6 +922,7 @@ public void shuffleFromTo(int from, int to) {
  *
  * @returns  the number of elements contained in the receiver.
  */
+@Override
 public int size() {
 	return size;
 }
@@ -963,6 +972,7 @@ public Object[] toArray(Object[] array) {
 /**
  * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
  */
+@Override
 public java.util.ArrayList toList() {
 	int mySize = size();
 	Object[] theElements = elements;
@@ -982,6 +992,7 @@ public String toString() {
  * size. Releases any superfluos internal memory. An application can use this operation to minimize the 
  * storage of the receiver.
  */
+@Override
 public void trimToSize() {
 	elements = cern.colt.Arrays.trimToCapacity(elements,size());
 }

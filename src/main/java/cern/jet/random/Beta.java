@@ -292,6 +292,7 @@ private static double f(double x, double a, double b, double m) {
 /**
  * Returns a random number from the distribution.
  */
+@Override
 public double nextDouble() {
 	return nextDouble(alpha, beta);
 }

@@ -76,6 +76,7 @@ public static double logGamma(double xx) {
 /**
  * Returns a random number from the distribution.
  */
+@Override
 public int nextInt() {
 	return nextInt(this.mean);
 }

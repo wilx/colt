@@ -114,6 +114,7 @@ protected DenseDoubleMatrix2D(int rows, int columns, double[] elements, int rowZ
  * @return <tt>this</tt> (for convenience only).
  * @throws IllegalArgumentException if <tt>values.length != rows() || for any 0 &lt;= row &lt; rows(): values[row].length != columns()</tt>.
  */
+@Override
 public DoubleMatrix2D assign(double[][] values) {
 	if (this.isNoView) {
 		if (values.length != rows) throw new IllegalArgumentException("Must have same number of rows: rows="+values.length+"rows()="+rows());
@@ -135,6 +136,7 @@ public DoubleMatrix2D assign(double[][] values) {
  * @param    value the value to be filled into the cells.
  * @return <tt>this</tt> (for convenience only).
  */
+@Override
 public DoubleMatrix2D assign(double value) {
 	final double[] elems = this.elements;
 	int index = index(0,0);
@@ -171,6 +173,7 @@ For further examples, see the <a href="package-summary.html#FunctionObjects">pac
 @return <tt>this</tt> (for convenience only).
 @see cern.jet.math.Functions
 */
+@Override
 public DoubleMatrix2D assign(cern.colt.function.DoubleFunction function) {
 	final double[] elems = this.elements;
 	if (elems==null) throw new InternalError();
@@ -211,6 +214,7 @@ public DoubleMatrix2D assign(cern.colt.function.DoubleFunction function) {
  * @return <tt>this</tt> (for convenience only).
  * @throws	IllegalArgumentException if <tt>columns() != source.columns() || rows() != source.rows()</tt>
  */
+@Override
 public DoubleMatrix2D assign(DoubleMatrix2D source) {
 	// overriden for performance only
 	if (! (source instanceof DenseDoubleMatrix2D)) {
@@ -283,6 +287,7 @@ and as second argument the current cell's value of <tt>y</tt>,
 @throws	IllegalArgumentException if <tt>columns() != other.columns() || rows() != other.rows()</tt>
 @see cern.jet.math.Functions
 */
+@Override
 public DoubleMatrix2D assign(DoubleMatrix2D y, cern.colt.function.DoubleDoubleFunction function) {
 	// overriden for performance only
 	if (! (y instanceof DenseDoubleMatrix2D)) {
@@ -388,6 +393,7 @@ public DoubleMatrix2D assign(DoubleMatrix2D y, cern.colt.function.DoubleDoubleFu
  * @param     column   the index of the column-coordinate.
  * @return    the value at the specified coordinate.
  */
+@Override
 public double getQuick(int row, int column) {
 	//if (debug) if (column<0 || column>=columns || row<0 || row>=rows) throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
 	//return elements[index(row,column)];
@@ -403,6 +409,7 @@ public double getQuick(int row, int column) {
  * <li><tt>this == other</tt>
  * </ul>
  */
+@Override
 protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
 	if (other instanceof SelectedDenseDoubleMatrix2D) {
 		SelectedDenseDoubleMatrix2D otherMatrix = (SelectedDenseDoubleMatrix2D) other;
@@ -420,6 +427,7 @@ protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
  * @param     row   the index of the row-coordinate.
  * @param     column   the index of the column-coordinate.
  */
+@Override
 protected int index(int row, int column) {
 	// return super.index(row,column);
 	// manually inlined for speed:
@@ -435,6 +443,7 @@ protected int index(int row, int column) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public DoubleMatrix2D like(int rows, int columns) {
 	return new DenseDoubleMatrix2D(rows, columns);
 }
@@ -446,6 +455,7 @@ public DoubleMatrix2D like(int rows, int columns) {
  * @param size the number of cells the matrix shall have.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 public DoubleMatrix1D like1D(int size) {
 	return new DenseDoubleMatrix1D(size);
 }
@@ -459,6 +469,7 @@ public DoubleMatrix1D like1D(int size) {
  * @param stride the number of indexes between any two elements, i.e. <tt>index(i+1)-index(i)</tt>.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 protected DoubleMatrix1D like1D(int size, int zero, int stride) {
 	return new DenseDoubleMatrix1D(size,this.elements,zero,stride);
 }
@@ -473,6 +484,7 @@ protected DoubleMatrix1D like1D(int size, int zero, int stride) {
  * @param     column   the index of the column-coordinate.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int row, int column, double value) {
 	//if (debug) if (column<0 || column>=columns || row<0 || row>=rows) throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
 	//elements[index(row,column)] = value;
@@ -486,6 +498,7 @@ public void setQuick(int row, int column, double value) {
  * @param columnOffsets the offsets of the visible elements.
  * @return  a new view.
  */
+@Override
 protected DoubleMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
 	return new SelectedDenseDoubleMatrix2D(this.elements,rowOffsets,columnOffsets,0);
 }
@@ -543,6 +556,7 @@ C.zAssign8Neighbors(B,g); // fast, even though it doesn't look like it
 @throws NullPointerException if <tt>function==null</tt>.
 @throws IllegalArgumentException if <tt>rows() != B.rows() || columns() != B.columns()</tt>.
 */
+@Override
 public void zAssign8Neighbors(DoubleMatrix2D B, cern.colt.function.Double9Function function) {
 	// 1. using only 4-5 out of the 9 cells in "function" is *not* the limiting factor for performance.
 
@@ -608,6 +622,7 @@ public void zAssign8Neighbors(DoubleMatrix2D B, cern.colt.function.Double9Functi
 	}
 
 }
+@Override
 public DoubleMatrix1D zMult(DoubleMatrix1D y, DoubleMatrix1D z, double alpha, double beta, boolean transposeA) {
 	if (transposeA) return viewDice().zMult(y,z,alpha,beta,false);
 	if (z==null) z = new DenseDoubleMatrix1D(this.rows);
@@ -663,6 +678,7 @@ public DoubleMatrix1D zMult(DoubleMatrix1D y, DoubleMatrix1D z, double alpha, do
 
 	return z;
 }
+@Override
 public DoubleMatrix2D zMult(DoubleMatrix2D B, DoubleMatrix2D C, double alpha, double beta, boolean transposeA, boolean transposeB) {
 	// overriden for performance only
 	if (transposeA) return viewDice().zMult(B,C,alpha,beta,false,transposeB);
@@ -794,6 +810,7 @@ public DoubleMatrix2D zMult(DoubleMatrix2D B, DoubleMatrix2D C, double alpha, do
  * Returns the sum of all cells; <tt>Sum( x[i,j] )</tt>.
  * @return the sum.
  */
+@Override
 public double zSum() {
 	double sum = 0;
 	final double[] elems = this.elements;

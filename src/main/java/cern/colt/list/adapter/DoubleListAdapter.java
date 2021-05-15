@@ -41,6 +41,7 @@ public DoubleListAdapter(AbstractDoubleList content) {
  * @throws IndexOutOfBoundsException index is out of range (<tt>index &lt;
  *		  0 || index &gt; size()</tt>).
  */
+@Override
 public void add(int index, Object element) {
 	content.beforeInsert(index,value(element));
 	modCount++;
@@ -54,6 +55,7 @@ public void add(int index, Object element) {
  * @throws IndexOutOfBoundsException if the given index is out of range
  * 		  (<tt>index &lt; 0 || index &gt;= size()</tt>).
  */
+@Override
 public Object get(int index) {
 	return object(content.get(index));
 }
@@ -75,6 +77,7 @@ protected static Object object(double element) {
  * @throws IndexOutOfBoundsException if the specified index is out of
  * 		  range (<tt>index &lt; 0 || index &gt;= size()</tt>).
  */
+@Override
 public Object remove(int index) {
 	Object old = get(index);
 	content.remove(index);
@@ -98,6 +101,7 @@ public Object remove(int index) {
  *            range (<tt>index &lt; 0 || index &gt;= size()</tt>).
  */
 
+@Override
 public Object set(int index, Object element) {
 	Object old = get(index);
 	content.set(index,value(element));
@@ -108,6 +112,7 @@ public Object set(int index, Object element) {
  *
  * @return  the number of elements in this list.
  */
+@Override
 public int size() {
 	return content.size();
 }

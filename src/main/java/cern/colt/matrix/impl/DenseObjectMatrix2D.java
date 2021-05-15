@@ -113,6 +113,7 @@ protected DenseObjectMatrix2D(int rows, int columns, Object[] elements, int rowZ
  * @return <tt>this</tt> (for convenience only).
  * @throws IllegalArgumentException if <tt>values.length != rows() || for any 0 &lt;= row &lt; rows(): values[row].length != columns()</tt>.
  */
+@Override
 public ObjectMatrix2D assign(Object[][] values) {
 	if (this.isNoView) {
 		if (values.length != rows) throw new IllegalArgumentException("Must have same number of rows: rows="+values.length+"rows()="+rows());
@@ -151,6 +152,7 @@ For further examples, see the <a href="package-summary.html#FunctionObjects">pac
 @return <tt>this</tt> (for convenience only).
 @see cern.jet.math.Functions
 */
+@Override
 public ObjectMatrix2D assign(cern.colt.function.ObjectFunction function) {
 	final Object[] elems = this.elements;
 	if (elems==null) throw new InternalError();
@@ -177,6 +179,7 @@ public ObjectMatrix2D assign(cern.colt.function.ObjectFunction function) {
  * @return <tt>this</tt> (for convenience only).
  * @throws	IllegalArgumentException if <tt>columns() != source.columns() || rows() != source.rows()</tt>
  */
+@Override
 public ObjectMatrix2D assign(ObjectMatrix2D source) {
 	// overriden for performance only
 	if (! (source instanceof DenseObjectMatrix2D)) {
@@ -249,6 +252,7 @@ and as second argument the current cell's value of <tt>y</tt>,
 @throws	IllegalArgumentException if <tt>columns() != other.columns() || rows() != other.rows()</tt>
 @see cern.jet.math.Functions
 */
+@Override
 public ObjectMatrix2D assign(ObjectMatrix2D y, cern.colt.function.ObjectObjectFunction function) {
 	// overriden for performance only
 	if (! (y instanceof DenseObjectMatrix2D)) {
@@ -291,6 +295,7 @@ public ObjectMatrix2D assign(ObjectMatrix2D y, cern.colt.function.ObjectObjectFu
  * @param     column   the index of the column-coordinate.
  * @return    the value at the specified coordinate.
  */
+@Override
 public Object getQuick(int row, int column) {
 	//if (debug) if (column<0 || column>=columns || row<0 || row>=rows) throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
 	//return elements[index(row,column)];
@@ -306,6 +311,7 @@ public Object getQuick(int row, int column) {
  * <li><tt>this == other</tt>
  * </ul>
  */
+@Override
 protected boolean haveSharedCellsRaw(ObjectMatrix2D other) {
 	if (other instanceof SelectedDenseObjectMatrix2D) {
 		SelectedDenseObjectMatrix2D otherMatrix = (SelectedDenseObjectMatrix2D) other;
@@ -323,6 +329,7 @@ protected boolean haveSharedCellsRaw(ObjectMatrix2D other) {
  * @param     row   the index of the row-coordinate.
  * @param     column   the index of the column-coordinate.
  */
+@Override
 protected int index(int row, int column) {
 	// return super.index(row,column);
 	// manually inlined for speed:
@@ -338,6 +345,7 @@ protected int index(int row, int column) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public ObjectMatrix2D like(int rows, int columns) {
 	return new DenseObjectMatrix2D(rows, columns);
 }
@@ -349,6 +357,7 @@ public ObjectMatrix2D like(int rows, int columns) {
  * @param size the number of cells the matrix shall have.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 public ObjectMatrix1D like1D(int size) {
 	return new DenseObjectMatrix1D(size);
 }
@@ -362,6 +371,7 @@ public ObjectMatrix1D like1D(int size) {
  * @param stride the number of indexes between any two elements, i.e. <tt>index(i+1)-index(i)</tt>.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 protected ObjectMatrix1D like1D(int size, int zero, int stride) {
 	return new DenseObjectMatrix1D(size,this.elements,zero,stride);
 }
@@ -376,6 +386,7 @@ protected ObjectMatrix1D like1D(int size, int zero, int stride) {
  * @param     column   the index of the column-coordinate.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int row, int column, Object value) {
 	//if (debug) if (column<0 || column>=columns || row<0 || row>=rows) throw new IndexOutOfBoundsException("row:"+row+", column:"+column);
 	//elements[index(row,column)] = value;
@@ -389,6 +400,7 @@ public void setQuick(int row, int column, Object value) {
  * @param columnOffsets the offsets of the visible elements.
  * @return  a new view.
  */
+@Override
 protected ObjectMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {
 	return new SelectedDenseObjectMatrix2D(this.elements,rowOffsets,columnOffsets,0);
 }

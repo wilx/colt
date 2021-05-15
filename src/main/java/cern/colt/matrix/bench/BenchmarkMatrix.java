@@ -178,17 +178,21 @@ protected static String commands() {
 protected static Double2DProcedure fun_dgemm(final boolean transposeA, final boolean transposeB) {
 	return new Double2DProcedure() {
 		public String toString() { return "Blas matrix-matrix mult";	}
-		public void setParameters(DoubleMatrix2D G, DoubleMatrix2D H) {
+		@Override
+      public void setParameters(DoubleMatrix2D G, DoubleMatrix2D H) {
 			super.setParameters(G,H);
 			D = new cern.colt.matrix.impl.DenseDoubleMatrix2D(A.rows(),A.columns()).assign(0.5);
 			C = D.copy();
 			B = D.copy();
 		}
-		public void init() { C.assign(D); }
-		public void apply(cern.colt.Timer timer) { 
+		@Override
+      public void init() { C.assign(D); }
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			cern.colt.matrix.linalg.SmpBlas.smpBlas.dgemm(transposeA,transposeB,1,A,B,0,C); 
 		}
-		public double operations() { // Mflops
+		@Override
+      public double operations() { // Mflops
 			double m = A.rows();
 			double n = A.columns();
 			double p = B.columns();
@@ -202,17 +206,21 @@ protected static Double2DProcedure fun_dgemm(final boolean transposeA, final boo
 protected static Double2DProcedure fun_dgemv(final boolean transposeA) {
 	return new Double2DProcedure() { 
 		public String toString() { return "Blas matrix-vector mult";	}
-		public void setParameters(DoubleMatrix2D G, DoubleMatrix2D H) {
+		@Override
+      public void setParameters(DoubleMatrix2D G, DoubleMatrix2D H) {
 			super.setParameters(G,H);
 			D = new cern.colt.matrix.impl.DenseDoubleMatrix2D(A.rows(),A.columns()).assign(0.5);
 			C = D.copy();
 			B = D.copy();
 		}
-		public void init() { C.viewRow(0).assign(D.viewRow(0)); }
-		public void apply(cern.colt.Timer timer) { 
+		@Override
+      public void init() { C.viewRow(0).assign(D.viewRow(0)); }
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			cern.colt.matrix.linalg.SmpBlas.smpBlas.dgemv(transposeA,1,A,B.viewRow(0),0,C.viewRow(0)); 
 		}
-		public double operations() { // Mflops
+		@Override
+      public double operations() { // Mflops
 			double m = A.rows();
 			double n = A.columns();
 			//double p = B.columns();
@@ -227,7 +235,8 @@ protected static Double2DProcedure fun_pow(final int k) {
 	return new Double2DProcedure() {
 		public double dummy;
 		public String toString() { return "matrix to the power of an exponent";	}
-		public void setParameters(DoubleMatrix2D A, DoubleMatrix2D B) {
+		@Override
+      public void setParameters(DoubleMatrix2D A, DoubleMatrix2D B) {
 			if (k<0) { // must be nonsingular for inversion
 				if (!cern.colt.matrix.linalg.Property.ZERO.isDiagonallyDominantByRow(A) ||
 					!cern.colt.matrix.linalg.Property.ZERO.isDiagonallyDominantByColumn(A)) {
@@ -237,11 +246,14 @@ protected static Double2DProcedure fun_pow(final int k) {
 			}
 		}
 
-		public void init() {}		
-		public void apply(cern.colt.Timer timer) {
+		@Override
+      public void init() {}
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			cern.colt.matrix.linalg.Algebra.DEFAULT.pow(A,k);
 		}
-		public double operations() { // Mflops
+		@Override
+      public double operations() { // Mflops
 			double m = A.rows();
 			if (k==0) return m; // identity
 			double mflops = 0;
@@ -267,8 +279,10 @@ protected static Double2DProcedure fun_pow(final int k) {
 protected static Double2DProcedure funAssign() {
 	return new Double2DProcedure() {
 		public String toString() { return "A.assign(B) [Mops/sec]";	}
-		public void init() { A.assign(0); }		
-		public void apply(cern.colt.Timer timer) {
+		@Override
+      public void init() { A.assign(0); }
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			A.assign(B);
 		}
 	};
@@ -279,8 +293,10 @@ protected static Double2DProcedure funAssign() {
 protected static Double2DProcedure funAssignGetSet() {
 	return new Double2DProcedure() { 
 		public String toString() { return "A.assign(B) via get and set [Mops/sec]";	}
-		public void init() { A.assign(0); }		
-		public void apply(cern.colt.Timer timer) {
+		@Override
+      public void init() { A.assign(0); }
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			int rows=B.rows();
 			int columns=B.columns();
 			/*
@@ -304,8 +320,10 @@ protected static Double2DProcedure funAssignGetSet() {
 protected static Double2DProcedure funAssignGetSetQuick() {
 	return new Double2DProcedure() { 
 		public String toString() { return "A.assign(B) via getQuick and setQuick [Mops/sec]";	}
-		public void init() { A.assign(0); }		
-		public void apply(cern.colt.Timer timer) {
+		@Override
+      public void init() { A.assign(0); }
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			int rows=B.rows();
 			int columns=B.columns();
 			//for (int row=rows; --row >= 0; ) {
@@ -324,8 +342,10 @@ protected static Double2DProcedure funAssignGetSetQuick() {
 protected static Double2DProcedure funAssignLog() {
 	return new Double2DProcedure() { 
 		public String toString() { return "A[i,j] = log(A[i,j]) via Blas.assign(fun) [Mflops/sec]";	}
-		public void init() { A.assign(C); }		
-		public void apply(cern.colt.Timer timer) {
+		@Override
+      public void init() { A.assign(C); }
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			cern.colt.matrix.linalg.SmpBlas.smpBlas.assign(A,cern.jet.math.Functions.log);
 		}
 	};
@@ -336,11 +356,14 @@ protected static Double2DProcedure funAssignLog() {
 protected static Double2DProcedure funAssignPlusMult() {
 	return new Double2DProcedure() { 
 		public String toString() { return "A[i,j] = A[i,j] + s*B[i,j] via Blas.assign(fun) [Mflops/sec]";	}
-		public void init() { A.assign(C); }		
-		public void apply(cern.colt.Timer timer) {
+		@Override
+      public void init() { A.assign(C); }
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			cern.colt.matrix.linalg.SmpBlas.smpBlas.assign(A,B,cern.jet.math.Functions.plusMult(0.5));
 		}
-		public double operations() { // Mflops
+		@Override
+      public double operations() { // Mflops
 			double m = A.rows();
 			double n = A.columns();
 			return 2*m*n / 1.0E6; 
@@ -353,15 +376,19 @@ protected static Double2DProcedure funAssignPlusMult() {
 protected static Double2DProcedure funCorrelation() {
 	return new Double2DProcedure() { 
 		public String toString() { return "xxxxxxx";	}
-		public void init() {  }		
-		public void setParameters(DoubleMatrix2D A, DoubleMatrix2D B) {
+		@Override
+      public void init() {  }
+		@Override
+      public void setParameters(DoubleMatrix2D A, DoubleMatrix2D B) {
 			super.setParameters(A.viewDice(),B); // transposed --> faster (memory aware) iteration in correlation algo
 		}
-		public void apply(cern.colt.Timer timer) {
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			cern.colt.matrix.doublealgo.Statistic.correlation(
 				cern.colt.matrix.doublealgo.Statistic.covariance(A));
 		}
-		public double operations() { // Mflops
+		@Override
+      public double operations() { // Mflops
 			double m = A.rows();
 			double n = A.columns();
 			return m*(n*n + n) / 1.0E6; 
@@ -374,8 +401,10 @@ protected static Double2DProcedure funCorrelation() {
 protected static Double2DProcedure funElementwiseMult() {
 	return new Double2DProcedure() { 
 		public String toString() { return "A.assign(F.mult(0.5)) via Blas [Mflops/sec]";	}
-		public void init() { A.assign(C); }		
-		public void apply(cern.colt.Timer timer) {
+		@Override
+      public void init() { A.assign(C); }
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			cern.colt.matrix.linalg.SmpBlas.smpBlas.assign(A,cern.jet.math.Functions.mult(0.5));
 		}
 	};
@@ -386,8 +415,10 @@ protected static Double2DProcedure funElementwiseMult() {
 protected static Double2DProcedure funElementwiseMultB() {
 	return new Double2DProcedure() { 
 		public String toString() { return "A.assign(B,F.mult) via Blas [Mflops/sec]";	}
-		public void init() { A.assign(C); }		
-		public void apply(cern.colt.Timer timer) {
+		@Override
+      public void init() { A.assign(C); }
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			cern.colt.matrix.linalg.SmpBlas.smpBlas.assign(A,B,cern.jet.math.Functions.mult);
 		}
 	};
@@ -399,8 +430,10 @@ protected static Double2DProcedure funGetQuick() {
 	return new Double2DProcedure() {
 		public double dummy;
 		public String toString() { return "xxxxxxx";	}
-		public void init() {}		
-		public void apply(cern.colt.Timer timer) {
+		@Override
+      public void init() {}
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			int rows=B.rows();
 			int columns=B.columns();
 			double sum =0;
@@ -422,11 +455,14 @@ protected static Double2DProcedure funLUDecompose() {
 	return new Double2DProcedure() {
 		cern.colt.matrix.linalg.LUDecompositionQuick lu = new cern.colt.matrix.linalg.LUDecompositionQuick(0);
 		public String toString() { return "LU.decompose(A) [Mflops/sec]";	}
-		public void init() { A.assign(C); }
-		public void apply(cern.colt.Timer timer) { 
+		@Override
+      public void init() { A.assign(C); }
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			lu.decompose(A);	
 		}
-		public double operations() { // Mflops
+		@Override
+      public double operations() { // Mflops
 			double N = Math.min(A.rows(),A.columns());
 			return (2.0 * N*N*N / 3.0 / 1.0E6); 
 		}
@@ -439,7 +475,8 @@ protected static Double2DProcedure funLUSolve() {
 	return new Double2DProcedure() {
 		cern.colt.matrix.linalg.LUDecompositionQuick lu;
 		public String toString() { return "LU.solve(A) [Mflops/sec]";	}
-		public void setParameters(DoubleMatrix2D A, DoubleMatrix2D B) {
+		@Override
+      public void setParameters(DoubleMatrix2D A, DoubleMatrix2D B) {
 			lu = null;
 			if (!cern.colt.matrix.linalg.Property.ZERO.isDiagonallyDominantByRow(A) ||
 				!cern.colt.matrix.linalg.Property.ZERO.isDiagonallyDominantByColumn(A)) {
@@ -449,11 +486,14 @@ protected static Double2DProcedure funLUSolve() {
 			lu = new cern.colt.matrix.linalg.LUDecompositionQuick(0);
 			lu.decompose(A);
 		}
-		public void init() { B.assign(D); }
-		public void apply(cern.colt.Timer timer) { 
+		@Override
+      public void init() { B.assign(D); }
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			lu.solve(B);	
 		}
-		public double operations() { // Mflops
+		@Override
+      public double operations() { // Mflops
 			double n = A.columns();
 			double nx = B.columns();
 			return (2.0 * nx*(n*n + n) / 1.0E6); 
@@ -466,15 +506,19 @@ protected static Double2DProcedure funLUSolve() {
 protected static Double2DProcedure funMatMultLarge() {
 	return new Double2DProcedure() {
 		public String toString() { return "xxxxxxx";	}
-		public void setParameters(DoubleMatrix2D A, DoubleMatrix2D B) {
+		@Override
+      public void setParameters(DoubleMatrix2D A, DoubleMatrix2D B) {
 			// do not allocate mem for "D" --> safe some mem
 			this.A = A;
 			this.B = B;
 			this.C = A.copy();
 		}
-		public void init() { C.assign(0); }
-		public void apply(cern.colt.Timer timer) { A.zMult(B,C); }
-		public double operations() { // Mflops
+		@Override
+      public void init() { C.assign(0); }
+		@Override
+      public void apply(cern.colt.Timer timer) { A.zMult(B,C); }
+		@Override
+      public double operations() { // Mflops
 			double m = A.rows();
 			double n = A.columns();
 			double p = B.columns();
@@ -488,15 +532,19 @@ protected static Double2DProcedure funMatMultLarge() {
 protected static Double2DProcedure funMatVectorMult() {
 	return new Double2DProcedure() { 
 		public String toString() { return "xxxxxxx";	}
-		public void setParameters(DoubleMatrix2D G, DoubleMatrix2D H) {
+		@Override
+      public void setParameters(DoubleMatrix2D G, DoubleMatrix2D H) {
 			super.setParameters(G,H);
 			D = new cern.colt.matrix.impl.DenseDoubleMatrix2D(A.rows(),A.columns()).assign(0.5);
 			C = D.copy();
 			B = D.copy();
 		}
-		public void init() { C.viewRow(0).assign(D.viewRow(0)); }
-		public void apply(cern.colt.Timer timer) { A.zMult(B.viewRow(0),C.viewRow(0)); }
-		public double operations() { // Mflops
+		@Override
+      public void init() { C.viewRow(0).assign(D.viewRow(0)); }
+		@Override
+      public void apply(cern.colt.Timer timer) { A.zMult(B.viewRow(0),C.viewRow(0)); }
+		@Override
+      public double operations() { // Mflops
 			double m = A.rows();
 			double n = A.columns();
 			//double p = B.columns();
@@ -512,13 +560,15 @@ protected static Double2DProcedure funSetQuick() {
 		private int current;
 		private double density;
 		public String toString() { return "xxxxxxx";	}
-		public void init() { 
+		@Override
+      public void init() {
 			A.assign(0);
 			int seed = 123456;
 			current = 4*seed+1;
 			density = A.cardinality() / (double) A.size();
 		}		
-		public void apply(cern.colt.Timer timer) {
+		@Override
+      public void apply(cern.colt.Timer timer) {
 			int rows=B.rows();
 			int columns=B.columns();
 			//for (int row=rows; --row >= 0; ) {
@@ -549,9 +599,12 @@ protected static Double2DProcedure funSOR5() {
 		final double beta = 1-omega;
 		cern.colt.function.Double9Function function = (a00, a01, a02, a10, a11, a12, a20, a21, a22) -> alpha*a11 + beta*(a01+a10+a12+a21);
 		public String toString() { return "A.zAssign8Neighbors(5 point function) [Mflops/sec]";	}
-		public void init() { B.assign(D); }
-		public void apply(cern.colt.Timer timer) { A.zAssign8Neighbors(B,function); }
-		public double operations() { // Mflops
+		@Override
+      public void init() { B.assign(D); }
+		@Override
+      public void apply(cern.colt.Timer timer) { A.zAssign8Neighbors(B,function); }
+		@Override
+      public double operations() { // Mflops
 			double n = A.columns();
 			double m = A.rows();
 			return 6.0 * m*n / 1.0E6; 
@@ -569,9 +622,12 @@ protected static Double2DProcedure funSOR8() {
 		final double beta = 1-omega;
 		cern.colt.function.Double9Function function = (a00, a01, a02, a10, a11, a12, a20, a21, a22) -> alpha*a11 + beta*(a00+a10+a20+a01+a21+a02+a12+a22);
 		public String toString() { return "A.zAssign8Neighbors(9 point function) [Mflops/sec]";	}
-		public void init() { B.assign(D); }
-		public void apply(cern.colt.Timer timer) { A.zAssign8Neighbors(B,function); }
-		public double operations() { // Mflops
+		@Override
+      public void init() { B.assign(D); }
+		@Override
+      public void apply(cern.colt.Timer timer) { A.zAssign8Neighbors(B,function); }
+		@Override
+      public double operations() { // Mflops
 			double n = A.columns();
 			double m = A.rows();
 			return 10.0 * m*n / 1.0E6; 
@@ -584,8 +640,10 @@ protected static Double2DProcedure funSOR8() {
 protected static Double2DProcedure funSort() {
 	return new Double2DProcedure() { 
 		public String toString() { return "xxxxxxx";	}
-		public void init() { A.assign(C); }
-		public void apply(cern.colt.Timer timer) { A.viewSorted(0); }
+		@Override
+      public void init() { A.assign(C); }
+		@Override
+      public void apply(cern.colt.Timer timer) { A.viewSorted(0); }
 	};
 }
 /**

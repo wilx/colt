@@ -75,7 +75,8 @@ public class Statistic {
 	 */ 
 	public static final VectorVectorFunction CANBERRA = new VectorVectorFunction() {
 		DoubleDoubleFunction fun = (a, b) -> Math.abs(a-b) / Math.abs(a+b);
-		public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {	
+		@Override
+      public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
 			return a.aggregate(b, F.plus, fun);
 		}
 	};

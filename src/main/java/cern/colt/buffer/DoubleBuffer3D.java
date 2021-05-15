@@ -62,6 +62,7 @@ public void add(double x, double y, double z) {
  * @param yElements the y-coordinates of the points.
  * @param zElements the y-coordinates of the points.
  */
+@Override
 public void addAllOf(DoubleArrayList xElements, DoubleArrayList yElements, DoubleArrayList zElements) {
 	int listSize = xElements.size();
 	if (this.size + listSize >= this.capacity) flush();

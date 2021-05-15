@@ -251,6 +251,7 @@ protected int generateBinomial(int n, double p) {
 /**
  * Returns a random number from the distribution.
  */
+@Override
 public int nextInt() {
 	return generateBinomial(n,p);
 }

@@ -61,6 +61,7 @@ public double cdf(int k) {
  *
  * @return a copy of the receiver.
  */
+@Override
 public Object clone() {
 	NegativeBinomial copy = (NegativeBinomial) super.clone();
 	if (this.poisson != null) copy.poisson = (Poisson) this.poisson.clone();
@@ -72,6 +73,7 @@ public Object clone() {
 /**
  * Returns a random number from the distribution.
  */
+@Override
 public int nextInt() {
 	return nextInt(n,p);
 }

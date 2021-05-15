@@ -85,6 +85,7 @@ public void beforeInsertAllOfFromTo(int index, AbstractFloatList other, int from
  * @param length number of dummy elements to be inserted.
  * @throws IndexOutOfBoundsException if <tt>index &lt; 0 || index &gt; size()</tt>.
  */
+@Override
 protected void beforeInsertDummies(int index, int length) {
 	if (index > size || index < 0) 
 		throw new IndexOutOfBoundsException("Index: "+index+", Size: "+size);
@@ -157,6 +158,7 @@ public int binarySearchFromTo(float key, int from, int to) {
  *
  * @return  a deep copy of the receiver.
  */
+@Override
 public Object clone() {
 	return partFromTo(0,size-1);
 }
@@ -354,6 +356,7 @@ public int lastIndexOfFromTo(float element, int from, int to) {
  * @param to the index of the last element (inclusive) to be sorted.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public void mergeSortFromTo(int from, int to) {
 	int mySize = size();
 	checkRangeFromTo(from, to, mySize);
@@ -432,6 +435,7 @@ public AbstractFloatList partFromTo(int from, int to) {
  * @param to the index of the last element (inclusive) to be sorted.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public void quickSortFromTo(int from, int to) {
 	int mySize = size();
 	checkRangeFromTo(from, to, mySize);
@@ -507,6 +511,7 @@ public boolean removeAll(AbstractFloatList other) {
  * @param to index of last element to be removed.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public void removeFromTo(int from, int to) {
 	checkRangeFromTo(from, to, size);
 	int numMoved = size - to - 1;
@@ -629,6 +634,7 @@ public void replaceFromToWithFromTo(int from, int to, AbstractFloatList other, i
  * @param other Collection to replace part of the receiver
  * @exception IndexOutOfBoundsException index is out of range (index &lt; 0 || index &gt;= size()).
  */
+@Override
 public void replaceFromWith(int from, java.util.Collection other) {
 	checkRange(from,size());
 	java.util.Iterator e = other.iterator();
@@ -665,6 +671,7 @@ public boolean retainAll(AbstractFloatList other) {
  * Reverses the elements of the receiver.
  * Last becomes first, second last becomes second first, and so on.
  */
+@Override
 public void reverse() {
 	float tmp;
 	int limit=size()/2;
@@ -725,6 +732,7 @@ protected void setSizeRaw(int newSize) {
  * @param to the index of the last element (inclusive) to be permuted.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public void shuffleFromTo(int from, int to) {
 	checkRangeFromTo(from, to, size());
 	
@@ -743,6 +751,7 @@ public void shuffleFromTo(int from, int to) {
  *
  * @returns  the number of elements contained in the receiver.
  */
+@Override
 public int size() {
 	return size;
 }
@@ -760,6 +769,7 @@ public AbstractFloatList times(int times) {
 /**
  * Returns a <code>java.util.ArrayList</code> containing all the elements in the receiver.
  */
+@Override
 public java.util.ArrayList toList() {
 	int mySize = size();
 	java.util.ArrayList list = new java.util.ArrayList(mySize);

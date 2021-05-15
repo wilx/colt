@@ -136,6 +136,7 @@ public RandomSampler(long n, long N, long low, RandomEngine randomGenerator) {
 /**
  * Returns a deep copy of the receiver.
  */
+@Override
 public Object clone() {
 	RandomSampler copy = (RandomSampler) super.clone();
 	copy.my_RandomGenerator = (RandomEngine) this.my_RandomGenerator.clone();

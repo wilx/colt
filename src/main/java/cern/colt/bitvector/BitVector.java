@@ -69,7 +69,8 @@ public class BitVector extends cern.colt.PersistentObject {
 	// IntProcedure for method indexOfFromTo(...)
 	private static class IndexProcedure implements cern.colt.function.IntProcedure {
 			private int foundPos = -1;
-			public boolean apply(int index) {
+			@Override
+         public boolean apply(int index) {
 				foundPos = index; 
 				return false;
 			}
@@ -203,6 +204,7 @@ public void clear(int bitIndex) {
  *
  * @return  a deep copy of this bit vector.
  */
+@Override
 public Object clone() {
 	BitVector clone = (BitVector) super.clone();
 	if (this.bits != null) clone.bits = this.bits.clone();

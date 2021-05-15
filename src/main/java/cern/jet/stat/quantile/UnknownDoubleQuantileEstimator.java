@@ -60,6 +60,7 @@ public UnknownDoubleQuantileEstimator(int b, int k, int h, double precomputeEpsi
 /**
  * Not yet commented.
  */
+@Override
 protected DoubleBuffer[] buffersToCollapse() {
 	DoubleBuffer[] fullBuffers = bufferSet._getFullOrPartialBuffers();
 
@@ -77,6 +78,7 @@ protected DoubleBuffer[] buffersToCollapse() {
  * Removes all elements from the receiver.  The receiver will
  * be empty after this call returns, and its memory requirements will be close to zero.
  */
+@Override
 public synchronized void clear() {
 	super.clear();
 	this.currentTreeHeight = 1;
@@ -87,6 +89,7 @@ public synchronized void clear() {
  *
  * @return a deep copy of the receiver.
  */
+@Override
 public Object clone() {
 	UnknownDoubleQuantileEstimator copy = (UnknownDoubleQuantileEstimator) super.clone();
 	if (this.sampler != null) copy.sampler = (WeightedRandomSampler) copy.sampler.clone();
@@ -95,6 +98,7 @@ public Object clone() {
 /**
  * Not yet commented.
  */
+@Override
 protected void newBuffer() {
 	currentBufferToFill = bufferSet._getFirstEmptyBuffer();
 	if (currentBufferToFill==null) throw new RuntimeException("Oops, no empty buffer.");
@@ -105,6 +109,7 @@ protected void newBuffer() {
 /**
  * Not yet commented.
  */
+@Override
 protected void postCollapse(DoubleBuffer[] toCollapse) {
 	if (toCollapse.length == bufferSet.b()) { //delta for unknown finder
 		currentTreeHeight++;
@@ -118,6 +123,7 @@ protected void postCollapse(DoubleBuffer[] toCollapse) {
  * @param phis the quantiles for which elements are to be computed. Each phi must be in the interval (0.0,1.0]. <tt>phis</tt> must be sorted ascending.
  * @return the approximate quantile elements.
  */
+@Override
 public DoubleArrayList quantileElements(DoubleArrayList phis) {
 	if (precomputeEpsilon<=0.0) return super.quantileElements(phis);
 	
@@ -146,6 +152,7 @@ public DoubleArrayList quantileElements(DoubleArrayList phis) {
 /**
  * Not yet commented.
  */
+@Override
 protected boolean sampleNextElement() {
 	return sampler.sampleNextElement();
 }

@@ -52,6 +52,7 @@ public BooleanArrayList(int initialCapacity) {
  *
  * @param element element to be appended to this list.
  */
+@Override
 public void add(boolean element) {
 	// overridden for performance only.
 	if (size == elements.length) {
@@ -68,6 +69,7 @@ public void add(boolean element) {
  * @param element element to be inserted.
  * @exception IndexOutOfBoundsException index is out of range (<tt>index &lt; 0 || index &gt; size()</tt>).
  */
+@Override
 public void beforeInsert(int index, boolean element) {
 	// overridden for performance only.
 	if (index > size || index < 0) 
@@ -82,6 +84,7 @@ public void beforeInsert(int index, boolean element) {
  *
  * @return  a deep copy of the receiver.
  */
+@Override
 public Object clone() {
 	// overridden for performance only.
 	BooleanArrayList clone = new BooleanArrayList(elements.clone());
@@ -125,6 +128,7 @@ public void countSortFromTo(int from, int to) {
  *
  * @return the elements currently stored.
  */
+@Override
 public boolean[] elements() {
 	return elements;
 }
@@ -138,6 +142,7 @@ public boolean[] elements() {
  * @param elements the new elements to be stored.
  * @return the receiver itself.
  */
+@Override
 public AbstractBooleanList elements(boolean[] elements) {
 	this.elements=elements;
 	this.size=elements.length;
@@ -149,6 +154,7 @@ public AbstractBooleanList elements(boolean[] elements) {
  *
  * @param   minCapacity   the desired minimum capacity.
  */
+@Override
 public void ensureCapacity(int minCapacity) {
 	elements = cern.colt.Arrays.ensureCapacity(elements,minCapacity);
 }
@@ -182,6 +188,7 @@ public boolean equals(Object otherObj) { //delta
  * @param procedure    the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise continues. 
  * @return <tt>false</tt> if the procedure stopped before all elements where iterated over, <tt>true</tt> otherwise. 
  */
+@Override
 public boolean forEach(BooleanProcedure procedure) {
 	// overridden for performance only.
 	boolean[] theElements = elements;
@@ -197,6 +204,7 @@ public boolean forEach(BooleanProcedure procedure) {
  * @exception IndexOutOfBoundsException index is out of range (index
  * 		  &lt; 0 || index &gt;= size()).
  */
+@Override
 public boolean get(int index) {
 	// overridden for performance only.
 	if (index >= size || index < 0)
@@ -211,6 +219,7 @@ public boolean get(int index) {
  *
  * @param index index of element to return.
  */
+@Override
 public boolean getQuick(int index) {
 	return elements[index];
 }
@@ -226,6 +235,7 @@ public boolean getQuick(int index) {
  * @return  the index of the first occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public int indexOfFromTo(boolean element, int from, int to) {
 	// overridden for performance only.
 	if (size==0) return -1;
@@ -249,6 +259,7 @@ public int indexOfFromTo(boolean element, int from, int to) {
  * @return  the index of the last occurrence of the element in the receiver; returns <code>-1</code> if the element is not found.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public int lastIndexOfFromTo(boolean element, int from, int to) {
 	// overridden for performance only.
 	if (size==0) return -1;
@@ -270,6 +281,7 @@ public int lastIndexOfFromTo(boolean element, int from, int to) {
  * @param to the index of the last element (inclusive) to be sorted.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public void mergeSortFromTo(int from, int to) {
 	countSortFromTo(from, to);
 }
@@ -280,6 +292,7 @@ public void mergeSortFromTo(int from, int to) {
  * @return a new list
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public AbstractBooleanList partFromTo(int from, int to) {
 	if (size==0) return new BooleanArrayList(0);
 
@@ -299,6 +312,7 @@ public AbstractBooleanList partFromTo(int from, int to) {
  * @param to the index of the last element (inclusive) to be sorted.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public void quickSortFromTo(int from, int to) {
 	countSortFromTo(from, to);
 }
@@ -309,6 +323,7 @@ public void quickSortFromTo(int from, int to) {
 * @param other the other list.
 * @return <code>true</code> if the receiver changed as a result of the call.
 */
+@Override
 public boolean removeAll(AbstractBooleanList other) {
 	// overridden for performance only.
 	if (! (other instanceof BooleanArrayList))	return super.removeAll(other);
@@ -361,6 +376,7 @@ public boolean removeAll(AbstractBooleanList other) {
  * @param other list holding elements to be copied into the receiver.
  * @param otherFrom position of first element within other list to be copied.
  */
+@Override
 public void replaceFromToWithFrom(int from, int to, AbstractBooleanList other, int otherFrom) {
 	// overridden for performance only.
 	if (! (other instanceof BooleanArrayList)) {
@@ -382,6 +398,7 @@ public void replaceFromToWithFrom(int from, int to, AbstractBooleanList other, i
 * @param other the other list to test against.
 * @return <code>true</code> if the receiver changed as a result of the call.
 */
+@Override
 public boolean retainAll(AbstractBooleanList other) {
 	// overridden for performance only.
 	if (! (other instanceof BooleanArrayList))	return super.retainAll(other);
@@ -427,6 +444,7 @@ public boolean retainAll(AbstractBooleanList other) {
  * Reverses the elements of the receiver.
  * Last becomes first, second last becomes second first, and so on.
  */
+@Override
 public void reverse() {
 	// overridden for performance only.
 	boolean tmp;
@@ -448,6 +466,7 @@ public void reverse() {
  * @exception IndexOutOfBoundsException index is out of range (index
  * 		  &lt; 0 || index &gt;= size()).
  */
+@Override
 public void set(int index, boolean element) {
 	// overridden for performance only.
 	if (index >= size || index < 0)
@@ -463,6 +482,7 @@ public void set(int index, boolean element) {
  * @param index index of element to replace.
  * @param element element to be stored at the specified position.
  */
+@Override
 public void setQuick(int index, boolean element) {
 	elements[index] = element;
 }
@@ -472,6 +492,7 @@ public void setQuick(int index, boolean element) {
  * @param to the index of the last element (inclusive) to be permuted.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public void shuffleFromTo(int from, int to) {
 	// overridden for performance only.
 	if (size==0) {return;}
@@ -499,6 +520,7 @@ public void shuffleFromTo(int from, int to) {
  * @param to the index of the last element (inclusive) to be sorted.
  * @exception IndexOutOfBoundsException index is out of range (<tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>).
  */
+@Override
 public void sortFromTo(int from, int to) {
 	countSortFromTo(from, to);
 }
@@ -507,6 +529,7 @@ public void sortFromTo(int from, int to) {
  * size. Releases any superfluos internal memory. An application can use this operation to minimize the 
  * storage of the receiver.
  */
+@Override
 public void trimToSize() {
 	elements = cern.colt.Arrays.trimToCapacity(elements,size());
 }

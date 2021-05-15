@@ -161,6 +161,7 @@ public RCDoubleMatrix2D(int rows, int columns) {
  * @param    value the value to be filled into the cells.
  * @return <tt>this</tt> (for convenience only).
  */
+@Override
 public DoubleMatrix2D assign(double value) {
 	// overriden for performance only
 	if (value==0) {
@@ -171,6 +172,7 @@ public DoubleMatrix2D assign(double value) {
 	else super.assign(value);
 	return this;
 }
+@Override
 public DoubleMatrix2D assign(final cern.colt.function.DoubleFunction function) {
 	if (function instanceof cern.jet.math.Mult) { // x[i] = mult*x[i]
 		final double alpha = ((cern.jet.math.Mult) function).multiplicator;
@@ -207,6 +209,7 @@ public DoubleMatrix2D assign(final cern.colt.function.DoubleFunction function) {
  * @return <tt>this</tt> (for convenience only).
  * @throws	IllegalArgumentException if <tt>columns() != source.columns() || rows() != source.rows()</tt>
  */
+@Override
 public DoubleMatrix2D assign(DoubleMatrix2D source) {
 	if (source==this) return this; // nothing to do
 	checkShape(source);
@@ -253,6 +256,7 @@ public DoubleMatrix2D assign(DoubleMatrix2D source) {
 	
 	return this;
 }
+@Override
 public DoubleMatrix2D assign(DoubleMatrix2D y, cern.colt.function.DoubleDoubleFunction function) {
 	checkShape(y);
 
@@ -300,6 +304,7 @@ public DoubleMatrix2D assign(DoubleMatrix2D y, cern.colt.function.DoubleDoubleFu
 	
 	return super.assign(y,function);
 }
+@Override
 public DoubleMatrix2D forEachNonZero(final cern.colt.function.IntIntDoubleFunction function) {
 	int[] idx = indexes.elements();
 	double[] vals = values.elements();
@@ -319,6 +324,7 @@ public DoubleMatrix2D forEachNonZero(final cern.colt.function.IntIntDoubleFuncti
  * Returns the content of this matrix if it is a wrapper; or <tt>this</tt> otherwise.
  * Override this method in wrappers.
  */
+@Override
 protected DoubleMatrix2D getContent() {
 	return this;
 }
@@ -333,6 +339,7 @@ protected DoubleMatrix2D getContent() {
  * @param     column   the index of the column-coordinate.
  * @return    the value at the specified coordinate.
  */
+@Override
 public double getQuick(int row, int column) {
 	int k = indexes.binarySearchFromTo(column,starts[row],starts[row+1]-1);
 	double v = 0;
@@ -354,6 +361,7 @@ protected void insert(int row, int column, int index, double value) {
  * @param columns the number of columns the matrix shall have.
  * @return  a new empty matrix of the same dynamic type.
  */
+@Override
 public DoubleMatrix2D like(int rows, int columns) {
 	return new RCDoubleMatrix2D(rows,columns);
 }
@@ -365,6 +373,7 @@ public DoubleMatrix2D like(int rows, int columns) {
  * @param size the number of cells the matrix shall have.
  * @return  a new matrix of the corresponding dynamic type.
  */
+@Override
 public DoubleMatrix1D like1D(int size) {
 	return new SparseDoubleMatrix1D(size);
 }
@@ -384,6 +393,7 @@ protected void remove(int row, int index) {
  * @param     column   the index of the column-coordinate.
  * @param    value the value to be filled into the specified cell.
  */
+@Override
 public void setQuick(int row, int column, double value) {
 	int k = indexes.binarySearchFromTo(column,starts[row],starts[row+1]-1);
 	if (k>=0) { // found
@@ -399,10 +409,12 @@ public void setQuick(int row, int column, double value) {
 		insert(row,column,k,value);
 	}
 }
+@Override
 public void trimToSize() {
 	indexes.trimToSize();
 	values.trimToSize();
 }
+@Override
 public DoubleMatrix1D zMult(DoubleMatrix1D y, DoubleMatrix1D z, double alpha, double beta, boolean transposeA) {
 	int m = rows;
 	int n = columns;
@@ -476,6 +488,7 @@ public DoubleMatrix1D zMult(DoubleMatrix1D y, DoubleMatrix1D z, double alpha, do
 	
 	return z;
 }
+@Override
 public DoubleMatrix2D zMult(DoubleMatrix2D B, DoubleMatrix2D C, final double alpha, double beta, boolean transposeA, boolean transposeB) {
 	if (transposeB) B = B.viewDice();
 	int m = rows;

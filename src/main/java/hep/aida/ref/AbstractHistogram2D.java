@@ -17,7 +17,8 @@ abstract class AbstractHistogram2D extends Histogram implements IHistogram2D
 	{
 		super(title);
 	}
-	public int allEntries()
+	@Override
+   public int allEntries()
 	{
 		int n = 0;
 		for (int i=xAxis.bins(); --i >= -2;)
@@ -27,27 +28,33 @@ abstract class AbstractHistogram2D extends Histogram implements IHistogram2D
 		}
 		return n;
 	}
-	public int binEntriesX(int indexX)
+	@Override
+   public int binEntriesX(int indexX)
 	{
 	    return projectionX().binEntries(indexX);
 	}
-	public int binEntriesY(int indexY)
+	@Override
+   public int binEntriesY(int indexY)
 	{
 	    return projectionY().binEntries(indexY);
 	}
-	public double binHeightX(int indexX)
+	@Override
+   public double binHeightX(int indexX)
 	{
 	    return projectionX().binHeight(indexX);
 	}
-	public double binHeightY(int indexY)
+	@Override
+   public double binHeightY(int indexY)
 	{
 	    return projectionY().binHeight(indexY);
 	}
-	public int dimensions()
+	@Override
+   public int dimensions()
 	{
 		return 2;
 	}
-	public int entries()
+	@Override
+   public int entries()
 	{
 		int n = 0;
 		for (int i=0; i<xAxis.bins(); i++)
@@ -57,11 +64,13 @@ abstract class AbstractHistogram2D extends Histogram implements IHistogram2D
 		}
 		return n;
 	}
-	public int extraEntries()
+	@Override
+   public int extraEntries()
 	{
 		return allEntries() - entries();
 	}
-	public void fill(double x, double y)
+	@Override
+   public void fill(double x, double y)
 	{
 		fill(x,y,1);
 	}
@@ -113,7 +122,8 @@ abstract class AbstractHistogram2D extends Histogram implements IHistogram2D
 		if (index == IHistogram.OVERFLOW) return bins-1;
 		throw new IllegalArgumentException("bin="+index);
 	}
-	public int[] minMaxBins()
+	@Override
+   public int[] minMaxBins()
 	{
 		double minValue = Double.MAX_VALUE;
 		double maxValue = Double.MIN_VALUE;
@@ -139,26 +149,30 @@ abstract class AbstractHistogram2D extends Histogram implements IHistogram2D
 		int[] result = {minBinX,minBinY, maxBinX,maxBinY};
 		return result;
 	}
-	public IHistogram1D projectionX()
+	@Override
+   public IHistogram1D projectionX()
 	{
 		String newTitle = title() + " (projectionX)";
 		//return internalSliceX(newTitle,yAxis.under,yAxis.over);
 		return internalSliceX(newTitle,mapY(IHistogram.UNDERFLOW),mapY(IHistogram.OVERFLOW));
 	}
-	public IHistogram1D projectionY()
+	@Override
+   public IHistogram1D projectionY()
 	{
 		String newTitle = title() + " (projectionY)";
 		//return internalSliceY(newTitle,xAxis.under,xAxis.over);
 		return internalSliceY(newTitle,mapX(IHistogram.UNDERFLOW),mapX(IHistogram.OVERFLOW));
 	}
-	public IHistogram1D sliceX(int indexY)
+	@Override
+   public IHistogram1D sliceX(int indexY)
 	{
 		//int start = yAxis.map(indexY);
 		int start = mapY(indexY);
 		String newTitle = title() + " (sliceX ["+indexY+"])";
 		return internalSliceX(newTitle,start,start);
 	}
-	public IHistogram1D sliceX(int indexY1, int indexY2)
+	@Override
+   public IHistogram1D sliceX(int indexY1, int indexY2)
 	{
 		//int start = yAxis.map(indexY1);
 		//int stop = yAxis.map(indexY2);
@@ -167,14 +181,16 @@ abstract class AbstractHistogram2D extends Histogram implements IHistogram2D
 		String newTitle = title() + " (sliceX ["+indexY1+":"+indexY2+"])";
 		return internalSliceX(newTitle,start,stop);
 	}
-	public IHistogram1D sliceY(int indexX)
+	@Override
+   public IHistogram1D sliceY(int indexX)
 	{
 		//int start = xAxis.map(indexX);
 		int start = mapX(indexX);
 		String newTitle = title() + " (sliceY ["+indexX+"])";
 		return internalSliceY(newTitle,start,start);
 	}
-	public IHistogram1D sliceY(int indexX1, int indexX2)
+	@Override
+   public IHistogram1D sliceY(int indexX1, int indexX2)
 	{
 		//int start = xAxis.map(indexX1);
 		//int stop = xAxis.map(indexX2);
@@ -183,7 +199,8 @@ abstract class AbstractHistogram2D extends Histogram implements IHistogram2D
 		String newTitle = title() + " (slicey ["+indexX1+":"+indexX2+"])";
 		return internalSliceY(newTitle,start,stop);
 	}
-	public double sumAllBinHeights()
+	@Override
+   public double sumAllBinHeights()
 	{
 		double n = 0;
 		for (int i=xAxis.bins(); --i >= -2;)
@@ -193,7 +210,8 @@ abstract class AbstractHistogram2D extends Histogram implements IHistogram2D
 		}
 		return n;
 	}
-	public double sumBinHeights()
+	@Override
+   public double sumBinHeights()
 	{
 		double n = 0;
 		for (int i=0; i<xAxis.bins(); i++)
@@ -203,15 +221,18 @@ abstract class AbstractHistogram2D extends Histogram implements IHistogram2D
 		}
 		return n;
 	}
-	public double sumExtraBinHeights()
+	@Override
+   public double sumExtraBinHeights()
 	{
 		return sumAllBinHeights() - sumBinHeights();
 	}
-	public IAxis xAxis()
+	@Override
+   public IAxis xAxis()
 	{
 		return xAxis;
 	}
-	public IAxis yAxis()
+	@Override
+   public IAxis yAxis()
 	{
 		return yAxis;
 	}

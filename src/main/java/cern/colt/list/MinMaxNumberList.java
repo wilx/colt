@@ -85,6 +85,7 @@ public MinMaxNumberList(long minimum, long maximum, int initialCapacity) {
  *
  * @param element element to be appended to this list.
  */
+@Override
 public void add(long element) {
 	// overridden for performance only.
 	if (size == capacity) {
@@ -146,6 +147,7 @@ public static int bitsPerElement(long minimum, long maximum) {
  *
  * @param   minCapacity   the desired minimum capacity.
  */
+@Override
 public void ensureCapacity(int minCapacity) {
 	int oldCapacity = capacity;
 	if (minCapacity > oldCapacity) {
@@ -165,6 +167,7 @@ public void ensureCapacity(int minCapacity) {
  *
  * @param index index of element to return.
  */
+@Override
 public long getQuick(int index) {
 	int i=index*this.bitsPerElement;
 	return this.minValue + QuickBitVector.getLongFromTo(this.bits, i,i+this.bitsPerElement-1);
@@ -214,6 +217,7 @@ public void partFromTo(final int from, final int to, final BitVector qualificant
  * @param index index of element to replace.
  * @param element element to be stored at the specified position.
  */
+@Override
 public void setQuick(int index, long element) {
 	int i=index*this.bitsPerElement;
 	QuickBitVector.putLongFromTo(this.bits, element-this.minValue,i,i+this.bitsPerElement-1);
@@ -222,6 +226,7 @@ public void setQuick(int index, long element) {
  * Sets the size of the receiver without modifying it otherwise.
  * This method should not release or allocate new memory but simply set some instance variable like <tt>size</tt>.
  */
+@Override
 protected void setSizeRaw(int newSize) {
 	super.setSizeRaw(newSize);
 }
@@ -271,6 +276,7 @@ public BitVector toBitVector() {
  * size. An application can use this operation to minimize the 
  * storage of the receiver. 
  */
+@Override
 public void trimToSize() {
 	int oldCapacity = capacity;
 	if (size < oldCapacity) {

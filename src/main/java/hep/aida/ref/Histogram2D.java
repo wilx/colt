@@ -71,30 +71,36 @@ public class Histogram2D extends AbstractHistogram2D implements IHistogram2D
 		errors = new double[xBins+2][yBins+2];
 
 	}
-	public int allEntries()
+	@Override
+   public int allEntries()
 	{
 		return nEntry;
 	}
-	public int binEntries(int indexX, int indexY)
+	@Override
+   public int binEntries(int indexX, int indexY)
 	{
 		//return entries[xAxis.map(indexX)][yAxis.map(indexY)];
 		return entries[mapX(indexX)][mapY(indexY)];
 	}
-	public double binError(int indexX, int indexY)
+	@Override
+   public double binError(int indexX, int indexY)
 	{
 		//return Math.sqrt(errors[xAxis.map(indexX)][yAxis.map(indexY)]);
 		return Math.sqrt(errors[mapX(indexX)][mapY(indexY)]);
 	}
-	public double binHeight(int indexX, int indexY)
+	@Override
+   public double binHeight(int indexX, int indexY)
 	{
 		//return heights[xAxis.map(indexX)][yAxis.map(indexY)];
 		return heights[mapX(indexX)][mapY(indexY)];
 	}
-	public double equivalentBinEntries()
+	@Override
+   public double equivalentBinEntries()
 	{
 		return sumWeight*sumWeight/sumWeightSquared;
 	}
-	public void fill(double x, double y)
+	@Override
+   public void fill(double x, double y)
 	{
 		//int xBin = xAxis.getBin(x);
 		//int yBin = xAxis.getBin(y);
@@ -111,7 +117,8 @@ public class Histogram2D extends AbstractHistogram2D implements IHistogram2D
 		meanY += y;
 		rmsY += y;
 	}
-	public void fill(double x, double y, double weight)
+	@Override
+   public void fill(double x, double y, double weight)
 	{
 		//int xBin = xAxis.getBin(x);
 		//int yBin = xAxis.getBin(y);
@@ -138,7 +145,8 @@ public class Histogram2D extends AbstractHistogram2D implements IHistogram2D
 	 * <b>Note 2</b>indexY1 and indexY2 may include the use of under and over flow bins
 	 * <b>Note 3</b>There is no note 3 (yet)
 	 */
-	protected IHistogram1D internalSliceX(String title, int indexY1, int indexY2)
+	@Override
+   protected IHistogram1D internalSliceX(String title, int indexY1, int indexY2)
 	{
 		// Attention: our internal definition of bins has been choosen
 		// so that this works properly even if the indeces passed in include
@@ -174,7 +182,8 @@ public class Histogram2D extends AbstractHistogram2D implements IHistogram2D
 	 * <b>Note 2</b>indexX1 and indexX2 may include the use of under and over flow bins
 	 * <b>Note 3</b>There is no note 3 (yet)
 	 */
-	protected IHistogram1D internalSliceY(String title, int indexX1, int indexX2)
+	@Override
+   protected IHistogram1D internalSliceY(String title, int indexX1, int indexX2)
 	{
 		// Attention: our internal definition of bins has been choosen
 		// so that this works properly even if the indeces passed in include
@@ -200,15 +209,18 @@ public class Histogram2D extends AbstractHistogram2D implements IHistogram2D
 		result.setContents(sliceEntries,sliceHeights,sliceErrors);
 		return result;
 	}
-	public double meanX()
+	@Override
+   public double meanX()
 	{
 		return meanX/sumWeight;
 	}
-	public double meanY()
+	@Override
+   public double meanY()
 	{
 		return meanY/sumWeight;
 	}
-	public void reset()
+	@Override
+   public void reset()
 	{
 		 for (int i=0; i<entries.length; i++)
 			 for (int j=0; j<entries[0].length; j++)
@@ -225,11 +237,13 @@ public class Histogram2D extends AbstractHistogram2D implements IHistogram2D
 		 meanY = 0;
 		 rmsY = 0;
 	}
-	public double rmsX()
+	@Override
+   public double rmsX()
 	{
 		return Math.sqrt(rmsX/sumWeight - meanX*meanX/sumWeight/sumWeight);
 	}
-	public double rmsY()
+	@Override
+   public double rmsY()
 	{
 		return Math.sqrt(rmsY/sumWeight - meanY*meanY/sumWeight/sumWeight);
 	}
@@ -255,7 +269,8 @@ public class Histogram2D extends AbstractHistogram2D implements IHistogram2D
 		meanY = Double.NaN;
 		rmsY = Double.NaN;
 	}
-	public double sumAllBinHeights()
+	@Override
+   public double sumAllBinHeights()
 	{
 		return sumWeight;
 	}

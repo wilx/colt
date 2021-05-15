@@ -4,6 +4,7 @@ package hep.aida.bin;
  * Interface that represents a function object: a function that takes 
  * two bins as arguments and returns a single value.
  */
+@FunctionalInterface
 public interface BinBinFunction1D {
 /**
  * Applies a function to two bin arguments.

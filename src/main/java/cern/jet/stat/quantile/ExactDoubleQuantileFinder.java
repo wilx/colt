@@ -31,6 +31,7 @@ public ExactDoubleQuantileFinder() {
  * Adds a value to the receiver.
  * @param value the value to add.
  */
+@Override
 public void add(double value) {
 	this.buffer.add(value);
 	this.isSorted = false;
@@ -39,6 +40,7 @@ public void add(double value) {
  * Adds all values of the specified list to the receiver.
  * @param values the list of which all values shall be added.
  */
+@Override
 public void addAllOf(DoubleArrayList values) {
 	addAllOfFromTo(values, 0, values.size()-1);
 }
@@ -49,6 +51,7 @@ public void addAllOf(DoubleArrayList values) {
  * @param from the index of the first element to be added (inclusive).
  * @param to the index of the last element to be added (inclusive).
  */
+@Override
 public void addAllOfFromTo(DoubleArrayList values, int from, int to) {
 	buffer.addAllOfFromTo(values, from, to);
 	this.isSorted = false;
@@ -57,6 +60,7 @@ public void addAllOfFromTo(DoubleArrayList values, int from, int to) {
  * Removes all elements from the receiver.  The receiver will
  * be empty after this call returns, and its memory requirements will be close to zero.
  */
+@Override
 public void clear() {
 	this.buffer.clear();
 	this.buffer.trimToSize();
@@ -67,6 +71,7 @@ public void clear() {
  *
  * @return a deep copy of the receiver.
  */
+@Override
 public Object clone() {
 	ExactDoubleQuantileFinder copy = (ExactDoubleQuantileFinder) super.clone();
 	if (this.buffer != null) copy.buffer = copy.buffer.copy();
@@ -85,6 +90,7 @@ public boolean contains(double element) {
  * @param procedure    the procedure to be applied. Stops iteration if the procedure returns <tt>false</tt>, otherwise continues. 
  * @return <tt>false</tt> if the procedure stopped before all elements where iterated over, <tt>true</tt> otherwise. 
  */
+@Override
 public boolean forEach(cern.colt.function.DoubleProcedure procedure) {
 	double[] theElements = buffer.elements();
 	int theSize = (int) size();
@@ -96,6 +102,7 @@ public boolean forEach(cern.colt.function.DoubleProcedure procedure) {
  * Returns the number of elements currently needed to store all contained elements.
  * This number usually differs from the results of method <tt>size()</tt>, according to the underlying datastructure.
  */
+@Override
 public long memory() {
 	return buffer.elements().length;
 }
@@ -106,6 +113,7 @@ public long memory() {
  * @param the element to search for.
  * @return the percentage <tt>p</tt> of elements <tt>&lt;= element</tt> (<tt>0.0 &lt;= p &lt;=1.0)</tt>.
  */
+@Override
 public double phi(double element) {
 	this.sort();
 	return cern.jet.stat.Descriptive.rankInterpolated(buffer,element) / this.size();
@@ -115,6 +123,7 @@ public double phi(double element) {
  * @param phis the quantiles for which elements are to be computed. Each phi must be in the interval [0.0,1.0]. <tt>phis</tt> must be sorted ascending.
  * @return the exact quantile elements.
  */
+@Override
 public DoubleArrayList quantileElements(DoubleArrayList phis) {
 	this.sort();
 	return cern.jet.stat.Descriptive.quantiles(this.buffer, phis);
@@ -131,6 +140,7 @@ public DoubleArrayList quantileElements(DoubleArrayList phis) {
 /**
  * Returns the number of elements currently contained in the receiver (identical to the number of values added so far).
  */
+@Override
 public long size() {
 	return buffer.size();
 }
@@ -158,6 +168,7 @@ public String toString() {
  * Returns the number of elements currently needed to store all contained elements.
  * This number usually differs from the results of method <tt>size()</tt>, according to the underlying datastructure.
  */
+@Override
 public long totalMemory() {
 	return memory();
 }

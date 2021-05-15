@@ -183,6 +183,7 @@ public double cdf(int k) {
  *
  * @return a copy of the receiver.
  */
+@Override
 public Object clone() {
 	EmpiricalWalker copy = (EmpiricalWalker) super.clone();
 	if (this.cdf != null) copy.cdf = this.cdf.clone();
@@ -193,6 +194,7 @@ public Object clone() {
 /**
  * Returns a random integer <tt>k</tt> with probability <tt>pdf(k)</tt>.
  */
+@Override
 public int nextInt() {
 	int c=0;
 	double u,f;
