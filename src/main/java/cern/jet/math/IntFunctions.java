@@ -98,7 +98,7 @@ public class IntFunctions {
 	/**
 	 * Function that returns <tt>a < b ? -1 : a > b ? 1 : 0</tt>.
 	 */
-	public static final IntIntFunction compare = (a, b) -> a < b ? -1 : a > b ? 1 : 0;
+	public static final IntIntFunction compare = Integer::compare;
 		
 	/**
 	 * Function that returns <tt>a / b</tt>.
@@ -212,7 +212,7 @@ public static IntFunction between(final int from, final int to) {
  * @return the unary function <tt>function(c,var)</tt>.
  */
 public static IntFunction bindArg1(final IntIntFunction function, final int c) {
-	return var -> function.apply(c,var);
+	return v -> function.apply(c,v);
 }
 /**
  * Constructs a unary function from a binary function with the second operand (argument) fixed to the given constant <tt>c</tt>.
@@ -222,7 +222,7 @@ public static IntFunction bindArg1(final IntIntFunction function, final int c) {
  * @return the unary function <tt>function(var,c)</tt>.
  */
 public static IntFunction bindArg2(final IntIntFunction function, final int c) {
-	return var -> function.apply(var,c);
+	return v -> function.apply(v,c);
 }
 /**
  * Constructs the function <tt>g( h(a) )</tt>.
@@ -260,7 +260,7 @@ public static IntIntFunction chain(final IntIntFunction f, final IntFunction g, 
  * <tt>a</tt> is a variable, <tt>b</tt> is fixed.
  */
 public static IntFunction compare(final int b) {
-	return a -> a < b ? -1 : a > b ? 1 : 0;
+	return a -> Integer.compare(a, b);
 }
 /**
  * Constructs a function that returns the constant <tt>c</tt>.
@@ -315,14 +315,14 @@ public static IntProcedure isLess(final int b) {
  * <tt>a</tt> is a variable, <tt>b</tt> is fixed.
  */
 public static IntFunction max(final int b) {
-	return a -> (a >= b) ? a : b;
+	return a -> Math.max(a, b);
 }
 /**
  * Constructs a function that returns <tt>Math.min(a,b)</tt>.
  * <tt>a</tt> is a variable, <tt>b</tt> is fixed.
  */
 public static IntFunction min(final int b) {
-	return a -> (a <= b) ? a : b;
+	return a -> Math.min(a, b);
 }
 /**
  * Constructs a function that returns <tt>a - b</tt>.
