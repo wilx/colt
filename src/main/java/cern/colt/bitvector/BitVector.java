@@ -205,7 +205,7 @@ public void clear(int bitIndex) {
  * @return  a deep copy of this bit vector.
  */
 @Override
-public Object clone() {
+public BitVector clone() {
 	BitVector clone = (BitVector) super.clone();
 	if (this.bits != null) clone.bits = this.bits.clone();
 	return clone;

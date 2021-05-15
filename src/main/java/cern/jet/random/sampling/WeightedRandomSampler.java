@@ -54,7 +54,7 @@ public WeightedRandomSampler(int weight, RandomEngine randomGenerator) {
  * Returns a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public WeightedRandomSampler clone() {
 	WeightedRandomSampler copy = (WeightedRandomSampler) super.clone();
 	copy.generator = (Uniform) this.generator.clone();
 	return copy;

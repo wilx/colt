@@ -72,7 +72,7 @@ public double cdf(int k) {
  * @return a copy of the receiver.
  */
 @Override
-public Object clone() {
+public Empirical clone() {
 	Empirical copy = (Empirical) super.clone();
 	if (this.cdf != null) copy.cdf = this.cdf.clone();
 	return copy;

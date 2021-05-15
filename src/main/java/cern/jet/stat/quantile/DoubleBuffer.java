@@ -60,7 +60,7 @@ public void clear() {
  * @return a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public DoubleBuffer clone() {
 	DoubleBuffer copy = (DoubleBuffer) super.clone();
 	if (this.values != null) copy.values = copy.values.copy();
 	return copy;

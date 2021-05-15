@@ -72,7 +72,7 @@ public void clear() {
  * @return a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public ExactDoubleQuantileFinder clone() {
 	ExactDoubleQuantileFinder copy = (ExactDoubleQuantileFinder) super.clone();
 	if (this.buffer != null) copy.buffer = copy.buffer.copy();
 	return copy;

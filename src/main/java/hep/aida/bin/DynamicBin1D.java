@@ -158,7 +158,7 @@ protected void clearAllMeasures() {
  * @return a deep copy of the receiver.
  */
 @Override
-public synchronized Object clone() {
+public synchronized DynamicBin1D clone() {
 	DynamicBin1D clone = (DynamicBin1D) super.clone();
 	if (this.elements != null) clone.elements = clone.elements.copy();
 	if (this.sortedElements != null) clone.sortedElements = clone.sortedElements.copy();

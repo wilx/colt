@@ -160,7 +160,7 @@ public MersenneTwister(Date d) {
  * @return a copy of the receiver.
  */
 @Override
-public Object clone() {
+public MersenneTwister clone() {
 	MersenneTwister clone = (MersenneTwister) super.clone();
 	clone.mt = this.mt.clone();
 	return clone;

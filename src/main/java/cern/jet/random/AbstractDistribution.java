@@ -72,7 +72,7 @@ public int apply(int dummy) {
  * @return a copy of the receiver.
  */
 @Override
-public Object clone() {
+public AbstractDistribution clone() {
 	AbstractDistribution copy = (AbstractDistribution) super.clone();
 	if (this.randomGenerator != null) copy.randomGenerator = (RandomEngine) this.randomGenerator.clone();
 	return copy;

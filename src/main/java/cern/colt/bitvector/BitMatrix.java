@@ -110,7 +110,7 @@ public void clear() {
  * @return  a clone of this bit matrix.
  */
 @Override
-public Object clone() {
+public BitMatrix clone() {
 	BitMatrix clone = (BitMatrix) super.clone();
 	if (this.bits != null) clone.bits = this.bits.clone();
 	return clone;

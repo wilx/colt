@@ -28,9 +28,9 @@ protected PersistentObject() {
  * @return a copy of the receiver.
  */
 @Override
-public Object clone() {
+public PersistentObject clone() {
 	try {
-		return super.clone();
+		return (PersistentObject) super.clone();
 	} catch (CloneNotSupportedException exc) {
 		throw new InternalError(); //should never happen since we are cloneable
 	}

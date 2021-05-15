@@ -112,7 +112,7 @@ public int binarySearchFromTo(char key, int from, int to) {
  * @return  a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public CharArrayList clone() {
 	// overridden for performance only.
 	CharArrayList clone = new CharArrayList(elements.clone());
 	clone.setSizeRaw(size);

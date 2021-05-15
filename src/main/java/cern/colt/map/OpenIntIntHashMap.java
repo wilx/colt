@@ -99,7 +99,7 @@ public void clear() {
  * @return  a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public OpenIntIntHashMap clone() {
 	OpenIntIntHashMap copy = (OpenIntIntHashMap) super.clone();
 	copy.table = copy.table.clone();
 	copy.values = copy.values.clone();

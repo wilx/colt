@@ -655,7 +655,7 @@ public synchronized void clear() {
  * @return a deep copy of the receiver.
  */
 @Override
-public synchronized Object clone() {
+public synchronized QuantileBin1D clone() {
 	QuantileBin1D clone = (QuantileBin1D) super.clone();
 	if (this.finder != null) clone.finder = (DoubleQuantileFinder) clone.finder.clone();
 	return clone;

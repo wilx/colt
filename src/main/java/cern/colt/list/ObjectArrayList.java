@@ -239,7 +239,7 @@ public int binarySearchFromTo(Object key, int from, int to, java.util.Comparator
  * @return  a copy of the receiver.
  */
 @Override
-public Object clone() {
+public ObjectArrayList clone() {
 	ObjectArrayList v = (ObjectArrayList)super.clone();
 	v.elements = elements.clone();
 	return v;

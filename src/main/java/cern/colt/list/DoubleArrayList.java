@@ -114,7 +114,7 @@ public int binarySearchFromTo(double key, int from, int to) {
  * @return  a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public DoubleArrayList clone() {
 	// overridden for performance only.
 	DoubleArrayList clone = new DoubleArrayList(elements.clone());
 	clone.setSizeRaw(size);

@@ -184,7 +184,7 @@ public double cdf(int k) {
  * @return a copy of the receiver.
  */
 @Override
-public Object clone() {
+public EmpiricalWalker clone() {
 	EmpiricalWalker copy = (EmpiricalWalker) super.clone();
 	if (this.cdf != null) copy.cdf = this.cdf.clone();
 	if (this.A != null) copy.A = this.A.clone();

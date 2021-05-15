@@ -168,7 +168,7 @@ public int binarySearchFromTo(double key, int from, int to) {
  * @return  a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public AbstractDoubleList clone() {
 	return partFromTo(0,size-1);
 }
 /**

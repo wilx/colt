@@ -75,7 +75,7 @@ private CholeskyDecomposition chol(DoubleMatrix2D matrix) {
  * @return a copy of the receiver.
  */
 @Override
-public Object clone() {
+public Algebra clone() {
 	return new Algebra(property.tolerance());
 }
 /**

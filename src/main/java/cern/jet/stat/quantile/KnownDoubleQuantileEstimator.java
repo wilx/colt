@@ -125,7 +125,7 @@ public void clear() {
  * @return a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public KnownDoubleQuantileEstimator clone() {
 	KnownDoubleQuantileEstimator copy = (KnownDoubleQuantileEstimator) super.clone();
 	if (this.samplingAssistant != null) copy.samplingAssistant = (RandomSamplingAssistant) copy.samplingAssistant.clone();
 	return copy;

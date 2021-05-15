@@ -121,7 +121,7 @@ public void clear() {
  * @return a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public DoubleQuantileEstimator clone() {
 	DoubleQuantileEstimator copy = (DoubleQuantileEstimator) super.clone();
 	if (this.bufferSet != null) {
 		copy.bufferSet = (DoubleBufferSet) copy.bufferSet.clone();

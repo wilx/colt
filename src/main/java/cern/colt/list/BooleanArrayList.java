@@ -85,7 +85,7 @@ public void beforeInsert(int index, boolean element) {
  * @return  a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public BooleanArrayList clone() {
 	// overridden for performance only.
 	BooleanArrayList clone = new BooleanArrayList(elements.clone());
 	clone.setSizeRaw(size);

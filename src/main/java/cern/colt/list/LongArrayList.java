@@ -110,7 +110,7 @@ public int binarySearchFromTo(long key, int from, int to) {
  * @return  a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public LongArrayList clone() {
 	// overridden for performance only.
 	LongArrayList clone = new LongArrayList(elements.clone());
 	clone.setSizeRaw(size);

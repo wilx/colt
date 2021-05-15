@@ -159,7 +159,7 @@ public int binarySearchFromTo(float key, int from, int to) {
  * @return  a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public AbstractFloatList clone() {
 	return partFromTo(0,size-1);
 }
 /**

@@ -90,7 +90,7 @@ public synchronized void clear() {
  * @return a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public UnknownDoubleQuantileEstimator clone() {
 	UnknownDoubleQuantileEstimator copy = (UnknownDoubleQuantileEstimator) super.clone();
 	if (this.sampler != null) copy.sampler = (WeightedRandomSampler) copy.sampler.clone();
 	return copy;

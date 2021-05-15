@@ -96,7 +96,7 @@ protected void clearAllMeasures() {
  * @return a deep copy of the receiver.
  */
 @Override
-public synchronized Object clone() {
+public synchronized MightyStaticBin1D clone() {
 	MightyStaticBin1D clone = (MightyStaticBin1D) super.clone();
 	if (this.sumOfPowers != null) clone.sumOfPowers = clone.sumOfPowers.clone();
 	return clone;

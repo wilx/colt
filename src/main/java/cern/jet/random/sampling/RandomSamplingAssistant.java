@@ -50,7 +50,7 @@ public RandomSamplingAssistant(long n, long N, RandomEngine randomGenerator) {
  * Returns a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public RandomSamplingAssistant clone() {
 	RandomSamplingAssistant copy = (RandomSamplingAssistant) super.clone();
 	copy.sampler = (RandomSampler) this.sampler.clone();
 	return copy;

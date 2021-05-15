@@ -110,7 +110,7 @@ public int binarySearchFromTo(float key, int from, int to) {
  * @return  a deep copy of the receiver.
  */
 @Override
-public Object clone() {
+public FloatArrayList clone() {
 	// overridden for performance only.
 	FloatArrayList clone = new FloatArrayList(elements.clone());
 	clone.setSizeRaw(size);

@@ -41,7 +41,7 @@ public BreitWignerMeanSquare(double mean, double gamma, double cut, RandomEngine
  * @return a copy of the receiver.
  */
 @Override
-public Object clone() {
+public BreitWignerMeanSquare clone() {
 	BreitWignerMeanSquare copy = (BreitWignerMeanSquare) super.clone();
 	if (this.uniform != null) copy.uniform = new Uniform(copy.randomGenerator);
 	return copy;
