@@ -146,8 +146,7 @@ abstract class AbstractHistogram2D extends Histogram implements IHistogram2D
 				}
 			}
 		}
-		int[] result = {minBinX,minBinY, maxBinX,maxBinY};
-		return result;
+       return new int[]{minBinX,minBinY, maxBinX,maxBinY};
 	}
 	@Override
    public IHistogram1D projectionX()

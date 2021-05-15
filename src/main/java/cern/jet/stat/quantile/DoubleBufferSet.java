@@ -150,7 +150,7 @@ public DoubleBufferSet clone() {
 
 	copy.buffers = copy.buffers.clone();
 	for (int i=buffers.length; --i >= 0; ) {
-		copy.buffers[i] = (DoubleBuffer) copy.buffers[i].clone();
+		copy.buffers[i] = copy.buffers[i].clone();
 	}
 	return copy;
 }

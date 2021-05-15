@@ -25,7 +25,7 @@ public class Uniform extends AbstractContinousDistribution {
 	protected double max;
 	
  	// The uniform random number generated shared by all <b>static</b> methods. 
-	protected static Uniform shared = new Uniform(makeDefaultGenerator());
+	protected static final Uniform shared = new Uniform(makeDefaultGenerator());
 /**
  * Constructs a uniform distribution with the given minimum and maximum, using a {@link cern.jet.random.engine.MersenneTwister} seeded with the given seed.
  */

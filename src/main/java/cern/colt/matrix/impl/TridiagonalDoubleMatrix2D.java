@@ -24,7 +24,7 @@ class TridiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
 	/*
 	 * The non zero elements of the matrix: {lower, diagonal, upper}.
 	 */
-	protected double[] values; 
+	protected final double[] values;
 
 	/*
 	 * The startIndexes and number of non zeros: {lowerStart, diagonalStart, upperStart, values.length, lowerNonZeros, diagonalNonZeros, upperNonZeros}.
@@ -32,7 +32,7 @@ class TridiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
 	 * diagonalStart = lowerStart + lower.length
 	 * upperStart = diagonalStart + diagonal.length
 	 */
-	protected int[] dims;
+	protected final int[] dims;
 
 	protected static final int NONZERO = 4;
 	
@@ -76,8 +76,7 @@ public TridiagonalDoubleMatrix2D(int rows, int columns) {
 	if (rows<columns) u++;
 
 	values = new double[l+d+u]; // {lower, diagonal, upper}
-	int[] dimensions = { 0, l, l+d, l+d+u, 0, 0, 0}; // {lowerStart, diagonalStart, upperStart, values.length, lowerNonZeros, diagonalNonZeros, upperNonZeros}
-	dims = dimensions;
+	dims = new int[]{ 0, l, l+d, l+d+u, 0, 0, 0};
 	
 	//diagonal = new double[d];
 	//lower = new double[l];
@@ -255,12 +254,10 @@ protected DoubleMatrix2D getContent() {
  */
 @Override
 public double getQuick(int row, int column) {
-	int i = row;
-	int j = column;
 
-	int k = j-i+1;
-	int q = i;
-	if (k==0) q=j; // lower diagonal
+	int k = column - row +1;
+	int q = row;
+	if (k==0) q= column; // lower diagonal
 
 	if (k>=0 && k<=2) {
 		return values[dims[k]+q];
@@ -330,14 +327,12 @@ public DoubleMatrix1D like1D(int size) {
  */
 @Override
 public void setQuick(int row, int column, double value) {
-	int i = row;
-	int j = column;
 
 	boolean isZero = (value==0);
 
-	int k = j-i+1;
-	int q = i;
-	if (k==0) q=j; // lower diagonal
+	int k = column - row +1;
+	int q = row;
+	if (k==0) q= column; // lower diagonal
 
 	if (k>=0 && k<=2) {
 		int index = dims[k]+q;

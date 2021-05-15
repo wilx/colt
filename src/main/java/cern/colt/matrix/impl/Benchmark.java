@@ -121,8 +121,7 @@ public static void benchmark(int runs, int size, String kind, boolean print, int
 		int m = A.rows();
 		int n = A.columns();
 		int p = B.rows();
-		int reps = runs;
-		double mflops = 1.0e-3*(2.0*m*n*p*reps)/timer3.millis();
+       double mflops = 1.0e-3*(2.0*m*n*p* runs)/timer3.millis();
 		System.out.println("mflops: "+mflops);
 	}
 	
@@ -191,8 +190,7 @@ public static void main(String[] args) {
 	double maxLoadFactor = Double.parseDouble(args[6]);
 	boolean print = args[7].equals("print");
 	double initialValue = Double.parseDouble(args[8]);
-	int size = rows;
-	
-	benchmark(runs,size,kind,print,initialCapacity,minLoadFactor,maxLoadFactor,initialValue);
+
+    benchmark(runs, rows,kind,print,initialCapacity,minLoadFactor,maxLoadFactor,initialValue);
 }
 }

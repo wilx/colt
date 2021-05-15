@@ -67,13 +67,13 @@ public class SmpBlas implements Blas {
 	*/
 	public static Blas smpBlas = SeqBlas.seqBlas;
 		
-	protected Blas seqBlas; // blocks are operated on in parallel; for each block this seq algo is used.
+	protected final Blas seqBlas; // blocks are operated on in parallel; for each block this seq algo is used.
 
-	protected Smp smp;
+	protected final Smp smp;
 		
-	protected int maxThreads;
+	protected final int maxThreads;
 
-	protected static int NN_THRESHOLD = 30000;
+	protected static final int NN_THRESHOLD = 30000;
 /**
 Constructs a blas using a maximum of <tt>maxThreads<tt> threads; each executing the given sequential algos.
 */

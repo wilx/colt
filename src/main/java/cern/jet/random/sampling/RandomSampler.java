@@ -262,7 +262,9 @@ protected static void rejectMethodD(long n, long N, int count, long low, long[] 
 		if (S<iter) iter=(int)S;
 		
 		count -= iter;
-		for (; --iter >= 0 ;) values[fromIndex++] = ++chosen;
+		while (--iter >= 0) {
+			values[fromIndex++] = ++chosen;
+		}
 		chosen++;
 
 		N -= S+1; Nreal=negSreal+(-1.0+Nreal);
@@ -280,12 +282,16 @@ protected static void rejectMethodD(long n, long N, int count, long low, long[] 
 		if (S<iter) iter=(int)S;
 		
 		count -= iter;
-		for (; --iter >= 0 ;) values[fromIndex++] = ++chosen;
+		while (--iter >= 0) {
+			values[fromIndex++] = ++chosen;
+		}
 
 		chosen++;
 
 		// fill the rest
-		for (; --count >= 0; ) values[fromIndex++] = ++chosen;
+		while (--count >= 0) {
+			values[fromIndex++] = ++chosen;
+		}
 	}
 }
 /**

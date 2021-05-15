@@ -453,7 +453,7 @@ protected static Double2DProcedure funGetQuick() {
  */
 protected static Double2DProcedure funLUDecompose() {
 	return new Double2DProcedure() {
-		cern.colt.matrix.linalg.LUDecompositionQuick lu = new cern.colt.matrix.linalg.LUDecompositionQuick(0);
+		final cern.colt.matrix.linalg.LUDecompositionQuick lu = new cern.colt.matrix.linalg.LUDecompositionQuick(0);
 		public String toString() { return "LU.decompose(A) [Mflops/sec]";	}
 		@Override
       public void init() { A.assign(C); }
@@ -593,11 +593,11 @@ protected static Double2DProcedure funSetQuick() {
  */
 protected static Double2DProcedure funSOR5() {
 	return new Double2DProcedure() {
-		double value = 2; 
-		double omega = 1.25;
+		final double value = 2;
+		final double omega = 1.25;
 		final double alpha = omega * 0.25;
 		final double beta = 1-omega;
-		cern.colt.function.Double9Function function = (a00, a01, a02, a10, a11, a12, a20, a21, a22) -> alpha*a11 + beta*(a01+a10+a12+a21);
+		final cern.colt.function.Double9Function function = (a00, a01, a02, a10, a11, a12, a20, a21, a22) -> alpha*a11 + beta*(a01+a10+a12+a21);
 		public String toString() { return "A.zAssign8Neighbors(5 point function) [Mflops/sec]";	}
 		@Override
       public void init() { B.assign(D); }
@@ -616,11 +616,11 @@ protected static Double2DProcedure funSOR5() {
  */
 protected static Double2DProcedure funSOR8() {
 	return new Double2DProcedure() {
-		double value = 2;
-		double omega = 1.25;
+		final double value = 2;
+		final double omega = 1.25;
 		final double alpha = omega * 0.25;
 		final double beta = 1-omega;
-		cern.colt.function.Double9Function function = (a00, a01, a02, a10, a11, a12, a20, a21, a22) -> alpha*a11 + beta*(a00+a10+a20+a01+a21+a02+a12+a22);
+		final cern.colt.function.Double9Function function = (a00, a01, a02, a10, a11, a12, a20, a21, a22) -> alpha*a11 + beta*(a00+a10+a20+a01+a21+a02+a12+a22);
 		public String toString() { return "A.zAssign8Neighbors(9 point function) [Mflops/sec]";	}
 		@Override
       public void init() { B.assign(D); }
@@ -885,7 +885,6 @@ protected static void run(double minSeconds, String title, Double2DProcedure fun
 	String colAxisName = "d"; //"density";
 	//String[] sliceNames = {"dense", "sparse"};
 	//String[] sliceNames = {"dense", "sparse", "rowCompressed"};
-	String[] sliceNames = types;
 	hep.aida.bin.BinFunctions1D F = hep.aida.bin.BinFunctions1D.functions;
 	hep.aida.bin.BinFunction1D[] aggr = null; //{F.mean, F.median, F.sum};
 	String[] rowNames = new String[sizes.length];
@@ -897,7 +896,7 @@ protected static void run(double minSeconds, String title, Double2DProcedure fun
 	String tmp = rowAxisName; rowAxisName = colAxisName; colAxisName = tmp;
 	String[] tmp2 = rowNames; rowNames = colNames; colNames = tmp2;
 	timings = timings.viewDice(0,2,1);
-	System.out.println(new cern.colt.matrix.doublealgo.Formatter("%1.3G").toTitleString(timings,sliceNames,rowNames,colNames,sliceAxisName,rowAxisName,colAxisName,"Performance of "+title,aggr));
+	System.out.println(new cern.colt.matrix.doublealgo.Formatter("%1.3G").toTitleString(timings, types,rowNames,colNames,sliceAxisName,rowAxisName,colAxisName,"Performance of "+title,aggr));
 	/*
 	title = "Speedup of dense over sparse";
 	DoubleMatrix2D speedup = cern.colt.matrix.doublealgo.Transform.div(timings.viewSlice(0).copy(),timings.viewSlice(1));
@@ -956,26 +955,24 @@ protected static void runSpecial(double minSeconds, String title, Double2DProced
  * Overall usage.
  */
 protected static String usage() {
-	String usage = 
-"\nUsage (help): To get this help, type java cern.colt.matrix.bench.BenchmarkMatrix -help\n"+
-"To get help on a command's args, omit args and type java cern.colt.matrix.bench.BenchmarkMatrix -help <command>\n" +
-"Available commands: "+commands()+"\n\n"+
+	return "\nUsage (help): To get this help, type java cern.colt.matrix.bench.BenchmarkMatrix -help\n"+
+	"To get help on a command's args, omit args and type java cern.colt.matrix.bench.BenchmarkMatrix -help <command>\n" +
+	"Available commands: "+commands()+"\n\n"+
 
-"Usage (direct): java cern.colt.matrix.bench.BenchmarkMatrix command {args}\n"+
-"Example: dgemm dense 2 2.0 0.999 false true 5 10 25 50 100 250 500\n\n"+
+	"Usage (direct): java cern.colt.matrix.bench.BenchmarkMatrix command {args}\n"+
+	"Example: dgemm dense 2 2.0 0.999 false true 5 10 25 50 100 250 500\n\n"+
 
-"Usage (batch mode): java cern.colt.matrix.bench.BenchmarkMatrix -file <file>\nwhere <file> is a text file with each line holding a command followed by appropriate args (comments and empty lines ignored).\n\n"+
-"Example file's content:\n" +
-"dgemm dense 1 2.0 0.999 false true 5 10 25 50 100 250 500\n"+
-"dgemm dense 2 2.0 0.999 false true 5 10 25 50 100 250 500\n\n"+
-"/*\n"+
-"Java like comments in file are ignored\n"+
-"dgemv dense 1 2.0 0.001 false 5 10 25 50 100 250 500 1000\n"+
-"dgemv sparse 1 2.0 0.001 false 5 10 25 50 100 250 500 1000\n"+
-"dgemv rowCompressed 1 2.0 0.001 false 5 10 25 50 100 250 500 1000\n"+
-"*/\n"+
-"// more comments ignored\n";
-	return usage;
+	"Usage (batch mode): java cern.colt.matrix.bench.BenchmarkMatrix -file <file>\nwhere <file> is a text file with each line holding a command followed by appropriate args (comments and empty lines ignored).\n\n"+
+	"Example file's content:\n" +
+	"dgemm dense 1 2.0 0.999 false true 5 10 25 50 100 250 500\n"+
+	"dgemm dense 2 2.0 0.999 false true 5 10 25 50 100 250 500\n\n"+
+	"/*\n"+
+	"Java like comments in file are ignored\n"+
+	"dgemv dense 1 2.0 0.001 false 5 10 25 50 100 250 500 1000\n"+
+	"dgemv sparse 1 2.0 0.001 false 5 10 25 50 100 250 500 1000\n"+
+	"dgemv rowCompressed 1 2.0 0.001 false 5 10 25 50 100 250 500 1000\n"+
+	"*/\n"+
+	"// more comments ignored\n";
 }
 /**
  * Usage of a specific command.

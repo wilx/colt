@@ -47,7 +47,7 @@ class SelectedSparseObjectMatrix3D extends ObjectMatrix3D {
 	/**
 	  * The elements of this matrix.
 	  */
-	protected AbstractIntObjectMap elements;
+	protected final AbstractIntObjectMap elements;
 	
 	/**
 	  * The offsets of the visible cells of this matrix.

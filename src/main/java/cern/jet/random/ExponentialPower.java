@@ -36,7 +36,7 @@ public class ExponentialPower extends AbstractContinousDistribution {
 	private double s,sm1,tau_set = -1.0;
 
  	// The uniform random number generated shared by all <b>static</b> methods.
-	protected static ExponentialPower shared = new ExponentialPower(1.0,makeDefaultGenerator());
+	protected static final ExponentialPower shared = new ExponentialPower(1.0,makeDefaultGenerator());
 /**
  * Constructs an Exponential Power distribution.
  * Example: tau=1.0.

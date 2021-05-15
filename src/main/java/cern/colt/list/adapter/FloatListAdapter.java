@@ -17,8 +17,8 @@ import cern.colt.list.AbstractFloatList;
  * <tt>java.lang.Number.floatValue()</tt> is used to convert objects into primitive values which are then stored in the backing templated list.
  * Getter methods return <tt>java.lang.Float</tt> objects.
  */
-public class FloatListAdapter extends java.util.AbstractList implements java.util.List {
-	protected AbstractFloatList content;
+public class FloatListAdapter extends java.util.AbstractList<Float> implements java.util.List<Float> {
+	protected final AbstractFloatList content;
 /**
  * Constructs a list backed by the specified content list.
  */
@@ -42,7 +42,7 @@ public FloatListAdapter(AbstractFloatList content) {
  *		  0 || index &gt; size()</tt>).
  */
 @Override
-public void add(int index, Object element) {
+public void add(int index, Float element) {
 	content.beforeInsert(index,value(element));
 	modCount++;
 }
@@ -56,13 +56,13 @@ public void add(int index, Object element) {
  * 		  (<tt>index &lt; 0 || index &gt;= size()</tt>).
  */
 @Override
-public Object get(int index) {
+public Float get(int index) {
 	return object(content.get(index));
 }
 /**
  * Transforms an element of a primitive data type to an object. 
  */
-protected static Object object(float element) {
+protected static Float object(float element) {
 	return element;
 }
 /**
@@ -78,8 +78,8 @@ protected static Object object(float element) {
  * 		  range (<tt>index &lt; 0 || index &gt;= size()</tt>).
  */
 @Override
-public Object remove(int index) {
-	Object old = get(index);
+public Float remove(int index) {
+	Float old = get(index);
 	content.remove(index);
 	modCount++;
 	return old;
@@ -102,8 +102,8 @@ public Object remove(int index) {
  */
 
 @Override
-public Object set(int index, Object element) {
-	Object old = get(index);
+public Float set(int index, Float element) {
+	Float old = get(index);
 	content.set(index,value(element));
 	return old;
 }
@@ -119,7 +119,7 @@ public int size() {
 /**
  * Transforms an object element to a primitive data type. 
  */
-protected static float value(Object element) {
-	return ((Number)element).floatValue();
+protected static <U extends Number> float value(U element) {
+	return element.floatValue();
 }
 }

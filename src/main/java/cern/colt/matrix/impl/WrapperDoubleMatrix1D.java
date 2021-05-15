@@ -20,7 +20,7 @@ class WrapperDoubleMatrix1D extends DoubleMatrix1D {
 	/*
 	 * The elements of the matrix.
 	 */
-	protected DoubleMatrix1D content; 
+	protected final DoubleMatrix1D content;
 public WrapperDoubleMatrix1D(DoubleMatrix1D newContent) {
 	if (newContent != null) setUp(newContent.size());
 	this.content = newContent;
@@ -96,17 +96,16 @@ The returned view is backed by this matrix, so changes in the returned view are 
 */
 @Override
 public DoubleMatrix1D viewFlip() {
-	DoubleMatrix1D view = new WrapperDoubleMatrix1D(this) {
+	return new WrapperDoubleMatrix1D(WrapperDoubleMatrix1D.this) {
 		@Override
       public double getQuick(int index) {
 			return content.get(size-1-index);
 		}
 		@Override
       public void setQuick(int index, double value) {
-			content.set(size-1-index,value); 
+			content.set(size-1-index,value);
 		}
 	};
-	return view;
 }
 /**
 Constructs and returns a new <i>sub-range view</i> that is a <tt>width</tt> sub matrix starting at <tt>index</tt>.

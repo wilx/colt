@@ -60,7 +60,7 @@ public class DenseObjectMatrix2D extends ObjectMatrix2D {
 	  * rowOf(index)==index/columns
 	  * i.e. {row0 column0..m}, {row1 column0..m}, ..., {rown column0..m}
 	  */
-	protected Object[] elements;
+	protected final Object[] elements;
 /**
  * Constructs a matrix with a copy of the given values.
  * <tt>values</tt> is required to have the form <tt>values[row][column]</tt>
@@ -201,8 +201,7 @@ public ObjectMatrix2D assign(ObjectMatrix2D source) {
 		}
 		other = (DenseObjectMatrix2D) c;
 	}
-	
-	final Object[] elems = this.elements;
+
 	final Object[] otherElems = other.elements;
 	if (elements==null || otherElems==null) throw new InternalError();
 	int cs = this.columnStride;
@@ -214,7 +213,7 @@ public ObjectMatrix2D assign(ObjectMatrix2D source) {
 	int index = index(0,0);
 	for (int row=rows; --row >= 0; ) {
 		for (int i=index, j=otherIndex, column=columns; --column >= 0; ) {
-			elems[i] = otherElems[j];
+			this.elements[i] = otherElems[j];
 			i += cs;
 			j += ocs;
 		}

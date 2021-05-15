@@ -124,7 +124,7 @@ public ShortArrayList clone() {
  * @return  a deep copy of the receiver.
  */
 public ShortArrayList copy() {
-	return (ShortArrayList) clone();
+	return clone();
 }
  /**
  * Sorts the specified range of the receiver into ascending numerical order. 

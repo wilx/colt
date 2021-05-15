@@ -49,7 +49,7 @@ public class Normal extends AbstractContinousDistribution {
 	protected double SQRT_INV; // performance cache
 
  	// The uniform random number generated shared by all <b>static</b> methods.
-	protected static Normal shared = new Normal(0.0,1.0,makeDefaultGenerator());
+	protected static final Normal shared = new Normal(0.0,1.0,makeDefaultGenerator());
 /**
  * Constructs a normal (gauss) distribution.
  * Example: mean=0.0, standardDeviation=1.0.

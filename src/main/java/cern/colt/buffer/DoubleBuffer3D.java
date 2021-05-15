@@ -16,16 +16,16 @@ import cern.colt.list.DoubleArrayList;
  * @version 1.0, 09/24/99
  */
 public class DoubleBuffer3D extends cern.colt.PersistentObject  implements DoubleBuffer3DConsumer {
-	protected DoubleBuffer3DConsumer target;
-	protected double[] xElements;
-	protected double[] yElements;
-	protected double[] zElements;
+	protected final DoubleBuffer3DConsumer target;
+	protected final double[] xElements;
+	protected final double[] yElements;
+	protected final double[] zElements;
 
 	// vars cached for speed
-	protected DoubleArrayList xList;
-	protected DoubleArrayList yList;
-	protected DoubleArrayList zList;
-	protected int capacity;
+	protected final DoubleArrayList xList;
+	protected final DoubleArrayList yList;
+	protected final DoubleArrayList zList;
+	protected final int capacity;
 	protected int size; 
 /**
  * Constructs and returns a new buffer with the given target.

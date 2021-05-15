@@ -42,7 +42,7 @@ public class ChiSquare extends AbstractContinousDistribution {
 	private double freedom_in = -1.0,b,vm,vp,vd;
 
  	// The uniform random number generated shared by all <b>static</b> methods.
-	protected static ChiSquare shared = new ChiSquare(1.0,makeDefaultGenerator());
+	protected static final ChiSquare shared = new ChiSquare(1.0,makeDefaultGenerator());
 /**
  * Constructs a ChiSquare distribution.
  * Example: freedom=1.0.
@@ -72,22 +72,21 @@ public double nextDouble() {
  * It should hold <tt>freedom &lt; 1.0</tt>.
  */
 public double nextDouble(double freedom) {
-/******************************************************************
- *                                                                *
- *        Chi Distribution - Ratio of Uniforms  with shift        *
- *                                                                *
- ******************************************************************
- *                                                                *
- * FUNCTION :   - chru samples a random number from the Chi       *
- *                distribution with parameter  a > 1.             *
- * REFERENCE :  - J.F. Monahan (1987): An algorithm for           *
- *                generating chi random variables, ACM Trans.     *
- *                Math. Software 13, 168-172.                     *
- * SUBPROGRAM : - anEngine  ... pointer to a (0,1)-Uniform        *
- *                engine                                          *
- *                                                                *
- * Implemented by R. Kremer, 1990                                 *
- ******************************************************************/
+/*****************************************************************
+ *
+ Chi Distribution - Ratio of Uniforms  with shift        *
+ *
+ *
+ FUNCTION :   - chru samples a random number from the Chi       *
+ distribution with parameter  a > 1.             *
+ REFERENCE :  - J.F. Monahan (1987): An algorithm for           *
+ generating chi random variables, ACM Trans.     *
+ Math. Software 13, 168-172.                     *
+ SUBPROGRAM : - anEngine  ... pointer to a (0,1)-Uniform        *
+ engine                                          *
+ *
+ Implemented by R. Kremer, 1990                                 *
+ */
 
 	double u,v,z,zz,r;
 
@@ -111,7 +110,7 @@ public double nextDouble(double freedom) {
 		if (freedom != freedom_in) {
 			b = Math.sqrt(freedom - 1.0);
 			vm = - 0.6065306597 * (1.0 - 0.25 / (b * b + 1.0));
-			vm = (-b > vm) ? -b : vm;
+			vm = Math.max(-b, vm);
 			vp = 0.6065306597 * (0.7071067812 + b) / (0.5 + b);
 			vd = vp - vm;
 			freedom_in = freedom;

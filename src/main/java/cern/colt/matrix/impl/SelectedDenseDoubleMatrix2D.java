@@ -46,7 +46,7 @@ class SelectedDenseDoubleMatrix2D extends DoubleMatrix2D {
 	/**
 	  * The elements of this matrix.
 	  */
-	protected double[] elements;
+	protected final double[] elements;
 	
 	/**
 	  * The offsets of the visible cells of this matrix.

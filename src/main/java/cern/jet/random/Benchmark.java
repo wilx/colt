@@ -77,7 +77,7 @@ public static void random(int size, boolean print, double mean, String generator
 	int largeVariance = 100;
 	RandomEngine gen; // = new MersenneTwister();
 	try {
-		gen = (RandomEngine) Class.forName(generatorName).newInstance();
+		gen = (RandomEngine) Class.forName(generatorName).getDeclaredConstructor().newInstance();
 	} catch (Exception exc) {
 		throw new InternalError(exc.getMessage());
 	}

@@ -24,7 +24,7 @@ import cern.jet.random.engine.RandomEngine;
 public class RandomSamplingAssistant extends cern.colt.PersistentObject {
 //public class RandomSamplingAssistant extends Object implements java.io.Serializable {
 	protected RandomSampler sampler;
-	protected long[] buffer;
+	protected final long[] buffer;
 	protected int bufferPosition;
 
 	protected long skip;
@@ -52,7 +52,7 @@ public RandomSamplingAssistant(long n, long N, RandomEngine randomGenerator) {
 @Override
 public RandomSamplingAssistant clone() {
 	RandomSamplingAssistant copy = (RandomSamplingAssistant) super.clone();
-	copy.sampler = (RandomSampler) this.sampler.clone();
+	copy.sampler = this.sampler.clone();
 	return copy;
 }
 /**

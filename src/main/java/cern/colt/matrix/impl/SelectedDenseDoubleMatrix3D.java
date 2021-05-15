@@ -46,7 +46,7 @@ class SelectedDenseDoubleMatrix3D extends DoubleMatrix3D {
 	/**
 	  * The elements of this matrix.
 	  */
-	protected double[] elements;
+	protected final double[] elements;
 	
 	/**
 	  * The offsets of the visible cells of this matrix.

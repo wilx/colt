@@ -36,7 +36,7 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
 	/**
 	  * The elements of this matrix.
 	  */
-	protected Object[] elements;
+	protected final Object[] elements;
 /**
  * Constructs a matrix with a copy of the given values.
  * The values are copied. So subsequent changes in <tt>values</tt> are not reflected in the matrix, and vice-versa.
@@ -153,7 +153,6 @@ public ObjectMatrix1D assign(ObjectMatrix1D source) {
 		other = (DenseObjectMatrix1D) c;
 	}
 
-	final Object[] elems = this.elements;
 	final Object[] otherElems = other.elements;
 	if (elements==null || otherElems==null) throw new InternalError();
 	int s = this.stride;
@@ -162,7 +161,7 @@ public ObjectMatrix1D assign(ObjectMatrix1D source) {
 	int index = index(0);
 	int otherIndex = other.index(0);
 	for (int k=size; --k >= 0; ) {
-		elems[index] = otherElems[otherIndex];
+		this.elements[index] = otherElems[otherIndex];
 		index += s;
 		otherIndex += ys;
 	}

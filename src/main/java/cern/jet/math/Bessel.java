@@ -12,9 +12,9 @@ package cern.jet.math;
  * Bessel and Airy functions.
  */
 public class Bessel extends Constants {
-	/****************************************
-	 *    COEFFICIENTS FOR METHODS i0, i0e  *
-	 ****************************************/
+	/***************************************
+	 COEFFICIENTS FOR METHODS i0, i0e  *
+	 */
 	 
 	/**
 	 * Chebyshev coefficients for exp(-x) I0(x)
@@ -92,10 +92,9 @@ public class Bessel extends Constants {
 		};
 
 
-	
-	/****************************************
-	 *    COEFFICIENTS FOR METHODS i1, i1e  *
-	 ****************************************/
+	/***************************************
+	 COEFFICIENTS FOR METHODS i1, i1e  *
+	 */
 	/**
 	 * Chebyshev coefficients for exp(-x) I1(x) / x
 	 * in the interval [0,8].

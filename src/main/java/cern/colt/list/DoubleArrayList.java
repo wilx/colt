@@ -126,7 +126,7 @@ public DoubleArrayList clone() {
  * @return  a deep copy of the receiver.
  */
 public DoubleArrayList copy() {
-	return (DoubleArrayList) clone();
+	return clone();
 }
 /**
  * Returns the elements currently stored, including invalid elements between size and capacity, if any.

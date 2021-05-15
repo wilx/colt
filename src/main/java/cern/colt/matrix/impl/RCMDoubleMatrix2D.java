@@ -21,8 +21,8 @@ class RCMDoubleMatrix2D extends WrapperDoubleMatrix2D {
 	/*
 	 * The elements of the matrix.
 	 */
-	private IntArrayList[] indexes;
-	private DoubleArrayList[] values;
+	private final IntArrayList[] indexes;
+	private final DoubleArrayList[] values;
 /**
  * Constructs a matrix with a copy of the given values.
  * <tt>values</tt> is required to have the form <tt>values[row][column]</tt>
@@ -132,16 +132,14 @@ public DoubleMatrix1D like1D(int size) {
  */
 @Override
 public void setQuick(int row, int column, double value) {
-	int i=row;
-	int j=column;
-	
+
 	int k=-1;
-	IntArrayList indexList = indexes[i];
-	if (indexList != null) k = indexList.binarySearch(j);
+	IntArrayList indexList = indexes[row];
+	if (indexList != null) k = indexList.binarySearch(column);
 	
 	if (k>=0) { // found
 		if (value==0) {
-			DoubleArrayList valueList = values[i];
+			DoubleArrayList valueList = values[row];
 			indexList.remove(k);
 			valueList.remove(k);
 			int s = indexList.size();
@@ -156,7 +154,7 @@ public void setQuick(int row, int column, double value) {
 			}
 		}
 		else {
-			values[i].setQuick(k,value);
+			values[row].setQuick(k,value);
 		}
 	}
 	else { // not found
@@ -165,11 +163,11 @@ public void setQuick(int row, int column, double value) {
 		k = -k-1;
 
 		if (indexList == null) {
-			indexes[i] = new IntArrayList(3);
-			values[i]  = new DoubleArrayList(3);
+			indexes[row] = new IntArrayList(3);
+			values[row]  = new DoubleArrayList(3);
 		}
-		indexes[i].beforeInsert(k,j);
-		values[i].beforeInsert(k,value);
+		indexes[row].beforeInsert(k, column);
+		values[row].beforeInsert(k,value);
 	}
 }
 /**

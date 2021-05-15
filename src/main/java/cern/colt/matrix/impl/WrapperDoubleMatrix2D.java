@@ -20,7 +20,7 @@ class WrapperDoubleMatrix2D extends DoubleMatrix2D {
 	/*
 	 * The elements of the matrix.
 	 */
-	protected DoubleMatrix2D content;
+	protected final DoubleMatrix2D content;
 /**
  * Constructs a matrix with a copy of the given values.
  * <tt>values</tt> is required to have the form <tt>values[row][column]</tt>
@@ -167,17 +167,16 @@ The returned view is backed by this matrix, so changes in the returned view are 
 @Override
 public DoubleMatrix2D viewColumnFlip() {
 	if (columns==0) return this;
-	DoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
+	return new WrapperDoubleMatrix2D(WrapperDoubleMatrix2D.this) {
 		@Override
       public double getQuick(int row, int column) {
 			return content.get(row,columns-1-column);
 		}
 		@Override
       public void setQuick(int row, int column, double value) {
-			content.set(row,columns-1-column,value); 
+			content.set(row,columns-1-column,value);
 		}
 	};
-	return view;
 }
 /**
 Constructs and returns a new <i>dice (transposition) view</i>; Swaps axes; example: 3 x 4 matrix --> 4 x 3 matrix.
@@ -319,17 +318,16 @@ The returned view is backed by this matrix, so changes in the returned view are 
 @Override
 public DoubleMatrix2D viewRowFlip() {
 	if (rows==0) return this;
-	DoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
+	return new WrapperDoubleMatrix2D(WrapperDoubleMatrix2D.this) {
 		@Override
       public double getQuick(int row, int column) {
 			return content.get(rows-1-row,column);
 		}
 		@Override
       public void setQuick(int row, int column, double value) {
-			content.set(rows-1-row,column,value); 
+			content.set(rows-1-row,column,value);
 		}
 	};
-	return view;
 }
 /**
 Constructs and returns a new <i>selection view</i> that is a matrix holding the indicated cells.

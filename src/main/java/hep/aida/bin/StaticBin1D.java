@@ -49,7 +49,7 @@ public class StaticBin1D extends AbstractBin1D {
 	 *
 	 * By the way, the whole fuss would be unnecessary if Java would know INOUT parameters (call by reference).
 	 */
-	static transient protected double[] arguments = new double[20];
+	static final transient protected double[] arguments = new double[20];
 /**
  * Constructs and returns an empty bin.
  */

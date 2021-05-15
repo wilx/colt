@@ -47,12 +47,12 @@ class SelectedSparseDoubleMatrix1D extends DoubleMatrix1D {
 	/*
 	 * The elements of the matrix.
 	 */
-	protected AbstractIntDoubleMap elements; 
+	protected final AbstractIntDoubleMap elements;
 	
 	/**
 	  * The offsets of visible indexes of this matrix.
 	  */
-	protected int[] offsets;
+	protected final int[] offsets;
 
 	/**
 	  * The offset.

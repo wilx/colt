@@ -28,7 +28,7 @@ public class BreitWigner extends AbstractContinousDistribution {
 	protected double cut;
 
 	// The uniform random number generated shared by all <b>static</b> methods.
-	protected static BreitWigner shared = new BreitWigner(1.0,0.2,1.0,makeDefaultGenerator());
+	protected static final BreitWigner shared = new BreitWigner(1.0,0.2,1.0,makeDefaultGenerator());
 /**
  * Constructs a BreitWigner distribution.
  * @param cut </tt>cut==Double.NEGATIVE_INFINITY</tt> indicates "don't cut".
@@ -55,15 +55,14 @@ public double nextDouble(double mean,double gamma,double cut) {
 	if (cut==Double.NEGATIVE_INFINITY) { // don't cut
 		rval = 2.0*randomGenerator.raw()-1.0;
 		displ = 0.5*gamma*Math.tan(rval*(Math.PI/2.0));
-		return mean + displ;
 	}
 	else {
 		val = Math.atan(2.0*cut/gamma);
 		rval = 2.0*randomGenerator.raw()-1.0;
 		displ = 0.5*gamma*Math.tan(rval*val);
 
-		return mean + displ;
 	}
+	return mean + displ;
 }
 /**
  * Sets the mean, gamma and cut parameters.

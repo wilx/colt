@@ -25,7 +25,7 @@ package cern.jet.random.engine;
  */
 public class RandomSeedGenerator extends cern.colt.PersistentObject {
 	protected int row;
-	protected int column;
+	protected final int column;
 /**
  * Constructs and returns a new seed generator.
  */

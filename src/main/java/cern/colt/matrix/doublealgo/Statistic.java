@@ -74,7 +74,7 @@ public class Statistic {
 	 * Canberra distance function; <tt>Sum( abs(x[i]-y[i]) / abs(x[i]+y[i]) )</tt>.
 	 */ 
 	public static final VectorVectorFunction CANBERRA = new VectorVectorFunction() {
-		DoubleDoubleFunction fun = (a, b) -> Math.abs(a-b) / Math.abs(a+b);
+		final DoubleDoubleFunction fun = (a, b) -> Math.abs(a-b) / Math.abs(a+b);
 		@Override
       public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
 			return a.aggregate(b, F.plus, fun);
@@ -548,15 +548,13 @@ public static DoubleMatrix1D viewSample(DoubleMatrix1D matrix, double fraction, 
 	if (randomGenerator==null) randomGenerator = new cern.jet.random.engine.MersenneTwister((int) System.currentTimeMillis());
 
 	int ncols = (int) Math.round(matrix.size() * fraction);
-	int max = ncols;
-	long[] selected = new long[max]; // sampler works on long's, not int's
+	long[] selected = new long[ncols]; // sampler works on long's, not int's
 
 	// sample 
-	int n = ncols;
 	int N = matrix.size();
-	cern.jet.random.sampling.RandomSampler.sample(n,N,n,0,selected,0,randomGenerator);
-	int[] selectedCols = new int[n];
-	for (int i=0; i<n; i++) selectedCols[i] = (int) selected[i];
+	cern.jet.random.sampling.RandomSampler.sample(ncols,N, ncols,0,selected,0,randomGenerator);
+	int[] selectedCols = new int[ncols];
+	for (int i = 0; i< ncols; i++) selectedCols[i] = (int) selected[i];
 
 	return matrix.viewSelection(selectedCols);
 }

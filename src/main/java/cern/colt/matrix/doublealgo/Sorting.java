@@ -65,7 +65,7 @@ protected Sorting() {}
 /**
  * Compare two values, one of which is assumed to be Double.NaN
  */
-private static final int compareNaN(double a, double b) {
+private static int compareNaN(double a, double b) {
 	if (a!=a) {
 		if (b!=b) return 0; // NaN equals NaN
 		else return 1; // e.g. NaN > 5
@@ -515,21 +515,19 @@ public DoubleMatrix3D sort(final DoubleMatrix3D matrix, final DoubleMatrix2DComp
  * Sorts by sum of row.
  */
 public static void zdemo1() {
-	Sorting sort = quickSort;
 	DoubleMatrix2D matrix = DoubleFactory2D.dense.descending(4,3);
 	DoubleMatrix1DComparator comp = (a, b) -> {
 		double as = a.zSum(); double bs = b.zSum();
 		return as < bs ? -1 : as == bs ? 0 : 1;
 	};
 	System.out.println("unsorted:"+matrix);
-	System.out.println("sorted  :"+sort.sort(matrix,comp));
+	System.out.println("sorted  :"+ quickSort.sort(matrix,comp));
 }
 /**
  * Demonstrates advanced sorting.
  * Sorts by sum of slice.
  */
 public static void zdemo2() {
-	Sorting sort = quickSort;
 	DoubleMatrix3D matrix = DoubleFactory3D.dense.descending(4,3,2);
 	DoubleMatrix2DComparator comp = (a, b) -> {
 		double as = a.zSum();
@@ -537,14 +535,13 @@ public static void zdemo2() {
 		return as < bs ? -1 : as == bs ? 0 : 1;
 	};
 	System.out.println("unsorted:"+matrix);
-	System.out.println("sorted  :"+sort.sort(matrix,comp));
+	System.out.println("sorted  :"+ quickSort.sort(matrix,comp));
 }
 /**
  * Demonstrates advanced sorting.
  * Sorts by sinus of cell values.
  */
 public static void zdemo3() {
-	Sorting sort = quickSort;
 	double[] values = {0.5, 1.5, 2.5, 3.5};
 	DoubleMatrix1D matrix = new DenseDoubleMatrix1D(values);
 	cern.colt.function.DoubleComparator comp = (a, b) -> {
@@ -553,7 +550,7 @@ public static void zdemo3() {
 	};
 	System.out.println("unsorted:"+matrix);
 	
-	DoubleMatrix1D sorted = sort.sort(matrix,comp);
+	DoubleMatrix1D sorted = quickSort.sort(matrix,comp);
 	System.out.println("sorted  :"+sorted);
 
 	// check whether it is really sorted

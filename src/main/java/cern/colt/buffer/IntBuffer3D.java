@@ -16,16 +16,16 @@ import cern.colt.list.IntArrayList;
  * @version 1.0, 09/24/99
  */
 public class IntBuffer3D extends cern.colt.PersistentObject  implements IntBuffer3DConsumer {
-	protected IntBuffer3DConsumer target;
-	protected int[] xElements;
-	protected int[] yElements;
-	protected int[] zElements;
+	protected final IntBuffer3DConsumer target;
+	protected final int[] xElements;
+	protected final int[] yElements;
+	protected final int[] zElements;
 
 	// vars cached for speed
-	protected IntArrayList xList;
-	protected IntArrayList yList;
-	protected IntArrayList zList;
-	protected int capacity;
+	protected final IntArrayList xList;
+	protected final IntArrayList yList;
+	protected final IntArrayList zList;
+	protected final int capacity;
 	protected int size; 
 /**
  * Constructs and returns a new buffer with the given target.

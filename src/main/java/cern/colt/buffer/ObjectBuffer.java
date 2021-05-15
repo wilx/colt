@@ -16,12 +16,12 @@ import cern.colt.list.ObjectArrayList;
  * @version 1.0, 09/24/99
  */
 public class ObjectBuffer extends cern.colt.PersistentObject implements ObjectBufferConsumer {
-	protected ObjectBufferConsumer target;
-	protected Object[] elements;
+	protected final ObjectBufferConsumer target;
+	protected final Object[] elements;
 
 	// vars cached for speed
-	protected ObjectArrayList list;
-	protected int capacity;
+	protected final ObjectArrayList list;
+	protected final int capacity;
 	protected int size; 
 /**
  * Constructs and returns a new buffer with the given target.

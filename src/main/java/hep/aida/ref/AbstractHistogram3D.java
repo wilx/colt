@@ -158,8 +158,7 @@ abstract class AbstractHistogram3D extends Histogram implements IHistogram3D
 				}
 			}
 		}
-		int[] result = {minBinX,minBinY,minBinZ, maxBinX,maxBinY,maxBinZ};
-		return result;
+       return new int[]{minBinX,minBinY,minBinZ, maxBinX,maxBinY,maxBinZ};
 	}
 	@Override
    public IHistogram2D projectionXY()

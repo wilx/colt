@@ -40,7 +40,7 @@ public class Hyperbolic extends AbstractContinousDistribution {
 
 
 	// The uniform random number generated shared by all <b>static</b> methods.
-	protected static Hyperbolic shared = new Hyperbolic(10.0,10.0,makeDefaultGenerator());
+	protected static final Hyperbolic shared = new Hyperbolic(10.0,10.0,makeDefaultGenerator());
 /**
  * Constructs a Beta distribution.
  */
@@ -59,42 +59,39 @@ public double nextDouble() {
  * Returns a hyperbolic distributed random number; bypasses the internal state.
  */
 public double nextDouble(double alpha, double beta) {
-/******************************************************************
- *                                                                *
- *        Hyperbolic Distribution - Non-Universal Rejection       *
- *                                                                *
- ******************************************************************
- *                                                                *
- * FUNCTION   : - hyplc.c samples a random number from the        *
- *                hyperbolic distribution with shape parameter a  *
- *                and b valid for a>0 and |b|<a using the         *
- *                non-universal rejection method for log-concave  *
- *                densities.                                      *
- * REFERENCE :  - L. Devroye (1986): Non-Uniform Random Variate   *
- *                Generation, Springer Verlag, New York.          *
- * SUBPROGRAM : - drand(seed) ... (0,1)-Uniform generator with    *
- *                unsigned long integer *seed.                    *
- *                                                                *
- ******************************************************************/
-	double a = alpha;
-	double b = beta;
+/*****************************************************************
+ *
+ Hyperbolic Distribution - Non-Universal Rejection       *
+ *
+ *
+ FUNCTION   : - hyplc.c samples a random number from the        *
+ hyperbolic distribution with shape parameter a  *
+ and b valid for a>0 and |b|<a using the         *
+ non-universal rejection method for log-concave  *
+ densities.                                      *
+ REFERENCE :  - L. Devroye (1986): Non-Uniform Random Variate   *
+ Generation, Springer Verlag, New York.          *
+ SUBPROGRAM : - drand(seed) ... (0,1)-Uniform generator with    *
+ unsigned long integer *seed.                    *
+ *
+ */
 
-	if ((a_setup != a) || (b_setup != b)) { // SET-UP 
+	if ((a_setup != alpha) || (b_setup != beta)) { // SET-UP
 		double mpa, mmb, mode;
 		double amb;
 		double a_, b_,  a_1, b_1, pl;
 		double help_1, help_2;
-		amb = a*a - b*b;                                        // a^2 - b^2 
+		amb = alpha * alpha - beta * beta;                                        // a^2 - b^2
 		samb = Math.sqrt(amb);                                  // -log(f(mode)) 
-		mode = b/samb;                                          // mode 
-		help_1 = a*Math.sqrt(2.0*samb + 1.0);
-		help_2 = b*(samb + 1.0);
+		mode = beta /samb;                                          // mode
+		help_1 = alpha *Math.sqrt(2.0*samb + 1.0);
+		help_2 = beta *(samb + 1.0);
 		mpa = (help_2 + help_1)/amb;   // fr^-1(exp(-sqrt(a^2 - b^2) - 1.0)) 
 		mmb = (help_2 - help_1)/amb;   // fl^-1(exp(-sqrt(a^2 - b^2) - 1.0))
 		a_ =   mpa - mode;
 		b_ =  -mmb + mode;
-		hr = -1.0/(-a*mpa/Math.sqrt(1.0 + mpa*mpa) + b);
-		hl =  1.0/(-a*mmb/Math.sqrt(1.0 + mmb*mmb) + b);
+		hr = -1.0/(-alpha *mpa/Math.sqrt(1.0 + mpa*mpa) + beta);
+		hl =  1.0/(-alpha *mmb/Math.sqrt(1.0 + mmb*mmb) + beta);
 		a_1 = a_ - hr;
 		b_1 = b_ - hl;
 		mmb_1 = mode - b_1;                                     // lower border
@@ -105,8 +102,8 @@ public double nextDouble(double alpha, double beta) {
 		pr = hr/s;
 		pmr = pm + pr;
 
-		a_setup = a;
-		b_setup = b;
+		a_setup = alpha;
+		b_setup = beta;
 	}
 
 	// GENERATOR 
@@ -116,20 +113,20 @@ public double nextDouble(double alpha, double beta) {
 		if (u <= pm) { // Rejection with a uniform majorizing function
 					   // over the body of the distribution 
 			x = mmb_1 + u*s;
-			if (Math.log(v)  <= (-a*Math.sqrt(1.0 + x*x) + b*x + samb)) break;
+			if (Math.log(v)  <= (-alpha *Math.sqrt(1.0 + x*x) + beta *x + samb)) break;
 		}
 		else {
 			if (u <= pmr) {  // Rejection with an exponential envelope on the
 							 // right side of the mode 
 				e = -Math.log((u-pm)/pr);
 				x = mpa_1 + hr*e;
-				if ((Math.log(v) - e) <= (-a*Math.sqrt(1.0 + x*x) + b*x + samb)) break;
+				if ((Math.log(v) - e) <= (-alpha *Math.sqrt(1.0 + x*x) + beta *x + samb)) break;
 			}
 			else {           // Rejection with an exponential envelope on the
 							 // left side of the mode 
 				e = Math.log((u-pmr)/(1.0 - pmr));
 				x = mmb_1 + hl*e;
-				if ((Math.log(v) + e) <= (-a*Math.sqrt(1.0 + x*x) + b*x + samb)) break;
+				if ((Math.log(v) + e) <= (-alpha *Math.sqrt(1.0 + x*x) + beta *x + samb)) break;
 			}
 		}
 	}

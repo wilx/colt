@@ -46,7 +46,7 @@ class SelectedDenseObjectMatrix3D extends ObjectMatrix3D {
 	/**
 	  * The elements of this matrix.
 	  */
-	protected Object[] elements;
+	protected final Object[] elements;
 	
 	/**
 	  * The offsets of the visible cells of this matrix.

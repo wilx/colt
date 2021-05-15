@@ -128,7 +128,7 @@ public IntArrayList clone() {
  * @return  a deep copy of the receiver.
  */
 public IntArrayList copy() {
-	return (IntArrayList) clone();
+	return clone();
 }
  /**
  * Sorts the specified range of the receiver into ascending numerical order. 

@@ -25,7 +25,7 @@ public class BreitWignerMeanSquare extends BreitWigner {
 	protected Uniform uniform; // helper
 	
 	// The uniform random number generated shared by all <b>static</b> methods.
-	protected static BreitWigner shared = new BreitWignerMeanSquare(1.0,0.2,1.0,makeDefaultGenerator());
+	protected static final BreitWigner shared = new BreitWignerMeanSquare(1.0,0.2,1.0,makeDefaultGenerator());
 /**
  * Constructs a mean-squared BreitWigner distribution.
  * @param cut </tt>cut==Double.NEGATIVE_INFINITY</tt> indicates "don't cut".

@@ -16,14 +16,14 @@ import cern.colt.list.DoubleArrayList;
  * @version 1.0, 09/24/99
  */
 public class DoubleBuffer2D extends cern.colt.PersistentObject implements DoubleBuffer2DConsumer {
-	protected DoubleBuffer2DConsumer target;
-	protected double[] xElements;
-	protected double[] yElements;
+	protected final DoubleBuffer2DConsumer target;
+	protected final double[] xElements;
+	protected final double[] yElements;
 
 	// vars cached for speed
-	protected DoubleArrayList xList;
-	protected DoubleArrayList yList;
-	protected int capacity;
+	protected final DoubleArrayList xList;
+	protected final DoubleArrayList yList;
+	protected final int capacity;
 	protected int size; 
 /**
  * Constructs and returns a new buffer with the given target.

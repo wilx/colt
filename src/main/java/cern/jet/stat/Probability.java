@@ -748,12 +748,12 @@ public static double studentTInverse(double alpha, int size) {
 
 		if (f3*f2<0) {
 		   x1=x2; f1=f2;
-		   x2=x3; f2=f3;
 		} else {
 		   g = f2/(f2+f3);
 		   f1=g*f1;
-		   x2=x3; f2=f3;
 		}
+		 x2=x3;
+		 f2=f3;
 	 } while(Math.abs(x2-x1)>0.001);
 
 	 if (Math.abs(f2)<=Math.abs(f1)) {

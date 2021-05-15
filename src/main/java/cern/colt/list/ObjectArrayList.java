@@ -264,7 +264,7 @@ public boolean contains(Object elem, boolean testForEquality) {
  * @return  a copy of the receiver.
  */
 public ObjectArrayList copy() {
-	return (ObjectArrayList) clone();
+	return clone();
 }
 /**
  * Deletes the first element from the receiver that matches the specified element.

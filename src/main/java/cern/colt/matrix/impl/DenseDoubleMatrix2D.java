@@ -61,7 +61,7 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
 	  * rowOf(index)==index/columns
 	  * i.e. {row0 column0..m}, {row1 column0..m}, ..., {rown column0..m}
 	  */
-	protected double[] elements;
+	protected final double[] elements;
 /**
  * Constructs a matrix with a copy of the given values.
  * <tt>values</tt> is required to have the form <tt>values[row][column]</tt>
@@ -138,13 +138,12 @@ public DoubleMatrix2D assign(double[][] values) {
  */
 @Override
 public DoubleMatrix2D assign(double value) {
-	final double[] elems = this.elements;
 	int index = index(0,0);
 	int cs = this.columnStride;
 	int rs = this.rowStride;
 	for (int row=rows; --row >= 0; ) {
 		for (int i=index, column=columns; --column >= 0; ) {
-			elems[i] = value;
+			this.elements[i] = value;
 			i += cs;
 		}
 		index += rs;
@@ -757,7 +756,7 @@ public DoubleMatrix2D zMult(DoubleMatrix2D B, DoubleMatrix2D C, double alpha, do
 	int blocks = m/m_optimal;
 	int rr = 0;
 	if (m%m_optimal != 0) blocks++;
-	for (; --blocks >= 0; ) {
+	while (--blocks >= 0) {
 		int jB = BB.index(0,0);
 		int indexA = index(rr,0);
 		int jC =  CC.index(rr,0);

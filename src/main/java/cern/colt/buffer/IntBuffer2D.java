@@ -16,14 +16,14 @@ import cern.colt.list.IntArrayList;
  * @version 1.0, 09/24/99
  */
 public class IntBuffer2D extends cern.colt.PersistentObject implements IntBuffer2DConsumer {
-	protected IntBuffer2DConsumer target;
-	protected int[] xElements;
-	protected int[] yElements;
+	protected final IntBuffer2DConsumer target;
+	protected final int[] xElements;
+	protected final int[] yElements;
 
 	// vars cached for speed
-	protected IntArrayList xList;
-	protected IntArrayList yList;
-	protected int capacity;
+	protected final IntArrayList xList;
+	protected final IntArrayList yList;
+	protected final int capacity;
 	protected int size; 
 /**
  * Constructs and returns a new buffer with the given target.

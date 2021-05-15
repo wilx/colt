@@ -23,7 +23,7 @@ linear equations.  This will fail if <tt>isNonsingular()</tt> returns false.
 */
 public class LUDecomposition implements java.io.Serializable {
 	static final long serialVersionUID = 1020;
-	protected LUDecompositionQuick quick;
+	protected final LUDecompositionQuick quick;
 /**
 Constructs and returns a new LU Decomposition object; 
 The decomposed matrices can be retrieved via instance methods of the returned decomposition object.

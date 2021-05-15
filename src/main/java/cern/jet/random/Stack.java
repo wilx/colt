@@ -12,8 +12,8 @@ package cern.jet.random;
  * Not yet commented.
  */
 class Stack {
-	int N;                      /* max number of elts on stack */
-	int[]v;                     /* array of values on the stack */
+	final int N;                      /* max number of elts on stack */
+	final int[]v;                     /* array of values on the stack */
 	int i;                      /* index of top of stack */
 /**
  * Constructs a new stack with the given capacity.

@@ -39,7 +39,7 @@ public class StudentT extends AbstractContinousDistribution {
 
 	protected double TERM; // performance cache for pdf()
  	// The uniform random number generated shared by all <b>static</b> methods. 
-	protected static StudentT shared = new StudentT(1.0,makeDefaultGenerator());
+	protected static final StudentT shared = new StudentT(1.0,makeDefaultGenerator());
 /**
  * Constructs a StudentT distribution.
  * Example: freedom=1.0.

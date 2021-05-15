@@ -31,15 +31,15 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
  	/** the index of the first element */
 	protected int rowZero, columnZero;
 
-	/** 
-	 * Indicates non-flipped state (flip==1) or flipped state (flip==-1).
-	 * see _setFlip() for further info.
+	/*
+	  Indicates non-flipped state (flip==1) or flipped state (flip==-1).
+	  see _setFlip() for further info.
 	 */
 	//protected int rowFlip, columnFlip;
 
-	/** 
-	 * Indicates non-flipped state or flipped state.
-	 * see _setFlip() for further info.
+	/*
+	  Indicates non-flipped state or flipped state.
+	  see _setFlip() for further info.
 	 */
 	//protected int rowFlipMask, columnFlipMask;
 

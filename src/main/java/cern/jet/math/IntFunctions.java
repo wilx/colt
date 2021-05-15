@@ -36,10 +36,10 @@ public class IntFunctions {
 	<p>
 	*/
 	public static final IntFunctions intFunctions = new IntFunctions();
-	
-	/*****************************
-	 * <H3>Unary functions</H3>
-	 *****************************/
+
+	/****************************
+	 <H3>Unary functions</H3>
+	 */
 	/**
 	 * Function that returns <tt>Math.abs(a) == (a < 0) ? -a : a</tt>.
 	 */
@@ -84,15 +84,11 @@ public class IntFunctions {
 	 * Function that returns <tt>a * a</tt>.
 	 */
 	public static final IntFunction square = a -> a * a;
-		
 
 
-
-
-
-	/*****************************
-	 * <H3>Binary functions</H3>
-	 *****************************/
+	/****************************
+	 <H3>Binary functions</H3>
+	 */
 		
 	/**
 	 * Function that returns <tt>a & b</tt>.
@@ -132,12 +128,12 @@ public class IntFunctions {
 	/**
 	 * Function that returns <tt>Math.max(a,b)</tt>.
 	 */
-	public static final IntIntFunction max = (a, b) -> (a >= b) ? a : b;
+	public static final IntIntFunction max = Math::max;
 		
 	/**
 	 * Function that returns <tt>Math.min(a,b)</tt>.
 	 */
-	public static final IntIntFunction min = (a, b) -> (a <= b) ? a : b;
+	public static final IntIntFunction min = Math::min;
 		
 	/**
 	 * Function that returns <tt>a - b</tt>.

@@ -43,8 +43,8 @@ class KnownDoubleQuantileEstimator extends DoubleQuantileEstimator {
 	protected boolean weHadMoreThanOneEmptyBuffer;
 
 	protected RandomSamplingAssistant samplingAssistant;
-	protected double samplingRate; // see method sampleNextElement()
-	protected long N; // see method sampleNextElement()
+	protected final double samplingRate; // see method sampleNextElement()
+	protected final long N; // see method sampleNextElement()
 /**
  * Constructs an approximate quantile finder with b buffers, each having k elements.
  * @param b the number of buffers
@@ -127,7 +127,7 @@ public void clear() {
 @Override
 public KnownDoubleQuantileEstimator clone() {
 	KnownDoubleQuantileEstimator copy = (KnownDoubleQuantileEstimator) super.clone();
-	if (this.samplingAssistant != null) copy.samplingAssistant = (RandomSamplingAssistant) copy.samplingAssistant.clone();
+	if (this.samplingAssistant != null) copy.samplingAssistant = copy.samplingAssistant.clone();
 	return copy;
 }
 /**

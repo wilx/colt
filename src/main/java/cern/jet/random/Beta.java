@@ -62,7 +62,7 @@ public class Beta extends AbstractContinousDistribution {
 
 
 	// The uniform random number generated shared by all <b>static</b> methods.
-	protected static Beta shared = new Beta(10.0,10.0,makeDefaultGenerator());
+	protected static final Beta shared = new Beta(10.0,10.0,makeDefaultGenerator());
 /**
  * Constructs a Beta distribution.
  */
@@ -300,68 +300,65 @@ public double nextDouble() {
  * Returns a beta distributed random number; bypasses the internal state.
  */
 public double nextDouble(double alpha, double beta) {
-/******************************************************************
- *                                                                *
- * Beta Distribution - Stratified Rejection/Patchwork Rejection   *
- *                                                                *
- ******************************************************************
- * For parameters a < 1 , b < 1  and  a < 1 < b   or  b < 1 < a   *
- * the stratified rejection methods b00 and b01 of Sakasegawa are *
- * used. Both procedures employ suitable two-part power functions *
- * from which samples can be obtained by inversion.               *
- * If a > 1 , b > 1 (unimodal case) the patchwork rejection       *
- * method b1prs of Zechner/Stadlober is utilized:                 *
- * The area below the density function f(x) in its body is        *
- * rearranged by certain point reflections. Within a large center *
- * interval variates are sampled efficiently by rejection from    *
- * uniform hats. Rectangular immediate acceptance regions speed   *
- * up the generation. The remaining tails are covered by          *
- * exponential functions.                                         *
- * If (a-1)(b-1) = 0  sampling is done by inversion if either a   *
- * or b are not equal to one. If  a = b = 1  a uniform random     *
- * variate is delivered.                                          *
- *                                                                *
- ******************************************************************
- *                                                                *
- * FUNCTION :   - bsprc samples a random variate from the beta    *
- *                distribution with parameters  a > 0, b > 0.     *
- * REFERENCES : - H. Sakasegawa (1983): Stratified rejection and  *
- *                squeeze method for generating beta random       *
- *                numbers, Ann. Inst. Statist. Math. 35 B,        *
- *                291-302.                                        *
- *              - H. Zechner, E. Stadlober (1993): Generating     *
- *                beta variates via patchwork rejection,          *
- *                Computing 50, 1-18.                             *
- *                                                                *
- * SUBPROGRAMS: - drand(seed) ... (0,1)-Uniform generator with    *
- *                unsigned long integer *seed.                    *
- *              - b00(seed,a,b) ... Beta generator for a<1, b<1   *
- *              - b01(seed,a,b) ... Beta generator for a<1<b or   *
- *                                  b<1<a                         *
- *              - b1prs(seed,a,b) ... Beta generator for a>1, b>1 *
- *                with unsigned long integer *seed, double a, b.  *
- *                                                                *
- ******************************************************************/
-	double a = alpha;
-	double b = beta;
-	if (a  > 1.0) {
-		if (b  > 1.0)  return(b1prs(a, b, randomGenerator));
-		if (b  < 1.0)  return(1.0 - b01(b, a, randomGenerator));
-		if (b == 1.0) {
-			return(Math.exp(Math.log( randomGenerator.raw()) / a));
+/*****************************************************************
+ *
+ Beta Distribution - Stratified Rejection/Patchwork Rejection   *
+ *
+
+ For parameters a < 1 , b < 1  and  a < 1 < b   or  b < 1 < a   *
+ the stratified rejection methods b00 and b01 of Sakasegawa are *
+ used. Both procedures employ suitable two-part power functions *
+ from which samples can be obtained by inversion.               *
+ If a > 1 , b > 1 (unimodal case) the patchwork rejection       *
+ method b1prs of Zechner/Stadlober is utilized:                 *
+ The area below the density function f(x) in its body is        *
+ rearranged by certain point reflections. Within a large center *
+ interval variates are sampled efficiently by rejection from    *
+ uniform hats. Rectangular immediate acceptance regions speed   *
+ up the generation. The remaining tails are covered by          *
+ exponential functions.                                         *
+ If (a-1)(b-1) = 0  sampling is done by inversion if either a   *
+ or b are not equal to one. If  a = b = 1  a uniform random     *
+ variate is delivered.                                          *
+ *
+ *
+ FUNCTION :   - bsprc samples a random variate from the beta    *
+ distribution with parameters  a > 0, b > 0.     *
+ REFERENCES : - H. Sakasegawa (1983): Stratified rejection and  *
+ squeeze method for generating beta random       *
+ numbers, Ann. Inst. Statist. Math. 35 B,        *
+ 291-302.                                        *
+ - H. Zechner, E. Stadlober (1993): Generating     *
+ beta variates via patchwork rejection,          *
+ Computing 50, 1-18.                             *
+ *
+ SUBPROGRAMS: - drand(seed) ... (0,1)-Uniform generator with    *
+ unsigned long integer *seed.                    *
+ - b00(seed,a,b) ... Beta generator for a<1, b<1   *
+ - b01(seed,a,b) ... Beta generator for a<1<b or   *
+ b<1<a                         *
+ - b1prs(seed,a,b) ... Beta generator for a>1, b>1 *
+ with unsigned long integer *seed, double a, b.  *
+ *
+ */
+	if (alpha > 1.0) {
+		if (beta > 1.0)  return(b1prs(alpha, beta, randomGenerator));
+		if (beta < 1.0)  return(1.0 - b01(beta, alpha, randomGenerator));
+		if (beta == 1.0) {
+			return(Math.exp(Math.log( randomGenerator.raw()) / alpha));
 		}
 	}
 
-	if (a  < 1.0) {
-		if (b  > 1.0)  return(b01(a, b, randomGenerator));
-		if (b  < 1.0)  return(b00(a, b, randomGenerator));
-		if (b == 1.0) {
-			return(Math.exp(Math.log(randomGenerator.raw()) / a));
+	if (alpha < 1.0) {
+		if (beta > 1.0)  return(b01(alpha, beta, randomGenerator));
+		if (beta < 1.0)  return(b00(alpha, beta, randomGenerator));
+		if (beta == 1.0) {
+			return(Math.exp(Math.log(randomGenerator.raw()) / alpha));
 		}
 	}
 
-	if (a == 1.0) {
-		if (b != 1.0)  return(1.0 - Math.exp(Math.log(randomGenerator.raw()) / b));
+	if (alpha == 1.0) {
+		if (beta != 1.0)  return(1.0 - Math.exp(Math.log(randomGenerator.raw()) / beta));
 		return(randomGenerator.raw());
 	}
 

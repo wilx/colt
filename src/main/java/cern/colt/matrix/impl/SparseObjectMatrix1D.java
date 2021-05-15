@@ -52,7 +52,7 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
 	/*
 	 * The elements of the matrix.
 	 */
-	protected AbstractIntObjectMap elements; 
+	protected final AbstractIntObjectMap elements;
 /**
  * Constructs a matrix with a copy of the given values.
  * The values are copied. So subsequent changes in <tt>values</tt> are not reflected in the matrix, and vice-versa.

@@ -17,8 +17,8 @@ import cern.colt.list.AbstractIntList;
  * <tt>java.lang.Number.intValue()</tt> is used to convert objects into primitive values which are then stored in the backing templated list.
  * Getter methods return <tt>java.lang.Integer</tt> objects.
  */
-public class IntListAdapter extends java.util.AbstractList implements java.util.List {
-	protected AbstractIntList content;
+public class IntListAdapter extends java.util.AbstractList<Integer> implements java.util.List<Integer> {
+	protected final AbstractIntList content;
 /**
  * Constructs a list backed by the specified content list.
  */
@@ -42,7 +42,7 @@ public IntListAdapter(AbstractIntList content) {
  *		  0 || index &gt; size()</tt>).
  */
 @Override
-public void add(int index, Object element) {
+public void add(int index, Integer element) {
 	content.beforeInsert(index,value(element));
 	modCount++;
 }
@@ -56,13 +56,13 @@ public void add(int index, Object element) {
  * 		  (<tt>index &lt; 0 || index &gt;= size()</tt>).
  */
 @Override
-public Object get(int index) {
+public Integer get(int index) {
 	return object(content.get(index));
 }
 /**
  * Transforms an element of a primitive data type to an object. 
  */
-protected static Object object(int element) {
+protected static Integer object(int element) {
 	return element;
 }
 /**
@@ -78,8 +78,8 @@ protected static Object object(int element) {
  * 		  range (<tt>index &lt; 0 || index &gt;= size()</tt>).
  */
 @Override
-public Object remove(int index) {
-	Object old = get(index);
+public Integer remove(int index) {
+	Integer old = get(index);
 	content.remove(index);
 	modCount++;
 	return old;
@@ -102,8 +102,8 @@ public Object remove(int index) {
  */
 
 @Override
-public Object set(int index, Object element) {
-	Object old = get(index);
+public Integer set(int index, Integer element) {
+	Integer old = get(index);
 	content.set(index,value(element));
 	return old;
 }
@@ -119,7 +119,7 @@ public int size() {
 /**
  * Transforms an object element to a primitive data type. 
  */
-protected static int value(Object element) {
-	return ((Number)element).intValue();
+protected static <U extends Number> int value(U element) {
+	return element.intValue();
 }
 }

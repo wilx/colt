@@ -59,7 +59,7 @@ public class LUDecompositionQuick implements java.io.Serializable {
 
 	protected boolean isNonSingular;
 
-	protected Algebra algebra;
+	protected final Algebra algebra;
 	
 	transient protected double[] workDouble;
 	transient protected int[] work1;

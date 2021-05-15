@@ -216,7 +216,7 @@ public BitVector clone() {
  * @return  a deep copy of the receiver.
  */
 public BitVector copy() {
-	return (BitVector) clone();
+	return clone();
 }
 /**
  * You normally need not use this method. Use this method only if performance is critical. 
@@ -269,7 +269,7 @@ public void elements(long[] bits, int size) {
  *          <code>false</code> otherwise.
  */
 public boolean equals(Object obj) {
-	if (obj == null || !(obj instanceof BitVector))
+	if (!(obj instanceof BitVector))
 		return false;
 	if (this == obj)
 		return true;

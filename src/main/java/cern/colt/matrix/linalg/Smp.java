@@ -20,9 +20,9 @@ import java.util.concurrent.Future;
 /*
 */
 class Smp {
-	protected ForkJoinPool taskGroup; // a very efficient and light weight thread pool
+	protected final ForkJoinPool taskGroup; // a very efficient and light weight thread pool
 
-	protected int maxThreads;	
+	protected final int maxThreads;
 /**
 Constructs a new Smp using a maximum of <tt>maxThreads<tt> threads.
 */
@@ -130,8 +130,7 @@ protected DoubleMatrix2D[][] splitBlockedNN(DoubleMatrix2D A, DoubleMatrix2D B, 
 	if (blocksA==null) return null;
 	DoubleMatrix2D[] blocksB = splitBlockedNN(B,threshold, flops);
 	if (blocksB==null) return null;
-	DoubleMatrix2D[][] blocks = {blocksA,blocksB};
-	return blocks;
+	return new DoubleMatrix2D[][]{blocksA,blocksB};
 }
 protected DoubleMatrix2D[] splitStridedNN(DoubleMatrix2D A, int threshold, long flops) {
 	/*

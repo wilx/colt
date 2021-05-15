@@ -158,12 +158,11 @@ public static double bessel2_fkt(double lambda, double beta) {
 	if ((lambda > 0.0) && ((beta - 0.04*lambda) <= 0.0)) {
 		if (lambda < 11.5) {
 			erg = -Math.log(gamma(lambda)) - lambda*Math.log(2.0) + lambda*Math.log(beta);
-			return(erg);
 		}
 		else {
 			erg = -(lambda + 1.0)*Math.log(2.0) - (lambda - 0.5)*Math.log(lambda) + lambda + lambda*Math.log(beta) - 0.5*Math.log(0.5*pi);
-			return(erg);
 		}
+		return(erg);
 	}
 
 
@@ -190,7 +189,6 @@ public static double bessel2_fkt(double lambda, double beta) {
 			if ((new_value/first_value) < epsilon) break;
 		}
 		erg = -Math.log(2.0*sum);
-		return(erg);
 	}
 	else {
 		z2 = 1.57;
@@ -226,8 +224,8 @@ public static double bessel2_fkt(double lambda, double beta) {
 		sum = 0.5*(first_sum + second_sum);
 		erg = gamma(lambda + 0.5)*Math.pow((2.0*z2),lambda)/(Math.sqrt(pi)*Math.pow(z1,lambda))*sum;
 		erg = -Math.log(2.0*erg);
-		return(erg);
 	}
+	return(erg);
 }
 /**
  * Modified Bessel Functions of First Kind - Order 0.

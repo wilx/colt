@@ -67,23 +67,22 @@ public static double geometricPdf(int k, double p) {
  * @param nr the number of the burr distribution (e.g. 2,7,8,10).
  */
 public static double nextBurr1(double r, int nr, RandomEngine randomGenerator) {
-/******************************************************************
- *                                                                *
- *        Burr II, VII, VIII, X Distributions - Inversion         *
- *                                                                *
- ******************************************************************
- *                                                                *
- * FUNCTION :   - burr1 samples a random number from one of the   *
- *                Burr II, VII, VIII, X distributions with        *
- *                parameter  r > 0 , where the no. of the         *
- *                distribution is indicated by a pointer          *
- *                variable.                                       *
- * REFERENCE :  - L. Devroye (1986): Non-Uniform Random Variate   *
- *                Generation, Springer Verlag, New York.          *
- * SUBPROGRAM : - drand(seed) ... (0,1)-uniform generator with    *
- *                unsigned long integer *seed.                    *
- *                                                                *
- ******************************************************************/
+/*****************************************************************
+ *
+ Burr II, VII, VIII, X Distributions - Inversion         *
+ *
+ *
+ FUNCTION :   - burr1 samples a random number from one of the   *
+ Burr II, VII, VIII, X distributions with        *
+ parameter  r > 0 , where the no. of the         *
+ distribution is indicated by a pointer          *
+ variable.                                       *
+ REFERENCE :  - L. Devroye (1986): Non-Uniform Random Variate   *
+ Generation, Springer Verlag, New York.          *
+ SUBPROGRAM : - drand(seed) ... (0,1)-uniform generator with    *
+ unsigned long integer *seed.                    *
+ *
+ */
 
 	double y;
 	y=Math.exp(Math.log(randomGenerator.raw())/r);                                /* y=u^(1/r) */
@@ -116,23 +115,22 @@ public static double nextBurr1(double r, int nr, RandomEngine randomGenerator) {
  * @param nr the number of the burr distribution (e.g. 3,4,5,6,9,12).
  */
 public static double nextBurr2(double r, double k, int nr, RandomEngine randomGenerator) {
-/******************************************************************
- *                                                                *
- *      Burr III, IV, V, VI, IX, XII Distribution - Inversion     *
- *                                                                *
- ******************************************************************
- *                                                                *
- * FUNCTION :   - burr2 samples a random number from one of the   *
- *                Burr III, IV, V, VI, IX, XII distributions with *
- *                parameters r > 0 and k > 0, where the no. of    *
- *                the distribution is indicated by a pointer      *
- *                variable.                                       *
- * REFERENCE :  - L. Devroye (1986): Non-Uniform Random Variate   *
- *                Generation, Springer Verlag, New York.          *
- * SUBPROGRAM : - drand(seed) ... (0,1)-Uniform generator with    *
- *                unsigned long integer *seed.                    *
- *                                                                *
- ******************************************************************/
+/*****************************************************************
+ *
+ Burr III, IV, V, VI, IX, XII Distribution - Inversion     *
+ *
+ *
+ FUNCTION :   - burr2 samples a random number from one of the   *
+ Burr III, IV, V, VI, IX, XII distributions with *
+ parameters r > 0 and k > 0, where the no. of    *
+ the distribution is indicated by a pointer      *
+ variable.                                       *
+ REFERENCE :  - L. Devroye (1986): Non-Uniform Random Variate   *
+ Generation, Springer Verlag, New York.          *
+ SUBPROGRAM : - drand(seed) ... (0,1)-Uniform generator with    *
+ unsigned long integer *seed.                    *
+ *
+ */
 	double y,u;
 	u = randomGenerator.raw();                     // U(0/1)       
 	y = Math.exp(-Math.log(u)/r)-1.0;              // u^(-1/r) - 1 
@@ -202,32 +200,30 @@ public static double nextErlang(double variance, double mean, RandomEngine rando
  * <p>
  */
 public static int nextGeometric(double p, RandomEngine randomGenerator) {
-/******************************************************************
- *                                                                *
- *              Geometric Distribution - Inversion                *
- *                                                                *
- ******************************************************************
- *                                                                *
- * On generating random numbers of a discrete distribution by     *
- * Inversion normally sequential search is necessary, but in the  *
- * case of the Geometric distribution a direct transformation is  *
- * possible because of the special parallel to the continuous     *
- * Exponential distribution Exp(t):                               *
- *    X - Exp(t): G(x)=1-exp(-tx)                                 *
- *        Geo(p): pk=G(k+1)-G(k)=exp(-tk)*(1-exp(-t))             *
- *                p=1-exp(-t)                                     *
- * A random number of the Geometric distribution Geo(p) is        *
- * obtained by k=(long int)x, where x is from Exp(t) with         *
- * parameter t=-log(1-p).                                         *
- *                                                                *
- ******************************************************************
- *                                                                *
- * FUNCTION:    - geo samples a random number from the Geometric  *
- *                distribution with parameter 0<p<1.              *
- * SUBPROGRAMS: - drand(seed) ... (0,1)-Uniform generator with    *
- *                unsigned long integer *seed.                    *
- *                                                                *
- ******************************************************************/
+/*****************************************************************
+ *
+ Geometric Distribution - Inversion                *
+ *
+ *
+ On generating random numbers of a discrete distribution by     *
+ Inversion normally sequential search is necessary, but in the  *
+ case of the Geometric distribution a direct transformation is  *
+ possible because of the special parallel to the continuous     *
+ Exponential distribution Exp(t):                               *
+ X - Exp(t): G(x)=1-exp(-tx)                                 *
+ Geo(p): pk=G(k+1)-G(k)=exp(-tk)*(1-exp(-t))             *
+ p=1-exp(-t)                                     *
+ A random number of the Geometric distribution Geo(p) is        *
+ obtained by k=(long int)x, where x is from Exp(t) with         *
+ parameter t=-log(1-p).                                         *
+ *
+ *
+ FUNCTION:    - geo samples a random number from the Geometric  *
+ distribution with parameter 0<p<1.              *
+ SUBPROGRAMS: - drand(seed) ... (0,1)-Uniform generator with    *
+ unsigned long integer *seed.                    *
+ *
+ */
 	double u = randomGenerator.raw();
 	return (int)(Math.log(u)/Math.log(1.0-p));
 }
@@ -247,8 +243,7 @@ public static double nextLambda(double l3, double l4, RandomEngine randomGenerat
 	else l_sign=1.0;
 
 	double u = randomGenerator.raw();                           // U(0/1) 
-	double x = l_sign*(Math.exp(Math.log(u)*l3) - Math.exp(Math.log(1.0 - u)*l4));
-	return x;
+	return l_sign*(Math.exp(Math.log(u)*l3) - Math.exp(Math.log(1.0 - u)*l4));
 }
 /**
  * Returns a Laplace (Double Exponential) distributed random number from the standard Laplace distribution L(0,1).  
@@ -290,18 +285,17 @@ public static double nextPowLaw(double alpha, double cut, RandomEngine randomGen
  * <p>
  */
 public static double nextTriangular(RandomEngine randomGenerator) {
-/******************************************************************
- *                                                                *
- *     Triangular Distribution - Inversion: x = +-(1-sqrt(u))     *
- *                                                                *
- ******************************************************************
- *                                                                *
- * FUNCTION :   - tra samples a random number from the            *
- *                standard Triangular distribution in (-1,1)      *
- * SUBPROGRAM : - drand(seed) ... (0,1)-Uniform generator with    *
- *                unsigned long integer *seed.                    *
- *                                                                *
- ******************************************************************/
+/*****************************************************************
+ *
+ Triangular Distribution - Inversion: x = +-(1-sqrt(u))     *
+ *
+ *
+ FUNCTION :   - tra samples a random number from the            *
+ standard Triangular distribution in (-1,1)      *
+ SUBPROGRAM : - drand(seed) ... (0,1)-Uniform generator with    *
+ unsigned long integer *seed.                    *
+ *
+ */
 
 	double u;
 	u=randomGenerator.raw();

@@ -16,12 +16,12 @@ import cern.colt.list.IntArrayList;
  * @version 1.0, 09/24/99
  */
 public class IntBuffer extends cern.colt.PersistentObject implements IntBufferConsumer {
-	protected IntBufferConsumer target;
-	protected int[] elements;
+	protected final IntBufferConsumer target;
+	protected final int[] elements;
 
 	// vars cached for speed
-	protected IntArrayList list;
-	protected int capacity;
+	protected final IntArrayList list;
+	protected final int capacity;
 	protected int size; 
 /**
  * Constructs and returns a new buffer with the given target.

@@ -129,8 +129,7 @@ protected static long[] known_N_compute_B_and_K_quick(long N, double epsilon) {
 		long kMin=Long.MAX_VALUE;
 		if (h>Integer.MIN_VALUE) {
 			double value = ((double)Math.round(binomial(b+h-2, h-1)));
-			long tmpK=ceiling(N_double/value);
-			kMin = tmpK;
+			kMin = ceiling(N_double/value);
 		}
 		kMinimums[b-2]=kMin;
 	}
@@ -189,7 +188,6 @@ protected static long[] known_N_compute_B_and_K_slow(long N, double epsilon, dou
 
 	final int maxBuffers = 50;
 	final int maxHeight = 50;
-	final double N_double = N;
 
 	// One possibility is to use one buffer of size N
 	//
@@ -206,11 +204,11 @@ protected static long[] known_N_compute_B_and_K_slow(long N, double epsilon, dou
 	// practical values of    epsilon >= 0.001   and    delta >= 0.00001
 	//
 	final double logarithm = Math.log(2.0*quantiles/delta);
-	final double c = 2.0 * epsilon * N_double;
+	final double c = 2.0 * epsilon * (double) N;
 	for (long b=2 ; b<maxBuffers ; b++)
 		for (long h=3 ; h<maxHeight ; h++) {
 			double binomial = binomial(b+h-2, h-1);
-			long tmp = ceiling(N_double / binomial);
+			long tmp = ceiling((double) N / binomial);
 			if ((b * tmp < memory) && 
 					((h-2) * binomial - binomial(b+h-3, h-3) + binomial(b+h-3, h-2)
 					<= c) ) {
@@ -242,7 +240,7 @@ protected static long[] known_N_compute_B_and_K_slow(long N, double epsilon, dou
 					ret_k = k ;
 					ret_b = b ;
 					memory = b * k ;
-					sampling_rate = N_double*2.0*epsilon*epsilon / logarithm ;
+					sampling_rate = (double) N *2.0*epsilon*epsilon / logarithm ;
 				}
 			}
 		}

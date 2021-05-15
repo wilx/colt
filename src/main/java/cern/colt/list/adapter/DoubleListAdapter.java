@@ -17,8 +17,8 @@ import cern.colt.list.AbstractDoubleList;
  * <tt>java.lang.Number.doubleValue()</tt> is used to convert objects into primitive values which are then stored in the backing templated list.
  * Getter methods return <tt>java.lang.Double</tt> objects.
  */
-public class DoubleListAdapter extends java.util.AbstractList implements java.util.List {
-	protected AbstractDoubleList content;
+public class DoubleListAdapter extends java.util.AbstractList<Double> implements java.util.List<Double> {
+	protected final AbstractDoubleList content;
 /**
  * Constructs a list backed by the specified content list.
  */
@@ -42,7 +42,7 @@ public DoubleListAdapter(AbstractDoubleList content) {
  *		  0 || index &gt; size()</tt>).
  */
 @Override
-public void add(int index, Object element) {
+public void add(int index, Double element) {
 	content.beforeInsert(index,value(element));
 	modCount++;
 }
@@ -56,13 +56,13 @@ public void add(int index, Object element) {
  * 		  (<tt>index &lt; 0 || index &gt;= size()</tt>).
  */
 @Override
-public Object get(int index) {
+public Double get(int index) {
 	return object(content.get(index));
 }
 /**
  * Transforms an element of a primitive data type to an object. 
  */
-protected static Object object(double element) {
+protected static Double object(double element) {
 	return element;
 }
 /**
@@ -78,8 +78,8 @@ protected static Object object(double element) {
  * 		  range (<tt>index &lt; 0 || index &gt;= size()</tt>).
  */
 @Override
-public Object remove(int index) {
-	Object old = get(index);
+public Double remove(int index) {
+	Double old = get(index);
 	content.remove(index);
 	modCount++;
 	return old;
@@ -102,8 +102,8 @@ public Object remove(int index) {
  */
 
 @Override
-public Object set(int index, Object element) {
-	Object old = get(index);
+public Double set(int index, Double element) {
+	Double old = get(index);
 	content.set(index,value(element));
 	return old;
 }
@@ -119,7 +119,8 @@ public int size() {
 /**
  * Transforms an object element to a primitive data type. 
  */
-protected static double value(Object element) {
-	return ((Number)element).doubleValue();
+
+protected static <U extends Number> double value(U element) {
+	return element.doubleValue();
 }
 }

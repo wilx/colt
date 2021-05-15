@@ -543,11 +543,15 @@ public void replaceFromToWithFrom(int from, int to, AbstractCharList other, int 
 
 		// unambiguous copy (it may hold other==this)
 		if (from<=otherFrom) {
-			for (; --length >= 0; ) setQuick(from++,other.getQuick(otherFrom++));
+			while (--length >= 0) {
+				setQuick(from++,other.getQuick(otherFrom++));
+			}
 		}
 		else {
 			int otherTo = otherFrom+length-1;
-			for (; --length >= 0; ) setQuick(to--,other.getQuick(otherTo--));
+			while (--length >= 0) {
+				setQuick(to--,other.getQuick(otherTo--));
+			}
 		}
 
 			
@@ -644,7 +648,7 @@ public void replaceFromWith(int from, java.util.Collection<? extends Character> 
 	int index=from;
 	int limit = Math.min(size()-from, other.size());
 	for (int i=0; i<limit; i++)
-	    set(index++, (Character) e.next()); //delta
+	    set(index++, e.next()); //delta
 }
 /**
 * Retains (keeps) only the elements in the receiver that are contained in the specified other list.

@@ -49,7 +49,7 @@ protected QuickBitVector() {
  * @param to index of end bit (inclusive).
  * @return the bit mask having all bits between <tt>from</tt> and <tt>to</tt> set to 1.
  */
-public static final long bitMaskWithBitsSetFromTo(int from, int to) {
+public static long bitMaskWithBitsSetFromTo(int from, int to) {
 	return pows[to-from+1] << from;
 
 	// This turned out to be slower:
@@ -148,8 +148,7 @@ static public int leastSignificantBit(int value) {
 public static long[] makeBitVector(int size, int bitsPerElement) {
 	int nBits = size*bitsPerElement;
 	int unitIndex = (nBits-1) >> ADDRESS_BITS_PER_UNIT;
-	long[] bitVector = new long[unitIndex + 1];
-	return bitVector;
+	return new long[unitIndex + 1];
 }
 /**
 Returns the index of the most significant bit in state "true".

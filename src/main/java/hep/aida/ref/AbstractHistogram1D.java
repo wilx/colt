@@ -70,8 +70,7 @@ abstract class AbstractHistogram1D extends Histogram implements IHistogram1D
 				maxBinX = i;
 			}
 		}
-		int[] result = {minBinX,maxBinX};
-		return result;
+		return new int[]{minBinX,maxBinX};
 	}
 	@Override
    public double sumAllBinHeights()

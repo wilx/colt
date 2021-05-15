@@ -55,7 +55,7 @@ public class HyperGeometric extends AbstractDiscreteDistribution {
 
 	
 	// The uniform random number generated shared by all <b>static</b> methods.
-	protected static HyperGeometric shared = new HyperGeometric(1,1,1,makeDefaultGenerator());
+	protected static final HyperGeometric shared = new HyperGeometric(1,1,1,makeDefaultGenerator());
 /**
  * Constructs a HyperGeometric distribution.
  */
@@ -284,48 +284,46 @@ public int nextInt(int N, int s, int n) {
  * Returns a random number from the distribution; bypasses the internal state.
  */
 protected int nextInt(int N, int M, int n, RandomEngine randomGenerator) {
-/******************************************************************
- *                                                                *
- * Hypergeometric Distribution - Patchwork Rejection/Inversion    *
- *                                                                *
- ******************************************************************
- *                                                                *
- * The basic algorithms work for parameters 1 <= n <= M <= N/2.   *
- * Otherwise parameters are re-defined in the set-up step and the *
- * random number K is adapted before delivering.                  *
- * For l = m-max(0,n-N+M) < 10  Inversion method hmdu is applied: *
- * The random numbers are generated via modal down-up search,     *
- * starting at the mode m. The cumulative probabilities           *
- * are avoided by using the technique of chop-down.               *
- * For l >= 10  the Patchwork Rejection method  hprs is employed: *
- * The area below the histogram function f(x) in its              *
- * body is rearranged by certain point reflections. Within a      *
- * large center interval variates are sampled efficiently by      *
- * rejection from uniform hats. Rectangular immediate acceptance  *
- * regions speed up the generation. The remaining tails are       *
- * covered by exponential functions.                              *
- *                                                                *
- ******************************************************************
- *                                                                *
- * FUNCTION :   - hprsc samples a random number from the          *
- *                Hypergeometric distribution with parameters     *
- *                N (number of red and black balls), M (number    *
- *                of red balls) and n (number of trials)          *
- *                valid for N >= 2, M,n <= N.                     *
- * REFERENCE :  - H. Zechner (1994): Efficient sampling from      *
- *                continuous and discrete unimodal distributions, *
- *                Doctoral Dissertation, 156 pp., Technical       *
- *                University Graz, Austria.                       *
- * SUBPROGRAMS: - flogfak(k)  ... log(k!) with long integer k     *
- *              - drand(seed) ... (0,1)-Uniform generator with    *
- *                unsigned long integer *seed.                    *
- *              - hmdu(seed,N,M,n) ... Hypergeometric generator   *
- *                for l<10                                        *
- *              - hprs(seed,N,M,n) ... Hypergeometric generator   *
- *                for l>=10 with unsigned long integer *seed,     *
- *                long integer  N , M , n.                        *
- *                                                                *
- ******************************************************************/
+/*****************************************************************
+ *
+ Hypergeometric Distribution - Patchwork Rejection/Inversion    *
+ *
+ *
+ The basic algorithms work for parameters 1 <= n <= M <= N/2.   *
+ Otherwise parameters are re-defined in the set-up step and the *
+ random number K is adapted before delivering.                  *
+ For l = m-max(0,n-N+M) < 10  Inversion method hmdu is applied: *
+ The random numbers are generated via modal down-up search,     *
+ starting at the mode m. The cumulative probabilities           *
+ are avoided by using the technique of chop-down.               *
+ For l >= 10  the Patchwork Rejection method  hprs is employed: *
+ The area below the histogram function f(x) in its              *
+ body is rearranged by certain point reflections. Within a      *
+ large center interval variates are sampled efficiently by      *
+ rejection from uniform hats. Rectangular immediate acceptance  *
+ regions speed up the generation. The remaining tails are       *
+ covered by exponential functions.                              *
+ *
+ *
+ FUNCTION :   - hprsc samples a random number from the          *
+ Hypergeometric distribution with parameters     *
+ N (number of red and black balls), M (number    *
+ of red balls) and n (number of trials)          *
+ valid for N >= 2, M,n <= N.                     *
+ REFERENCE :  - H. Zechner (1994): Efficient sampling from      *
+ continuous and discrete unimodal distributions, *
+ Doctoral Dissertation, 156 pp., Technical       *
+ University Graz, Austria.                       *
+ SUBPROGRAMS: - flogfak(k)  ... log(k!) with long integer k     *
+ - drand(seed) ... (0,1)-Uniform generator with    *
+ unsigned long integer *seed.                    *
+ - hmdu(seed,N,M,n) ... Hypergeometric generator   *
+ for l<10                                        *
+ - hprs(seed,N,M,n) ... Hypergeometric generator   *
+ for l>=10 with unsigned long integer *seed,     *
+ long integer  N , M , n.                        *
+ *
+ */
 	int Nhalf, n_le_Nhalf, M_le_Nhalf, K;
 
 	Nhalf =  N / 2;

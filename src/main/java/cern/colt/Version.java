@@ -91,8 +91,7 @@ public static void main(String[] args) {
 private static int[] numbers() {
 	int w = 4;
 	//int[] numbers = new int[w];
-	int[] numbers = new int[] {1, 1, 0, 0};
-	return numbers;
+	return new int[] {1, 1, 0, 0};
 	/*
 	if (getPackage()==null) return numbers;
 	String s = getPackage().getImplementationVersion();

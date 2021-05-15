@@ -163,9 +163,9 @@ public class Functions {
 	*/
 	public static final Functions functions = new Functions();
 
-	/*****************************
-	 * <H3>Unary functions</H3>
-	 *****************************/
+    /****************************
+     <H3>Unary functions</H3>
+     */
 	/**
 	 * Function that returns <tt>Math.abs(a)</tt>.
 	 */
@@ -176,8 +176,8 @@ public class Functions {
 	 */
 	public static final DoubleFunction acos = Math::acos;
 
-	/**
-	 * Function that returns <tt>com.imsl.math.Sfun.acosh(a)</tt>.
+	/*
+	  Function that returns <tt>com.imsl.math.Sfun.acosh(a)</tt>.
 	 */
 	/*
 	public static final DoubleFunction acosh = new DoubleFunction() {
@@ -190,8 +190,8 @@ public class Functions {
 	 */
 	public static final DoubleFunction asin = Math::asin;
 
-	/**
-	 * Function that returns <tt>com.imsl.math.Sfun.asinh(a)</tt>.
+	/*
+	  Function that returns <tt>com.imsl.math.Sfun.asinh(a)</tt>.
 	 */
 	/*
 	public static final DoubleFunction asinh = new DoubleFunction() {
@@ -204,8 +204,8 @@ public class Functions {
 	 */
 	public static final DoubleFunction atan = Math::atan;
 
-	/**
-	 * Function that returns <tt>com.imsl.math.Sfun.atanh(a)</tt>.
+	/*
+	  Function that returns <tt>com.imsl.math.Sfun.atanh(a)</tt>.
 	 */
 	/*
 	public static final DoubleFunction atanh = new DoubleFunction() {
@@ -223,8 +223,8 @@ public class Functions {
 	 */
 	public static final DoubleFunction cos = Math::cos;
 
-	/**
-	 * Function that returns <tt>com.imsl.math.Sfun.cosh(a)</tt>.
+	/*
+	  Function that returns <tt>com.imsl.math.Sfun.cosh(a)</tt>.
 	 */
 	/*
 	public static final DoubleFunction cosh = new DoubleFunction() {
@@ -232,8 +232,8 @@ public class Functions {
 	};
 	*/		
 
-	/**
-	 * Function that returns <tt>com.imsl.math.Sfun.cot(a)</tt>.
+	/*
+	  Function that returns <tt>com.imsl.math.Sfun.cot(a)</tt>.
 	 */
 	/*
 	public static final DoubleFunction cot = new DoubleFunction() {
@@ -241,8 +241,8 @@ public class Functions {
 	};
 	*/		
 
-	/**
-	 * Function that returns <tt>com.imsl.math.Sfun.erf(a)</tt>.
+	/*
+	  Function that returns <tt>com.imsl.math.Sfun.erf(a)</tt>.
 	 */
 	/*
 	public static final DoubleFunction erf = new DoubleFunction() {
@@ -250,8 +250,8 @@ public class Functions {
 	};
 	*/		
 
-	/**
-	 * Function that returns <tt>com.imsl.math.Sfun.erfc(a)</tt>.
+	/*
+	  Function that returns <tt>com.imsl.math.Sfun.erfc(a)</tt>.
 	 */
 	/*
 	public static final DoubleFunction erfc = new DoubleFunction() {
@@ -269,8 +269,8 @@ public class Functions {
 	 */
 	public static final DoubleFunction floor = Math::floor;
 
-	/**
-	 * Function that returns <tt>com.imsl.math.Sfun.gamma(a)</tt>.
+	/*
+	  Function that returns <tt>com.imsl.math.Sfun.gamma(a)</tt>.
 	 */
 	/*
 	public static final DoubleFunction gamma = new DoubleFunction() {
@@ -293,8 +293,8 @@ public class Functions {
 	 */
 	public static final DoubleFunction log = Math::log;
 
-	/**
-	 * Function that returns <tt>com.imsl.math.Sfun.log10(a)</tt>.
+	/*
+	  Function that returns <tt>com.imsl.math.Sfun.log10(a)</tt>.
 	 */
 	/*
 	public static final DoubleFunction log10 = new DoubleFunction() {
@@ -308,8 +308,8 @@ public class Functions {
 	 */
 	public static final DoubleFunction log2 = a -> Math.log(a) * 1.4426950408889634;
 
-	/**
-	 * Function that returns <tt>com.imsl.math.Sfun.logGamma(a)</tt>.
+	/*
+	  Function that returns <tt>com.imsl.math.Sfun.logGamma(a)</tt>.
 	 */
 	/*
 	public static final DoubleFunction logGamma = new DoubleFunction() {
@@ -337,8 +337,8 @@ public class Functions {
 	 */
 	public static final DoubleFunction sin = Math::sin;
 		
-	/**
-	 * Function that returns <tt>com.imsl.math.Sfun.sinh(a)</tt>.
+	/*
+	  Function that returns <tt>com.imsl.math.Sfun.sinh(a)</tt>.
 	 */
 	/*
 	public static final DoubleFunction sinh = new DoubleFunction() {
@@ -361,8 +361,8 @@ public class Functions {
 	 */
 	public static final DoubleFunction tan = Math::tan;
 		
-	/**
-	 * Function that returns <tt>com.imsl.math.Sfun.tanh(a)</tt>.
+	/*
+	  Function that returns <tt>com.imsl.math.Sfun.tanh(a)</tt>.
 	 */
 	/*
 	public static final DoubleFunction tanh = new DoubleFunction() {
@@ -370,8 +370,8 @@ public class Functions {
 	};
 	*/		
 
-	/**
-	 * Function that returns <tt>Math.toDegrees(a)</tt>.
+	/*
+	  Function that returns <tt>Math.toDegrees(a)</tt>.
 	 */
 	/*
 	public static final DoubleFunction toDegrees = new DoubleFunction() {
@@ -379,28 +379,27 @@ public class Functions {
 	};
 	*/
 
-	/**
-	 * Function that returns <tt>Math.toRadians(a)</tt>.
+	/*
+	  Function that returns <tt>Math.toRadians(a)</tt>.
 	 */
 	/*
 	public static final DoubleFunction toRadians = new DoubleFunction() {
 		public final double apply(double a) { return Math.toRadians(a); }
 	};		
 	*/
-	
 
 
-	/*****************************
-	 * <H3>Binary functions</H3>
-	 *****************************/
+    /****************************
+     <H3>Binary functions</H3>
+     */
 		
 	/**
 	 * Function that returns <tt>Math.atan2(a,b)</tt>.
 	 */
 	public static final DoubleDoubleFunction atan2 = Math::atan2;
 		
-	/**
-	 * Function that returns <tt>com.imsl.math.Sfun.logBeta(a,b)</tt>.
+	/*
+	  Function that returns <tt>com.imsl.math.Sfun.logBeta(a,b)</tt>.
 	 */
 	/*
 	public static final DoubleDoubleFunction logBeta = new DoubleDoubleFunction() {

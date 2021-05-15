@@ -46,7 +46,7 @@ public class PoissonSlow extends AbstractDiscreteDistribution {
 		0.1208650973866179e-2, -0.5395239384953e-5};
 
  	// The uniform random number generated shared by all <b>static</b> methods.
-	protected static PoissonSlow shared = new PoissonSlow(0.0,makeDefaultGenerator());
+	protected static final PoissonSlow shared = new PoissonSlow(0.0,makeDefaultGenerator());
 /**
  * Constructs a poisson distribution.
  * Example: mean=1.0.
@@ -66,10 +66,9 @@ public static double logGamma(double xx) {
 	tmp -= (x + 0.5) * Math.log(tmp);
 	double ser = 1.000000000190015;
 
-	double[] coeff = cof;
 	for (int j = 0; j <= 5; j++ ) {
 		x++;
-		ser += coeff[j]/x;
+		ser += cof[j]/x;
 	}
 	return -tmp + Math.log(2.5066282746310005*ser);
 }
@@ -87,11 +86,10 @@ private int nextInt(double theMean) {
 	/* 
 	 * Adapted from "Numerical Recipes in C".
 	 */
-  	double xm = theMean;
-  	double g = this.cached_g;
+	double g = this.cached_g;
 
-	if (xm == -1.0 ) return 0; // not defined
-	if (xm < SWITCH_MEAN ) {
+	if (theMean == -1.0 ) return 0; // not defined
+	if (theMean < SWITCH_MEAN ) {
 		int poisson = -1;
 		double product = 1;
 		do {
@@ -101,7 +99,7 @@ private int nextInt(double theMean) {
 		// bug in CLHEP 1.4.0: was "} while ( product > g );"
 		return poisson;
 	}
-	else if (xm < MEAN_MAX ) {
+	else if (theMean < MEAN_MAX ) {
 		double t;
 		double em;
 	  	double sq = this.cached_sq;
@@ -112,7 +110,7 @@ private int nextInt(double theMean) {
 			double y;
 			do {
 				y = Math.tan(Math.PI*rand.raw());
-				em = sq*y + xm;
+				em = sq*y + theMean;
 			} while (em < 0.0);
 			em = (int)(em); // faster than em = Math.floor(em); (em>=0.0)
 			t = 0.9*(1.0 + y*y)* Math.exp(em*alxm - logGamma(em + 1.0) - g);
@@ -120,7 +118,7 @@ private int nextInt(double theMean) {
 		return (int) em;
 	}
 	else { // mean is too large
-		return (int) xm;
+		return (int) theMean;
 	}
 }
 /**

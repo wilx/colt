@@ -47,7 +47,7 @@ public class FormerFactory {
 public Former create(final String format) {
 	return new Former() {
 		//private FormatStringBuffer f = (format!=null ? new corejava.FormatStringBuffer(format) : null);
-		private corejava.Format f = (format!=null ? new corejava.Format(format) : null);
+		private final corejava.Format f = (format!=null ? new corejava.Format(format) : null);
 		//private corejava.PrintfFormat f = (format!=null ? new corejava.PrintfFormat(format) : null);
 		@Override
       public String form(double value) {

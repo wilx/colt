@@ -14,7 +14,7 @@ package cern.jet.stat.quantile;
 abstract class Buffer extends cern.colt.PersistentObject {
 	protected int weight;
 	protected int level;
-	protected int k;
+	protected final int k;
 	protected boolean isAllocated;
 /**
  * This method was created in VisualAge.

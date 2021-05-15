@@ -46,12 +46,12 @@ class SelectedDenseDoubleMatrix1D extends DoubleMatrix1D {
 	/**
 	  * The elements of this matrix.
 	  */
-	protected double[] elements;
+	protected final double[] elements;
 	
 	/**
 	  * The offsets of visible indexes of this matrix.
 	  */
-	protected int[] offsets;
+	protected final int[] offsets;
 
 	/**
 	  * The offset.

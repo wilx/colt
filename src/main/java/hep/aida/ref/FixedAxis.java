@@ -10,9 +10,9 @@ Fixed-width axis; A reference implementation of hep.aida.IAxis.
 */
 public class FixedAxis implements IAxis
 {
-	private int bins;
-	private double min;
-	private double binWidth;
+	private final int bins;
+	private final double min;
+	private final double binWidth;
 	// Package private for ease of use in Histogram1D and Histogram2D
 	private int xunder, xover;
 	/**

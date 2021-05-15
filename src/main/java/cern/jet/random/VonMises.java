@@ -38,7 +38,7 @@ public class VonMises extends AbstractContinousDistribution {
 	private double tau,rho,r;
 
  	// The uniform random number generated shared by all <b>static</b> methods. 
-	protected static VonMises shared = new VonMises(1.0,makeDefaultGenerator());
+	protected static final VonMises shared = new VonMises(1.0,makeDefaultGenerator());
 /**
  * Constructs a Von Mises distribution.
  * Example: k=1.0.
@@ -60,24 +60,23 @@ public double nextDouble() {
  * @throws IllegalArgumentException if <tt>k &lt;= 0.0</tt>.
  */
 public double nextDouble(double k) {
-/******************************************************************
- *                                                                *
- *         Von Mises Distribution - Acceptance Rejection          *
- *                                                                *
- ******************************************************************
- *                                                                *
- * FUNCTION :  - mwc samples a random number from the von Mises   *
- *               distribution ( -Pi <= x <= Pi) with parameter    *
- *               k > 0  via  rejection from the wrapped Cauchy    *
- *               distibution.                                     *
- * REFERENCE:  - D.J. Best, N.I. Fisher (1979): Efficient         *
- *               simulation of the von Mises distribution,        *
- *               Appl. Statist. 28, 152-157.                      *
- * SUBPROGRAM: - drand(seed) ... (0,1)-Uniform generator with     *
- *               unsigned long integer *seed.                     *
- *                                                                *
- * Implemented by F. Niederl, August 1992                         *
- ******************************************************************/
+/*****************************************************************
+ *
+ Von Mises Distribution - Acceptance Rejection          *
+ *
+ *
+ FUNCTION :  - mwc samples a random number from the von Mises   *
+ distribution ( -Pi <= x <= Pi) with parameter    *
+ k > 0  via  rejection from the wrapped Cauchy    *
+ distibution.                                     *
+ REFERENCE:  - D.J. Best, N.I. Fisher (1979): Efficient         *
+ simulation of the von Mises distribution,        *
+ Appl. Statist. 28, 152-157.                      *
+ SUBPROGRAM: - drand(seed) ... (0,1)-Uniform generator with     *
+ unsigned long integer *seed.                     *
+ *
+ Implemented by F. Niederl, August 1992                         *
+ */
 	double u,v,w,c,z;
 
 	if (k<=0.0) throw new IllegalArgumentException();

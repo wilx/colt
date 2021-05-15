@@ -13,9 +13,9 @@ However, performance seems fine - filling 3 * 10^5 points/sec, both using FixedA
 */
 public class Histogram3D extends AbstractHistogram3D implements IHistogram3D
 {
-	private double[][][] heights;
-	private double[][][] errors;
-	private int[][][] entries;
+	private final double[][][] heights;
+	private final double[][][] errors;
+	private final int[][][] entries;
 	private int nEntry; // total number of times fill called
 	private double sumWeight; // Sum of all weights
 	private double sumWeightSquared; // Sum of the squares of the weights
@@ -212,7 +212,7 @@ public class Histogram3D extends AbstractHistogram3D implements IHistogram3D
 		{
 			for (int j=indexY1; j<=indexY2; j++)
 			{
-				for (int k=0; i<zBins; k++)
+				for (int k=0; k<zBins; k++)
 				{
 					sliceEntries[i][k] += entries[i][j][k]; 
 					sliceHeights[i][k] += heights[i][j][k]; 

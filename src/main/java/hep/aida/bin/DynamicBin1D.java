@@ -192,9 +192,8 @@ public synchronized double covariance(DynamicBin1D other) {
 			for (int i=size(); --i >= 0; ) {
 				s += this.elements.getQuick(i) * other.elements.getQuick(i);
 			}
-		
-		double cov = (s - sum()*other.sum()/size()) / size();
-		return cov;
+
+		return (s - sum()*other.sum()/size()) / size();
 	}
 }
 /**

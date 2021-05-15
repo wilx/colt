@@ -35,7 +35,7 @@ public class NegativeBinomial extends AbstractDiscreteDistribution {
 	protected Poisson poisson;
 	
  	// The uniform random number generated shared by all <b>static</b> methods. 
-	protected static NegativeBinomial shared = new NegativeBinomial(1,0.5,makeDefaultGenerator());
+	protected static final NegativeBinomial shared = new NegativeBinomial(1,0.5,makeDefaultGenerator());
 /**
  * Constructs a Negative Binomial distribution.
  * Example: n=1, p=0.5.
@@ -64,7 +64,7 @@ public double cdf(int k) {
 @Override
 public NegativeBinomial clone() {
 	NegativeBinomial copy = (NegativeBinomial) super.clone();
-	if (this.poisson != null) copy.poisson = (Poisson) this.poisson.clone();
+	if (this.poisson != null) copy.poisson = this.poisson.clone();
 	copy.poisson.setRandomGenerator(copy.getRandomGenerator());
 	if (this.gamma != null) copy.gamma = (Gamma) this.gamma.clone();
 	copy.gamma.setRandomGenerator(copy.getRandomGenerator());
@@ -81,32 +81,30 @@ public int nextInt() {
  * Returns a random number from the distribution; bypasses the internal state.
  */
 public int nextInt(int n, double p) {
-/******************************************************************
- *                                                                *
- *        Negative Binomial Distribution - Compound method        *
- *                                                                *
- ******************************************************************
- *                                                                *
- * FUNCTION:    - nbp  samples a random number from the Negative  *
- *                Binomial distribution with parameters r (no. of *
- *                failures given) and p (probability of success)  *
- *                valid for  r > 0, 0 < p < 1.                    *
- *                If G from Gamma(r) then K  from Poiss(pG/(1-p)) *
- *                is NB(r,p)--distributed.                        *
- * REFERENCE:   - J.H. Ahrens, U. Dieter (1974): Computer methods *
- *                for sampling from gamma, beta, Poisson and      *
- *                binomial distributions, Computing 12, 223--246. *
- * SUBPROGRAMS: - drand(seed) ... (0,1)-Uniform generator with    *
- *                unsigned long integer *seed                     *
- *              - Gamma(seed,a) ... Gamma generator for a > 0     *
- *                unsigned long *seed, double a                   *
- *              - Poisson(seed,a) ...Poisson generator for a > 0  *
- *                unsigned long *seed, double a.                  *
- *                                                                *
- ******************************************************************/
+/*****************************************************************
+ *
+ Negative Binomial Distribution - Compound method        *
+ *
+ *
+ FUNCTION:    - nbp  samples a random number from the Negative  *
+ Binomial distribution with parameters r (no. of *
+ failures given) and p (probability of success)  *
+ valid for  r > 0, 0 < p < 1.                    *
+ If G from Gamma(r) then K  from Poiss(pG/(1-p)) *
+ is NB(r,p)--distributed.                        *
+ REFERENCE:   - J.H. Ahrens, U. Dieter (1974): Computer methods *
+ for sampling from gamma, beta, Poisson and      *
+ binomial distributions, Computing 12, 223--246. *
+ SUBPROGRAMS: - drand(seed) ... (0,1)-Uniform generator with    *
+ unsigned long integer *seed                     *
+ - Gamma(seed,a) ... Gamma generator for a > 0     *
+ unsigned long *seed, double a                   *
+ - Poisson(seed,a) ...Poisson generator for a > 0  *
+ unsigned long *seed, double a.                  *
+ *
+ */
 
 	double x = p /(1.0 - p);
-	double p1 = p;  
 	double y = x * this.gamma.nextDouble(n,1.0);
 	return this.poisson.nextInt(y);
 }

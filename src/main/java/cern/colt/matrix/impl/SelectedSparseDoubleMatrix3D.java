@@ -47,7 +47,7 @@ class SelectedSparseDoubleMatrix3D extends DoubleMatrix3D {
 	/**
 	  * The elements of this matrix.
 	  */
-	protected AbstractIntDoubleMap elements;
+	protected final AbstractIntDoubleMap elements;
 	
 	/**
 	  * The offsets of the visible cells of this matrix.

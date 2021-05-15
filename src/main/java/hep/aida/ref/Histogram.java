@@ -8,7 +8,7 @@ Base class for Histogram1D and Histogram2D.
 */
 abstract class Histogram implements hep.aida.IHistogram
 {
-	private String title;
+	private final String title;
 	Histogram(String title)
 	{
 		this.title = title;

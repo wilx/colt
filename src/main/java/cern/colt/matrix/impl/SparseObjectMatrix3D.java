@@ -78,7 +78,7 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
 	/*
 	 * The elements of the matrix.
 	 */
-	protected AbstractIntObjectMap elements; 
+	protected final AbstractIntObjectMap elements;
 /**
  * Constructs a matrix with a copy of the given values.
  * <tt>values</tt> is required to have the form <tt>values[slice][row][column]</tt>

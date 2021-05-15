@@ -122,7 +122,7 @@ public LongArrayList clone() {
  * @return  a deep copy of the receiver.
  */
 public LongArrayList copy() {
-	return (LongArrayList) clone();
+	return clone();
 }
  /**
  * Sorts the specified range of the receiver into ascending numerical order. 

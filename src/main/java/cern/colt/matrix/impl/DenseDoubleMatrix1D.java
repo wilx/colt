@@ -36,7 +36,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
 	/**
 	  * The elements of this matrix.
 	  */
-	protected double[] elements;
+	protected final double[] elements;
 /**
  * Constructs a matrix with a copy of the given values.
  * The values are copied. So subsequent changes in <tt>values</tt> are not reflected in the matrix, and vice-versa.
@@ -100,9 +100,8 @@ public DoubleMatrix1D assign(double[] values) {
 public DoubleMatrix1D assign(double value) {
 	int index = index(0);
 	int s = this.stride;
-	double[] elems = this.elements;
 	for (int i=size; --i >= 0; ) {
-		elems[index] = value;
+		this.elements[index] = value;
 		index += s;
 	}
 	return this;
@@ -179,7 +178,6 @@ public DoubleMatrix1D assign(DoubleMatrix1D source) {
 		other = (DenseDoubleMatrix1D) c;
 	}
 
-	final double[] elems = this.elements;
 	final double[] otherElems = other.elements;
 	if (elements==null || otherElems==null) throw new InternalError();
 	int s = this.stride;
@@ -188,7 +186,7 @@ public DoubleMatrix1D assign(DoubleMatrix1D source) {
 	int index = index(0);
 	int otherIndex = other.index(0);
 	for (int k=size; --k >= 0; ) {
-		elems[index] = otherElems[otherIndex];
+		this.elements[index] = otherElems[otherIndex];
 		index += s;
 		otherIndex += ys;
 	}
@@ -299,10 +297,9 @@ protected int cardinality(int maxCardinality) {
 	int cardinality = 0;
 	int index = index(0);
 	int s = this.stride;
-	double[] elems = this.elements;
-	int i=size; 
+	int i=size;
 	while (--i >= 0 && cardinality < maxCardinality) {
-		if (elems[index] != 0) cardinality++;
+		if (this.elements[index] != 0) cardinality++;
 		index += s;
 	}
 	return cardinality;

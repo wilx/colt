@@ -554,11 +554,15 @@ public void replaceFromToWithFrom(int from, int to, AbstractDoubleList other, in
 
 		// unambiguous copy (it may hold other==this)
 		if (from<=otherFrom) {
-			for (; --length >= 0; ) setQuick(from++,other.getQuick(otherFrom++));
+			while (--length >= 0) {
+				setQuick(from++,other.getQuick(otherFrom++));
+			}
 		}
 		else {
 			int otherTo = otherFrom+length-1;
-			for (; --length >= 0; ) setQuick(to--,other.getQuick(otherTo--));
+			while (--length >= 0) {
+				setQuick(to--,other.getQuick(otherTo--));
+			}
 		}
 
 			

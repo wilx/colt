@@ -133,7 +133,7 @@ protected void containsBox(int column, int row, int width, int height) {
  * @return  a shallow clone of the receiver.
  */
 public BitMatrix copy() {
-	return (BitMatrix) clone();
+	return clone();
 }
 protected long[] elements() {
 	return bits;

@@ -124,7 +124,7 @@ public CharArrayList clone() {
  * @return  a deep copy of the receiver.
  */
 public CharArrayList copy() {
-	return (CharArrayList) clone();
+	return clone();
 }
  /**
  * Sorts the specified range of the receiver into ascending numerical order. 

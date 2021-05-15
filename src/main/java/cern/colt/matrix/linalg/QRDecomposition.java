@@ -27,19 +27,20 @@ public class QRDecomposition implements java.io.Serializable {
 	/** Array for internal storage of decomposition.
 	@serial internal array storage.
 	*/
-	private DoubleMatrix2D QR;
+	private final DoubleMatrix2D QR;
 	//private double[][] QR;
 	
 	/** Row and column dimensions.
 	@serial column dimension.
 	@serial row dimension.
 	*/
-	private int m, n;
+	private final int m;
+	private final int n;
 	
 	/** Array for internal storage of diagonal of R.
 	@serial diagonal of R.
 	*/
-	private DoubleMatrix1D Rdiag;
+	private final DoubleMatrix1D Rdiag;
 /** 
 Constructs and returns a new QR decomposition object;  computed by Householder reflections;
 The decomposed matrices can be retrieved via instance methods of the returned decomposition object.

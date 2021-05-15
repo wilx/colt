@@ -105,9 +105,11 @@ public void drotg(double a, double b, double[] rotvec) {
 
 	roe = b;
 
-	if (Math.abs(a) > Math.abs(b)) roe = a;
+	final double absA = Math.abs(a);
+	final double absB = Math.abs(b);
+	if (absA > absB) roe = a;
 
-	scale = Math.abs(a) + Math.abs(b);
+	scale = absA + absB;
 
 	if (scale != 0.0) {
 
@@ -118,8 +120,8 @@ public void drotg(double a, double b, double[] rotvec) {
 		c = a/r;
 		s = b/r;
 		z = 1.0;
-		if (Math.abs(a) > Math.abs(b)) z = s;
-		if ((Math.abs(b) >= Math.abs(a)) && (c != 0.0)) z = 1.0/c;
+		if (absA > absB) z = s;
+		if ((absB >= absA) && (c != 0.0)) z = 1.0/c;
 
 	} else {
 

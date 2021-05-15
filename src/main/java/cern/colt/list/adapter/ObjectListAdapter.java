@@ -13,8 +13,8 @@ import cern.colt.list.ObjectArrayList;
  * Adapter that permits an {@link cern.colt.list.ObjectArrayList} to be viewed and treated as a JDK 1.2 {@link java.util.AbstractList}.
  * Makes the contained list compatible with the JDK 1.2 Collections Framework.
  */
-public class ObjectListAdapter extends java.util.AbstractList implements java.util.List {
-	protected ObjectArrayList content;
+public class ObjectListAdapter extends java.util.AbstractList<Object> implements java.util.List<Object> {
+	protected final ObjectArrayList content;
 /**
  * Constructs a list backed by the specified content list.
  */

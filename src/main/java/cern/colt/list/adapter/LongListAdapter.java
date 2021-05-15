@@ -17,8 +17,8 @@ import cern.colt.list.AbstractLongList;
  * <tt>java.lang.Number.longValue()</tt> is used to convert objects into primitive values which are then stored in the backing templated list.
  * Getter methods return <tt>java.lang.Long</tt> objects.
  */
-public class LongListAdapter extends java.util.AbstractList implements java.util.List {
-	protected AbstractLongList content;
+public class LongListAdapter extends java.util.AbstractList<Long> implements java.util.List<Long> {
+	protected final AbstractLongList content;
 /**
  * Constructs a list backed by the specified content list.
  */
@@ -42,7 +42,7 @@ public LongListAdapter(AbstractLongList content) {
  *		  0 || index &gt; size()</tt>).
  */
 @Override
-public void add(int index, Object element) {
+public void add(int index, Long element) {
 	content.beforeInsert(index,value(element));
 	modCount++;
 }
@@ -56,13 +56,13 @@ public void add(int index, Object element) {
  * 		  (<tt>index &lt; 0 || index &gt;= size()</tt>).
  */
 @Override
-public Object get(int index) {
+public Long get(int index) {
 	return object(content.get(index));
 }
 /**
  * Transforms an element of a primitive data type to an object. 
  */
-protected static Object object(long element) {
+protected static Long object(long element) {
 	return element;
 }
 /**
@@ -78,8 +78,8 @@ protected static Object object(long element) {
  * 		  range (<tt>index &lt; 0 || index &gt;= size()</tt>).
  */
 @Override
-public Object remove(int index) {
-	Object old = get(index);
+public Long remove(int index) {
+	Long old = get(index);
 	content.remove(index);
 	modCount++;
 	return old;
@@ -102,8 +102,8 @@ public Object remove(int index) {
  */
 
 @Override
-public Object set(int index, Object element) {
-	Object old = get(index);
+public Long set(int index, Long element) {
+	Long old = get(index);
 	content.set(index,value(element));
 	return old;
 }
@@ -119,7 +119,7 @@ public int size() {
 /**
  * Transforms an object element to a primitive data type. 
  */
-protected static long value(Object element) {
-	return ((Number)element).longValue();
+protected static <U extends Number> long value(U element) {
+	return element.longValue();
 }
 }

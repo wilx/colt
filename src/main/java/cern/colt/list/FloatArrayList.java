@@ -122,7 +122,7 @@ public FloatArrayList clone() {
  * @return  a deep copy of the receiver.
  */
 public FloatArrayList copy() {
-	return (FloatArrayList) clone();
+	return clone();
 }
 /**
  * Returns the elements currently stored, including invalid elements between size and capacity, if any.

@@ -124,7 +124,7 @@ public ByteArrayList clone() {
  * @return  a deep copy of the receiver.
  */
 public ByteArrayList copy() {
-	return (ByteArrayList) clone();
+	return clone();
 }
 /**
  * Sorts the specified range of the receiver into ascending numerical order. 

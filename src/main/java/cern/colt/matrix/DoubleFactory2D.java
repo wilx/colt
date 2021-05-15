@@ -562,7 +562,6 @@ System.out.println("\n"+compose(parts3));
 
 DoubleMatrix2D A = ascending(2,2);
 DoubleMatrix2D B = descending(2,2);
-DoubleMatrix2D _ = null;
 
 DoubleMatrix2D[][] parts4 = 
 {

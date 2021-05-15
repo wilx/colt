@@ -27,7 +27,7 @@ public class Exponential extends AbstractContinousDistribution {
 	protected double lambda;
 
  	// The uniform random number generated shared by all <b>static</b> methods.
-	protected static Exponential shared = new Exponential(1.0,makeDefaultGenerator());
+	protected static final Exponential shared = new Exponential(1.0,makeDefaultGenerator());
 /**
  * Constructs a Negative Exponential distribution.
  */

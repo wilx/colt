@@ -41,7 +41,7 @@ class UnknownDoubleQuantileEstimator extends DoubleQuantileEstimator {
 	protected int currentTreeHeight;
 	final protected int treeHeightStartingSampling;
 	protected WeightedRandomSampler sampler;
-	protected double precomputeEpsilon;
+	protected final double precomputeEpsilon;
 /**
  * Constructs an approximate quantile finder with b buffers, each having k elements.
  * @param b the number of buffers
@@ -92,7 +92,7 @@ public synchronized void clear() {
 @Override
 public UnknownDoubleQuantileEstimator clone() {
 	UnknownDoubleQuantileEstimator copy = (UnknownDoubleQuantileEstimator) super.clone();
-	if (this.sampler != null) copy.sampler = (WeightedRandomSampler) copy.sampler.clone();
+	if (this.sampler != null) copy.sampler = copy.sampler.clone();
 	return copy;
 }
 /**

@@ -26,7 +26,7 @@ package cern.jet.stat.quantile;
  * @version 1.0, 09/24/99
  */
 public class EquiDepthHistogram extends cern.colt.PersistentObject {
-	protected float[] binBoundaries;
+	protected final float[] binBoundaries;
 /**
  * Constructs an equi-depth histogram with the given quantile elements.
  * Quantile elements must be sorted ascending and have the form specified in the class documentation.

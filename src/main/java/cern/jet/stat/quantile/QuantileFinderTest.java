@@ -39,11 +39,10 @@ protected static IntArrayList binaryMultiSearch(DoubleArrayList list, double ele
  * Observed epsilon
  */
 public static double epsilon(int size, double phi, double rank) {
-	double s = size;
 	//System.out.println("\n");
 	//System.out.println("s="+size+", rank="+rank+", phi="+phi+", eps="+Math.abs((rank)/s - phi));
 	//System.out.println("\n");
-	return Math.abs(rank/s - phi);
+	return Math.abs(rank/ (double) size - phi);
 }
 /**
  * Observed epsilon
@@ -89,8 +88,7 @@ public static double observedEpsilonAtPhi(double phi, ExactDoubleQuantileFinder 
 		else distance=Math.abs(exactRank-to);
 	}
 
-	double epsilon = (double)distance / (double)N;
-	return epsilon;
+	return (double)distance / (double)N;
 }
 /**
  * This method was created in VisualAge.
@@ -194,9 +192,7 @@ public static void testBestBandKCalculation(String[] args) {
 				System.out.println("      computing for e = " + epsilon);
 				for (double delta : deltas) {
 					for (int knownCounter = 0; knownCounter < 2; knownCounter++) {
-						boolean known_N;
-						if (knownCounter == 0) known_N = true;
-						else known_N = false;
+						boolean known_N = knownCounter == 0;
 
 						DoubleQuantileFinder finder = QuantileFinderFactory.newDoubleQuantileFinder(known_N, N, epsilon, delta, p, null);
 						//System.out.println(finder.getClass().getName());
@@ -295,8 +291,8 @@ public static void testQuantileCalculation(String[] args) {
 	int chunks=Integer.parseInt(args[4]);
 	boolean computeExactQuantilesAlso=args[5].equals("exact");
 	boolean doShuffle=args[6].equals("shuffle");
-	double epsilon = new Double(args[7]).doubleValue();
-	double delta = new Double(args[8]).doubleValue();
+	double epsilon = Double.parseDouble(args[7]);
+	double delta = Double.parseDouble(args[8]);
 	int quantiles = Integer.parseInt(args[9]);	
 	long max_N = Long.parseLong(args[10]);	
 

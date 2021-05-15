@@ -124,7 +124,7 @@ public void clear() {
 public DoubleQuantileEstimator clone() {
 	DoubleQuantileEstimator copy = (DoubleQuantileEstimator) super.clone();
 	if (this.bufferSet != null) {
-		copy.bufferSet = (DoubleBufferSet) copy.bufferSet.clone();
+		copy.bufferSet = copy.bufferSet.clone();
 		if (this.currentBufferToFill != null) {
 			 int index = new ObjectArrayList(this.bufferSet.buffers).indexOf(this.currentBufferToFill, true);
 			 copy.currentBufferToFill = copy.bufferSet.buffers[index];

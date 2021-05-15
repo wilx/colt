@@ -52,7 +52,7 @@ public class Gamma extends AbstractContinousDistribution {
 	protected double lambda;
 
  	// The uniform random number generated shared by all <b>static</b> methods.
-	protected static Gamma shared = new Gamma(1.0,1.0,makeDefaultGenerator());
+	protected static final Gamma shared = new Gamma(1.0,1.0,makeDefaultGenerator());
 /**
  * Constructs a Gamma distribution.
  * Example: alpha=1.0, lambda=1.0.
@@ -79,30 +79,28 @@ public double nextDouble() {
  * Returns a random number from the distribution; bypasses the internal state.
  */
 public double nextDouble(double alpha, double lambda) {
-/******************************************************************
- *                                                                *
- *    Gamma Distribution - Acceptance Rejection combined with     *
- *                         Acceptance Complement                  *
- *                                                                *
- ******************************************************************
- *                                                                *
- * FUNCTION:    - gds samples a random number from the standard   *
- *                gamma distribution with parameter  a > 0.       *
- *                Acceptance Rejection  gs  for  a < 1 ,          *
- *                Acceptance Complement gd  for  a >= 1 .         *
- * REFERENCES:  - J.H. Ahrens, U. Dieter (1974): Computer methods *
- *                for sampling from gamma, beta, Poisson and      *
- *                binomial distributions, Computing 12, 223-246.  *
- *              - J.H. Ahrens, U. Dieter (1982): Generating gamma *
- *                variates by a modified rejection technique,     *
- *                Communications of the ACM 25, 47-54.            *
- * SUBPROGRAMS: - drand(seed) ... (0,1)-Uniform generator with    *
- *                unsigned long integer *seed                     *
- *              - NORMAL(seed) ... Normal generator N(0,1).       *
- *                                                                *
- ******************************************************************/
- 	double a = alpha;
-	double aa = -1.0, aaa = -1.0, 
+/*****************************************************************
+ *
+ Gamma Distribution - Acceptance Rejection combined with     *
+ Acceptance Complement                  *
+ *
+ *
+ FUNCTION:    - gds samples a random number from the standard   *
+ gamma distribution with parameter  a > 0.       *
+ Acceptance Rejection  gs  for  a < 1 ,          *
+ Acceptance Complement gd  for  a >= 1 .         *
+ REFERENCES:  - J.H. Ahrens, U. Dieter (1974): Computer methods *
+ for sampling from gamma, beta, Poisson and      *
+ binomial distributions, Computing 12, 223-246.  *
+ - J.H. Ahrens, U. Dieter (1982): Generating gamma *
+ variates by a modified rejection technique,     *
+ Communications of the ACM 25, 47-54.            *
+ SUBPROGRAMS: - drand(seed) ... (0,1)-Uniform generator with    *
+ unsigned long integer *seed                     *
+ - NORMAL(seed) ... Normal generator N(0,1).       *
+ *
+ */
+	double aa = -1.0, aaa = -1.0,
 		b=0.0, c=0.0, d=0.0, e, r, s=0.0, si=0.0, ss=0.0, q0=0.0,
 		q1 = 0.0416666664, q2 =  0.0208333723, q3 = 0.0079849875,
 		q4 = 0.0015746717, q5 = -0.0003349403, q6 = 0.0003340332,
@@ -119,28 +117,28 @@ public double nextDouble(double alpha, double lambda) {
 
 	// Check for invalid input values
 
-	if (a <= 0.0) throw new IllegalArgumentException(); 
+	if (alpha <= 0.0) throw new IllegalArgumentException();
 	if (lambda <= 0.0) new IllegalArgumentException(); 
 
-	if (a < 1.0) { // CASE A: Acceptance rejection algorithm gs
-		b = 1.0 + 0.36788794412 * a;              // Step 1
+	if (alpha < 1.0) { // CASE A: Acceptance rejection algorithm gs
+		b = 1.0 + 0.36788794412 * alpha;              // Step 1
 		for(;;) {
 			p = b * randomGenerator.raw();
 			if (p <= 1.0) {                       // Step 2. Case gds <= 1
-				gds = Math.exp(Math.log(p) / a);
+				gds = Math.exp(Math.log(p) / alpha);
 				if (Math.log(randomGenerator.raw()) <= -gds) return(gds/lambda);
 			}
 			else {                                // Step 3. Case gds > 1
-				gds = - Math.log ((b - p) / a);
-				if (Math.log(randomGenerator.raw()) <= ((a - 1.0) * Math.log(gds))) return(gds/lambda);
+				gds = - Math.log ((b - p) / alpha);
+				if (Math.log(randomGenerator.raw()) <= ((alpha - 1.0) * Math.log(gds))) return(gds/lambda);
 			}
 		}
 	}
 
 	else {        // CASE B: Acceptance complement algorithm gd (gaussian distribution, box muller transformation)
-		if (a != aa) {                        // Step 1. Preparations
-			aa = a;
-			ss = a - 0.5;
+		if (alpha != aa) {                        // Step 1. Preparations
+			aa = alpha;
+			ss = alpha - 0.5;
 			s = Math.sqrt(ss);
 			d = 5.656854249 - 12.0 * s;
 		}
@@ -158,13 +156,13 @@ public double nextDouble(double alpha, double lambda) {
 		u = randomGenerator.raw();                // Step 3. Uniform random number
 		if (d * u <= t * t * t) return(gds/lambda); // Squeeze acceptance
 
-		if (a != aaa) {                           // Step 4. Set-up for hat case
-			aaa = a;
-			r = 1.0 / a;
+		if (alpha != aaa) {                           // Step 4. Set-up for hat case
+			aaa = alpha;
+			r = 1.0 / alpha;
 			q0 = ((((((((q9 * r + q8) * r + q7) * r + q6) * r + q5) * r + q4) *
 					  r + q3) * r + q2) * r + q1) * r;
-			if (a > 3.686) {
-				if (a > 13.022) {
+			if (alpha > 3.686) {
+				if (alpha > 13.022) {
 					b = 1.77;
 					si = 0.75;
 					c = 0.1515 / s;
