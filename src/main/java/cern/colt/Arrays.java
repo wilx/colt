@@ -274,16 +274,7 @@ public static boolean[] ensureCapacity(boolean[] array, int minCapacity) {
  * @return a string representation of the specified array.
  */
 public static String toString(byte[] array) {
-	StringBuilder buf = new StringBuilder();
-	buf.append("[");
-	int maxIndex = array.length - 1;
-	for (int i = 0; i <= maxIndex; i++) {
-	    buf.append(array[i]);
-	    if (i < maxIndex)
-		buf.append(", ");
-	}
-	buf.append("]");
-	return buf.toString();
+	return java.util.Arrays.toString(array);
 }
 /**
  * Returns a string representation of the specified array.  The string
@@ -293,16 +284,7 @@ public static String toString(byte[] array) {
  * @return a string representation of the specified array.
  */
 public static String toString(char[] array) {
-	StringBuilder buf = new StringBuilder();
-	buf.append("[");
-	int maxIndex = array.length - 1;
-	for (int i = 0; i <= maxIndex; i++) {
-	    buf.append(array[i]);
-	    if (i < maxIndex)
-		buf.append(", ");
-	}
-	buf.append("]");
-	return buf.toString();
+	return java.util.Arrays.toString(array);
 }
 /**
  * Returns a string representation of the specified array.  The string
@@ -312,16 +294,7 @@ public static String toString(char[] array) {
  * @return a string representation of the specified array.
  */
 public static String toString(double[] array) {
-	StringBuilder buf = new StringBuilder();
-	buf.append("[");
-	int maxIndex = array.length - 1;
-	for (int i = 0; i <= maxIndex; i++) {
-	    buf.append(array[i]);
-	    if (i < maxIndex)
-		buf.append(", ");
-	}
-	buf.append("]");
-	return buf.toString();
+	return java.util.Arrays.toString(array);
 }
 /**
  * Returns a string representation of the specified array.  The string
@@ -331,16 +304,7 @@ public static String toString(double[] array) {
  * @return a string representation of the specified array.
  */
 public static String toString(float[] array) {
-	StringBuilder buf = new StringBuilder();
-	buf.append("[");
-	int maxIndex = array.length - 1;
-	for (int i = 0; i <= maxIndex; i++) {
-	    buf.append(array[i]);
-	    if (i < maxIndex)
-		buf.append(", ");
-	}
-	buf.append("]");
-	return buf.toString();
+	return java.util.Arrays.toString(array);
 }
 /**
  * Returns a string representation of the specified array.  The string
@@ -350,16 +314,7 @@ public static String toString(float[] array) {
  * @return a string representation of the specified array.
  */
 public static String toString(int[] array) {
-	StringBuilder buf = new StringBuilder();
-	buf.append("[");
-	int maxIndex = array.length - 1;
-	for (int i = 0; i <= maxIndex; i++) {
-	    buf.append(array[i]);
-	    if (i < maxIndex)
-		buf.append(", ");
-	}
-	buf.append("]");
-	return buf.toString();
+	return java.util.Arrays.toString(array);
 }
 /**
  * Returns a string representation of the specified array.  The string
@@ -369,16 +324,7 @@ public static String toString(int[] array) {
  * @return a string representation of the specified array.
  */
 public static String toString(long[] array) {
-	StringBuilder buf = new StringBuilder();
-	buf.append("[");
-	int maxIndex = array.length - 1;
-	for (int i = 0; i <= maxIndex; i++) {
-	    buf.append(array[i]);
-	    if (i < maxIndex)
-		buf.append(", ");
-	}
-	buf.append("]");
-	return buf.toString();
+	return java.util.Arrays.toString(array);
 }
 /**
  * Returns a string representation of the specified array.  The string
@@ -388,16 +334,7 @@ public static String toString(long[] array) {
  * @return a string representation of the specified array.
  */
 public static String toString(Object[] array) {
-	StringBuilder buf = new StringBuilder();
-	buf.append("[");
-	int maxIndex = array.length - 1;
-	for (int i = 0; i <= maxIndex; i++) {
-	    buf.append(array[i]);
-	    if (i < maxIndex)
-		buf.append(", ");
-	}
-	buf.append("]");
-	return buf.toString();
+	return java.util.Arrays.toString(array);
 }
 /**
  * Returns a string representation of the specified array.  The string
@@ -407,16 +344,7 @@ public static String toString(Object[] array) {
  * @return a string representation of the specified array.
  */
 public static String toString(short[] array) {
-	StringBuilder buf = new StringBuilder();
-	buf.append("[");
-	int maxIndex = array.length - 1;
-	for (int i = 0; i <= maxIndex; i++) {
-	    buf.append(array[i]);
-	    if (i < maxIndex)
-		buf.append(", ");
-	}
-	buf.append("]");
-	return buf.toString();
+	return java.util.Arrays.toString(array);
 }
 /**
  * Returns a string representation of the specified array.  The string
@@ -426,16 +354,7 @@ public static String toString(short[] array) {
  * @return a string representation of the specified array.
  */
 public static String toString(boolean[] array) {
-	StringBuilder buf = new StringBuilder();
-	buf.append("[");
-	int maxIndex = array.length - 1;
-	for (int i = 0; i <= maxIndex; i++) {
-	    buf.append(array[i]);
-	    if (i < maxIndex)
-		buf.append(", ");
-	}
-	buf.append("]");
-	return buf.toString();
+	return java.util.Arrays.toString(array);
 }
 /**
  * Ensures that the specified array cannot hold more than <tt>maxCapacity</tt> elements.
